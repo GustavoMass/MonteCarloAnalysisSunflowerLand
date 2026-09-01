@@ -1,0 +1,17 @@
+Level,Petting Hand,Brush,Music Box,XP,Egg,Feather,Preferred Food
+0,0%,0%,0%,0,0,0,Kernel
+1,100%,0%,0%,60,1,0,Kernel
+2,80%,20%,0%,120,1,0,Kernel
+3,70%,30%,0%,240,1,1,Hay
+4,60%,30%,10%,360,2,1,Hay
+5,50%,40%,10%,480,2,1,Hay
+6,50%,30%,20%,660,2,1,NutriBarley
+7,40%,40%,20%,840,2,1,NutriBarley
+8,40%,30%,30%,1020,3,1,NutriBarley
+9,30%,40%,30%,1200,3,2,NutriBarley
+10,30%,30%,40%,1440,3,2,Mixed Grain
+11,20%,40%,40%,1680,3,2,Mixed Grain
+12,20%,30%,50%,1920,3,2,Mixed Grain
+13,10%,40%,50%,2160,4,2,Mixed Grain
+14,10%,30%,60%,2400,4,2,Mixed Grain
+15,10%,20%,70%,2720,5,3,Mixed Grain
