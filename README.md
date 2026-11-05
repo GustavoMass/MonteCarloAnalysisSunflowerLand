@@ -61,8 +61,9 @@ and days to reach each level.
 awake animal that meets an open request is sold (hardest request first); the herd is kept at "requests
 this week + buffer" with level-0 replacements; capped animals wait unfed. Pigs can be traded in for bristles.
 
-**Also in the report:** cheap boost payback, Duende Cap projection (habits / cheap push / maximum), and a
-flower prep guide (weekly season calendar, cross-breed recipes, Raven's orders seen so far).
+**Also in the report:** cheap boost payback, Duende Cap projection (habits / cheap push / maximum),
+Barn and Pigpen tickets per level over a full chapter with the cost of each upgrade (`upgrade_paths`),
+and the 4-bed flower plan.
 
 ## Layout
 

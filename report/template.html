@@ -34,8 +34,6 @@ p { margin: 0; max-width: 72ch; }
 .eyebrow { font: 600 12px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 header, section { display: grid; gap: 14px; }
 .muted { color: var(--muted); }
-.verdicts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-@media (max-width: 680px) { .verdicts { grid-template-columns: 1fr; } }
 .verdict { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 16px; display: grid; gap: 6px; align-content: start; min-width: 0; }
 .verdict .k { font: 600 12px/1.2 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .verdict .v { font-family: var(--display); font-size: 21px; font-weight: 700; line-height: 1.2; }
@@ -79,11 +77,6 @@ code { font-family: var(--mono); font-size: 13px; }
     FLOWER at today's P2P prices after the <span id="tax"></span> marketplace cut. <span class="coinNote"></span></p>
 </header>
 
-<section aria-labelledby="v-h">
-  <h2 id="v-h">The short answers</h2>
-  <div class="verdicts" id="verdicts"></div>
-</section>
-
 <section aria-labelledby="l-h">
   <h2 id="l-h">Every level, every animal: the Monte Carlo spread</h2>
   <p class="muted">Each bar is one level. The pale bar covers 80% of simulated runs (P10–P90), the solid bar the middle half (P25–P75), the white tick the median.
@@ -96,27 +89,6 @@ code { font-family: var(--mono); font-size: 13px; }
   <h3 id="acc-h">Accumulated profit by level</h3>
   <p class="muted">Running FLOWER total for one animal when it leaves each level: every feed it ate and everything it produced so far, from the day you buy it. Read it as “sell or trade it in after this level and this is what it made”.</p>
   <div class="grid4" id="accCharts"></div>
-</section>
-
-<section aria-labelledby="h-h">
-  <h2 id="h-h">Lean herds: only the animals the board needs</h2>
-  <p class="muted" id="herdIntro"></p>
-  <div class="grid4">
-    <div class="chart"><h3>Chapter value per building (FLOWER from produce)</h3><div class="box" style="height:260px"><canvas id="hcValue"></canvas></div>
-      <p class="cap"><span class="coinNote"></span> Bars: P10–P90 pale, P25–P75 solid.</p></div>
-    <div class="chart"><h3>Animal-days spent waiting unfed (sickness exposure)</h3><div class="box" style="height:260px"><canvas id="hcParked"></canvas></div>
-      <p class="cap">Days that capped animals stood awake waiting for a request, summed over the chapter. More buffer, more days at risk.</p></div>
-  </div>
-  <div class="tbl"><table id="herdTable"></table></div>
-</section>
-
-<section aria-labelledby="p-h">
-  <h2 id="p-h">Pigs: keep them, or trade them in?</h2>
-  <div class="split">
-    <div class="tbl"><table id="pigTable"></table></div>
-    <div class="chart"><h3>Trade-in value vs Pig Bristle price</h3><div class="box" style="height:240px"><canvas id="pigChart"></canvas></div>
-      <p class="cap" id="pigCap"></p></div>
-  </div>
 </section>
 
 <section aria-labelledby="b-h">
@@ -136,13 +108,10 @@ code { font-family: var(--mono); font-size: 13px; }
 </section>
 
 <section aria-labelledby="u-h">
-  <h2 id="u-h">Barn and Pigpen: what each upgrade costs and earns</h2>
+  <h2 id="u-h">Barn and Pigpen: tickets per level, and what each upgrade adds</h2>
   <p class="muted" id="upIntro"></p>
-  <div class="split">
-    <div class="chart"><h3>Chapter tickets and value by upgrade path</h3><div class="box" style="height:300px"><canvas id="upChart"></canvas></div>
-      <p class="cap">Tickets from that building's animal bounties (bars, left axis) and value in FLOWER: produce + bristles − feed (diamonds, right axis; <span class="coinNote"></span>). Building cost not subtracted.</p></div>
-    <div class="tbl"><table id="costTable"></table></div>
-  </div>
+  <div class="chart"><h3>Chapter tickets at each building level</h3><div class="box" style="height:260px"><canvas id="upChart"></canvas></div>
+    <p class="cap">Duende Caps from that building's animal bounties over the full chapter with the building at that level all along. Solid part: tickets the level below already gives; light part: the extra this level adds.</p></div>
   <div class="tbl"><table id="upTable"></table></div>
 </section>
 
@@ -154,30 +123,6 @@ code { font-family: var(--mono); font-size: 13px; }
     <div class="tbl"><table id="readyTable"></table></div>
     <div class="tbl"><table id="stockTable"></table></div>
   </div>
-</section>
-
-<section aria-labelledby="f-h">
-  <h2 id="f-h">Flower calendar and recipes</h2>
-  <p class="muted" id="flowerIntro"></p>
-  <div class="grid4">
-    <div class="tbl"><table id="calTable"></table></div>
-    <div class="tbl"><table id="ravenTable"></table></div>
-  </div>
-  <div class="tbl"><table id="recipeTable"></table></div>
-</section>
-
-<section aria-labelledby="r-h">
-  <h2 id="r-h">Run it yourself</h2>
-  <ol class="steps">
-    <li>Install Python 3.10 or newer from python.org (tick “Add python.exe to PATH”). Nothing else is needed.</li>
-    <li>Double-click <code>run.bat</code> in the project folder, or type <code>python run.py</code>. It pulls your farm, the board, delivery orders, flower recipes, NFT floors and P2P prices from sfl-manager, simulates (about 3 minutes) and opens this report.</li>
-    <li>Change your habits in <code>config.json</code>: tax, skill builds, building levels per week, herd buffer, pig policy, NPC delivery frequency, board shares, boosts to test. Use <code>--quick</code> while experimenting.</li>
-    <li>From 9 Nov the board shows real ticket amounts; every run picks them up and replaces the guesses. Each run also stores the ticket NPC orders it sees in <code>Data/ticket_orders_history.json</code>, so Raven's flower requests build up week by week.</li>
-  </ol>
-  <pre>python run.py            # refresh + simulate + open
-python run.py --quick    # fast, fewer runs
-python run.py --offline  # reuse saved data
-python -m unittest discover -s tests -t .</pre>
 </section>
 
 <section aria-labelledby="m-h">
@@ -262,49 +207,6 @@ function levelCharts() {
   levelGrid("accCharts", "accumulated", ACC, "ac");
 }
 
-// ---------- lean herd
-function herdView() {
-  const rows = A4.filter(a => a !== "Pig").flatMap(a => herds(PLAN, a));
-  const labels = rows.map(h => `${h.animal} · ${bufLabel(h)}`);
-  const colors = rows.map(h => css("--" + h.animal.toLowerCase()));
-  const bars = (k) => [
-    { type: "bar", label: "P10–P90", data: rows.map(h => [h[k].p10, h[k].p90]), backgroundColor: colors.map(c => c + "40"), grouped: false, borderRadius: 3 },
-    { type: "bar", label: "P25–P75", data: rows.map(h => [h[k].p25, h[k].p75]), backgroundColor: colors, grouped: false, borderRadius: 2 },
-    { type: "line", label: "Median", data: rows.map(h => h[k].p50), showLine: false, pointStyle: "line", pointRadius: 9, pointBorderWidth: 3, borderColor: css("--card") }];
-  const opt = { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { display: false }, tooltip: rangeTip(1) },
-    scales: axes("", "", { x: { ticks: { color: css("--muted"), autoSkip: false, maxRotation: 50, minRotation: 30, font: { size: 11 } } } }) };
-  mk("hcValue", { data: { labels, datasets: bars("value_flower") }, options: opt });
-  mk("hcParked", { data: { labels, datasets: bars("parked_days") }, options: opt });
-  const all = BUILDS.flatMap(b => A4.filter(a => a !== "Pig").flatMap(a => herds(b, a)));
-  $("herdTable").innerHTML = `<thead><tr><th>Build</th><th>Animal · herd</th><th>Herd by week</th><th>Tickets</th><th>Bounty coins − new animals</th><th>Produce</th><th>Feed</th><th>Value (FLOWER)</th><th>Bounties filled</th><th>Waiting days</th><th>Stop feeding at</th></tr></thead><tbody>` +
-    all.map(h => `<tr class="${h.build === PLAN ? "hi" : ""}"><td>${h.build}</td><td>${h.animal} · ${bufLabel(h)}</td>
-      <td class="num">${[...new Set(h.herd_size.map(Math.round))].join(" → ")}</td><td class="num">${nf(h.tickets.p50)}</td>
-      <td class="num">${nf(h.coins_net.p50)}</td><td class="num">${nf(h.produce.p50, 1)}</td><td class="num">${nf(h.feed.p50, 1)}</td>
-      <td class="num">${sg(h.value_flower.p50, 1)}</td><td class="num">${nf(100 * (h.fill_rate.coins ?? 0))}%</td>
-      <td class="num">${nf(h.parked_days.p50, 0)}</td><td class="num">${h.stop_feeding_at ?? "—"}</td></tr>`).join("") + "</tbody>";
-  const sched = Object.entries(C.buildings).map(([b, s]) => `${b} ${s.map(([w, l]) => `L${l} from week ${w + 1}`).join(", ")}`).join("; ");
-  $("herdIntro").textContent = `${C.chapter_weeks} weeks from 9 Nov, ${C.runs_herd} runs each. ${sched}. Each Monday a new board; every awake animal that meets an open request is sold and replaced only if the herd is below “requests this week + buffer”. Cows and sheep stop being fed at the highest level boards ask for. Chickens keep the full Hen House because they pay on eggs every day. One week (${C.no_ticket_weeks.map(w => w + 1).join(", ")}) has no ticket bounties.`;
-}
-
-// ---------- pigs
-function pigView() {
-  const ps = herds(PLAN, "Pig"), price = DATA.meta.prices.prices["Pig Bristles"], fee = C.sell_fee;
-  $("pigTable").innerHTML = `<thead><tr><th>Policy (${PLAN})</th><th>Traded</th><th>Sold</th><th>Bristles FLOWER</th><th>Feed</th><th>Coins</th><th>Tickets</th><th>Value</th></tr></thead><tbody>` +
-    ps.map(h => `<tr><td>${h.policy}</td><td class="num">${nf(h.traded.p50)}</td><td class="num">${nf(h.sold.p50)}</td><td class="num">${nf(h.bristles.p50, 1)}</td>
-      <td class="num">${nf(h.feed.p50, 1)}</td><td class="num">${nf(h.coins_net.p50)}</td><td class="num">${nf(h.tickets.p50)}</td><td class="num">${sg(h.value_flower.p50, 1)}</td></tr>`).join("") + "</tbody>";
-  const xs = [0, .25, .5, .75, 1, 1.5, 2, 2.5].map(f => +(price * f).toFixed(2));
-  const sets = ps.map((h, i) => { const nb = h.bristles.mean / (price * (1 - fee) || 1), rest = h.value_flower.mean - h.bristles.mean;
-    return { label: h.policy, data: xs.map(p => rest + nb * p * (1 - fee)), borderColor: [css("--muted"), css("--pig"), css("--ink")][i], backgroundColor: "transparent", borderWidth: 2, pointRadius: 2 }; });
-  mk("pigChart", { type: "line", data: { labels: xs, datasets: sets },
-    options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { labels: { color: css("--muted"), boxHeight: 2 } }, tooltip: rangeTip(1) },
-      scales: axes("Pig Bristle price (FLOWER)", "chapter value (FLOWER)") } });
-  const t = ps.find(h => /Trade in at/.test(h.policy)), nb = t ? t.bristles.mean / (price * (1 - fee)) : 0, rest = t ? t.value_flower.mean - t.bristles.mean : 0;
-  const be = -rest / (nb * (1 - fee));
-  $("pigCap").innerHTML = `Today ${price} FLOWER per bristle; ${nf(nb)} bristles a chapter from trade-ins. ` + (be <= 0
-    ? `Trading in stays profitable even if bristles were worth nothing: from level 0 to 9 pigs pay for their slop with Truffles. What loses money is keeping them past level 9, when they move to Gourmet Slop.`
-    : `Trading in breaks even at about ${nf(be, 2)} FLOWER per bristle.`) + ` That many bristles is a lot for a young market, so expect the price to fall if many players do this.`;
-}
-
 // ---------- boosts
 function boostView() {
   const rows = [...DATA.boosts].map(b => ({ ...b, payback: b.price && b.flower > 0 ? b.price / b.flower : null }))
@@ -353,56 +255,31 @@ function ticketView() {
   return tot;
 }
 
-// ---------- flowers
-function flowerView() {
-  const F = DATA.flowers, sp = F.special;
-  $("calTable").innerHTML = `<thead><tr><th>Week</th><th>Starts</th><th>Season</th><th>Season-only flower</th><th>Plant by</th></tr></thead><tbody>` +
-    F.calendar.map(c => { const s = sp[c.season] || {}; return `<tr><td>${c.week + 1}</td><td class="num">${c.starts}</td><td>${c.season}</td>
-      <td>${(s.seed || "—").replace(" Seed", "")} <span class="muted">(${s.days || "?"} d)</span></td><td class="num">Mon–Wed</td></tr>`; }).join("") + "</tbody>";
-  const rv = F.raven.length ? F.raven.map(r => `<tr><td>${r.order}</td><td class="num">${r.days.join(", ")}</td></tr>`).join("") : `<tr><td colspan="2">No orders stored yet.</td></tr>`;
-  $("ravenTable").innerHTML = `<thead><tr><th>Raven orders seen</th><th>Days</th></tr></thead><tbody>${rv}</tbody>`;
-  const want = new Set([...F.board_now, ...F.raven.flatMap(r => r.order.split(" + ").map(x => x.replace(/^\d+ /, "")))]);
-  const rows = Object.entries(F.flowers).filter(([n]) => !/Prism|Frostbloom|Primula/.test(n))
-    .sort((a, b) => (want.has(b[0]) - want.has(a[0])) || a[1].seed.localeCompare(b[1].seed) || a[0].localeCompare(b[0]));
-  $("recipeTable").innerHTML = `<thead><tr><th>Flower</th><th>Seed</th><th>Seasons</th><th>Days</th><th>Cheapest cross-breed</th></tr></thead><tbody>` +
-    rows.map(([n, f]) => { const s = F.seeds[f.seed] || {}; const cross = f.steps.filter(x => x[1]).map(x => `${x[1]} ${x[0]}`).join(" + ") || "—";
-      return `<tr class="${want.has(n) ? "hi" : ""}"><td>${n}${want.has(n) ? ' <span class="tag">asked</span>' : ""}</td><td>${f.seed.replace(" Seed", "")}</td>
-        <td>${(s.seasons || []).length === 4 ? "all" : (s.seasons || []).join(", ")}</td><td class="num">${f.days ?? s.days}</td><td>${cross}</td></tr>`; }).join("") + "</tbody>";
-  const seasonOnly = Object.entries(sp).map(([s, v]) => `${v.seed.replace(" Seed", "")} (${s})`).join(", ");
-  $("flowerIntro").innerHTML = `The board asks for five flowers a week from the seeds sold that week. The season changes every Monday with the board, and each season has one seed nobody can plant in other weeks: ${seasonOnly}.
-    This week (${F.season_now}) it asked for ${F.board_now.join(", ")}. Sunpetal (1 day), Bloom (2 days) and Lily (5 days) flowers can be planted any week, and stored flowers do not spoil.
-    So: keep one or two of every Pansy, Cosmos, Balloon Flower, Daffodil, Carnation and Lotus colour in stock. In each season week, plant all five colours of its season-only flower on Monday (ready Thursday) and grow a spare set for when that season comes back four weeks later.
-    Raven's orders are drawn per player, not from a shared schedule; so far she has asked for Cosmos. Rows marked “asked” have been requested by Raven or this week's board.`;
-}
-
-
 // ---------- upgrades
 function upgradeView() {
   const U = DATA.upgrades || [];
   if (!U.length) return;
-  const blds = [...new Set(U.map(u => u.building))];
-  const base = Object.fromEntries(blds.map(b => [b, U.find(u => u.building === b)]));
-  const labels = U.map(u => `${u.building}: ${u.path}`);
-  mk("upChart", { data: { labels, datasets: [
-      { type: "bar", label: "Tickets", data: U.map(u => u.tickets), backgroundColor: U.map(u => u.building === "Barn" ? css("--cow") : css("--pig")), yAxisID: "y" },
-      { type: "line", label: "Value (FLOWER)", data: U.map(u => u.value), borderColor: css("--accent"), backgroundColor: css("--accent"), yAxisID: "y1", showLine: false, pointRadius: 6, pointStyle: "rectRot" } ] },
-    options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { labels: { color: css("--muted") } }, tooltip: rangeTip(0) },
-      scales: { x: { ticks: { color: css("--muted"), autoSkip: false, maxRotation: 50, minRotation: 30, font: { size: 11 } }, grid: { display: false } },
-        y: { position: "left", title: { display: true, text: "tickets", color: css("--muted") }, ticks: { color: css("--muted") }, grid: { color: css("--rule") } },
-        y1: { position: "right", title: { display: true, text: "FLOWER", color: css("--muted") }, ticks: { color: css("--muted") }, grid: { display: false } } } } });
-  $("upTable").innerHTML = `<thead><tr><th>Path</th><th>Tickets</th><th>+ tickets vs L1</th><th>Value</th><th>+ value vs L1</th><th>Upgrade cost (FLOWER)</th><th>Net cost per + ticket</th><th>Also needs</th></tr></thead><tbody>` +
-    U.map(u => { const b = base[u.building], dt = u.tickets - b.tickets, dv = u.value - b.value, dc = u.cost_flower - b.cost_flower;
-      return `<tr><td>${u.building}: ${u.path}</td><td class="num">${nf(u.tickets)}</td><td class="num">${dt ? "+" + nf(dt) : "—"}</td><td class="num">${sg(u.value, 0)}</td>
-        <td class="num">${dv ? sg(dv, 0) : "—"}</td><td class="num">${nf(u.cost_flower, 1)}</td><td class="num">${dt > 0 ? nf(Math.max(0, dc - Math.max(0, dv)) / dt, 2) : "—"}</td>
-        <td>${Object.entries(u.unpriced).map(([k, q]) => `${q} ${k}`).join(", ") || "—"}</td></tr>`; }).join("") + "</tbody>";
-  const rows = [];
-  ["Barn", "Pigpen"].forEach(b => [1, 2, 3].forEach(lv => { const c = (DATA.building_costs || {})[b]?.[lv]; if (c) rows.push([b, lv, c]); }));
-  const inv = DATA.meta.farm.inventory || {}, price = DATA.meta.prices.prices;
-  $("costTable").innerHTML = `<thead><tr><th>Level</th><th>Coins</th><th>Items (you have)</th><th>FLOWER</th></tr></thead><tbody>` +
-    rows.map(([b, lv, c]) => { const fl = coinFl(c.coins) + Object.entries(c.items).reduce((t, [k, q]) => t + q * (price[k] || 0), 0);
-      return `<tr><td>${b} L${lv}${lv === 1 ? " (build)" : ""}</td><td class="num">${nf(c.coins)}</td>
-        <td style="white-space:normal">${Object.entries(c.items).map(([k, q]) => `${nf(q)} ${k} <span class="muted">(${nf(inv[k] || 0)})</span>`).join(", ")}</td><td class="num">${nf(fl, 1)}${Object.keys(c.items).some(k => !price[k]) ? "+" : ""}</td></tr>`; }).join("") + "</tbody>";
-  $("upIntro").innerHTML = `Costs come from the game code (construction, then each upgrade). FLOWER prices items at P2P; ${COIN_TXT} Oil and Mud have no market price (marked +). “Net cost per + ticket” = extra upgrade cost minus the extra coins and produce it earns this chapter, divided by the extra tickets. Tickets per bounty, and bounty counts below Barn L3, are guesses until 9 Nov. Barn = cows and sheep at “needed + 1”; Pigpen = pigs on bounties + trade-in at L9. Upgrades stay for later chapters, which this chapter-only view ignores.`;
+  const inv = DATA.meta.farm.inventory || {}, price = DATA.meta.prices.prices, owned = DATA.meta.farm.buildings || {};
+  const prev = u => U.find(x => x.building === u.building && x.top_level === u.top_level - 1);
+  const col = b => b === "Barn" ? css("--cow") : css("--pig");
+  mk("upChart", { data: { labels: U.map(u => `${u.building} L${u.top_level}`), datasets: [
+      { type: "bar", label: "From the level below", data: U.map(u => prev(u) ? prev(u).tickets : u.tickets), backgroundColor: U.map(u => col(u.building)), stack: "t" },
+      { type: "bar", label: "Added by this level", data: U.map(u => prev(u) ? u.tickets - prev(u).tickets : 0), backgroundColor: U.map(u => col(u.building) + "55"), stack: "t" } ] },
+    plugins: [{ id: "totals", afterDatasetsDraw(c) { const { ctx } = c, m = c.getDatasetMeta(1); ctx.save(); ctx.font = `11px ${css("--mono")}`; ctx.fillStyle = css("--ink"); ctx.textAlign = "center";
+      m.data.forEach((e, i) => ctx.fillText(nf(U[i].tickets), e.x, Math.min(e.y, e.base) - 5)); ctx.restore(); } }],
+    options: { responsive: true, maintainAspectRatio: false, animation: false, layout: { padding: { top: 16 } },
+      plugins: { legend: { labels: { color: css("--muted") } }, tooltip: rangeTip(0) },
+      scales: { x: { stacked: true, ticks: { color: css("--muted") }, grid: { display: false } },
+        y: { stacked: true, title: { display: true, text: "tickets per chapter", color: css("--muted") }, ticks: { color: css("--muted") }, grid: { color: css("--rule") } } } } });
+  $("upTable").innerHTML = `<thead><tr><th>Level</th><th>Tickets / chapter</th><th>Extra tickets</th><th>Upgrade from level below: items (you have)</th><th>Coins</th><th>Items in FLOWER</th><th>FLOWER per extra ticket</th><th>Extra produce value</th></tr></thead><tbody>` +
+    U.map(u => { const p = prev(u), dt = p ? u.tickets - p.tickets : null, dv = p ? u.value - p.value : null, have = u.top_level <= (owned[u.building] || 0);
+      const items = Object.entries(u.step_items || {}).map(([k, q]) => `${nf(q)} ${k} <span class="muted">(${nf(inv[k] || 0)})</span>`).join(", ");
+      const unpriced = Object.keys(u.step_items || {}).some(k => !price[k]);
+      return `<tr class="${have ? "" : "hi"}"><td>${u.building} L${u.top_level}${have ? ' <span class="muted">(yours)</span>' : ""}</td><td class="num">${nf(u.tickets)}</td>
+        <td class="num">${dt == null ? "—" : "+" + nf(dt)}</td><td style="white-space:normal">${p ? items : "—"}</td><td class="num">${p ? nf(u.step_coins) : "—"}</td>
+        <td class="num">${p ? nf(u.step_flower, 1) + (unpriced ? "+" : "") : "—"}</td><td class="num">${p && dt > 0 ? nf(u.step_flower / dt, 2) + (unpriced ? "+" : "") : "—"}</td>
+        <td class="num">${dv == null ? "—" : sg(dv, 0)}</td></tr>`; }).join("") + "</tbody>";
+  $("upIntro").innerHTML = `Each level is simulated for the whole ${C.chapter_weeks}-week chapter with the building at that level from day one (${C.runs_herd} runs, mean shown). Barn = cows and sheep at “needed + 1”; Pigpen = pigs on bounties + trade-in at L9. Upgrade costs come from the game code and are priced at today's P2P; ${COIN_TXT} Oil and Mud have no market price (marked +), so their rows cost more than shown. Ticket amounts per bounty, and how many bounties each level brings, are guesses until the 9 Nov board. “Extra produce value” = produce − feed difference against the level below. The upgrade stays for later chapters; this is one chapter only.`;
 }
 
 // ---------- flower plan
@@ -439,36 +316,6 @@ function flowerPlanView() {
       <td class="num ${r.held_after_plan.length ? "pos" : "neg"}">${r.held_after_plan.length ? r.held_after_plan.join(", ") : "missing"}</td></tr>`).join("") + "</tbody>";
 }
 
-function verdicts(tot) {
-  const [plan, old] = BUILDS;
-  const v = (b, a, pick) => (pick(herds(b, a)) || {}).value_flower;
-  const lean1 = hs => hs.find(h => h.buffer === 1) || hs[0];
-  const barnPlan = ["Cow", "Sheep"].reduce((t, a) => t + v(plan, a, lean1).p50, 0), barnOld = ["Cow", "Sheep"].reduce((t, a) => t + v(old, a, lean1).p50, 0);
-  const pig = h => h.find(x => /Bounties/.test(x.policy));
-  const pigPlan = v(plan, "Pig", pig).p50, pigOld = v(old, "Pig", pig).p50;
-  const ch = single(plan, "Chicken").l15_day.p50, chOld = single(old, "Chicken").l15_day.p50;
-  const cow = herds(plan, "Cow"), b0 = cow.find(h => h.buffer === 0), b2 = cow.find(h => h.buffer === 2);
-  const top = [...DATA.boosts].filter(b => b.flower > 0).sort((x, y) => (y.flower / Math.max(y.price || 1, 1)) - (x.flower / Math.max(x.price || 1, 1))).slice(0, 4);
-  const keep = herds(plan, "Pig").find(h => /Keep/.test(h.policy)), trade = herds(plan, "Pig").find(h => /^Trade/.test(h.policy));
-  const items = [
-    ["Chonky Feed", "Good switch", `Chickens are unchanged (${sg(ch, 3)} vs ${sg(chOld, 3)} FLOWER/day at level 15). Over the chapter, cows + sheep come to ${sg(barnPlan, 0)} FLOWER with Chonky against ${sg(barnOld, 0)} with Clucky, and pigs ${sg(pigPlan, 0)} vs ${sg(pigOld, 0)}. ${COIN_TXT}`],
-    (() => { const hs = herds(plan, "Chicken"), lo = hs.find(h => /lowest/.test(h.policy)), hi = hs.find(h => /highest/.test(h.policy));
-      if (!lo || !hi) return null; const lv = single(plan, "Chicken").levels, pd = L => lv[L - 1].profit_day && lv[L - 1].profit_day.p50;
-      return ["Which chicken to sell", lo.value_flower.p50 >= hi.value_flower.p50 ? "The lowest level that fits" : "The highest level",
-        `Full Hen House over the chapter: ${sg(lo.value_flower.p50, 0)} FLOWER selling the lowest-level chicken each bounty accepts, ${sg(hi.value_flower.p50, 0)} selling the highest. A chicken makes ${sg(pd(1), 3)} FLOWER/day at level 1 and ${sg(pd(14), 3)} at level 14, so the old ones are the ones worth keeping.`]; })(),
-    ["Herd size", "Needed + 0 or + 1 is enough", `A cow herd sized exactly to the week's requests fills ${nf(100 * b0.fill_rate.coins)}% of them; +2 animals fills ${nf(100 * b2.fill_rate.coins)}% but leaves ${nf(b2.parked_days.p50)} animal-days waiting unfed against ${nf(b0.parked_days.p50)}. A level-0 calf reaches level 9 in about a week, so replacements bought on the day you sell are ready for next week's board.`],
-    ["Pigs", trade.value_flower.p50 > keep.value_flower.p50 ? "Trade in at level 9, don't keep" : "Keep them", `Keeping and feeding pigs: ${sg(keep.value_flower.p50, 0)} FLOWER over the chapter (from level 10 they eat Gourmet Slop). Trading in at level 9 and rebuying: ${sg(trade.value_flower.p50, 0)}. Most of that is bristles at ${DATA.meta.prices.prices["Pig Bristles"]} FLOWER each${(DATA.meta.prices.stale || {})["Pig Bristles"] ? ` (no listing right now; last price seen ${DATA.meta.prices.stale["Pig Bristles"]})` : ""}, but Truffles alone already cover a pig's feed up to level 9.`],
-    ["Cheapest upgrades", top.map(b => b.name).join(", "), top.map(b => `${b.name}: ${sg(b.flower, 0)} a chapter${b.price ? ` for ${nf(b.price, 0)} FLOWER` : ""}`).join("; ") + ". Skill rows need a free point. " + (() => { const bb = DATA.boosts.find(b => /Bountiful/.test(b.name)); return bb ? `Bountiful Bounties adds only coins (${nf(bb.coins)} a chapter), so it is worth nothing in FLOWER here.` : ""; })()],
-    ["9,000 Duende Caps", tot[1] >= C.ticket_goal ? "Possible with the cheap push" : tot[2] >= C.ticket_goal ? "Only near the maximum" : "Out of reach this chapter",
-      `Your habits: ~${nf(tot[0])}. Delivering to the five cheap NPCs every day and doing all flowers and mutant crops: ~${nf(tot[1])}. Everything except Tywin, Jester and obsidian: ~${nf(tot[2])}. Board and animal ticket amounts are guesses until 9 Nov; rerun then.`],
-    ["Flowers", "Keep a stock; some need another flower first", (() => {
-      const fl = DATA.flowers.flowers, slow = Object.entries(fl).filter(([n, f]) => f.days >= 6 && !/Prism|Frostbloom|Primula/.test(n)).sort((a, b) => b[1].days - a[1].days);
-      const parentOnly = Object.entries(fl).filter(([n, f]) => f.steps.some(x => x[1] && fl[x[0]] && (DATA.flowers.seeds[fl[x[0]].seed] || {}).seasons?.length === 1)).map(([n]) => n);
-      return `Board flowers come from that week's seeds; the season rotates every Monday (winter on 9 Nov, then spring, summer, autumn). ${slow.length} flowers need another flower as a parent and take ${slow.at(-1)[1].days}–${slow[0][1].days} days from scratch, e.g. ${slow.slice(0, 3).map(([n, f]) => `${n} ${f.days} d`).join(", ")}. ${parentOnly.length} need a season-only parent (like ${parentOnly.slice(0, 2).join(", ")}), so you can only start them if you saved that parent from its season.`; })()],
-  ];
-  $("verdicts").innerHTML = items.filter(Boolean).map(([k, v, p]) => `<div class="verdict"><span class="k">${k}</span><span class="v">${v}</span><p>${p}</p></div>`).join("");
-}
-
 function method() {
   const p = DATA.meta.prices.prices, sl = DATA.meta.slops, f = DATA.meta.farm;
   const items = [
@@ -476,12 +323,12 @@ function method() {
     `Your farm (pulled ${f.fetched}): ${f.collectibles.length} placed collectibles, VIP ${f.vip ? "yes" : "no"}, ${f.island} island, ${f.chapter_wearables.length} Duende wearables worn.`,
     `${C.runs_single_animal} runs per animal and build for the level bars; ${C.runs_herd} runs per herd setup. Randomness: pet tools, and each week's bounty levels drawn from levels boards have asked for.`,
     `Prices: sfl-manager P2P ${DATA.meta.prices.fetched}; produce and bristles after ${C.sell_fee * 100}%. Egg ${p.Egg}, Milk ${p.Milk}, Leather ${p.Leather}, Wool ${p.Wool}, Truffle ${p.Truffle}, Pig Bristles ${p["Pig Bristles"]}. Slop from the cheapest tradeable ingredient: ${Object.entries(sl).map(([k, v]) => `${k} ${v[0]}`).join(", ")}.`,
-    `Not modelled: sickness itself (server-side; the waiting-days chart shows exposure instead), Buckaroo, shrines, treats, mud, gem value. Building costs are not subtracted.`,
+    `Not modelled: sickness itself (server-side), Buckaroo, shrines, treats, mud, gem value. Building costs are not subtracted.`,
   ];
   $("method").innerHTML = items.map(x => `<li>${x}</li>`).join("");
 }
 
-function all() { document.querySelectorAll(".coinNote").forEach(e => e.textContent = COIN_TXT); levelCharts(); herdView(); pigView(); boostView(); const t = ticketView(); upgradeView(); flowerPlanView(); flowerView(); verdicts(t); }
+function all() { document.querySelectorAll(".coinNote").forEach(e => e.textContent = COIN_TXT); levelCharts(); boostView(); ticketView(); upgradeView(); flowerPlanView(); }
 function init() {
   $("fid").textContent = DATA.meta.farm.farm_id; $("gen").textContent = DATA.meta.generated; $("tax").textContent = (C.sell_fee * 100) + "%";
   seg("buildSeg", BUILDS.map(b => [b, b]), "build", levelCharts);
