@@ -1,13 +1,18 @@
 {
   "farm_id": 3621107187220366,
-  "runs_single_animal": 1000,
-  "runs_herd": 200,
+  "runs_single_animal": 100,
+  "runs_herd": 100,
   "days_single_animal": 30,
 
   "_tax": "Marketplace cut when you sell produce or bristles. VIP on the desert island = 12.5%.",
   "sell_fee": 0.125,
   "_coins_per_flower": "Coins per FLOWER when coins are added into FLOWER totals. 0 = coins count as nothing (shown separately); e.g. 1000 to value them.",
   "coins_per_flower": 0,
+
+  "_price_overrides": "Your own price for an item until a date (then the market price is used again).",
+  "price_overrides": {"Pig Bristles": {"price": 1.0747, "until": "2026-11-20"}},
+  "_derived_prices": "Price items the market does not list from what they cost to make. Oil: one Oil Drill (20 Wood, 9 Iron, 10 Leather) per drill; drills give 10, 10, then 30 = 50 per 3.",
+  "derived_prices": {"Oil": {"inputs": {"Wood": 20, "Iron": 9, "Leather": 10}, "per": 16.6667}},
 
   "_builds": "Skill builds to compare, applied to your live skills: remove these skills, then add {skill: rank}. The first one is your plan.",
   "builds": {
