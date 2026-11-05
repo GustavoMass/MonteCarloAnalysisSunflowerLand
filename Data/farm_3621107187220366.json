@@ -1,7 +1,7 @@
 {
  "farm_id": 3621107187220366,
  "source": "https://sfl-manager.com/api/v3/land/3621107187220366",
- "fetched": "2026-11-05 09:45",
+ "fetched": "2026-11-05 10:29",
  "skills": {
   "Chonky Scarecrow": 1,
   "Green Thumb": 1,
@@ -206,5 +206,7 @@
   "Duende Shirt",
   "Duende Shoes"
  ],
- "coins": 21369.389999999996
+ "coins": 21369.389999999996,
+ "season": "autumn",
+ "season_started": 1793577600000
 }

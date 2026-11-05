@@ -1,84 +1,123 @@
-"""Chapter herd simulation: a full building of one animal type, a new bounty
-board every week, and a player who sells to every bounty an awake animal
-qualifies for (except kept animals), buying a level-0 replacement at once."""
+"""Chapter herd simulation for one animal type.
+
+Each week a new bounty board opens. The player sells every awake animal that
+meets an open request (hardest request first), keeps a herd sized to the
+board plus a buffer, and stops feeding animals once they reach a cap level
+(they then wait awake for a request, which is when sickness can hit).
+Pigs can also be traded in for Pig Bristles at a set level.
+"""
 import heapq
-import random
 
 from . import analysis as A
-from . import game as G
 from .sim import Pet
 
 WEEK_H = 7 * 24.0
 BUY_COINS = {"Chicken": 50, "Cow": 100, "Sheep": 120, "Pig": 100}
+KINDS = ("tickets", "coins", "gems")
 
 
-def make_board(rng, animal, counts, level_pool, coin_points, ticket_amount, gems):
-    """One week of requests: [{level, kind, amount, open}]. Levels drawn from what boards have asked."""
+def make_board(rng, counts, level_pool, coin_points, ticket_amount, gems):
     board = []
     for kind, n in counts.items():
         for _ in range(int(n)):
             lv = rng.choice(level_pool)
-            if kind == "coins":
-                amt = A.interp_bounty(coin_points, lv) or 0.0
-            elif kind == "tickets":
-                amt = ticket_amount
-            else:
-                amt = gems
+            amt = (A.interp_bounty(coin_points, lv) or 0.0) if kind == "coins" else ticket_amount if kind == "tickets" else gems
             board.append({"level": lv, "kind": kind, "amount": amt, "open": True})
     return board
 
 
-def simulate_herd(model, rng, *, start_xp, capacity, weeks, sell, counts, level_pool,
-                  coin_points, ticket_amount, gems, live_board=None, stop_feeding_at=None):
+def simulate_herd(model, rng, *, start_xp, weeks, schedule, sell=True, buffer=None,
+                  level_pool, coin_points, ticket_amount, gems, coin_mult=1.0,
+                  stop_feeding_at=None, trade_in_at=None, no_ticket_weeks=(), live_board=None):
+    """schedule[w] = (capacity, {"coins": n, "gems": n, "tickets": n}) for week w.
+    buffer=None keeps the building full; an int keeps (requests this week + buffer) animals."""
     animal = model.animal
     horizon = weeks * WEEK_H
-    xps = list(start_xp)[:capacity] + [0.0] * max(0, capacity - len(start_xp))
-    # existing animals: unknown phase in their sleep -> stagger first wake over one sleep
-    pets = [Pet(model, rng, xp=x, t=rng.random() * model.sleep) for x in xps]
-    heap = [(p.next_time(), i) for i, p in enumerate(pets)]
-    heapq.heapify(heap)
+    pets, heap = {}, []
+    nid = 0
 
-    W = weeks
-    out = {k: [0.0] * W for k in ("coins", "gems", "tickets", "produce", "feed", "buy_coins", "sold")}
-    offered = {"coins": 0, "gems": 0, "tickets": 0}
-    filled = {"coins": 0, "gems": 0, "tickets": 0}
+    def add(xp=0.0, t=0.0, stagger=False):
+        nonlocal nid
+        p = Pet(model, rng, xp=xp, t=t + (rng.random() * model.sleep if stagger else 0.0))
+        pets[nid] = p
+        heapq.heappush(heap, (p.next_time(), nid))
+        nid += 1
+
+    def target(w):
+        cap, counts = schedule[min(w, len(schedule) - 1)]
+        return cap if buffer is None else min(cap, sum(counts.values()) + buffer)
+
+    for x in list(start_xp)[:target(0)]:
+        add(x, 0.0, stagger=True)
+    while len(pets) < target(0):
+        add()
+
+    out = {k: [0.0] * weeks for k in ("coins", "gems", "tickets", "produce", "feed", "buy_coins", "sold",
+                                      "traded", "bristles", "parked_days", "herd")}
+    offered = dict.fromkeys(KINDS, 0)
+    filled = dict.fromkeys(KINDS, 0)
     sold_levels = []
     week, board = -1, []
+    parked_since = {}
 
-    def new_week(w):
+    def open_week(w):
         nonlocal board
-        board = ([dict(r, open=True) for r in live_board] if live_board else
-                 make_board(rng, animal, counts, level_pool, coin_points, ticket_amount, gems))
+        cap, counts = schedule[min(w, len(schedule) - 1)]
+        counts = dict(counts)
+        if w in no_ticket_weeks and counts.get("tickets"):
+            counts["coins"] = counts.get("coins", 0) + counts.pop("tickets")
+        board = ([dict(r, open=True) for r in live_board] if live_board and w == 0 else
+                 make_board(rng, counts, level_pool, coin_points, ticket_amount, gems))
         for r in board:
             offered[r["kind"]] += 1
+        while len(pets) < target(w):   # building upgrade or new target: top up
+            add(0.0, w * WEEK_H)
+        out["herd"][w] = len(pets)
+
+    def remove(i, t, w):
+        if i in parked_since:
+            out["parked_days"][w] += (t - parked_since.pop(i)) / 24
+        del pets[i]
+        if len(pets) < target(w):
+            add(0.0, t)
+            out["buy_coins"][w] += BUY_COINS[animal]
 
     while heap:
         t, i = heapq.heappop(heap)
-        if t > horizon:
+        if t >= horizon:
             break
+        if i not in pets:
+            continue
         w = int(t // WEEK_H)
         while week < w:
             week += 1
-            new_week(week)
+            open_week(week)
         p = pets[i]
-        if p.awake(t) and sell:
+        if p.awake(t):
             bl = p.bounty_level()
-            # fill the hardest request this animal meets; tickets first on ties
-            cands = [r for r in board if r["open"] and r["level"] <= bl]
+            cands = [r for r in board if r["open"] and r["level"] <= bl] if sell else []
             if cands:
                 order = {"tickets": 0, "coins": 1, "gems": 2}
                 r = max(cands, key=lambda r: (r["level"], -order[r["kind"]], r["amount"]))
                 r["open"] = False
                 filled[r["kind"]] += 1
-                out[r["kind"]][w] += r["amount"]
+                out[r["kind"]][w] += r["amount"] * (coin_mult if r["kind"] == "coins" else 1)
                 out["sold"][w] += 1
+                out["bristles"][w] += model.bristle_value[bl]
                 sold_levels.append(bl)
-                out["buy_coins"][w] += BUY_COINS[animal]
-                p = pets[i] = Pet(model, rng, t=t)
-        if stop_feeding_at is not None and p.awake(t) and not p.ready and p.level >= stop_feeding_at:
-            # park it: awake, unfed, costs nothing; look again when the next board opens
-            heapq.heappush(heap, ((w + 1) * WEEK_H + 1e-6, i))
-            continue
+                remove(i, t, w)
+                continue
+            if trade_in_at is not None and bl >= trade_in_at and model.bristle_value[bl] > 0:
+                out["traded"][w] += 1
+                out["bristles"][w] += model.bristle_value[bl]
+                remove(i, t, w)
+                continue
+            if stop_feeding_at is not None and not p.ready and p.level >= stop_feeding_at:
+                parked_since.setdefault(i, t)
+                heapq.heappush(heap, ((w + 1) * WEEK_H + 1e-6, i))   # look again when the next board opens
+                continue
+            if i in parked_since:
+                out["parked_days"][w] += (t - parked_since.pop(i)) / 24
         ev = p.act(t)
         if ev:
             out["produce"][w] += ev[2]

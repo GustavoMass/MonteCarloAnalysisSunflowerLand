@@ -80,12 +80,30 @@ class Simulation(unittest.TestCase):
     def test_herd_sells_and_parks(self):
         from sflmc import herd as H
         m = S.AnimalModel(F.Farm({}, set()), "Cow", S.Economy(PRICES))
-        r = H.simulate_herd(m, random.Random(4), start_xp=[], capacity=5, weeks=3, sell=True,
-                            counts={"coins": 2, "tickets": 1}, level_pool=[3, 5], coin_points={"3": 500, "5": 900},
-                            ticket_amount=7, gems=5, stop_feeding_at=5)
+        sched = [(5, {"coins": 2, "tickets": 1})] * 3
+        r = H.simulate_herd(m, random.Random(4), start_xp=[], weeks=3, schedule=sched, buffer=None,
+                            level_pool=[3, 5], coin_points={"3": 500, "5": 900}, ticket_amount=7, gems=5,
+                            stop_feeding_at=5, no_ticket_weeks={2})
         self.assertEqual(sum(r["weekly"]["sold"]), 9)
-        self.assertEqual(sum(r["weekly"]["tickets"]), 21)
+        self.assertEqual(sum(r["weekly"]["tickets"]), 14)      # week 3 has no ticket bounty
         self.assertTrue(all(lv <= 5 for lv in r["sold_levels"]))
+
+    def test_lean_herd_size(self):
+        from sflmc import herd as H
+        m = S.AnimalModel(F.Farm({}, set()), "Sheep", S.Economy(PRICES))
+        sched = [(10, {"coins": 2, "gems": 1, "tickets": 2})] * 2
+        r = H.simulate_herd(m, random.Random(5), start_xp=[], weeks=2, schedule=sched, buffer=1,
+                            level_pool=[3], coin_points={"3": 300}, ticket_amount=7, gems=5)
+        self.assertEqual(r["weekly"]["herd"], [6, 6])
+
+    def test_pig_trade_in(self):
+        from sflmc import herd as H
+        prices = dict(PRICES, **{"Pig Bristles": 2.0})
+        m = S.AnimalModel(F.Farm({}, set()), "Pig", S.Economy(prices))
+        r = H.simulate_herd(m, random.Random(6), start_xp=[], weeks=2, schedule=[(3, {})] * 2, sell=False,
+                            level_pool=[5], coin_points={}, ticket_amount=0, gems=0, trade_in_at=9)
+        self.assertGreater(sum(r["weekly"]["traded"]), 0)
+        self.assertGreater(sum(r["weekly"]["bristles"]), 0)
 
 if __name__ == "__main__":
     unittest.main()
