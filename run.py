@@ -273,7 +273,9 @@ def main():
 
     fl = load(os.path.join(DATA, "flowers.json"), {})
     if fl and farm_d.get("flower_beds") is not None and farm_d.get("season_started"):
-        fp = flowerplan.plan(farm_d, fl, int(time.time() * 1000), cfg.get("flower_plan_days", 11), prices["prices"])
+        fp = flowerplan.plan(farm_d, fl, int(time.time() * 1000), prices["prices"],
+                             tz_offset_h=cfg.get("timezone_offset_hours", 0), awake=tuple(cfg.get("awake_hours", (0, 24))),
+                             board_now=[b["label"] for b in board_week.get("board", []) if b["category"] == "Flowers"])
         out["flower_plan"] = fp
 
     os.makedirs(os.path.join(HERE, "results"), exist_ok=True)

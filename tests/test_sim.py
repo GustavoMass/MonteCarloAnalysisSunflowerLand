@@ -118,10 +118,27 @@ class FlowerPlan(unittest.TestCase):
                                "Blue Clover": {"seed": "Clover Seed", "days": 3, "parents": [["Rhubarb", 25]]}}}
         farm = {"inventory": {"Sunpetal Seed": 5, "Clover Seed": 5, "Cauliflower": 50, "Rhubarb": 100},
                 "flower_beds": [{"name": None}, {"name": None}], "season": "winter", "season_started": start}
-        r = FP.plan(farm, flowers, start + H, horizon_days=3)
+        r = FP.plan(farm, flowers, start + H, target_start_ms=start, target_days=3, tz_offset_h=0, awake=(6, 23))
         self.assertTrue(all(s["flower"] != "Blue Clover" for s in r["schedule"]))   # clover is autumn-only
         self.assertEqual(r["schedule"][0]["flower"], "Blue Cosmos")
-        self.assertEqual({s["bed"] for s in r["schedule"][:2]}, {1, 2})
+        for s in r["schedule"]:                                                     # never planted while asleep
+            self.assertTrue(6 <= (s["plant"] // H) % 24 < 23)
+
+    def test_parent_grown_first(self):
+        from sflmc import flowerplan as FP
+        H = 3600 * 1000
+        start = 1_000 * H
+        all4 = ["spring", "summer", "autumn", "winter"]
+        flowers = {"seeds": {"Sunpetal Seed": {"days": 1, "seasons": all4, "flowers": []},
+                             "Bloom Seed": {"days": 2, "seasons": all4, "flowers": []}},
+                   "flowers": {"Red Cosmos": {"seed": "Sunpetal Seed", "days": 3, "parents": [["Yellow Daffodil", 1]]},
+                               "Yellow Daffodil": {"seed": "Bloom Seed", "days": 2, "parents": [["Radish", 5]]}}}
+        farm = {"inventory": {"Sunpetal Seed": 5, "Bloom Seed": 5, "Radish": 50},
+                "flower_beds": [{"name": None}], "season": "winter", "season_started": start}
+        r = FP.plan(farm, flowers, start, target_start_ms=start, target_days=5, tz_offset_h=0, awake=(0, 24))
+        names = [s["flower"] for s in r["schedule"]]
+        self.assertEqual(names[:2], ["Yellow Daffodil", "Red Cosmos"])
+        self.assertEqual(r["schedule"][0]["why"], "parent for Red Cosmos")
 
 
 if __name__ == "__main__":
