@@ -111,5 +111,9 @@
   "board_bonus_tickets": 100,
   "_chores": "Chore tickets per week (none shown yet on your board).",
   "chore_tickets_per_week": 0,
-  "ticket_goal": 9000
+  "ticket_goal": 9000,
+
+  "_flower_plan": "Your clock: hours from UTC (Brazil = -3) and the hours you are awake to plant and harvest.",
+  "timezone_offset_hours": -3,
+  "awake_hours": [6, 23]
 }

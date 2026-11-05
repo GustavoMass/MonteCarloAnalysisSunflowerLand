@@ -377,28 +377,31 @@ function upgradeView() {
 // ---------- flower plan
 function flowerPlanView() {
   const P = DATA.flower_plan; if (!P) return;
-  const fmt = ms => new Date(ms).toLocaleString("en-GB", { weekday: "short", day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) + " UTC";
+  const off = P.tz_offset_h || 0, tz = off ? `UTC${off > 0 ? "+" : ""}${off}` : "UTC";
+  const fmt = ms => new Date(ms + off * 3600e3).toLocaleString("en-GB", { weekday: "short", day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "UTC" });
   const fams = ["Pansy", "Cosmos", "Balloon Flower", "Daffodil", "Carnation", "Lotus", "Edelweiss", "Lavender", "Gladiolus", "Clover"];
   const cols = ["Red", "Yellow", "Purple", "White", "Blue"];
   const seasonOf = { Edelweiss: "winter", Lavender: "spring", Gladiolus: "summer", Clover: "autumn" };
   const seedOf = { Pansy: "Sunpetal", Cosmos: "Sunpetal", "Balloon Flower": "Bloom", Daffodil: "Bloom", Carnation: "Lily", Lotus: "Lily" };
-  $("stockTable").innerHTML = `<thead><tr><th>Flower (now → after plan)</th>${cols.map(c => `<th>${c}</th>`).join("")}<th>Seeds held</th></tr></thead><tbody>` +
+  $("stockTable").innerHTML = `<thead><tr><th>Flower (now → end of plan)</th>${cols.map(c => `<th>${c}</th>`).join("")}<th>Seeds held</th></tr></thead><tbody>` +
     fams.map(f => `<tr><td>${f}${seasonOf[f] ? ` <span class="muted">(${seasonOf[f]} only)</span>` : ""}</td>` + cols.map(c => {
-        const n = `${c} ${f}`, a = P.stock_now[n] || 0, b = P.stock_end[n] || 0;
-        return `<td class="num ${a === 0 ? (b > 0 ? "pos" : "neg") : ""}">${a}${b !== a ? " → " + b : ""}</td>`; }).join("") +
+        const n = `${c} ${f}`, x = P.stock_now[n] || 0, y = P.stock_end[n] || 0;
+        return `<td class="num ${x === 0 ? (y > 0 ? "pos" : "neg") : ""}">${x}${y !== x ? " → " + y : ""}</td>`; }).join("") +
         `<td class="num">${P.seeds[(seedOf[f] || f) + " Seed"] ?? "—"}</td></tr>`).join("") + "</tbody>";
-  const wk = ms => ms < Date.parse("2026-11-09T00:00:00Z") ? "Before Monday (autumn still)" : ms < Date.parse("2026-11-16T00:00:00Z") ? "Week 1: winter" : "Week 2: spring";
+  const group = ms => ms < P.target_start ? `Before winter week (until ${fmt(P.target_start)})` : ms < P.horizon ? "Winter week (board week 1)" : "After";
   let last = "";
-  $("planTable").innerHTML = `<thead><tr><th>Bed</th><th>Plant</th><th>Seed</th><th>Cross-breed with</th><th>Gives</th><th>Ready</th><th>Why</th></tr></thead><tbody>` +
-    P.schedule.map(r => { const g = wk(r.plant), head = g !== last ? `<tr class="hi"><td colspan="7"><b>${g}</b></td></tr>` : ""; last = g;
+  $("planTable").innerHTML = `<thead><tr><th>Bed</th><th>Plant (${tz})</th><th>Seed</th><th>Cross-breed with</th><th>Gives</th><th>Ready</th><th>Harvest when awake</th><th>Why</th></tr></thead><tbody>` +
+    P.schedule.map(r => { const g = group(r.plant), head = g !== last ? `<tr class="hi"><td colspan="8"><b>${g}</b></td></tr>` : ""; last = g;
       return head + `<tr><td class="num">${r.bed}</td><td class="num">${fmt(r.plant)}</td><td>${r.seed.replace(" Seed", "")}</td>
-        <td>${r.cross}${r.buy ? ` <span class="tag">buy ${nf(r.buy)}</span>` : ""}</td><td><b>${r.flower}</b></td><td class="num">${fmt(r.ready)}</td><td class="muted">${r.why}</td></tr>`; }).join("") + "</tbody>";
+        <td>${r.cross}${r.buy ? ` <span class="tag">buy ${nf(r.buy)}</span>` : ""}</td><td><b>${r.flower}</b></td><td class="num">${fmt(r.ready)}</td>
+        <td class="num">${r.harvest > r.ready + 60e3 ? fmt(r.harvest) : "—"}</td><td class="muted">${r.why}</td></tr>`; }).join("") + "</tbody>";
   const growing = P.beds.filter(b => b.growing).map(b => `bed ${b.bed}: ${b.growing} (ready ${fmt(b.ready)})`).join(", ");
-  $("fpIntro").innerHTML = `Read from your farm: your flowers, seeds and crops, and what your 4 beds are growing (${growing}). Your beds grow at ×${P.speed.toFixed(2)} of base time.
-    Each bed is planted as soon as it frees up; log in near those times or as soon after as you can. Priorities: a season-only flower you have none of while its season lasts (the only week you can plant it);
-    then all-season colours you have none of (Cosmos first for Raven, then Pansy, Daffodil and Balloon Flower, then Carnation and Lotus); then a spare of the current season's flower, because the board takes one.
-    It cross-breeds with crops you hold, or with a flower only if you hold two. Before Monday the season is still autumn, so your Clover seeds go in now: Clover cannot be planted again until 30 Nov.
-    Week 1 is winter. You already hold one of every Edelweiss colour, so the board's likely requests are covered, and the plan grows spares. Re-run <code>run.bat</code> whenever you like; the plan is rebuilt from your beds and stock.`;
+  $("fpIntro").innerHTML = `Built from your farm at ${DATA.meta.generated}: flowers, seeds, crops, and your 4 beds (${growing}). Beds grow at ×${P.speed.toFixed(2)} of base time.
+    Times are your clock (${tz}); you plant and harvest only between ${P.awake[0]}:00 and ${P.awake[1]}:00, so a bed that finishes at night waits until morning.
+    When a flower needs another flower as its parent and you have none to spare, the parent is planted first and both grow times count (marked “parent for …”).
+    Goal: be ready for the winter week. The board leans on that week's season-only flower (last week 4 of 5 were Clover), and you already hold one of every Edelweiss.
+    So the beds go first to all-season colours you lack, fast ones first (Cosmos and Pansy lead, Raven asks for Cosmos), then Edelweiss spares once winter starts on ${fmt(P.target_start)}.
+    Clover is left for its own week (30 Nov). Re-run <code>run.bat</code> after you plant or harvest; the plan rebuilds from your live beds.`;
 }
 
 function verdicts(tot) {
