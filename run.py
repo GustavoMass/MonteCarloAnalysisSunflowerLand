@@ -253,8 +253,11 @@ def main():
                 for k, q in cst["items"].items():
                     items[k] = items.get(k, 0) + q
             priced = sum(q * eco.unit(k) for k, q in items.items())
+            step = G.BUILDING_COSTS[bld].get(top, {"coins": 0, "items": {}})   # from the level below
+            step_fl = eco.coin_flower(step["coins"]) + sum(q * eco.unit(k) for k, q in step["items"].items())
             out["upgrades"].append({"building": bld, "path": pname, "top_level": top, **tot,
-                                    "cost_coins": coins, "cost_items": items,
+                                    "cost_coins": coins, "cost_items": items, "step_coins": step["coins"],
+                                    "step_items": step["items"], "step_flower": step_fl,
                                     "cost_flower": eco.coin_flower(coins) + priced,
                                     "unpriced": {k: q for k, q in items.items() if not eco.unit(k)},
                                     "have": {k: farm_d.get("inventory", {}).get(k, 0) for k in items}})
