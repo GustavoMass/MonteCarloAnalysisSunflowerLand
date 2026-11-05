@@ -1,0 +1,18 @@
+{
+  "farm_id": 3621107187220366,
+  "source": "https://sfl-manager.com/api/v3/land/3621107187220366 (fetched 2026-11-05)",
+  "note": "Only animal-relevant skills / items are listed. Collectibles assumed placed (boostsUsedAt shows them active).",
+  "skills": {
+    "Efficient Feeding": 1,
+    "Restless Animals": 2,
+    "Double Bale": 1,
+    "Featherweight": 1,
+    "Heartwarming Instruments": 1,
+    "Abundant Harvest": 1,
+    "Clucky Grazing": 1
+  },
+  "collectibles": ["Fat Chicken", "Cluckulator", "Rich Chicken", "Speed Chicken", "El Pollo Veloz",
+                   "Chicken Coop", "Bale", "Ayam Cemani", "Undead Rooster"],
+  "wearables": [],
+  "buildings": {"Hen House": 3, "Pigpen": 1, "Barn": 0}
+}

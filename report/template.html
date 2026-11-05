@@ -1,0 +1,326 @@
+<meta charset="utf-8">
+<title>Barnyard Monte Carlo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one ledger column; verdicts first, then a control bar that drives the charts and the per-level ledger. */
+:root {
+  --paper: #f1f3ec; --card: #fbfcf8; --ink: #1d261f; --muted: #5d6a60; --rule: #d3d9cc;
+  --accent: #c8861a;  /* egg yolk */
+  --chicken: #c8861a; --cow: #3e6b8a; --sheep: #7a6a9c; --pig: #b5546a;
+  --good: #2f7d4f; --bad: #b2412f; --band: rgba(200,134,26,.16);
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #151a16; --card: #1c231e; --ink: #e6ebe2; --muted: #9aa69b; --rule: #2f3a31;
+  --accent: #e3a43c; --chicken: #e3a43c; --cow: #79a7c7; --sheep: #a99bcb; --pig: #dc8199;
+  --good: #6cc48f; --bad: #e57d6a; --band: rgba(227,164,60,.18); color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --paper: #151a16; --card: #1c231e; --ink: #e6ebe2; --muted: #9aa69b; --rule: #2f3a31;
+  --accent: #e3a43c; --chicken: #e3a43c; --cow: #79a7c7; --sheep: #a99bcb; --pig: #dc8199;
+  --good: #6cc48f; --bad: #e57d6a; --band: rgba(227,164,60,.18); color-scheme: dark; }
+body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.55; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-block: 28px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 40px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: clamp(30px, 5vw, 46px); font-weight: 700; letter-spacing: -.01em; }
+h2 { font-size: 24px; font-weight: 700; }
+h3 { font-size: 17px; font-weight: 700; }
+p { margin: 0; max-width: 68ch; }
+.eyebrow { font: 600 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+header { display: grid; gap: 12px; }
+header .sub { color: var(--muted); }
+section { display: grid; gap: 16px; }
+.verdicts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 640px) { .verdicts { grid-template-columns: 1fr; } }
+.verdict { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 16px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.verdict .k { font: 600 12px/1.2 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.verdict .v { font-family: var(--display); font-size: 21px; font-weight: 700; line-height: 1.2; }
+.verdict p { font-size: 14px; color: var(--muted); }
+.controls { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: end; padding: 14px 16px; background: var(--card); border: 1px solid var(--rule); border-radius: 10px; }
+.controls label { display: grid; gap: 4px; font: 600 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+select, input[type=number] { font: 15px var(--body); color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; padding: 6px 8px; }
+input[type=number] { width: 84px; font-family: var(--mono); }
+select:focus-visible, input:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.tabs button { font: 600 14px var(--body); border: 1px solid var(--rule); background: var(--paper); color: var(--ink); border-radius: 999px; padding: 6px 14px; cursor: pointer; display: inline-flex; gap: 8px; align-items: center; }
+.tabs button .dot { width: 9px; height: 9px; border-radius: 50%; }
+.tabs button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+.chart { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 14px; display: grid; gap: 8px; min-width: 0; }
+.chart .cap { font-size: 13px; color: var(--muted); }
+.chart .box { position: relative; height: 280px; }
+.tbl { overflow-x: auto; background: var(--card); border: 1px solid var(--rule); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 14px; }
+th, td { padding: 7px 10px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--rule); }
+th { font: 600 11px/1.2 var(--mono); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); position: sticky; top: 0; background: var(--card); }
+th:first-child, td:first-child { text-align: left; }
+td.num { font-family: var(--mono); font-size: 13px; }
+tr.best td { background: var(--band); font-weight: 700; }
+.pos { color: var(--good); } .neg { color: var(--bad); } .dim { color: var(--muted); }
+.pill { display: inline-block; font: 600 11px/1 var(--mono); padding: 3px 7px; border-radius: 999px; border: 1px solid currentColor; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; align-items: start; }
+.calc { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 16px; display: grid; gap: 12px; min-width: 0; }
+.calc .row { display: grid; grid-template-columns: 1fr auto auto auto; gap: 8px 12px; align-items: center; }
+.calc .row.h { font: 600 11px/1.2 var(--mono); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.big { font-family: var(--display); font-size: 34px; font-weight: 700; line-height: 1; }
+.kv { display: grid; grid-template-columns: 1fr auto; gap: 6px 16px; font-variant-numeric: tabular-nums; }
+.kv .r { font-family: var(--mono); text-align: right; }
+.kv .tot { border-top: 1px solid var(--rule); padding-top: 6px; font-weight: 700; }
+.note { font-size: 13px; color: var(--muted); }
+ul.method { margin: 0; padding-left: 20px; display: grid; gap: 6px; max-width: 80ch; }
+code { font-family: var(--mono); font-size: 13px; }
+@media (max-width: 520px) { .calc .row { grid-template-columns: 1fr auto auto; } .calc .row .opt { display: none; } }
+</style>
+
+<div class="wrap">
+<header>
+  <span class="eyebrow">Farm #3621107187220366 · Cave Dwellers chapter · <span id="gen"></span></span>
+  <h1>Barnyard Monte Carlo</h1>
+  <p class="sub">Every chicken, cow, sheep and pig simulated feed by feed and pet by pet, <span id="runs"></span> times per scenario, using the game's own rules from the Sunflower Land source. Profit is in FLOWER at today's P2P prices: produce sold minus the feed it ate.</p>
+</header>
+
+<section aria-labelledby="v-h">
+  <h2 id="v-h">The short answers</h2>
+  <div class="verdicts" id="verdicts"></div>
+</section>
+
+<section aria-labelledby="p-h">
+  <h2 id="p-h">Profit over an animal's life</h2>
+  <div class="controls">
+    <div class="tabs" id="animalTabs" role="group" aria-label="Animal"></div>
+    <label for="sched">Logins<select id="sched"></select></label>
+    <label for="buildA">Build A<select id="buildA"></select></label>
+    <label for="buildB">Build B<select id="buildB"></select></label>
+  </div>
+  <div class="charts">
+    <div class="chart">
+      <h3>Cumulative net FLOWER, one animal from level 0</h3>
+      <div class="box"><canvas id="cumChart" aria-label="Cumulative profit chart"></canvas></div>
+      <p class="cap">Line = median run. Shaded = middle 80% of runs (P10–P90). Starts negative by the purchase price.</p>
+    </div>
+    <div class="chart">
+      <h3>When to sell: FLOWER per day of the animal's life</h3>
+      <div class="box"><canvas id="sellChart" aria-label="Sell timing chart"></canvas></div>
+      <p class="cap">(produce − feed − purchase + bounty) ÷ days owned, if sold the morning after it reaches that level. Peak = best level to sell, when a bounty for it exists.</p>
+    </div>
+  </div>
+  <div class="tbl"><table id="lvlTable"></table></div>
+  <p class="note" id="lvlNote"></p>
+</section>
+
+<section aria-labelledby="s-h">
+  <h2 id="s-h">Login timing decides how many pets you get</h2>
+  <p>Each sleep has two love slots: the first opens one third into the sleep, the second one third after the first pet. Whether you catch both depends on when you log in, not how often.</p>
+  <div class="tbl"><table id="schedTable"></table></div>
+</section>
+
+<section aria-labelledby="t-h">
+  <h2 id="t-h">Do cows, sheep and pigs get you the 9,000-ticket item?</h2>
+  <p>The Duende Hat and Straw House cost 9,000 Duende Caps. Ticket bounties open on 9 Nov, so per-bounty ticket counts are not public yet; every assumption below is editable. Each bounty ticket also gives 5 chapter-pass points.</p>
+  <div class="grid2">
+    <div class="calc">
+      <h3>Assumptions</h3>
+      <div class="row h"><span>Animal</span><span>Bounties/wk</span><span>Base tickets</span><span class="opt">Sell level</span></div>
+      <div id="tRows"></div>
+      <div class="row"><span>Weeks of bounties left</span><input type="number" id="weeks" value="12" min="0" max="13"><span></span><span class="opt"></span></div>
+      <div class="row"><span>Bonus per bounty (Duende wearables)</span><input type="number" id="wear" value="3" min="0" max="5"><span></span><span class="opt"></span></div>
+      <div class="row"><span>Delivery + board tickets (sfl-manager plan)</span><input type="number" id="baseline" value="9812" min="0" step="10"><span></span><span class="opt"></span></div>
+      <div class="row"><span>Barn level to build</span><select id="barnLv"><option value="0">None</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3" selected>Level 3</option></select><span></span><span class="opt"></span></div>
+      <div class="row"><span>Pigpen level</span><select id="penLv"><option value="1" selected>Level 1 (owned)</option><option value="2">Level 2</option><option value="3">Level 3</option></select><span></span><span class="opt"></span></div>
+      <p class="note">Hen House L3 and Barn L3 bounty counts come from the SFL wiki. Barn L1–L2 and Pigpen counts are guesses. Building costs are sfl-manager P2P equivalents (coins + materials).</p>
+    </div>
+    <div class="calc" aria-live="polite">
+      <h3>Result for the chapter</h3>
+      <div><span class="big" id="tTotal"></span> <span class="dim">tickets projected</span></div>
+      <div class="kv" id="tKv"></div>
+      <p class="note" id="tVerdict"></p>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="m-h">
+  <h2 id="m-h">How it was modelled</h2>
+  <ul class="method" id="method"></ul>
+</section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const DATA = /*__DATA__*/null;
+const ANIMALS = ["Chicken", "Cow", "Sheep", "Pig"];
+const BUILD_CUR = "Clucky Grazing R1 (current)", BUILD_CHONKY = "Chonky Feed R1 (reset)";
+const BUILD_COST = { barn: [0, 6.8, 125.1, 696.2], pen: [0, 0, 58.8, 332.5] }; // FLOWER per level step
+const BOUNTY_PW = { // ticket bounties per week by building level (L3 from wiki; others assumed)
+  Chicken: () => 8, Cow: b => [0, 2, 3, 4][b], Sheep: b => [0, 2, 3, 4][b], Pig: p => [0, 2, 3, 4][p] };
+const state = { animal: "Chicken", sched: "3x/day", a: BUILD_CUR, b: BUILD_CHONKY };
+const $ = id => document.getElementById(id);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const f = (x, d = 3) => x == null ? "—" : (Math.abs(x) >= 100 ? x.toFixed(0) : x.toFixed(d));
+const sgn = (x, d = 3) => x == null ? '<span class="dim">—</span>' : `<span class="${x >= 0 ? "pos" : "neg"}">${x >= 0 ? "+" : "−"}${f(Math.abs(x), d)}</span>`;
+const get = (b, a, s) => DATA.scenarios.find(x => x.build === b && x.animal === a && x.schedule === s);
+
+function bestSell(sc) {
+  let best = null;
+  sc.levels.forEach(l => { if (l.sell_rate != null && (!best || l.sell_rate > best.sell_rate)) best = l; });
+  return best;
+}
+
+function verdicts() {
+  const s = "3x/day";
+  const chick = [BUILD_CUR, BUILD_CHONKY].map(b => get(b, "Chicken", s).steady_l15_daily);
+  const herd = ["Cow", "Sheep", "Pig"].map(a => [get(BUILD_CUR, a, s), get(BUILD_CHONKY, a, s)]);
+  const c2 = get(BUILD_CUR, "Chicken", "2x/day").steady_l15_daily, c3 = chick[0];
+  const items = [
+    ["Skill swap", "Swap Clucky Grazing for Chonky Feed",
+      `For chickens it is a wash (${f(chick[0])} vs ${f(chick[1])} FLOWER/day at level 15: x0.75 feed vs 2x XP for x1.5 feed lands on the same cost per XP). For every other animal Clucky's x1.5 feed penalty disappears and Chonky halves the feed count, so a cow at level 15 costs ${f(-herd[0][1].steady_l15_daily, 2)} instead of ${f(-herd[0][0].steady_l15_daily, 2)} FLOWER/day.`],
+    ["Petting", "Log in at 7, 15 and 23h",
+      `Two logins a day only ever catch one pet per sleep. Three well-spaced logins catch both and lift a level-15 chicken from ${f(c2)} to ${f(c3)} FLOWER/day. Four logins at 7/12/17/22 fall back to about one pet: timing matters more than count.`],
+    ["Selling chickens", sellLine("Chicken"),
+      "Chickens make money on eggs every day, so the bounty only tops it up. Fill the highest-level coin bounty you can; keep the rest producing."],
+    ["Barn animals", "Cows, sheep and pigs are bounty stock",
+      `Their produce never pays for its feed after level 10 (Mixed Grain and Gourmet Slop are expensive). They earn through bounties. ${sellLine("Cow")}. ${sellLine("Pig")}.`],
+  ];
+  $("verdicts").innerHTML = items.map(([k, v, p]) => `<div class="verdict"><span class="k">${k}</span><span class="v">${v}</span><p>${p}</p></div>`).join("");
+}
+function sellLine(a) {
+  const b = bestSell(get(BUILD_CHONKY, a, "3x/day"));
+  return b ? `${a}s: sell at level ${b.level} (${f(b.sell_rate, 2)} FLOWER/day of life)` : `${a}s: no bounty data`;
+}
+
+let cumChart, sellChart;
+function colorFor(a) { return css("--" + a.toLowerCase()); }
+function draw() {
+  const sa = get(state.a, state.animal, state.sched), sb = get(state.b, state.animal, state.sched);
+  const ink = css("--muted"), rule = css("--rule"), col = colorFor(state.animal), alt = css("--ink");
+  const days = sa.band["0.5"].map((_, i) => i);
+  const ds = (sc, c, name, dash) => [
+    { label: name + " P90", data: sc.band["0.9"], borderWidth: 0, pointRadius: 0, fill: false },
+    { label: name + " P10", data: sc.band["0.1"], borderWidth: 0, pointRadius: 0, fill: "-1", backgroundColor: c + "33" },
+    { label: name, data: sc.band["0.5"], borderColor: c, borderWidth: 2.5, pointRadius: 0, borderDash: dash },
+  ];
+  const opts = (xl, yl) => ({ responsive: true, maintainAspectRatio: false, animation: false, interaction: { mode: "index", intersect: false },
+    plugins: { legend: { labels: { color: ink, filter: i => !/P10|P90/.test(i.text), boxHeight: 2 } },
+      tooltip: { filter: i => !/P10|P90/.test(i.dataset.label), callbacks: { label: c => `${c.dataset.label}: ${c.parsed.y == null ? "—" : c.parsed.y.toFixed(3)}` } } },
+    scales: { x: { title: { display: true, text: xl, color: ink }, ticks: { color: ink }, grid: { color: rule } },
+      y: { title: { display: true, text: yl, color: ink }, ticks: { color: ink }, grid: { color: rule } } } });
+  cumChart && cumChart.destroy();
+  cumChart = new Chart($("cumChart"), { type: "line", data: { labels: days,
+    datasets: [...ds(sa, col, "A: " + short(state.a), []), ...(state.a === state.b ? [] : ds(sb, alt, "B: " + short(state.b), [6, 4]))] },
+    options: opts("day", "FLOWER") });
+  const lv = sa.levels.map(l => l.level);
+  const sets = [{ label: "A: " + short(state.a), data: sa.levels.map(l => l.sell_rate), borderColor: col, backgroundColor: col, spanGaps: false, borderWidth: 2.5 }];
+  if (state.a !== state.b) sets.push({ label: "B: " + short(state.b), data: sb.levels.map(l => l.sell_rate), borderColor: alt, backgroundColor: alt, borderDash: [6, 4], borderWidth: 2 });
+  if (state.animal === "Pig") sets.push({ label: "A: trade-in (bristles only)", data: sa.levels.map(l => l.tradein_rate), borderColor: css("--muted"), backgroundColor: css("--muted"), borderDash: [2, 3], borderWidth: 2 });
+  sellChart && sellChart.destroy();
+  sellChart = new Chart($("sellChart"), { type: "line", data: { labels: lv, datasets: sets }, options: opts("level when sold", "FLOWER / day") });
+  table(sa);
+  schedTable();
+}
+const short = b => b.replace(" (current)", " ·now").replace(" (reset)", "");
+
+function table(sc) {
+  const best = bestSell(sc);
+  const rows = sc.levels.map(l => `<tr class="${best && l.level === best.level ? "best" : ""}">
+    <td>${l.level}</td><td class="num">${f(l.days_to_reach, 1)}</td><td class="num">${f(l.cycle_days, 2)}</td>
+    <td class="num">${f(l.cycle_loves, 2)}</td><td class="num">${f(l.cycle_feed)}</td><td class="num">${f(l.cycle_produce)}</td>
+    <td class="num">${sgn(l.daily_profit)}</td><td class="num dim">${f(l.daily_profit_p10)} … ${f(l.daily_profit_p90)}</td>
+    <td class="num">${sgn(l.cum_at_reach, 2)}</td><td class="num">${l.bounty_flower == null ? '<span class="dim">no bounty</span>' : f(l.bounty_flower, 2)}</td>
+    <td class="num">${sgn(l.sell_rate)}</td></tr>`).join("");
+  $("lvlTable").innerHTML = `<thead><tr><th>Level</th><th>Day reached</th><th>Cycle days</th><th>Pets</th><th>Feed / cycle</th><th>Produce / cycle</th>
+    <th>Profit / day</th><th>P10 … P90</th><th>Cum. net</th><th>Bounty value</th><th>If sold: / day</th></tr></thead><tbody>${rows}</tbody>`;
+  const u = sc.produce_units[15];
+  $("lvlNote").innerHTML = `${state.animal}, build A, ${state.sched}: sleeps ${sc.sleep_h.toFixed(2)} h, eats ${sc.food_qty_per_feed.toFixed(3)} units per feed` +
+    `${sc.xp_mult > 1 ? ` at ${sc.xp_mult}x XP` : ""}. Level-15 produce per claim: ${Object.entries(u).map(([k, v]) => v + " " + k).join(", ")}. ` +
+    `At level 15 it keeps producing every ${({ Chicken: 320, Cow: 960, Sheep: 640, Pig: 960 })[state.animal]} XP: ${sgn(sc.steady_l15_daily)} FLOWER/day. ` +
+    `"Profit / day" is the cycle that ends at that level. All values FLOWER.`;
+}
+
+function schedTable() {
+  const rows = Object.keys(DATA.meta.schedules).map(s => {
+    const a = get(state.a, state.animal, s), b = get(state.b, state.animal, s), l = a.levels[7];
+    const hours = DATA.meta.schedules[s];
+    return `<tr><td>${s}</td><td class="num dim">${hours ? hours.map(h => h + "h").join(" · ") : "on every timer"}</td>
+      <td class="num">${f(l.cycle_loves, 2)}</td><td class="num">${f(l.cycle_days, 2)}</td><td class="num">${f(a.levels[14].days_to_reach, 1)}</td>
+      <td class="num">${sgn(a.steady_l15_daily)}</td><td class="num">${sgn(b.steady_l15_daily)}</td><td class="num">${sgn(a.band["0.5"].at(-1), 2)}</td></tr>`;
+  }).join("");
+  $("schedTable").innerHTML = `<thead><tr><th>${state.animal}</th><th>Login hours</th><th>Pets / sleep</th><th>Days / cycle</th><th>Days to L15</th>
+    <th>L15 / day (A)</th><th>L15 / day (B)</th><th>Day ${DATA.meta.days} net (A)</th></tr></thead><tbody>${rows}</tbody>`;
+}
+
+// ---- tickets
+function ticketRows() {
+  $("tRows").innerHTML = ANIMALS.map(a => `<div class="row"><span><span class="pill" style="color:var(--${a.toLowerCase()})">${a}</span></span>
+    <input type="number" id="pw-${a}" min="0" max="20" aria-label="${a} ticket bounties per week">
+    <input type="number" id="base-${a}" value="${a === "Chicken" ? 3 : 4}" min="0" max="40" aria-label="${a} base tickets per bounty">
+    <span class="opt"><input type="number" id="lv-${a}" value="6" min="1" max="15" aria-label="${a} level sold"></span></div>`).join("");
+  syncPw();
+}
+function syncPw() {
+  const barn = +$("barnLv").value, pen = +$("penLv").value;
+  $("pw-Chicken").value = BOUNTY_PW.Chicken(); $("pw-Cow").value = BOUNTY_PW.Cow(barn);
+  $("pw-Sheep").value = BOUNTY_PW.Sheep(barn); $("pw-Pig").value = BOUNTY_PW.Pig(pen);
+}
+function tickets() {
+  const w = +$("weeks").value, bonus = +$("wear").value, baseLine = +$("baseline").value;
+  const barn = +$("barnLv").value, pen = +$("penLv").value;
+  let lines = [], extraT = 0, chickT = 0, raise = 0, extraRaise = 0;
+  ANIMALS.forEach(a => {
+    const n = (+$("pw-" + a).value) * w, t = n * ((+$("base-" + a).value) + bonus);
+    const lv = Math.min(15, Math.max(1, +$("lv-" + a).value));
+    const cum = get(state.a, a, state.sched).levels[lv - 1].cum_at_reach;  // negative = cost to raise
+    const cost = n * Math.max(0, -cum);
+    if (a === "Chicken") { chickT = t; raise += cost; } else { extraT += t; extraRaise += cost; }
+    lines.push([`${a}: ${n} bounties × ${(+$("base-" + a).value) + bonus}`, t]);
+  });
+  const build = BUILD_COST.barn.slice(1, barn + 1).reduce((s, x) => s + x, 0) + BUILD_COST.pen.slice(2, pen + 1).reduce((s, x) => s + x, 0);
+  const total = baseLine + chickT + extraT;
+  $("tTotal").textContent = Math.round(total).toLocaleString("en-US");
+  const kv = [["Deliveries + board (baseline)", baseLine], ...lines, ["Total", total]];
+  $("tKv").innerHTML = kv.map(([k, v], i) => `<span class="${i === kv.length - 1 ? "tot" : ""}">${k}</span><span class="r ${i === kv.length - 1 ? "tot" : ""}">${Math.round(v).toLocaleString("en-US")}</span>`).join("") +
+    `<span>Chapter-pass points from animal bounties</span><span class="r">${Math.round((chickT + extraT) * 5).toLocaleString("en-US")}</span>` +
+    `<span>Extra tickets from barn + pigpen</span><span class="r">${Math.round(extraT).toLocaleString("en-US")}</span>` +
+    `<span>Their cost: buildings + raising (FLOWER)</span><span class="r">${(build + extraRaise).toFixed(1)}</span>` +
+    `<span>FLOWER per extra ticket</span><span class="r">${extraT ? ((build + extraRaise) / extraT).toFixed(2) : "—"}</span>`;
+  const gap = 9000 - (baseLine + chickT);
+  $("tVerdict").textContent = gap <= 0
+    ? `Deliveries plus chicken bounties already clear 9,000 by ${Math.round(-gap).toLocaleString("en-US")}. The barn and pigpen are a safety margin worth ${Math.round(extraT).toLocaleString("en-US")} tickets, not a requirement.`
+    : `Deliveries plus chicken bounties fall ${Math.round(gap).toLocaleString("en-US")} short; barn and pigpen bounties ${extraT >= gap ? "close" : "do not close"} that gap.`;
+}
+
+function method() {
+  const p = DATA.prices.prices, sl = DATA.meta.slops;
+  const items = [
+    `Rules mirror <code>sunflower-land</code> main: level XP tables, favourite feed (60 XP, 80 from level 10), one-click feed batch to the next level, one produce claim per level-up, sleep 24 h × boosts, two pets per sleep at ⅓ and ⅔, love tool drawn by level weights (Petting Hand 25 / Brush 40 / Music Box 50 XP).`,
+    `Your boosts: ${Object.entries(DATA.farm.skills).map(([k, v]) => k + " R" + v).join(", ")}; placed ${DATA.farm.collectibles.join(", ")}. Builds swap only the tier-3 feed skill.`,
+    `${DATA.meta.runs} runs × ${DATA.meta.days} days per scenario (4 animals × ${DATA.builds.length} builds × 5 login schedules). Randomness: the pet tool requested each sleep and ±20 min jitter on login times.`,
+    `Prices: sfl-manager P2P on ${DATA.prices.fetched}. Produce valued with a ${DATA.meta.sell_fee * 100}% selling cut. Feed bought at P2P: Egg ${p.Egg}, Milk ${p.Milk}, Wool ${p.Wool}, Truffle ${p.Truffle}, Corn ${p.Corn}, Wheat ${p.Wheat}, Barley ${p.Barley}. Pig slop uses the cheapest tradeable ingredient: ${Object.entries(sl).map(([k, v]) => `${k} = ${v[0]} (${v[1].toFixed(3)})`).join(", ")}. Fish can replace Rich/Gourmet slop ingredients and would make pigs cheaper.`,
+    `Coin bounties are this week's board, interpolated between observed levels and shown only inside the observed range. Coins are valued at the 1:${DATA.meta.coins_per_flower} rate you would pay to buy them, which is an upper bound since coins cannot be sold. Pigs also pay Pig Bristles on a bounty or trade-in (${p["Pig Bristles"]} FLOWER each on P2P, a thin new market).`,
+    `Not modelled: sickness (rolled server-side, halves produce), Buckaroo multipliers, shrines, treats and mud, gem bounties.`,
+  ];
+  $("method").innerHTML = items.map(x => `<li>${x}</li>`).join("");
+}
+
+function init() {
+  $("gen").textContent = DATA.meta.generated;
+  $("runs").textContent = DATA.meta.runs.toLocaleString("en-US");
+  $("animalTabs").innerHTML = ANIMALS.map(a => `<button type="button" data-a="${a}" aria-pressed="${a === state.animal}"><span class="dot" style="background:var(--${a.toLowerCase()})"></span>${a}</button>`).join("");
+  $("animalTabs").onclick = e => { const b = e.target.closest("button"); if (!b) return; state.animal = b.dataset.a;
+    [...$("animalTabs").children].forEach(x => x.setAttribute("aria-pressed", x.dataset.a === state.animal)); draw(); };
+  $("sched").innerHTML = Object.keys(DATA.meta.schedules).map(s => `<option ${s === state.sched ? "selected" : ""}>${s}</option>`).join("");
+  ["buildA", "buildB"].forEach((id, i) => { $(id).innerHTML = DATA.builds.map(b => `<option ${b === (i ? state.b : state.a) ? "selected" : ""}>${b}</option>`).join(""); });
+  $("sched").onchange = e => { state.sched = e.target.value; draw(); tickets(); };
+  $("buildA").onchange = e => { state.a = e.target.value; draw(); tickets(); };
+  $("buildB").onchange = e => { state.b = e.target.value; draw(); };
+  ticketRows();
+  document.querySelector(".calc").addEventListener("input", e => { if (e.target.id === "barnLv" || e.target.id === "penLv") syncPw(); tickets(); });
+  verdicts(); method(); draw(); tickets();
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw);
+  new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+}
+if (window.Chart) init(); else window.addEventListener("load", init);
+</script>
