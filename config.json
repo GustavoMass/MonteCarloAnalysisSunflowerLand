@@ -24,6 +24,20 @@
     "Barn": [[0, 1], [2, 2]],
     "Pigpen": [[0, 1], [2, 2]]
   },
+  "_upgrade_paths": "Building paths to compare for tickets and value: [[from_week, level], ...]. Barn = cows + sheep (buffer 1), Pigpen = pigs on bounties + trade-in.",
+  "upgrade_paths": {
+    "Barn": {
+      "L1 all chapter": [[0, 1]],
+      "L2 from week 3": [[0, 1], [2, 2]],
+      "L2 wk 3, L3 wk 6": [[0, 1], [2, 2], [5, 3]],
+      "L3 from week 3": [[0, 1], [2, 3]]
+    },
+    "Pigpen": {
+      "L1 all chapter": [[0, 1]],
+      "L2 from week 3": [[0, 1], [2, 2]],
+      "L2 wk 3, L3 wk 6": [[0, 1], [2, 2], [5, 3]]
+    }
+  },
   "_capacity": "Slots per building level (sfl-manager). Chicken Coop adds +5 per Hen House level, Barn Blueprint +5 per Barn level.",
   "capacity": {"Hen House": [0, 10, 15, 20], "Barn": [0, 10, 15, 20], "Pigpen": [0, 3, 6, 9]},
 
@@ -76,7 +90,7 @@
     "Bert":          {"base": 2, "freq": 1.0},
     "Finley":        {"base": 2, "freq": 0.2},
     "Raven":         {"base": 4, "freq": 0.333},
-    "Miranda":       {"base": 2, "freq": 0.0},
+    "Miranda":       {"base": 2, "freq": 1.0},
     "Finn":          {"base": 5, "freq": 0.2},
     "Pharaoh":       {"base": 6, "freq": 0.2},
     "Cornwell":      {"base": 3, "freq": 0.333},

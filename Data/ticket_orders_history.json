@@ -4,7 +4,7 @@
   "orders": {
    "20 Zucchini + 30 Sunflower": {
     "reward": 3,
-    "cost": 0.016017999999999998,
+    "cost": 0.016015,
     "cost_ok": true,
     "days": [
      "2026-11-02",
@@ -18,7 +18,7 @@
   "orders": {
    "20 Stone + 5 Pickaxe + 2 Acorn": {
     "reward": 4,
-    "cost": 0.912,
+    "cost": 0.9114,
     "cost_ok": true,
     "days": [
      "2026-11-02"
@@ -47,7 +47,7 @@
   "orders": {
    "4 Earthworm + 2 Mussel": {
     "reward": 4,
-    "cost": 1.89276,
+    "cost": 1.8915600000000001,
     "cost_ok": true,
     "days": [
      "2026-11-02",
@@ -56,7 +56,7 @@
    },
    "3 Pickled Broccoli + 3 Rod": {
     "reward": 4,
-    "cost": 0.35829,
+    "cost": 0.35792999999999997,
     "cost_ok": false,
     "days": [
      "2026-11-02"
@@ -72,7 +72,7 @@
    },
    "25 Wheat + 2 Shrimp": {
     "reward": 4,
-    "cost": 2.251135,
+    "cost": 2.2499100000000003,
     "cost_ok": true,
     "days": [
      "2026-11-02",
@@ -124,7 +124,7 @@
   "orders": {
    "2 Sproutroot Surprise + 10 Feather": {
     "reward": 4,
-    "cost": 0.0332,
+    "cost": 0.032,
     "cost_ok": false,
     "days": [
      "2026-11-02",
@@ -134,7 +134,7 @@
    },
    "2 Turbofruit Mix + 10 Feather": {
     "reward": 4,
-    "cost": 0.0332,
+    "cost": 0.032,
     "cost_ok": false,
     "days": [
      "2026-11-02",
@@ -157,7 +157,7 @@
    },
    "2 Sea Slug + 12 Wool": {
     "reward": 7,
-    "cost": 3.8863771419999997,
+    "cost": 3.883977142,
     "cost_ok": true,
     "days": [
      "2026-11-02"
@@ -165,7 +165,7 @@
    },
    "2 Octopus + 2 Anemone + 5 Anchovy": {
     "reward": 7,
-    "cost": 5.782167142,
+    "cost": 5.7779671420000005,
     "cost_ok": true,
     "days": [
      "2026-11-02",
@@ -179,7 +179,7 @@
   "orders": {
    "15 Sand Shovel + 2 Vase + 10 Sand": {
     "reward": 8,
-    "cost": 1.6117499999999998,
+    "cost": 1.61055,
     "cost_ok": false,
     "days": [
      "2026-11-02",
@@ -188,7 +188,7 @@
    },
    "6 Sand Drill + 1 Hieroglyph": {
     "reward": 8,
-    "cost": 5.5838339999999995,
+    "cost": 5.582914000199999,
     "cost_ok": false,
     "days": [
      "2026-11-02"
@@ -196,7 +196,7 @@
    },
    "10 Sand Shovel + 1 Hieroglyph": {
     "reward": 8,
-    "cost": 1.0745,
+    "cost": 1.0736999999999999,
     "cost_ok": true,
     "days": [
      "2026-11-03"
@@ -209,7 +209,7 @@
   "orders": {
    "40 Feather": {
     "reward": 5,
-    "cost": 0.1328,
+    "cost": 0.128,
     "cost_ok": true,
     "days": [
      "2026-11-02"
@@ -226,7 +226,7 @@
    },
    "50 Wheat + 80 Radish": {
     "reward": 5,
-    "cost": 1.34475,
+    "cost": 1.3447,
     "cost_ok": true,
     "days": [
      "2026-11-02"
@@ -234,7 +234,7 @@
    },
    "50 Egg + 60 Eggplant + 50 Radish": {
     "reward": 5,
-    "cost": 2.0533799999999998,
+    "cost": 2.053460784,
     "cost_ok": true,
     "days": [
      "2026-11-02",
@@ -249,7 +249,7 @@
   "orders": {
    "1 Gilded Doll + 25 Orange + 20 Lemon": {
     "reward": 7,
-    "cost": 0.4893,
+    "cost": 0.49178,
     "cost_ok": false,
     "days": [
      "2026-11-02",
@@ -258,7 +258,7 @@
    },
    "1 Moo Doll + 35 Lemon": {
     "reward": 7,
-    "cost": 0.28752500000000003,
+    "cost": 0.28749,
     "cost_ok": false,
     "days": [
      "2026-11-02",
@@ -281,7 +281,7 @@
    },
    "15 Crimstone + 8000 coins": {
     "reward": 12,
-    "cost": 35.183499999999995,
+    "cost": 35.1830000005,
     "cost_ok": true,
     "days": [
      "2026-11-02",
@@ -290,7 +290,7 @@
    },
    "5 Crimstone + 25 Iron + 8000 coins": {
     "reward": 12,
-    "cost": 30.172,
+    "cost": 30.1716833335,
     "cost_ok": true,
     "days": [
      "2026-11-03"

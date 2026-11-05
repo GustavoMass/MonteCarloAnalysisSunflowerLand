@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-05T13:29:57+00:00",
+ "fetched": "2026-11-05T13:51:39+00:00",
  "seeds": {
   "Sunpetal Seed": {
    "days": 1.0,
@@ -124,6 +124,36 @@
   "Red Pansy": {
    "seed": "Sunpetal Seed",
    "days": 1,
+   "parents": [
+    [
+     "Radish",
+     5
+    ],
+    [
+     "Banana",
+     3
+    ],
+    [
+     "Red Cosmos",
+     1
+    ],
+    [
+     "Purple Daffodil",
+     1
+    ],
+    [
+     "Red Balloon Flower",
+     1
+    ],
+    [
+     "Red Lotus",
+     1
+    ],
+    [
+     "Primula Enigma",
+     1
+    ]
+   ],
    "steps": [
     [
      "Radish",
@@ -140,6 +170,16 @@
   "Red Cosmos": {
    "seed": "Sunpetal Seed",
    "days": 8,
+   "parents": [
+    [
+     "Yellow Daffodil",
+     1
+    ],
+    [
+     "Purple Lotus",
+     1
+    ]
+   ],
    "steps": [
     [
      "White Lotus",
@@ -161,6 +201,20 @@
   "Yellow Daffodil": {
    "seed": "Bloom Seed",
    "days": 7,
+   "parents": [
+    [
+     "Red Cosmos",
+     1
+    ],
+    [
+     "White Carnation",
+     1
+    ],
+    [
+     "White Lotus",
+     1
+    ]
+   ],
    "steps": [
     [
      "White Lotus",
@@ -177,6 +231,28 @@
   "White Carnation": {
    "seed": "Lily Seed",
    "days": 6,
+   "parents": [
+    [
+     "Yellow Pansy",
+     1
+    ],
+    [
+     "White Cosmos",
+     1
+    ],
+    [
+     "Prism Petal",
+     1
+    ],
+    [
+     "Yellow Daffodil",
+     1
+    ],
+    [
+     "Celestial Frostbloom",
+     1
+    ]
+   ],
    "steps": [
     [
      "Yellow Pansy",
@@ -193,6 +269,32 @@
   "Yellow Pansy": {
    "seed": "Sunpetal Seed",
    "days": 1,
+   "parents": [
+    [
+     "Sunflower",
+     50
+    ],
+    [
+     "Apple",
+     3
+    ],
+    [
+     "Red Pansy",
+     1
+    ],
+    [
+     "Red Daffodil",
+     1
+    ],
+    [
+     "Yellow Balloon Flower",
+     1
+    ],
+    [
+     "Yellow Carnation",
+     1
+    ]
+   ],
    "steps": [
     [
      "Sunflower",
@@ -209,6 +311,24 @@
   "Red Daffodil": {
    "seed": "Bloom Seed",
    "days": 3,
+   "parents": [
+    [
+     "Yellow Pansy",
+     1
+    ],
+    [
+     "Yellow Balloon Flower",
+     1
+    ],
+    [
+     "Red Carnation",
+     1
+    ],
+    [
+     "Primula Enigma",
+     1
+    ]
+   ],
    "steps": [
     [
      "Yellow Pansy",
@@ -225,6 +345,12 @@
   "Yellow Balloon Flower": {
    "seed": "Bloom Seed",
    "days": 8,
+   "parents": [
+    [
+     "Yellow Lotus",
+     1
+    ]
+   ],
    "steps": [
     [
      "Red Pansy",
@@ -246,6 +372,24 @@
   "Yellow Lotus": {
    "seed": "Lily Seed",
    "days": 6,
+   "parents": [
+    [
+     "Red Pansy",
+     1
+    ],
+    [
+     "Red Cosmos",
+     1
+    ],
+    [
+     "Red Daffodil",
+     1
+    ],
+    [
+     "Yellow Lotus",
+     1
+    ]
+   ],
    "steps": [
     [
      "Red Pansy",
@@ -262,6 +406,12 @@
   "Red Carnation": {
    "seed": "Lily Seed",
    "days": 8,
+   "parents": [
+    [
+     "Purple Pansy",
+     1
+    ]
+   ],
    "steps": [
     [
      "Purple Cosmos",
@@ -288,6 +438,20 @@
   "Purple Pansy": {
    "seed": "Sunpetal Seed",
    "days": 3,
+   "parents": [
+    [
+     "Blue Pansy",
+     1
+    ],
+    [
+     "Purple Balloon Flower",
+     1
+    ],
+    [
+     "Purple Carnation",
+     1
+    ]
+   ],
    "steps": [
     [
      "Purple Cosmos",
@@ -309,6 +473,32 @@
   "Blue Pansy": {
    "seed": "Sunpetal Seed",
    "days": 2,
+   "parents": [
+    [
+     "Purple Cosmos",
+     1
+    ],
+    [
+     "White Pansy",
+     1
+    ],
+    [
+     "White Cosmos",
+     1
+    ],
+    [
+     "White Daffodil",
+     1
+    ],
+    [
+     "Blue Daffodil",
+     1
+    ],
+    [
+     "White Carnation",
+     1
+    ]
+   ],
    "steps": [
     [
      "Purple Cosmos",
@@ -325,6 +515,32 @@
   "Purple Cosmos": {
    "seed": "Sunpetal Seed",
    "days": 1,
+   "parents": [
+    [
+     "Beetroot",
+     10
+    ],
+    [
+     "Eggplant",
+     5
+    ],
+    [
+     "Kale",
+     5
+    ],
+    [
+     "Blue Cosmos",
+     1
+    ],
+    [
+     "Blue Balloon Flower",
+     1
+    ],
+    [
+     "Celestial Frostbloom",
+     1
+    ]
+   ],
    "steps": [
     [
      "Beetroot",
@@ -341,6 +557,32 @@
   "Blue Cosmos": {
    "seed": "Sunpetal Seed",
    "days": 1,
+   "parents": [
+    [
+     "Cauliflower",
+     5
+    ],
+    [
+     "Parsnip",
+     5
+    ],
+    [
+     "Blueberry",
+     3
+    ],
+    [
+     "Purple Pansy",
+     1
+    ],
+    [
+     "White Lotus",
+     1
+    ],
+    [
+     "Blue Carnation",
+     1
+    ]
+   ],
    "steps": [
     [
      "Cauliflower",
@@ -357,6 +599,40 @@
   "White Lotus": {
    "seed": "Lily Seed",
    "days": 5,
+   "parents": [
+    [
+     "Cauliflower",
+     5
+    ],
+    [
+     "Parsnip",
+     5
+    ],
+    [
+     "Kale",
+     5
+    ],
+    [
+     "Banana",
+     3
+    ],
+    [
+     "White Pansy",
+     1
+    ],
+    [
+     "Blue Daffodil",
+     1
+    ],
+    [
+     "Blue Lotus",
+     1
+    ],
+    [
+     "White Lotus",
+     1
+    ]
+   ],
    "steps": [
     [
      "Cauliflower",
@@ -373,6 +649,12 @@
   "White Pansy": {
    "seed": "Sunpetal Seed",
    "days": 3,
+   "parents": [
+    [
+     "Yellow Cosmos",
+     1
+    ]
+   ],
    "steps": [
     [
      "Yellow Pansy",
@@ -394,6 +676,20 @@
   "Yellow Cosmos": {
    "seed": "Sunpetal Seed",
    "days": 2,
+   "parents": [
+    [
+     "Yellow Pansy",
+     1
+    ],
+    [
+     "White Balloon Flower",
+     1
+    ],
+    [
+     "Red Carnation",
+     1
+    ]
+   ],
    "steps": [
     [
      "Yellow Pansy",
@@ -410,6 +706,24 @@
   "White Balloon Flower": {
    "seed": "Bloom Seed",
    "days": 6,
+   "parents": [
+    [
+     "White Cosmos",
+     1
+    ],
+    [
+     "Blue Daffodil",
+     1
+    ],
+    [
+     "White Daffodil",
+     1
+    ],
+    [
+     "White Balloon Flower",
+     1
+    ]
+   ],
    "steps": [
     [
      "Yellow Pansy",
@@ -436,6 +750,16 @@
   "White Cosmos": {
    "seed": "Sunpetal Seed",
    "days": 7,
+   "parents": [
+    [
+     "Prism Petal",
+     1
+    ],
+    [
+     "Yellow Lotus",
+     1
+    ]
+   ],
    "steps": [
     [
      "Red Pansy",
@@ -457,6 +781,12 @@
   "Prism Petal": {
    "seed": "Sunpetal Seed",
    "days": 8,
+   "parents": [
+    [
+     "Blue Lotus",
+     1
+    ]
+   ],
    "steps": [
     [
      "Purple Cosmos",
@@ -483,6 +813,16 @@
   "Blue Lotus": {
    "seed": "Lily Seed",
    "days": 7,
+   "parents": [
+    [
+     "Blue Pansy",
+     1
+    ],
+    [
+     "White Daffodil",
+     1
+    ]
+   ],
    "steps": [
     [
      "Purple Cosmos",
@@ -504,6 +844,16 @@
   "White Daffodil": {
    "seed": "Bloom Seed",
    "days": 4,
+   "parents": [
+    [
+     "Yellow Cosmos",
+     1
+    ],
+    [
+     "Prism Petal",
+     1
+    ]
+   ],
    "steps": [
     [
      "Yellow Pansy",
@@ -525,6 +875,20 @@
   "Blue Daffodil": {
    "seed": "Bloom Seed",
    "days": 7,
+   "parents": [
+    [
+     "Purple Balloon Flower",
+     1
+    ],
+    [
+     "Purple Carnation",
+     1
+    ],
+    [
+     "Purple Lotus",
+     1
+    ]
+   ],
    "steps": [
     [
      "Purple Carnation",
@@ -541,6 +905,12 @@
   "Purple Balloon Flower": {
    "seed": "Bloom Seed",
    "days": 9,
+   "parents": [
+    [
+     "Blue Carnation",
+     1
+    ]
+   ],
    "steps": [
     [
      "Purple Daffodil",
@@ -562,6 +932,20 @@
   "Blue Carnation": {
    "seed": "Lily Seed",
    "days": 7,
+   "parents": [
+    [
+     "Purple Daffodil",
+     1
+    ],
+    [
+     "White Balloon Flower",
+     1
+    ],
+    [
+     "Primula Enigma",
+     1
+    ]
+   ],
    "steps": [
     [
      "Purple Daffodil",
@@ -578,6 +962,28 @@
   "Purple Daffodil": {
    "seed": "Bloom Seed",
    "days": 2,
+   "parents": [
+    [
+     "Radish",
+     5
+    ],
+    [
+     "Blueberry",
+     3
+    ],
+    [
+     "Red Balloon Flower",
+     1
+    ],
+    [
+     "Red Lotus",
+     1
+    ],
+    [
+     "Blue Lotus",
+     1
+    ]
+   ],
    "steps": [
     [
      "Radish",
@@ -594,6 +1000,48 @@
   "Red Balloon Flower": {
    "seed": "Bloom Seed",
    "days": 2,
+   "parents": [
+    [
+     "Sunflower",
+     50
+    ],
+    [
+     "Beetroot",
+     10
+    ],
+    [
+     "Apple",
+     3
+    ],
+    [
+     "Banana",
+     3
+    ],
+    [
+     "Purple Pansy",
+     1
+    ],
+    [
+     "Red Pansy",
+     1
+    ],
+    [
+     "Red Daffodil",
+     1
+    ],
+    [
+     "Yellow Daffodil",
+     1
+    ],
+    [
+     "Purple Daffodil",
+     1
+    ],
+    [
+     "Yellow Carnation",
+     1
+    ]
+   ],
    "steps": [
     [
      "Sunflower",
@@ -610,6 +1058,24 @@
   "Yellow Carnation": {
    "seed": "Lily Seed",
    "days": 5,
+   "parents": [
+    [
+     "Sunflower",
+     50
+    ],
+    [
+     "Yellow Cosmos",
+     1
+    ],
+    [
+     "Red Lotus",
+     1
+    ],
+    [
+     "White Carnation",
+     1
+    ]
+   ],
    "steps": [
     [
      "Sunflower",
@@ -626,6 +1092,40 @@
   "Red Lotus": {
    "seed": "Lily Seed",
    "days": 5,
+   "parents": [
+    [
+     "Beetroot",
+     10
+    ],
+    [
+     "Radish",
+     5
+    ],
+    [
+     "Purple Cosmos",
+     1
+    ],
+    [
+     "Red Balloon Flower",
+     1
+    ],
+    [
+     "Yellow Balloon Flower",
+     1
+    ],
+    [
+     "Purple Carnation",
+     1
+    ],
+    [
+     "Yellow Carnation",
+     1
+    ],
+    [
+     "Red Carnation",
+     1
+    ]
+   ],
    "steps": [
     [
      "Beetroot",
@@ -642,6 +1142,32 @@
   "Purple Carnation": {
    "seed": "Lily Seed",
    "days": 5,
+   "parents": [
+    [
+     "Eggplant",
+     5
+    ],
+    [
+     "Blueberry",
+     3
+    ],
+    [
+     "Apple",
+     3
+    ],
+    [
+     "Blue Cosmos",
+     1
+    ],
+    [
+     "Blue Balloon Flower",
+     1
+    ],
+    [
+     "Purple Lotus",
+     1
+    ]
+   ],
    "steps": [
     [
      "Eggplant",
@@ -658,6 +1184,44 @@
   "Blue Balloon Flower": {
    "seed": "Bloom Seed",
    "days": 2,
+   "parents": [
+    [
+     "Cauliflower",
+     5
+    ],
+    [
+     "Parsnip",
+     5
+    ],
+    [
+     "Eggplant",
+     5
+    ],
+    [
+     "Kale",
+     5
+    ],
+    [
+     "Blue Pansy",
+     1
+    ],
+    [
+     "Blue Cosmos",
+     1
+    ],
+    [
+     "Purple Cosmos",
+     1
+    ],
+    [
+     "Blue Balloon Flower",
+     1
+    ],
+    [
+     "Celestial Frostbloom",
+     1
+    ]
+   ],
    "steps": [
     [
      "Cauliflower",
@@ -674,6 +1238,12 @@
   "Celestial Frostbloom": {
    "seed": "Bloom Seed",
    "days": 5,
+   "parents": [
+    [
+     "White Pansy",
+     1
+    ]
+   ],
    "steps": [
     [
      "Yellow Pansy",
@@ -700,6 +1270,12 @@
   "Purple Lotus": {
    "seed": "Lily Seed",
    "days": 12,
+   "parents": [
+    [
+     "Blue Carnation",
+     1
+    ]
+   ],
    "steps": [
     [
      "Purple Daffodil",
@@ -721,6 +1297,12 @@
   "Primula Enigma": {
    "seed": "Lily Seed",
    "days": 14,
+   "parents": [
+    [
+     "Purple Balloon Flower",
+     1
+    ]
+   ],
    "steps": [
     [
      "Purple Daffodil",
@@ -747,6 +1329,32 @@
   "Red Edelweiss": {
    "seed": "Edelweiss Seed",
    "days": 3,
+   "parents": [
+    [
+     "Artichoke",
+     8
+    ],
+    [
+     "Barley",
+     5
+    ],
+    [
+     "Yellow Edelweiss",
+     1
+    ],
+    [
+     "Yellow Lavender",
+     1
+    ],
+    [
+     "Purple Lavender",
+     1
+    ],
+    [
+     "Red Clover",
+     1
+    ]
+   ],
    "steps": [
     [
      "Artichoke",
@@ -763,6 +1371,28 @@
   "Yellow Edelweiss": {
    "seed": "Edelweiss Seed",
    "days": 3,
+   "parents": [
+    [
+     "Onion",
+     10
+    ],
+    [
+     "Red Edelweiss",
+     1
+    ],
+    [
+     "Yellow Gladiolus",
+     1
+    ],
+    [
+     "Red Lavender",
+     1
+    ],
+    [
+     "White Lavender",
+     1
+    ]
+   ],
    "steps": [
     [
      "Onion",
@@ -779,6 +1409,44 @@
   "Yellow Gladiolus": {
    "seed": "Gladiolus Seed",
    "days": 3,
+   "parents": [
+    [
+     "Pepper",
+     15
+    ],
+    [
+     "Onion",
+     10
+    ],
+    [
+     "Barley",
+     5
+    ],
+    [
+     "Yellow Gladiolus",
+     1
+    ],
+    [
+     "White Gladiolus",
+     1
+    ],
+    [
+     "Red Lavender",
+     1
+    ],
+    [
+     "Yellow Lavender",
+     1
+    ],
+    [
+     "White Lavender",
+     1
+    ],
+    [
+     "Yellow Clover",
+     1
+    ]
+   ],
    "steps": [
     [
      "Pepper",
@@ -795,6 +1463,20 @@
   "White Gladiolus": {
    "seed": "Gladiolus Seed",
    "days": 6,
+   "parents": [
+    [
+     "White Edelweiss",
+     1
+    ],
+    [
+     "Blue Edelweiss",
+     1
+    ],
+    [
+     "Blue Gladiolus",
+     1
+    ]
+   ],
    "steps": [
     [
      "Rhubarb",
@@ -816,6 +1498,16 @@
   "White Edelweiss": {
    "seed": "Edelweiss Seed",
    "days": 6,
+   "parents": [
+    [
+     "Blue Edelweiss",
+     1
+    ],
+    [
+     "Yellow Clover",
+     1
+    ]
+   ],
    "steps": [
     [
      "Pepper",
@@ -837,6 +1529,28 @@
   "Blue Edelweiss": {
    "seed": "Edelweiss Seed",
    "days": 6,
+   "parents": [
+    [
+     "Purple Edelweiss",
+     1
+    ],
+    [
+     "White Edelweiss",
+     1
+    ],
+    [
+     "White Gladiolus",
+     1
+    ],
+    [
+     "Purple Clover",
+     1
+    ],
+    [
+     "White Clover",
+     1
+    ]
+   ],
    "steps": [
     [
      "Rhubarb",
@@ -858,6 +1572,36 @@
   "Purple Edelweiss": {
    "seed": "Edelweiss Seed",
    "days": 3,
+   "parents": [
+    [
+     "Rhubarb",
+     25
+    ],
+    [
+     "Pepper",
+     15
+    ],
+    [
+     "Red Gladiolus",
+     1
+    ],
+    [
+     "Purple Gladiolus",
+     1
+    ],
+    [
+     "Blue Gladiolus",
+     1
+    ],
+    [
+     "Blue Lavender",
+     1
+    ],
+    [
+     "Blue Clover",
+     1
+    ]
+   ],
    "steps": [
     [
      "Rhubarb",
@@ -874,6 +1618,12 @@
   "Red Gladiolus": {
    "seed": "Gladiolus Seed",
    "days": 6,
+   "parents": [
+    [
+     "Yellow Edelweiss",
+     1
+    ]
+   ],
    "steps": [
     [
      "Onion",
@@ -895,6 +1645,32 @@
   "Purple Gladiolus": {
    "seed": "Gladiolus Seed",
    "days": 3,
+   "parents": [
+    [
+     "Artichoke",
+     8
+    ],
+    [
+     "Red Edelweiss",
+     1
+    ],
+    [
+     "Red Gladiolus",
+     1
+    ],
+    [
+     "Purple Gladiolus",
+     1
+    ],
+    [
+     "Red Clover",
+     1
+    ],
+    [
+     "Purple Clover",
+     1
+    ]
+   ],
    "steps": [
     [
      "Artichoke",
@@ -911,6 +1687,16 @@
   "Red Clover": {
    "seed": "Clover Seed",
    "days": 6,
+   "parents": [
+    [
+     "Red Edelweiss",
+     1
+    ],
+    [
+     "Purple Clover",
+     1
+    ]
+   ],
    "steps": [
     [
      "Artichoke",
@@ -932,6 +1718,16 @@
   "Purple Clover": {
    "seed": "Clover Seed",
    "days": 6,
+   "parents": [
+    [
+     "Red Lavender",
+     1
+    ],
+    [
+     "Red Clover",
+     1
+    ]
+   ],
    "steps": [
     [
      "Pepper",
@@ -953,6 +1749,36 @@
   "Red Lavender": {
    "seed": "Lavender Seed",
    "days": 3,
+   "parents": [
+    [
+     "Pepper",
+     15
+    ],
+    [
+     "Artichoke",
+     8
+    ],
+    [
+     "Red Edelweiss",
+     1
+    ],
+    [
+     "Purple Edelweiss",
+     1
+    ],
+    [
+     "Red Lavender",
+     1
+    ],
+    [
+     "Purple Lavender",
+     1
+    ],
+    [
+     "Yellow Clover",
+     1
+    ]
+   ],
    "steps": [
     [
      "Pepper",
@@ -969,6 +1795,16 @@
   "Purple Lavender": {
    "seed": "Lavender Seed",
    "days": 6,
+   "parents": [
+    [
+     "Blue Lavender",
+     1
+    ],
+    [
+     "Purple Gladiolus",
+     1
+    ]
+   ],
    "steps": [
     [
      "Artichoke",
@@ -990,6 +1826,28 @@
   "Blue Lavender": {
    "seed": "Lavender Seed",
    "days": 6,
+   "parents": [
+    [
+     "White Edelweiss",
+     1
+    ],
+    [
+     "Blue Edelweiss",
+     1
+    ],
+    [
+     "Purple Clover",
+     1
+    ],
+    [
+     "White Clover",
+     1
+    ],
+    [
+     "Blue Clover",
+     1
+    ]
+   ],
    "steps": [
     [
      "Rhubarb",
@@ -1011,6 +1869,20 @@
   "White Clover": {
    "seed": "Clover Seed",
    "days": 6,
+   "parents": [
+    [
+     "Blue Edelweiss",
+     1
+    ],
+    [
+     "Yellow Gladiolus",
+     1
+    ],
+    [
+     "Blue Lavender",
+     1
+    ]
+   ],
    "steps": [
     [
      "Pepper",
@@ -1032,6 +1904,48 @@
   "Blue Clover": {
    "seed": "Clover Seed",
    "days": 3,
+   "parents": [
+    [
+     "Rhubarb",
+     25
+    ],
+    [
+     "Artichoke",
+     8
+    ],
+    [
+     "Purple Edelweiss",
+     1
+    ],
+    [
+     "White Edelweiss",
+     1
+    ],
+    [
+     "Purple Gladiolus",
+     1
+    ],
+    [
+     "White Gladiolus",
+     1
+    ],
+    [
+     "Blue Gladiolus",
+     1
+    ],
+    [
+     "Purple Lavender",
+     1
+    ],
+    [
+     "White Clover",
+     1
+    ],
+    [
+     "Blue Clover",
+     1
+    ]
+   ],
    "steps": [
     [
      "Rhubarb",
@@ -1048,6 +1962,32 @@
   "Blue Gladiolus": {
    "seed": "Gladiolus Seed",
    "days": 3,
+   "parents": [
+    [
+     "Rhubarb",
+     25
+    ],
+    [
+     "Purple Edelweiss",
+     1
+    ],
+    [
+     "Purple Lavender",
+     1
+    ],
+    [
+     "Blue Lavender",
+     1
+    ],
+    [
+     "White Clover",
+     1
+    ],
+    [
+     "Blue Clover",
+     1
+    ]
+   ],
    "steps": [
     [
      "Rhubarb",
@@ -1064,6 +2004,40 @@
   "Yellow Clover": {
    "seed": "Clover Seed",
    "days": 3,
+   "parents": [
+    [
+     "Pepper",
+     15
+    ],
+    [
+     "Onion",
+     10
+    ],
+    [
+     "Barley",
+     5
+    ],
+    [
+     "Yellow Edelweiss",
+     1
+    ],
+    [
+     "Red Gladiolus",
+     1
+    ],
+    [
+     "Yellow Lavender",
+     1
+    ],
+    [
+     "White Lavender",
+     1
+    ],
+    [
+     "Yellow Clover",
+     1
+    ]
+   ],
    "steps": [
     [
      "Pepper",
@@ -1080,6 +2054,28 @@
   "Yellow Lavender": {
    "seed": "Lavender Seed",
    "days": 6,
+   "parents": [
+    [
+     "Red Gladiolus",
+     1
+    ],
+    [
+     "Yellow Gladiolus",
+     1
+    ],
+    [
+     "White Gladiolus",
+     1
+    ],
+    [
+     "Yellow Lavender",
+     1
+    ],
+    [
+     "Red Clover",
+     1
+    ]
+   ],
    "steps": [
     [
      "Pepper",
@@ -1101,6 +2097,32 @@
   "White Lavender": {
    "seed": "Lavender Seed",
    "days": 3,
+   "parents": [
+    [
+     "Rhubarb",
+     25
+    ],
+    [
+     "Onion",
+     10
+    ],
+    [
+     "Barley",
+     5
+    ],
+    [
+     "Yellow Edelweiss",
+     1
+    ],
+    [
+     "Blue Gladiolus",
+     1
+    ],
+    [
+     "White Lavender",
+     1
+    ]
+   ],
    "steps": [
     [
      "Rhubarb",

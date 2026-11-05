@@ -4,6 +4,7 @@ Data/prices_snapshot.json and Data/bounties_observed.json."""
 import json
 import os
 import time
+import urllib.error
 import urllib.request
 
 from . import game as G
@@ -13,10 +14,17 @@ UA = {"User-Agent": "Mozilla/5.0 (MonteCarloAnalysisSunflowerLand)"}
 TICKET = "Duende Cap"  # Cave Dwellers chapter ticket
 
 
-def _get(url):
-    req = urllib.request.Request(url, headers=UA)
-    with urllib.request.urlopen(req, timeout=60) as r:
-        return json.loads(r.read().decode("utf-8"))
+def _get(url, tries=4):
+    """GET JSON, backing off politely when the API rate-limits (HTTP 429)."""
+    for i in range(tries):
+        try:
+            req = urllib.request.Request(url, headers=UA)
+            with urllib.request.urlopen(req, timeout=60) as r:
+                return json.loads(r.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            if e.code != 429 or i == tries - 1:
+                raise
+            time.sleep(5 * (i + 1))
 
 
 def _placed(farm):
@@ -75,6 +83,10 @@ def parse_farm(raw, farm_id):
         "island": (f.get("island") or {}).get("type"),
         "chapter_wearables": chapter_wearables,
         "coins": f.get("coins"),
+        "inventory": {k: float(v) for k, v in inv.items()},
+        "flower_beds": [{"name": (b.get("flower") or {}).get("name"), "planted_at": (b.get("flower") or {}).get("plantedAt"),
+                         "boosted_ms": (b.get("flower") or {}).get("boostedTime", 0)}
+                        for b in ((f.get("flowers") or {}).get("flowerBeds") or {}).values()],
         "season": (f.get("season") or {}).get("season"),
         "season_started": (f.get("season") or {}).get("startedAt"),
     }
@@ -109,6 +121,7 @@ def _flowers(api):
             continue
         best = fl.get("best") or {}
         flowers[name] = {"seed": fl["seed"], "days": best.get("days"),
+                         "parents": [(x["name"], x.get("qty") or 1) for x in fl.get("parents", [])],
                          "steps": [(s["name"], s.get("qty"), s.get("days")) for s in best.get("steps", [])]}
     return {"fetched": p.get("fetched_at"), "seeds": seeds, "flowers": flowers}
 
@@ -152,7 +165,10 @@ def refresh(data_dir, farm_id, nft_names=()):
     farm = parse_farm(raw, farm_id)
     board = parse_board(raw)
 
-    need = {"Egg", "Feather", "Milk", "Leather", "Wool", "Merino Wool", "Truffle", "Pig Bristles"}
+    need = {"Egg", "Feather", "Milk", "Leather", "Wool", "Merino Wool", "Truffle", "Pig Bristles",
+            "Wood", "Stone", "Iron", "Gold", "Crimstone", "Oil", "Mud",
+            "Sunflower", "Beetroot", "Cauliflower", "Radish", "Parsnip", "Kale", "Eggplant", "Blueberry",
+            "Banana", "Apple", "Rhubarb", "Pepper", "Artichoke", "Onion", "Barley"}
     for r in G.FEED_RECIPES.values():
         need |= set(r)
     for o in G.SLOP_OPTIONS.values():
