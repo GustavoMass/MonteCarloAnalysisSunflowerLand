@@ -1,6 +1,18 @@
 {
  "fetched": "2026-11-05",
  "items": {
+  "Training Whistle": {
+   "price": 1761,
+   "last_sale": 1761,
+   "chapter": "Paw Prints",
+   "tradable": true
+  },
+  "Ascended Chicken": {
+   "price": 90.4999,
+   "last_sale": 90.4999,
+   "chapter": "Ascension Age",
+   "tradable": true
+  },
   "Ascended Cow": {
    "price": 24.9789,
    "last_sale": 24.9789,
@@ -31,10 +43,22 @@
    "chapter": "Crabs and Traps",
    "tradable": true
   },
+  "Astronaut Sheep": {
+   "price": 66,
+   "last_sale": 66,
+   "chapter": "Paw Prints",
+   "tradable": true
+  },
   "Baby Cow": {
    "price": 131.8,
    "last_sale": 131.8,
    "chapter": "Better Together",
+   "tradable": true
+  },
+  "Dr Cow": {
+   "price": 347,
+   "last_sale": 347,
+   "chapter": "Great Bloom",
    "tradable": true
   },
   "Mammoth": {
@@ -43,9 +67,33 @@
    "chapter": "Winds of Change",
    "tradable": true
   },
+  "Infernal Bullwhip": {
+   "price": 8650,
+   "last_sale": 8650,
+   "chapter": "Bull Run",
+   "tradable": true
+  },
   "White Sheep Onesie": {
    "price": 19.8996,
    "last_sale": 19.8996,
+   "chapter": "Bull Run",
+   "tradable": true
+  },
+  "Black Sheep Onesie": {
+   "price": 1489,
+   "last_sale": 1489,
+   "chapter": "Bull Run",
+   "tradable": true
+  },
+  "Chicken Suit": {
+   "price": 328,
+   "last_sale": 328,
+   "chapter": "Bull Run",
+   "tradable": true
+  },
+  "Merino Jumper": {
+   "price": 212,
+   "last_sale": 212,
    "chapter": "Bull Run",
    "tradable": true
   },
@@ -55,9 +103,45 @@
    "chapter": "Bull Run",
    "tradable": true
   },
+  "Cowbell Necklace": {
+   "price": 4889,
+   "last_sale": 4889,
+   "chapter": "Bull Run",
+   "tradable": true
+  },
+  "Milk Apron": {
+   "price": 514,
+   "last_sale": 514,
+   "chapter": "Bull Run",
+   "tradable": true
+  },
+  "Longhorn Cowfish": {
+   "price": 237.9899,
+   "last_sale": 237.9899,
+   "chapter": "Bull Run",
+   "tradable": true
+  },
+  "Moo-ver": {
+   "price": 239,
+   "last_sale": 239,
+   "chapter": "Bull Run",
+   "tradable": true
+  },
   "Alien Chicken": {
    "price": 42.9799,
    "last_sale": 42.9799,
+   "chapter": "Bull Run",
+   "tradable": true
+  },
+  "Mootant": {
+   "price": 770,
+   "last_sale": 770,
+   "chapter": "Bull Run",
+   "tradable": true
+  },
+  "Toxic Tuft": {
+   "price": 443,
+   "last_sale": 443,
    "chapter": "Bull Run",
    "tradable": true
   }

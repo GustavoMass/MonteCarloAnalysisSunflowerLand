@@ -16,8 +16,7 @@
 
   "_builds": "Skill builds to compare, applied to your live skills: remove these skills, then add {skill: rank}. The first one is your plan.",
   "builds": {
-    "Chonky Feed R1 (new)": {"remove": ["Clucky Grazing"], "add": {"Chonky Feed": 1}},
-    "Clucky Grazing R1 (old)": {"remove": ["Chonky Feed"], "add": {"Clucky Grazing": 1}}
+    "Your skills": {"remove": ["Clucky Grazing"], "add": {"Chonky Feed": 1}}
   },
 
   "chapter_weeks": 12,
@@ -66,15 +65,14 @@
 
   "_boosts": "Cheap upgrades to test on top of your plan (first build, buffer 1). price in FLOWER is refreshed from the sfl-manager NFT catalog when found.",
   "boosts": [
-    {"name": "Bountiful Bounties R1", "type": "skill (1 point)", "skills": {"Bountiful Bounties": 1}, "price": 0},
-    {"name": "Fine Fibers R1", "type": "skill (1 point)", "skills": {"Fine Fibers": 1}, "price": 0},
-    {"name": "Truffle Yield R1", "type": "skill (2 points)", "skills": {"Truffle Yield": 1}, "price": 0},
+    {"name": "Bountiful Bounties", "type": "skill (1 point)", "skills": {"Bountiful Bounties": 1}, "price": 0},
+    {"name": "Fine Fibers", "type": "skill (1 point)", "skills": {"Fine Fibers": 1}, "price": 0},
+    {"name": "Truffle Yield", "type": "skill (2 points)", "skills": {"Truffle Yield": 1}, "price": 0},
     {"name": "Chonky Feed R2", "type": "rank-up (6 points + 3 shards)", "skills": {"Chonky Feed": 2}, "price": 0},
     {"name": "Abundant Harvest R2", "type": "rank-up (3 points + 2 shards)", "skills": {"Abundant Harvest": 2}, "price": 0},
     {"name": "Heartwarming Instruments R2", "type": "rank-up (3 points + 2 shards)", "skills": {"Heartwarming Instruments": 2}, "price": 0},
     {"name": "Double Bale R2", "type": "rank-up (1 point + 1 shard)", "skills": {"Double Bale": 2}, "price": 0},
     {"name": "Efficient Feeding R2", "type": "rank-up (1 point + 1 shard)", "skills": {"Efficient Feeding": 2}, "price": 0},
-    {"name": "Restless Animals R3", "type": "rank-up (1 point + 1 shard, needs tier 3)", "skills": {"Restless Animals": 3}, "price": 0},
     {"name": "Dream Scarf", "type": "wearable", "wearables": ["Dream Scarf"]},
     {"name": "White Sheep Onesie", "type": "wearable", "wearables": ["White Sheep Onesie"]},
     {"name": "Spa Sheep", "type": "collectible", "collectibles": ["Spa Sheep"]},
@@ -84,7 +82,24 @@
     {"name": "Baby Cow", "type": "collectible", "collectibles": ["Baby Cow"]},
     {"name": "Spa Cow", "type": "collectible", "collectibles": ["Spa Cow"]},
     {"name": "Mammoth", "type": "collectible", "collectibles": ["Mammoth"]},
-    {"name": "Alien Chicken", "type": "collectible", "collectibles": ["Alien Chicken"]}
+    {"name": "Alien Chicken", "type": "collectible", "collectibles": ["Alien Chicken"]},
+    {"name": "Ascended Chicken", "type": "collectible", "collectibles": ["Ascended Chicken"]},
+    {"name": "Farm Dog", "type": "collectible", "collectibles": ["Farm Dog"]},
+    {"name": "Beetle Sheep", "type": "collectible", "collectibles": ["Beetle Sheep"]},
+    {"name": "Astronaut Sheep", "type": "collectible", "collectibles": ["Astronaut Sheep"]},
+    {"name": "Toxic Tuft", "type": "collectible", "collectibles": ["Toxic Tuft"]},
+    {"name": "Wrangler", "type": "collectible", "collectibles": ["Wrangler"]},
+    {"name": "Dr Cow", "type": "collectible", "collectibles": ["Dr Cow"]},
+    {"name": "Longhorn Cowfish", "type": "collectible", "collectibles": ["Longhorn Cowfish"]},
+    {"name": "Moo-ver", "type": "collectible", "collectibles": ["Moo-ver"]},
+    {"name": "Mootant", "type": "collectible", "collectibles": ["Mootant"]},
+    {"name": "Infernal Bullwhip", "type": "wearable", "wearables": ["Infernal Bullwhip"]},
+    {"name": "Chicken Suit", "type": "wearable", "wearables": ["Chicken Suit"]},
+    {"name": "Black Sheep Onesie", "type": "wearable", "wearables": ["Black Sheep Onesie"]},
+    {"name": "Merino Jumper", "type": "wearable", "wearables": ["Merino Jumper"]},
+    {"name": "Milk Apron", "type": "wearable", "wearables": ["Milk Apron"]},
+    {"name": "Cowbell Necklace", "type": "wearable", "wearables": ["Cowbell Necklace"]},
+    {"name": "Training Whistle", "type": "wearable", "wearables": ["Training Whistle"]}
   ],
 
   "_tickets": "Chapter ticket plan. Deliveries get VIP +2 and +1 per Duende wearable; bounties only the wearables.",
