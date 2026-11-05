@@ -55,7 +55,10 @@
 
   "_herd": "How you run each building. buffer = animals kept beyond this week's requests (null = keep it full). Several buffers are compared. stop_feeding_at: \"auto\" = highest level boards ask for. trade_in_at: trade pigs for bristles at this level.",
   "herd": {
-    "Chicken": {"sell": true, "buffers": [null], "stop_feeding_at": null},
+    "Chicken": {"policies": {
+      "Sell the lowest level that fits": {"sell": true, "buffers": [null], "sell_order": "lowest"},
+      "Sell the highest level (old habit)": {"sell": true, "buffers": [null], "sell_order": "highest"}
+    }},
     "Cow":     {"sell": true, "buffers": [0, 1, 2], "stop_feeding_at": "auto"},
     "Sheep":   {"sell": true, "buffers": [0, 1, 2], "stop_feeding_at": "auto"},
     "Pig":     {"policies": {

@@ -39,26 +39,42 @@ def interp_bounty(points, level):
 
 
 def per_level(model, runs, buy_flower):
-    """Distribution, per level, of: profit/day of the cycle ending at that level,
-    cumulative net when first reaching it, day reached, pets in that cycle."""
+    """Per level L, over the runs, for the feeds given while the animal is at L
+    (the produce of that sleep is credited to L, the level it was fed at):
+      profit_day   FLOWER per day (produce after tax - feed) while at L,
+      accumulated  running FLOWER total when it leaves L (purchase included;
+                   for level 15, after its first sleep there),
+      day_reached  day it first reaches L."""
     levels = []
     for L in range(1, G.MAX_LEVEL + 1):
-        daily, cum_reach, day_reach, pets, feed, prod = [], [], [], [], [], []
+        daily, acc, day_reach, pets, feed, prod = [], [], [], [], [], []
         for ev in runs:
-            cum, prev_t, seen = -buy_flower, None, False
-            for t, lv, p, f, n in ev:
-                cum += p - f
-                if not seen and lv >= L:
+            cum, at, seen = -buy_flower, 1, False
+            got, span, nf, npr, cycles, left = 0.0, 0.0, 0.0, 0.0, 0, None
+            for k, (t, lv, p, f, n) in enumerate(ev):
+                if not seen and at >= L:
                     seen = True
-                    cum_reach.append(cum)
                     day_reach.append(t / 24)
-                    if lv == L and prev_t is not None and t > prev_t:
-                        daily.append((p - f) / ((t - prev_t) / 24))
-                        pets.append(n)
-                        feed.append(f)
-                        prod.append(p)
-                prev_t = t
-        levels.append({"level": L, "profit_day": dist(daily), "cum_at_reach": dist(cum_reach),
+                if at > L and left is None:
+                    left = cum
+                if at == L == G.MAX_LEVEL and left is None:
+                    left = cum + p - f   # level 15 never ends: total after its first sleep there
+                if at == L and k + 1 < len(ev):
+                    got += p - f
+                    span += ev[k + 1][0] - t
+                    nf += f
+                    npr += p
+                    cycles += 1
+                    pets.append(ev[k + 1][4])
+                cum += p - f
+                at = lv
+            if cycles and span > 0:
+                daily.append(got / (span / 24))
+                feed.append(nf / cycles)
+                prod.append(npr / cycles)
+            if left is not None:
+                acc.append(left)
+        levels.append({"level": L, "profit_day": dist(daily), "accumulated": dist(acc),
                        "day_reached": dist(day_reach), "pets": st.mean(pets) if pets else None,
                        "feed": st.mean(feed) if feed else None, "produce": st.mean(prod) if prod else None})
     ss = []
