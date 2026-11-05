@@ -77,9 +77,10 @@ def herd_totals(results, coins_per_flower):
     out = {k: dist([tot(r, k) for r in results]) for k in keys}
     out["net_flower"] = dist([tot(r, "produce") + tot(r, "bristles") - tot(r, "feed") for r in results])
     out["coins_net"] = dist([tot(r, "coins") - tot(r, "buy_coins") for r in results])
-    # everything in FLOWER: coins at the purchase rate, gems ignored
+    # everything in FLOWER: produce sold at the market; coins only if a rate is set; gems ignored
+    rate = 1.0 / coins_per_flower if coins_per_flower else 0.0
     out["value_flower"] = dist([tot(r, "produce") + tot(r, "bristles") - tot(r, "feed")
-                                + (tot(r, "coins") - tot(r, "buy_coins")) / coins_per_flower for r in results])
+                                + (tot(r, "coins") - tot(r, "buy_coins")) * rate for r in results])
     out["herd_size"] = [st.mean(r["weekly"]["herd"][w] for r in results) for w in range(len(results[0]["weekly"]["herd"]))]
     weeks = len(results[0]["weekly"]["tickets"])
     out["weekly"] = {k: [dist([r["weekly"][k][w] for r in results]) for w in range(weeks)]

@@ -25,7 +25,11 @@ from . import game as G
 class Economy:
     prices: dict            # FLOWER per unit (P2P)
     sell_fee: float = 0.125  # marketplace cut when selling produce
-    coins_per_flower: float = 320.0
+    coins_per_flower: float = 0.0  # 0 = coins count as nothing in FLOWER totals
+
+    def coin_flower(self, coins):
+        """Coins expressed in FLOWER; 0 when coins are not counted."""
+        return coins / self.coins_per_flower if self.coins_per_flower else 0.0
 
     def unit(self, item):
         return float(self.prices.get(item) or 0.0)
