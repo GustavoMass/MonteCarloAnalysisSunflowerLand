@@ -8,6 +8,7 @@ Source: https://github.com/sunflower-land/sunflower-land (main, Nov 2026)
   - src/features/game/types/bumpkinSkills.ts     skill ranks
   - src/features/game/types/pigFeeds.ts          slop recipes
 """
+import bisect
 
 ANIMALS = ("Chicken", "Cow", "Sheep", "Pig")
 
@@ -107,13 +108,7 @@ FIBRE_SKILLS = {"Featherweight": "Feather", "Merino Whisperer": "Merino Wool", "
 
 
 def level_for_xp(animal, xp):
-    lv = 0
-    for i, t in enumerate(ANIMAL_LEVELS[animal]):
-        if xp + 1e-9 >= t:
-            lv = i
-        else:
-            break
-    return lv
+    return bisect.bisect_right(ANIMAL_LEVELS[animal], xp + 1e-9) - 1
 
 
 def cycle_xp(animal):

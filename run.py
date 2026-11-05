@@ -59,6 +59,25 @@ def week_schedule(cfg, animal, farm):
     return out
 
 
+POOL = None   # process pool set up in main(); runs are split across CPU cores
+
+
+def _map(fn, jobs):
+    if POOL is None or len(jobs) < 8:
+        return [fn(j) for j in jobs]
+    return list(POOL.map(fn, jobs, chunksize=max(1, len(jobs) // (4 * (os.cpu_count() or 4)))))
+
+
+def _herd_one(job):
+    model, s, kw = job
+    return H.simulate_herd(model, random.Random(s), **kw)
+
+
+def _single_one(job):
+    model, days, s = job
+    return S.simulate(model, days, random.Random(s))
+
+
 def run_herd(cfg, ctx, farm, animal, policy, buffer, runs, key):
     eco, farm_d, bounties = ctx["eco"], ctx["farm_d"], ctx["bounties"]
     model = S.AnimalModel(farm, animal, eco)
@@ -69,21 +88,41 @@ def run_herd(cfg, ctx, farm, animal, policy, buffer, runs, key):
     live = live if any(r["kind"] == "tickets" for r in live) else None
     stop = policy.get("stop_feeding_at")
     stop = max(pool) if stop == "auto" else stop
-    rng = random.Random(seed(key))
-    res = [H.simulate_herd(model, rng, start_xp=farm_d.get("animal_xp", {}).get(animal, []),
-                           weeks=cfg["chapter_weeks"], schedule=week_schedule(cfg, animal, farm),
-                           sell=policy.get("sell", True), buffer=buffer, level_pool=pool, coin_points=coins,
-                           ticket_amount=cfg["ticket_base"][animal] + ctx["wear"], gems=cfg["gems_per_bounty"],
-                           coin_mult=F.bounty_coin_multiplier(farm), stop_feeding_at=stop,
-                           trade_in_at=policy.get("trade_in_at"), no_ticket_weeks=set(cfg["no_ticket_weeks"]),
-                           live_board=live, sell_order=policy.get("sell_order"))
-           for _ in range(runs)]
+    kw = dict(start_xp=farm_d.get("animal_xp", {}).get(animal, []),
+              weeks=cfg["chapter_weeks"], schedule=week_schedule(cfg, animal, farm),
+              sell=policy.get("sell", True), buffer=buffer, level_pool=pool, coin_points=coins,
+              ticket_amount=cfg["ticket_base"][animal] + ctx["wear"], gems=cfg["gems_per_bounty"],
+              coin_mult=F.bounty_coin_multiplier(farm), stop_feeding_at=stop,
+              trade_in_at=policy.get("trade_in_at"), no_ticket_weeks=set(cfg["no_ticket_weeks"]),
+              live_board=live, sell_order=policy.get("sell_order"))
+    s0 = seed(key)
+    res = _map(_herd_one, [(model, s0 + i, kw) for i in range(runs)])
     return {"stop_feeding_at": stop, **A.herd_totals(res, eco.coins_per_flower)}
 
 
 def policies(cfg, animal):
     h = cfg["herd"][animal]
     return h["policies"] if "policies" in h else {"": h}
+
+
+def apply_price_rules(cfg, prices):
+    """Your price assumptions on top of the market snapshot:
+    price_overrides  {item: {"price": x, "until": "YYYY-MM-DD"}} fixed price until that date;
+    derived_prices   {item: {"inputs": {item: qty}, "per": units}} cost of the inputs / units made,
+                     used when the market has no price (e.g. Oil from an Oil Drill)."""
+    p, notes = prices["prices"], {}
+    today = time.strftime("%Y-%m-%d")
+    for item, o in cfg.get("price_overrides", {}).items():
+        if today <= o.get("until", "9999-12-31"):
+            notes[item] = f"set to {o['price']} until {o['until']} (market {p.get(item)})"
+            p[item] = o["price"]
+    for item, d in cfg.get("derived_prices", {}).items():
+        if not p.get(item) and all(p.get(k) for k in d["inputs"]):
+            p[item] = sum(q * p[k] for k, q in d["inputs"].items()) / d["per"]
+            notes[item] = f"{p[item]:.4f} from " + " + ".join(f"{q} {k}" for k, q in d["inputs"].items()) + f" per {d['per']:.2f}"
+    prices["assumed"] = notes
+    for k, v in notes.items():
+        print(f"  price {k}: {v}")
 
 
 def model_signature(farm, animal, eco):
@@ -169,6 +208,7 @@ def main():
     bounties = load(os.path.join(DATA, "bounties_observed.json"))
     nfts = load(os.path.join(DATA, "nft_prices.json"), {"items": {}})["items"]
     board_week = load(os.path.join(DATA, "board_week.json"), {})
+    apply_price_rules(cfg, prices)
     eco = S.Economy(prices["prices"], cfg["sell_fee"], cfg["coins_per_flower"])
     base = F.Farm(farm_d["skills"], set(farm_d["collectibles"]), set(farm_d["wearables"]))
     ctx = {"eco": eco, "farm_d": farm_d, "bounties": bounties, "wear": len(farm_d.get("chapter_wearables", []))}
@@ -185,7 +225,8 @@ def main():
     for bname, farm in builds.items():
         for animal in G.ANIMALS:
             model = S.AnimalModel(farm, animal, eco)
-            runs = S.run_scenario(model, cfg["days_single_animal"], cfg["runs_single_animal"], seed(bname, animal))
+            s0 = seed(bname, animal)
+            runs = _map(_single_one, [(model, cfg["days_single_animal"], s0 + i) for i in range(cfg["runs_single_animal"])])
             out["single"].append({"build": bname, "animal": animal, "sleep_h": model.sleep, "food_qty": model.food_qty,
                                   "xp_mult": model.xp_mult, "produce_units": model.produce_units,
                                   **A.per_level(model, runs, eco.coin_flower(H.BUY_COINS[animal]))})
@@ -297,4 +338,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    from concurrent.futures import ProcessPoolExecutor
+    with ProcessPoolExecutor() as POOL:
+        main()

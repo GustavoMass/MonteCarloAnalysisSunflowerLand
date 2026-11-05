@@ -80,6 +80,7 @@ class Pet:
     def __init__(self, model, rng, xp=0.0, t=0.0):
         self.m, self.rng = model, rng
         self.xp = xp
+        self._lv_xp, self._lv = None, 0
         self.asleep_at, self.wake_at, self.loved_at = -1e9, t, -1e9
         self.loves, self.ready = 0, False
         self.item = draw_item(rng, G.level_for_xp(model.animal, xp))
@@ -87,7 +88,9 @@ class Pet:
 
     @property
     def level(self):
-        return G.level_for_xp(self.m.animal, self.xp)
+        if self.xp != self._lv_xp:          # cached: XP changes far less often than level is read
+            self._lv_xp, self._lv = self.xp, G.level_for_xp(self.m.animal, self.xp)
+        return self._lv
 
     def bounty_level(self):
         lv = self.level
