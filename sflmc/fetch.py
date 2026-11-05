@@ -159,7 +159,19 @@ def nft_prices(names):
     return found
 
 
+def _ask_live_copy(farm_id):
+    """sfl-manager serves a cached copy (can be hours old). Its own land page asks
+    for a live reload with this POST before reading; do the same, ignore failures."""
+    try:
+        req = urllib.request.Request(f"{API}/v3/land/{farm_id}/refresh", data=b"", headers=UA, method="POST")
+        with urllib.request.urlopen(req, timeout=60) as r:
+            r.read()
+    except Exception as e:  # noqa: BLE001
+        print(f"  live reload not available ({e}); using sfl-manager's cached copy")
+
+
 def refresh(data_dir, farm_id, nft_names=()):
+    _ask_live_copy(farm_id)
     raw = _get(f"{API}/v3/land/{farm_id}")
     prices = _get(f"{API}/v1/prices")["p2p"]
     farm = parse_farm(raw, farm_id)
