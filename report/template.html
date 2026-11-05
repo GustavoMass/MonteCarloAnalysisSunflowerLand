@@ -53,6 +53,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
 .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--muted); align-items: center; }
 .sw { display: inline-block; width: 18px; height: 10px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+table.compact { font-size: 12px; } table.compact td, table.compact th { white-space: nowrap; padding-top: 3px; padding-bottom: 3px; }
 .tbl { overflow-x: auto; background: var(--card); border: 1px solid var(--rule); border-radius: 10px; }
 table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 14px; }
 th, td { padding: 7px 10px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--rule); }
@@ -81,10 +82,7 @@ code { font-family: var(--mono); font-size: 13px; }
   <h2 id="l-h">Every level, every animal: the Monte Carlo spread</h2>
   <p class="muted">Each bar is one level. The pale bar covers 80% of simulated runs (P10–P90), the solid bar the middle half (P25–P75), the white tick the median.
     The spread comes from which tool each pet asks for: two Music Boxes can finish a level on pets alone, two Petting Hands leave it to the feed.</p>
-  <div class="controls">
-    <div><span class="lbl">Skill build</span><div class="seg" id="buildSeg"></div></div>
-    <div><span class="lbl">Measure</span><div class="seg" id="metricSeg"></div></div>
-  </div>
+  <h3>Profit per day at each level</h3>
   <div class="grid4" id="levelCharts"></div>
   <h3 id="acc-h">Accumulated profit by level</h3>
   <p class="muted">Running FLOWER total for one animal when it leaves each level: every feed it ate and everything it produced so far, from the day you buy it. Read it as “sell or trade it in after this level and this is what it made”.</p>
@@ -119,10 +117,8 @@ code { font-family: var(--mono); font-size: 13px; }
   <h2 id="fp-h">Your flower plan: 4 beds, starting now</h2>
   <p class="muted" id="fpIntro"></p>
   <div class="tbl"><table id="planTable"></table></div>
-  <div class="grid4">
-    <div class="tbl"><table id="readyTable"></table></div>
-    <div class="tbl"><table id="stockTable"></table></div>
-  </div>
+  <div class="tbl"><table id="readyTable" class="compact"></table></div>
+  <div class="tbl"><table id="stockTable"></table></div>
 </section>
 
 <section aria-labelledby="m-h">
@@ -139,7 +135,6 @@ const C = DATA.meta.config, PLAN = DATA.meta.plan;
 const BUILDS = Object.keys(C.builds);
 const METRICS = {
   profit_day: { dp: 3, name: "Profit / day", y: "FLOWER per day", cap: "FLOWER per day while it is at this level: produce of every sleep it was fed at this level, after tax, minus that feed." },
-  day_reached: { dp: 1, name: "Days to reach", y: "days", cap: "Days from buying it until it reaches the level." },
 };
 const ACC = { dp: 2, name: "Accumulated profit", y: "FLOWER", cap: "Below zero = it has not paid for its feed yet. Level 15 never ends, so its bar is the total after its first sleep there; after that it adds the level-15 profit per day." };
 const st = { build: BUILDS[0], metric: "profit_day" };
@@ -181,6 +176,12 @@ const medianLabels = dp => ({ id: "medianLabels", afterDatasetsDraw(chart) {
   });
   ctx.restore(); } });
 
+// Last level that still earns (median profit/day > 0) and the level where the running total peaks.
+function keyLevels(s) {
+  const lv = s.levels, earn = lv.filter(l => l.profit_day && l.profit_day.p50 > 0).map(l => l.level);
+  const acc = lv.filter(l => l.accumulated), top = acc.reduce((b, l) => !b || l.accumulated.p50 > b.accumulated.p50 ? l : b, null);
+  return { last: earn.length ? Math.max(...earn) : null, top: top && top.level, topVal: top && top.accumulated.p50 };
+}
 function levelGrid(box, key, m, prefix) {
   $(box).innerHTML = A4.map(a => `<div class="chart"><h3><span class="dot" style="background:var(--${a.toLowerCase()})"></span>${a}</h3>
     <div class="box"><canvas id="${prefix}-${a}" aria-label="${a} ${m.name} by level"></canvas></div><p class="cap" id="${prefix}cap-${a}"></p></div>`).join("");
@@ -188,34 +189,45 @@ function levelGrid(box, key, m, prefix) {
     const s = single(st.build, a), col = css("--" + a.toLowerCase()), d = s.levels.map(l => l[key]);
     const flat = d.map(x => x && Math.abs(x.p90 - x.p10) < 1e-9);
     const none = s.levels.filter(l => !l[key]).map(l => "L" + l.level);
+    const k = keyLevels(s), mark = key === "accumulated" ? k.top : k.last;
+    const edge = s.levels.map(l => l.level === mark ? css("--ink") : "transparent");
     mk(`${prefix}-${a}`, { data: { labels: s.levels.map(l => "L" + l.level), datasets: [
         { type: "bar", label: "P10–P90", data: d.map(x => x ? [x.p10, x.p90] : null), backgroundColor: col + "40", borderRadius: 3, grouped: false, barPercentage: .8, minBarLength: 6 },
-        { type: "bar", label: "P25–P75", data: d.map(x => x ? [x.p25, x.p75] : null), backgroundColor: col, borderRadius: 2, grouped: false, barPercentage: .8, minBarLength: 6 },
+        { type: "bar", label: "P25–P75", data: d.map(x => x ? [x.p25, x.p75] : null), backgroundColor: col, borderRadius: 2, grouped: false, barPercentage: .8, minBarLength: 6, borderColor: edge, borderWidth: 2 },
         { type: "line", label: "Median", data: d.map(x => x ? x.p50 : null), showLine: false, pointStyle: "line", pointRadius: 9, pointBorderWidth: 3,
           borderColor: flat.map(f => f ? css("--ink") : css("--card")) } ] },
       plugins: [medianLabels(m.dp)],
       options: { responsive: true, maintainAspectRatio: false, animation: false, layout: { padding: { top: 16 } },
         plugins: { legend: { display: false }, tooltip: rangeTip(m.dp) }, scales: axes("level", m.y, { y: { grace: "8%" } }) } });
     const head = key === "profit_day" ? `Sleeps ${s.sleep_h.toFixed(1)} h · ${s.food_qty.toFixed(2)} food per feed${s.xp_mult > 1 ? ` at ${s.xp_mult}x XP` : ""} · at level 15 ${sg(s.l15_day && s.l15_day.p50, 3)} FLOWER/day. ` : "";
-    $(`${prefix}cap-${a}`).innerHTML = head + m.cap +
+    const key_ = key === "accumulated"
+      ? (k.topVal > 0 ? `<b>Peaks at L${k.top} (${sg(k.topVal, 2)} FLOWER)</b>, outlined; after that each level takes back what it made. `
+                      : `<b>Never pays for its feed</b>; the smallest loss is at L${k.top} (${sg(k.topVal, 2)}), outlined. `)
+      : (k.last ? `<b>Last profitable level: L${k.last}</b>, outlined${k.last === 15 ? " (every level earns)" : ""}. ` : `<b>No level makes a profit.</b> `);
+    $(`${prefix}cap-${a}`).innerHTML = key_ + head + m.cap +
       (none.length ? ` ${none.join(", ")}: not reached in the simulated days.` : "") +
       (flat.some(Boolean) ? " A thin bar with a dark mark means every run gave the same value." : "");
   });
 }
 function levelCharts() {
-  levelGrid("levelCharts", st.metric, METRICS[st.metric], "lc");
+  levelGrid("levelCharts", "profit_day", METRICS.profit_day, "lc");
   levelGrid("accCharts", "accumulated", ACC, "ac");
 }
 
 // ---------- boosts
 function boostView() {
-  const rows = [...DATA.boosts].map(b => ({ ...b, payback: b.price && b.flower > 0 ? b.price / b.flower : null }))
+  const MAXPB = 20, all = [...DATA.boosts].map(b => ({ ...b, payback: b.price && b.flower > 0 ? b.price / b.flower : null }));
+  const owned = new Set(DATA.meta.boosts_owned || []);
+  // skills cost no FLOWER and always show; items only if they pay back within MAXPB chapters
+  const keep = b => b.price === 0 || (b.payback != null && b.payback <= MAXPB);
+  const hidden = all.filter(b => !keep(b) && !(b.collectibles || b.wearables || []).some(n => owned.has(n)));
+  const rows = all.filter(keep)
     .sort((x, y) => (y.flower / Math.max(y.price || 1, 1)) - (x.flower / Math.max(x.price || 1, 1)));
   $("boostTable").innerHTML = `<thead><tr><th>Upgrade</th><th>Type</th><th>Helps</th><th>Price (FLOWER)</th><th>Gain / chapter</th><th>of which coins</th><th>Feed saved</th><th>Chapters to pay back</th></tr></thead><tbody>` +
     rows.map(b => `<tr class="${b.flower > 0 && (b.price === 0 || (b.payback && b.payback <= 3)) ? "hi" : ""}"><td>${b.name}</td><td>${b.type}</td><td>${b.animals.join(", ") || "—"}</td>
       <td class="num">${b.price == null ? "no listing" : nf(b.price, 1)}</td><td class="num">${sg(b.flower, 1)}</td><td class="num">${nf(b.coins)}</td>
       <td class="num">${sg(b.feed, 1)}</td><td class="num">${b.price === 0 ? "free" : b.payback ? nf(b.payback, 1) : "never"}</td></tr>`).join("") + "</tbody>";
-  $("boostIntro").innerHTML = `Each upgrade is added to your plan (${PLAN}, herds at needed + 1, pigs on bounties + trade-in) and the chapter is simulated again with the same random draws, so the difference is the upgrade alone. Gain is FLOWER from produce. ${COIN_TXT} Coins gained are shown in their own column. A skill row needs a free point (or dropping another skill). NFTs keep their resale value; “chapters to pay back” ignores that.`;
+  $("boostIntro").innerHTML = `Each upgrade is added to your plan (${PLAN}, herds at needed + 1, pigs on bounties + trade-in) and the chapter is simulated again with the same random draws, so the difference is the upgrade alone. Gain is FLOWER from produce. ${COIN_TXT} Coins gained are shown in their own column. A skill row needs a free point (or dropping another skill). NFTs keep their resale value; “chapters to pay back” ignores that. Items that take more than ${MAXPB} chapters to pay back are left out${hidden.length ? `: ${hidden.map(b => `${b.name} (${b.price == null ? "no listing" : b.flower > 0 ? nf(b.payback, 0) + " chapters" : "never"})`).join(", ")}` : ""}.`;
 }
 
 // ---------- tickets
@@ -310,10 +322,10 @@ function flowerPlanView() {
     Order of priority: <b>1. must-haves</b>${must ? ` (${must})` : ""}; <b>2. parent prep</b>: hold one of every parent flower for the flowers that have no crop recipe, so whatever the board or Raven asks you can finish inside that week. Season-only parents come first because they can only be grown in their own week;
     <b>3.</b> colours you hold none of. If a parent is already growing, the plan waits for it rather than planting another. Re-run <code>run.bat</code> after you plant or harvest; the plan rebuilds from your live beds. Add chores to <code>flower_must_have</code> in <code>config.json</code>.`;
   const R = P.readiness || [];
-  $("readyTable").innerHTML = `<thead><tr><th>Needs a flower parent</th><th>Parents</th><th>Now</th><th>After plan</th></tr></thead><tbody>` +
-    R.map(r => `<tr class="${r.held_after_plan.length ? "" : "hi"}"><td>${r.flower}${r.season_only ? ' <span class="muted">(season-only)</span>' : ""}</td>
-      <td style="white-space:normal">${r.parents.join(", ")}</td><td class="num ${r.held_now.length ? "pos" : "neg"}">${r.held_now.length ? "ready" : "missing"}</td>
-      <td class="num ${r.held_after_plan.length ? "pos" : "neg"}">${r.held_after_plan.length ? r.held_after_plan.join(", ") : "missing"}</td></tr>`).join("") + "</tbody>";
+  $("readyTable").innerHTML = `<thead><tr><th>Flower</th><th>Parents (bold = you hold one)</th><th>Now</th></tr></thead><tbody>` +
+    R.map(r => `<tr><td>${r.flower}${r.season_only ? ' <span class="muted">(season-only)</span>' : ""}</td>
+      <td>${r.parents.map(p => r.held_now.includes(p) ? `<b>${p}</b>` : p).join(", ")}</td>
+      <td class="num ${r.held_now.length ? "pos" : "neg"}">${r.held_now.length ? "ready" : "missing"}</td></tr>`).join("") + "</tbody>";
 }
 
 function method() {
@@ -331,8 +343,6 @@ function method() {
 function all() { document.querySelectorAll(".coinNote").forEach(e => e.textContent = COIN_TXT); levelCharts(); boostView(); ticketView(); upgradeView(); flowerPlanView(); }
 function init() {
   $("fid").textContent = DATA.meta.farm.farm_id; $("gen").textContent = DATA.meta.generated; $("tax").textContent = (C.sell_fee * 100) + "%";
-  seg("buildSeg", BUILDS.map(b => [b, b]), "build", levelCharts);
-  seg("metricSeg", Object.entries(METRICS).map(([k, v]) => [k, v.name]), "metric", levelCharts);
   method(); all();
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", all);
   new MutationObserver(all).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
