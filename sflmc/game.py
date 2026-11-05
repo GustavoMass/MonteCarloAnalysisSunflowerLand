@@ -137,3 +137,19 @@ def completed_cycle(animal, before, gained):
         return level_for_xp(animal, before) != level_for_xp(animal, before + gained)
     c = cycle_xp(animal)
     return ((before - lv[MAX_LEVEL]) % c) + gained >= c
+
+
+# Building construction (level 1, types/buildings.ts) and upgrades
+# (events/landExpansion/upgradeBuilding.ts): coins + items.
+BUILDING_COSTS = {
+    "Barn": {
+        1: {"coins": 200, "items": {"Wood": 150, "Iron": 10, "Gold": 10}},
+        2: {"coins": 10000, "items": {"Wood": 1000, "Iron": 100, "Gold": 75, "Crimstone": 30}},
+        3: {"coins": 75000, "items": {"Wood": 5000, "Iron": 300, "Gold": 200, "Crimstone": 125, "Oil": 250}},
+    },
+    "Pigpen": {
+        1: {"coins": 200, "items": {"Wood": 150, "Iron": 10, "Gold": 10, "Mud": 10}},
+        2: {"coins": 5000, "items": {"Wood": 450, "Iron": 45, "Gold": 35, "Crimstone": 12, "Mud": 25}},
+        3: {"coins": 37500, "items": {"Wood": 2250, "Iron": 135, "Gold": 90, "Crimstone": 50, "Oil": 100, "Mud": 100}},
+    },
+}

@@ -105,5 +105,24 @@ class Simulation(unittest.TestCase):
         self.assertGreater(sum(r["weekly"]["traded"]), 0)
         self.assertGreater(sum(r["weekly"]["bristles"]), 0)
 
+
+
+class FlowerPlan(unittest.TestCase):
+    def test_season_gating_and_beds(self):
+        from sflmc import flowerplan as FP
+        H = 3600 * 1000
+        start = 1_000 * H
+        flowers = {"seeds": {"Sunpetal Seed": {"days": 1, "seasons": ["spring", "summer", "autumn", "winter"], "flowers": []},
+                             "Clover Seed": {"days": 3, "seasons": ["autumn"], "flowers": []}},
+                   "flowers": {"Blue Cosmos": {"seed": "Sunpetal Seed", "days": 1, "parents": [["Cauliflower", 5]]},
+                               "Blue Clover": {"seed": "Clover Seed", "days": 3, "parents": [["Rhubarb", 25]]}}}
+        farm = {"inventory": {"Sunpetal Seed": 5, "Clover Seed": 5, "Cauliflower": 50, "Rhubarb": 100},
+                "flower_beds": [{"name": None}, {"name": None}], "season": "winter", "season_started": start}
+        r = FP.plan(farm, flowers, start + H, horizon_days=3)
+        self.assertTrue(all(s["flower"] != "Blue Clover" for s in r["schedule"]))   # clover is autumn-only
+        self.assertEqual(r["schedule"][0]["flower"], "Blue Cosmos")
+        self.assertEqual({s["bed"] for s in r["schedule"][:2]}, {1, 2})
+
+
 if __name__ == "__main__":
     unittest.main()

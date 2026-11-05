@@ -132,8 +132,26 @@ code { font-family: var(--mono); font-size: 13px; }
   </div>
 </section>
 
+<section aria-labelledby="u-h">
+  <h2 id="u-h">Barn and Pigpen: what each upgrade costs and earns</h2>
+  <p class="muted" id="upIntro"></p>
+  <div class="split">
+    <div class="chart"><h3>Chapter tickets and value by upgrade path</h3><div class="box" style="height:300px"><canvas id="upChart"></canvas></div>
+      <p class="cap">Tickets from that building's animal bounties (bars, left axis) and value in FLOWER: produce + bristles − feed + coins at 1:320 (diamonds, right axis). Building cost not subtracted.</p></div>
+    <div class="tbl"><table id="costTable"></table></div>
+  </div>
+  <div class="tbl"><table id="upTable"></table></div>
+</section>
+
+<section aria-labelledby="fp-h">
+  <h2 id="fp-h">Your flower plan: 4 beds, starting now</h2>
+  <p class="muted" id="fpIntro"></p>
+  <div class="tbl"><table id="stockTable"></table></div>
+  <div class="tbl"><table id="planTable"></table></div>
+</section>
+
 <section aria-labelledby="f-h">
-  <h2 id="f-h">Flowers to have ready</h2>
+  <h2 id="f-h">Flower calendar and recipes</h2>
   <p class="muted" id="flowerIntro"></p>
   <div class="grid4">
     <div class="tbl"><table id="calTable"></table></div>
@@ -326,6 +344,63 @@ function flowerView() {
     Raven's orders are drawn per player, not from a shared schedule; so far she has asked for Cosmos. Rows marked “asked” have been requested by Raven or this week's board.`;
 }
 
+
+// ---------- upgrades
+function upgradeView() {
+  const U = DATA.upgrades || [];
+  if (!U.length) return;
+  const blds = [...new Set(U.map(u => u.building))];
+  const base = Object.fromEntries(blds.map(b => [b, U.find(u => u.building === b)]));
+  const labels = U.map(u => `${u.building}: ${u.path}`);
+  mk("upChart", { data: { labels, datasets: [
+      { type: "bar", label: "Tickets", data: U.map(u => u.tickets), backgroundColor: U.map(u => u.building === "Barn" ? css("--cow") : css("--pig")), yAxisID: "y" },
+      { type: "line", label: "Value (FLOWER)", data: U.map(u => u.value), borderColor: css("--accent"), backgroundColor: css("--accent"), yAxisID: "y1", showLine: false, pointRadius: 6, pointStyle: "rectRot" } ] },
+    options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { labels: { color: css("--muted") } }, tooltip: rangeTip(0) },
+      scales: { x: { ticks: { color: css("--muted"), autoSkip: false, maxRotation: 50, minRotation: 30, font: { size: 11 } }, grid: { display: false } },
+        y: { position: "left", title: { display: true, text: "tickets", color: css("--muted") }, ticks: { color: css("--muted") }, grid: { color: css("--rule") } },
+        y1: { position: "right", title: { display: true, text: "FLOWER", color: css("--muted") }, ticks: { color: css("--muted") }, grid: { display: false } } } } });
+  $("upTable").innerHTML = `<thead><tr><th>Path</th><th>Tickets</th><th>+ tickets vs L1</th><th>Value</th><th>+ value vs L1</th><th>Upgrade cost (FLOWER)</th><th>Net cost per + ticket</th><th>Also needs</th></tr></thead><tbody>` +
+    U.map(u => { const b = base[u.building], dt = u.tickets - b.tickets, dv = u.value - b.value, dc = u.cost_flower - b.cost_flower;
+      return `<tr><td>${u.building}: ${u.path}</td><td class="num">${nf(u.tickets)}</td><td class="num">${dt ? "+" + nf(dt) : "—"}</td><td class="num">${sg(u.value, 0)}</td>
+        <td class="num">${dv ? sg(dv, 0) : "—"}</td><td class="num">${nf(u.cost_flower, 1)}</td><td class="num">${dt > 0 ? nf(Math.max(0, dc - Math.max(0, dv)) / dt, 2) : "—"}</td>
+        <td>${Object.entries(u.unpriced).map(([k, q]) => `${q} ${k}`).join(", ") || "—"}</td></tr>`; }).join("") + "</tbody>";
+  const rows = [];
+  ["Barn", "Pigpen"].forEach(b => [1, 2, 3].forEach(lv => { const c = (DATA.building_costs || {})[b]?.[lv]; if (c) rows.push([b, lv, c]); }));
+  const inv = DATA.meta.farm.inventory || {}, price = DATA.meta.prices.prices;
+  $("costTable").innerHTML = `<thead><tr><th>Level</th><th>Coins</th><th>Items (you have)</th><th>FLOWER</th></tr></thead><tbody>` +
+    rows.map(([b, lv, c]) => { const fl = c.coins / C.coins_per_flower + Object.entries(c.items).reduce((t, [k, q]) => t + q * (price[k] || 0), 0);
+      return `<tr><td>${b} L${lv}${lv === 1 ? " (build)" : ""}</td><td class="num">${nf(c.coins)}</td>
+        <td style="white-space:normal">${Object.entries(c.items).map(([k, q]) => `${nf(q)} ${k} <span class="muted">(${nf(inv[k] || 0)})</span>`).join(", ")}</td><td class="num">${nf(fl, 1)}${Object.keys(c.items).some(k => !price[k]) ? "+" : ""}</td></tr>`; }).join("") + "</tbody>";
+  $("upIntro").innerHTML = `Costs come from the game code (construction, then each upgrade). FLOWER prices items at P2P and coins at 1:320; Oil and Mud have no market price (marked +). “Net cost per + ticket” = extra upgrade cost minus the extra coins and produce it earns this chapter, divided by the extra tickets. Tickets per bounty, and bounty counts below Barn L3, are guesses until 9 Nov. Barn = cows and sheep at “needed + 1”; Pigpen = pigs on bounties + trade-in at L9. Upgrades stay for later chapters, which this chapter-only view ignores.`;
+}
+
+// ---------- flower plan
+function flowerPlanView() {
+  const P = DATA.flower_plan; if (!P) return;
+  const fmt = ms => new Date(ms).toLocaleString("en-GB", { weekday: "short", day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) + " UTC";
+  const fams = ["Pansy", "Cosmos", "Balloon Flower", "Daffodil", "Carnation", "Lotus", "Edelweiss", "Lavender", "Gladiolus", "Clover"];
+  const cols = ["Red", "Yellow", "Purple", "White", "Blue"];
+  const seasonOf = { Edelweiss: "winter", Lavender: "spring", Gladiolus: "summer", Clover: "autumn" };
+  const seedOf = { Pansy: "Sunpetal", Cosmos: "Sunpetal", "Balloon Flower": "Bloom", Daffodil: "Bloom", Carnation: "Lily", Lotus: "Lily" };
+  $("stockTable").innerHTML = `<thead><tr><th>Flower (now → after plan)</th>${cols.map(c => `<th>${c}</th>`).join("")}<th>Seeds held</th></tr></thead><tbody>` +
+    fams.map(f => `<tr><td>${f}${seasonOf[f] ? ` <span class="muted">(${seasonOf[f]} only)</span>` : ""}</td>` + cols.map(c => {
+        const n = `${c} ${f}`, a = P.stock_now[n] || 0, b = P.stock_end[n] || 0;
+        return `<td class="num ${a === 0 ? (b > 0 ? "pos" : "neg") : ""}">${a}${b !== a ? " → " + b : ""}</td>`; }).join("") +
+        `<td class="num">${P.seeds[(seedOf[f] || f) + " Seed"] ?? "—"}</td></tr>`).join("") + "</tbody>";
+  const wk = ms => ms < Date.parse("2026-11-09T00:00:00Z") ? "Before Monday (autumn still)" : ms < Date.parse("2026-11-16T00:00:00Z") ? "Week 1: winter" : "Week 2: spring";
+  let last = "";
+  $("planTable").innerHTML = `<thead><tr><th>Bed</th><th>Plant</th><th>Seed</th><th>Cross-breed with</th><th>Gives</th><th>Ready</th><th>Why</th></tr></thead><tbody>` +
+    P.schedule.map(r => { const g = wk(r.plant), head = g !== last ? `<tr class="hi"><td colspan="7"><b>${g}</b></td></tr>` : ""; last = g;
+      return head + `<tr><td class="num">${r.bed}</td><td class="num">${fmt(r.plant)}</td><td>${r.seed.replace(" Seed", "")}</td>
+        <td>${r.cross}${r.buy ? ` <span class="tag">buy ${nf(r.buy)}</span>` : ""}</td><td><b>${r.flower}</b></td><td class="num">${fmt(r.ready)}</td><td class="muted">${r.why}</td></tr>`; }).join("") + "</tbody>";
+  const growing = P.beds.filter(b => b.growing).map(b => `bed ${b.bed}: ${b.growing} (ready ${fmt(b.ready)})`).join(", ");
+  $("fpIntro").innerHTML = `Read from your farm: your flowers, seeds and crops, and what your 4 beds are growing (${growing}). Your beds grow at ×${P.speed.toFixed(2)} of base time.
+    Each bed is planted as soon as it frees up; log in near those times or as soon after as you can. Priorities: a season-only flower you have none of while its season lasts (the only week you can plant it);
+    then all-season colours you have none of (Cosmos first for Raven, then Pansy, Daffodil and Balloon Flower, then Carnation and Lotus); then a spare of the current season's flower, because the board takes one.
+    It cross-breeds with crops you hold, or with a flower only if you hold two. Before Monday the season is still autumn, so your Clover seeds go in now: Clover cannot be planted again until 30 Nov.
+    Week 1 is winter. You already hold one of every Edelweiss colour, so the board's likely requests are covered, and the plan grows spares. Re-run <code>run.bat</code> whenever you like; the plan is rebuilt from your beds and stock.`;
+}
+
 function verdicts(tot) {
   const [plan, old] = BUILDS;
   const v = (b, a, pick) => (pick(herds(b, a)) || {}).value_flower;
@@ -364,7 +439,7 @@ function method() {
   $("method").innerHTML = items.map(x => `<li>${x}</li>`).join("");
 }
 
-function all() { levelCharts(); herdView(); pigView(); boostView(); const t = ticketView(); flowerView(); verdicts(t); }
+function all() { levelCharts(); herdView(); pigView(); boostView(); const t = ticketView(); upgradeView(); flowerPlanView(); flowerView(); verdicts(t); }
 function init() {
   $("fid").textContent = DATA.meta.farm.farm_id; $("gen").textContent = DATA.meta.generated; $("tax").textContent = (C.sell_fee * 100) + "%";
   seg("buildSeg", BUILDS.map(b => [b, b]), "build", levelCharts);

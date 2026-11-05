@@ -20,6 +20,7 @@ import zlib
 from sflmc import analysis as A
 from sflmc import farm as F
 from sflmc import fetch
+from sflmc import flowerplan
 from sflmc import game as G
 from sflmc import herd as H
 from sflmc import sim as S
@@ -178,7 +179,7 @@ def main():
     out = {"meta": {"generated": time.strftime("%Y-%m-%d %H:%M"), "config": cfg, "farm": farm_d, "prices": prices,
                     "bounties": bounties, "slops": {f: eco.cheapest_slop_ingredient(f) for f in G.SLOP_OPTIONS},
                     "plan": plan_name},
-           "single": [], "herd": [], "boosts": []}
+           "single": [], "herd": [], "boosts": [], "building_costs": G.BUILDING_COSTS}
     t0 = time.time()
 
     for bname, farm in builds.items():
@@ -229,6 +230,36 @@ def main():
                if n in plan.collectibles or n in plan.wearables}
     out["meta"]["boosts_owned"] = sorted(already)
 
+    # building upgrade paths: tickets and value per path, against building costs
+    owned_lv = {"Barn": farm_d["buildings"].get("Barn", 0), "Pigpen": farm_d["buildings"].get("Pigpen", 0)}
+    out["upgrades"] = []
+    for bld, paths in cfg.get("upgrade_paths", {}).items():
+        animals = ["Cow", "Sheep"] if bld == "Barn" else ["Pig"]
+        for pname, path in paths.items():
+            c2 = json.loads(json.dumps(cfg))
+            c2["buildings"][bld] = path
+            tot = {"tickets": 0.0, "value": 0.0, "coins": 0.0}
+            for animal in animals:
+                pn, pol, buf = pick(animal)
+                r = run_herd(c2, ctx, plan, animal, pol, buf, cfg["runs_herd"], ("upg", bld, animal))
+                tot["tickets"] += r["tickets"]["mean"]
+                tot["value"] += r["value_flower"]["mean"]
+                tot["coins"] += r["coins_net"]["mean"]
+            top = max(lv for _, lv in path)
+            coins, items = 0, {}
+            for lv in range(owned_lv[bld] + 1, top + 1):
+                cst = G.BUILDING_COSTS[bld][lv]
+                coins += cst["coins"]
+                for k, q in cst["items"].items():
+                    items[k] = items.get(k, 0) + q
+            priced = sum(q * eco.unit(k) for k, q in items.items())
+            out["upgrades"].append({"building": bld, "path": pname, "top_level": top, **tot,
+                                    "cost_coins": coins, "cost_items": items,
+                                    "cost_flower": coins / eco.coins_per_flower + priced,
+                                    "unpriced": {k: q for k, q in items.items() if not eco.unit(k)},
+                                    "have": {k: farm_d.get("inventory", {}).get(k, 0) for k in items}})
+        print(f"  upgrades {bld} ({time.time() - t0:.0f}s)")
+
     herd_tickets = {}
     for animal in G.ANIMALS:
         pname, pol, buf = pick(animal)
@@ -239,6 +270,11 @@ def main():
     out["flowers"] = flower_guide(farm_d, load(os.path.join(DATA, "flowers.json"), {}),
                                   load(os.path.join(DATA, "ticket_orders_history.json"), {}), board_week,
                                   cfg["chapter_weeks"])
+
+    fl = load(os.path.join(DATA, "flowers.json"), {})
+    if fl and farm_d.get("flower_beds") is not None and farm_d.get("season_started"):
+        fp = flowerplan.plan(farm_d, fl, int(time.time() * 1000), cfg.get("flower_plan_days", 11), prices["prices"])
+        out["flower_plan"] = fp
 
     os.makedirs(os.path.join(HERE, "results"), exist_ok=True)
     with open(os.path.join(HERE, "results", "results.json"), "w", encoding="utf-8") as f:
