@@ -2,8 +2,8 @@
  "fetched": "2026-11-05",
  "items": {
   "Ascended Cow": {
-   "price": 24.9788,
-   "last_sale": 24.9788,
+   "price": 24.9,
+   "last_sale": 24.9,
    "chapter": "Ascension Age",
    "tradable": true
   },
@@ -14,8 +14,8 @@
    "tradable": true
   },
   "Spa Cow": {
-   "price": 135,
-   "last_sale": 135,
+   "price": 134.9999,
+   "last_sale": 134.9999,
    "chapter": "Salt Awakening",
    "tradable": true
   },
