@@ -75,6 +75,8 @@ def parse_farm(raw, farm_id):
         "island": (f.get("island") or {}).get("type"),
         "chapter_wearables": chapter_wearables,
         "coins": f.get("coins"),
+        "season": (f.get("season") or {}).get("season"),
+        "season_started": (f.get("season") or {}).get("startedAt"),
     }
 
 
@@ -95,7 +97,56 @@ def parse_board(raw):
     return board
 
 
-def refresh(data_dir, farm_id):
+def _flowers(api):
+    """Seeds (time, seasons) and the cheapest known breeding path for every flower."""
+    p = api["payload"]
+    seeds = {s["name"]: {"days": s["seconds"] / 86400, "seasons": s["seasons"], "flowers": s["flowers"]}
+             for s in p["seeds"]}
+    flowers = {}
+    for name, src in p["sources"].items():
+        fl = src.get("flower")
+        if not fl:
+            continue
+        best = fl.get("best") or {}
+        flowers[name] = {"seed": fl["seed"], "days": best.get("days"),
+                         "steps": [(s["name"], s.get("qty"), s.get("days")) for s in best.get("steps", [])]}
+    return {"fetched": p.get("fetched_at"), "seeds": seeds, "flowers": flowers}
+
+
+def _merge_orders(path, api):
+    """Keep every ticket-NPC order ever seen, so request patterns build up over time."""
+    hist = {}
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as fh:
+            hist = json.load(fh)
+    for sec in api["payload"]["sections"]:
+        if sec["kind"] != "tickets":
+            continue
+        for n in sec["npcs"]:
+            known = hist.setdefault(n["npc"], {"base": n.get("ticket_base"), "orders": {}})
+            for o in n.get("orders", []):
+                key = " + ".join(f'{i["qty"]} {i["name"]}' for i in o["items"])
+                rec = known["orders"].setdefault(key, {"reward": o.get("reward"), "cost": o.get("cost"),
+                                                       "cost_ok": o.get("cost_ok"), "days": []})
+                rec["days"] = sorted(set(rec["days"]) | set(o.get("days", [])))
+                rec["cost"] = o.get("cost")
+    return hist
+
+
+def nft_prices(names):
+    """Floor price (FLOWER) of named NFTs from the sfl-manager catalog, all chapters."""
+    names, found = set(names), {}
+    for idx in _get(f"{API}/v3/nft").get("seasons", []):
+        cat = _get(f"{API}/v3/nft/{idx['slug']}")
+        for sec in cat.get("sections", []):
+            for it in sec.get("items", []):
+                if it["name"] in names and it.get("price") is not None:
+                    found[it["name"]] = {"price": it["price"], "last_sale": it.get("last_sale"),
+                                         "chapter": idx["chapter"], "tradable": it.get("tradable")}
+    return found
+
+
+def refresh(data_dir, farm_id, nft_names=()):
     raw = _get(f"{API}/v3/land/{farm_id}")
     prices = _get(f"{API}/v1/prices")["p2p"]
     farm = parse_farm(raw, farm_id)
@@ -124,7 +175,33 @@ def refresh(data_dir, farm_id):
                 "updated": time.strftime("%Y-%m-%d"), "coins": coins, "current_board": board}
 
     os.makedirs(data_dir, exist_ok=True)
-    for name, obj in ((f"farm_{farm_id}.json", farm), ("prices_snapshot.json", snap), ("bounties_observed.json", bounties)):
+    files = [(f"farm_{farm_id}.json", farm), ("prices_snapshot.json", snap), ("bounties_observed.json", bounties)]
+    # optional extras: a failure here should not stop the simulation
+    try:
+        files.append(("flowers.json", _flowers(_get(f"{API}/v3/info/flowers"))))
+    except Exception as e:  # noqa: BLE001
+        print(f"  flowers not refreshed: {e}")
+    try:
+        files.append(("ticket_orders_history.json",
+                      _merge_orders(os.path.join(data_dir, "ticket_orders_history.json"), _get(f"{API}/v3/info/deliveries"))))
+    except Exception as e:  # noqa: BLE001
+        print(f"  delivery orders not refreshed: {e}")
+    try:
+        st = _get(f"{API}/v3/tools/season-tickets/farm/{farm_id}")
+        tickets = {r["id"]: r["items"].get(TICKET) for r in (raw["raw"]["farm"].get("bounties") or {}).get("requests", [])
+                   if TICKET in (r.get("items") or {})}
+        board_items = [{"label": b["label"], "category": b["detail"], "tickets": tickets.get(b["id"]), "done": b["done"]}
+                       for b in st["weekly"]["board"]]
+        files.append(("board_week.json", {"fetched": time.strftime("%Y-%m-%d"), "season": farm["season"],
+                                          "double_dates": st.get("double_dates", []), "board": board_items}))
+    except Exception as e:  # noqa: BLE001
+        print(f"  board not refreshed: {e}")
+    if nft_names:
+        try:
+            files.append(("nft_prices.json", {"fetched": time.strftime("%Y-%m-%d"), "items": nft_prices(nft_names)}))
+        except Exception as e:  # noqa: BLE001
+            print(f"  NFT prices not refreshed: {e}")
+    for name, obj in files:
         with open(os.path.join(data_dir, name), "w", encoding="utf-8") as fh:
             json.dump(obj, fh, indent=1)
     return farm, snap, bounties

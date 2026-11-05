@@ -1,61 +1,101 @@
 {
   "farm_id": 3621107187220366,
   "runs_single_animal": 1000,
-  "runs_herd": 300,
+  "runs_herd": 200,
   "days_single_animal": 30,
 
-  "_tax": "Marketplace cut when you sell produce. VIP on the desert island = 12.5%.",
+  "_tax": "Marketplace cut when you sell produce or bristles. VIP on the desert island = 12.5%.",
   "sell_fee": 0.125,
   "coins_per_flower": 320,
 
-  "_builds": "Skill builds to compare. Each one edits your live skills: remove skills, then add {skill: rank}.",
+  "_builds": "Skill builds to compare, applied to your live skills: remove these skills, then add {skill: rank}. The first one is your plan.",
   "builds": {
-    "Clucky Grazing R1 (now)": {"remove": [], "add": {}},
-    "Chonky Feed R1 (reset)": {"remove": ["Clucky Grazing"], "add": {"Chonky Feed": 1}}
+    "Chonky Feed R1 (new)": {"remove": ["Clucky Grazing"], "add": {"Chonky Feed": 1}},
+    "Clucky Grazing R1 (old)": {"remove": ["Chonky Feed"], "add": {"Clucky Grazing": 1}}
   },
 
-  "_herd": "Chapter herd simulation. You sell to every bounty you can, except the animals listed in keep.",
   "chapter_weeks": 12,
-  "keep_animals": ["Pig"],
-  "_stop_feeding_at": "Stop feeding an animal once it reaches this level; it waits awake (no cost) for a bounty. \"auto\" = highest level the boards ask for, null = always feed.",
-  "stop_feeding_at": {"Chicken": null, "Cow": "auto", "Sheep": "auto", "Pig": null},
-  "building_levels": {"Hen House": 3, "Pigpen": 1},
-  "_barn": "Barn levels to compare (0 = no barn).",
-  "compare_barn_levels": [1, 3],
+  "_no_ticket_weeks": "Week numbers (0 = week starting 9 Nov) whose board has no ticket bounties. One per chapter; which one is a guess.",
+  "no_ticket_weeks": [11],
+
+  "_buildings": "Building level by week: [[from_week, level], ...]. Week 0 starts 9 Nov.",
+  "buildings": {
+    "Hen House": [[0, 3]],
+    "Barn": [[0, 1], [2, 2]],
+    "Pigpen": [[0, 1], [2, 2]]
+  },
   "_capacity": "Slots per building level (sfl-manager). Chicken Coop adds +5 per Hen House level, Barn Blueprint +5 per Barn level.",
   "capacity": {"Hen House": [0, 10, 15, 20], "Barn": [0, 10, 15, 20], "Pigpen": [0, 3, 6, 9]},
 
-  "_board": "Animal bounties per week per building level, by kind. Hen House L3 and Barn L3 from the SFL wiki; the other rows are guesses. Replaced by the live board when it has ticket bounties.",
+  "_board": "Animal bounties per week per building level. Hen House L3 and Barn L3 from the SFL wiki; the rest are guesses.",
   "board_per_week": {
     "Chicken": {"3": {"coins": 10, "gems": 2, "tickets": 8}},
     "Cow":     {"1": {"coins": 2, "gems": 1, "tickets": 2}, "2": {"coins": 4, "gems": 1, "tickets": 3}, "3": {"coins": 5, "gems": 1, "tickets": 4}},
     "Sheep":   {"1": {"coins": 2, "gems": 1, "tickets": 2}, "2": {"coins": 4, "gems": 1, "tickets": 3}, "3": {"coins": 5, "gems": 1, "tickets": 4}},
     "Pig":     {"1": {"coins": 2, "gems": 1, "tickets": 1}, "2": {"coins": 3, "gems": 1, "tickets": 2}, "3": {"coins": 4, "gems": 1, "tickets": 3}}
   },
-  "_ticket_base": "Base Duende Caps per animal ticket bounty. UNKNOWN until 9 Nov: placeholder values. Gems per gem bounty from the live board.",
+  "_ticket_base": "Base Duende Caps per animal ticket bounty: GUESS until 9 Nov. The +1 per Duende wearable is added automatically.",
   "ticket_base": {"Chicken": 3, "Cow": 4, "Sheep": 4, "Pig": 4},
   "gems_per_bounty": 5,
 
-  "_tickets": "Chapter ticket plan. Bonus = VIP +2 (deliveries and chores only) and +1 per Duende wearable worn by you or a farm hand.",
+  "_herd": "How you run each building. buffer = animals kept beyond this week's requests (null = keep it full). Several buffers are compared. stop_feeding_at: \"auto\" = highest level boards ask for. trade_in_at: trade pigs for bristles at this level.",
+  "herd": {
+    "Chicken": {"sell": true, "buffers": [null], "stop_feeding_at": null},
+    "Cow":     {"sell": true, "buffers": [0, 1, 2], "stop_feeding_at": "auto"},
+    "Sheep":   {"sell": true, "buffers": [0, 1, 2], "stop_feeding_at": "auto"},
+    "Pig":     {"policies": {
+      "Keep and feed": {"sell": false, "buffers": [null]},
+      "Trade in at L9": {"sell": false, "buffers": [null], "trade_in_at": 9},
+      "Bounties + trade in at L9": {"sell": true, "buffers": [null], "trade_in_at": 9}
+    }}
+  },
+
+  "_boosts": "Cheap upgrades to test on top of your plan (first build, buffer 1). price in FLOWER is refreshed from the sfl-manager NFT catalog when found.",
+  "boosts": [
+    {"name": "Bountiful Bounties R1", "type": "skill (1 point)", "skills": {"Bountiful Bounties": 1}, "price": 0},
+    {"name": "Bale Economy", "type": "skill (1 point)", "skills": {"Bale Economy": 1}, "price": 0},
+    {"name": "Dream Scarf", "type": "wearable", "wearables": ["Dream Scarf"]},
+    {"name": "White Sheep Onesie", "type": "wearable", "wearables": ["White Sheep Onesie"]},
+    {"name": "Spa Sheep", "type": "collectible", "collectibles": ["Spa Sheep"]},
+    {"name": "Ascended Sheep", "type": "collectible", "collectibles": ["Ascended Sheep"]},
+    {"name": "Mermaid Sheep", "type": "collectible", "collectibles": ["Mermaid Sheep"]},
+    {"name": "Ascended Cow", "type": "collectible", "collectibles": ["Ascended Cow"]},
+    {"name": "Baby Cow", "type": "collectible", "collectibles": ["Baby Cow"]},
+    {"name": "Spa Cow", "type": "collectible", "collectibles": ["Spa Cow"]},
+    {"name": "Mammoth", "type": "collectible", "collectibles": ["Mammoth"]},
+    {"name": "Alien Chicken", "type": "collectible", "collectibles": ["Alien Chicken"]}
+  ],
+
+  "_tickets": "Chapter ticket plan. Deliveries get VIP +2 and +1 per Duende wearable; bounties only the wearables.",
   "vip_bonus": 2,
   "delivery_days": 84,
-  "double_delivery_days": 4,
-  "_npcs": "base = tickets before bonuses (sfl-manager, Cave Dwellers). freq = share of days you deliver. flower_per_ticket = sfl-manager average P2P cost (a + means some items have no market price).",
+  "double_delivery_days": 12,
+  "_npcs": "base = tickets before bonuses (sfl-manager). freq = share of days you deliver. exclude = never counted, even in the maximum.",
   "ticket_npcs": {
-    "Pumpkin' Pete": {"base": 1, "freq": 1.0, "flower_per_ticket": "0.01"},
-    "Bert":          {"base": 2, "freq": 1.0, "flower_per_ticket": "0.36"},
-    "Finley":        {"base": 2, "freq": 0.2, "flower_per_ticket": "0.37"},
-    "Raven":         {"base": 4, "freq": 0.333, "flower_per_ticket": "0.05 (items without market price)"},
-    "Miranda":       {"base": 2, "freq": 0.0, "flower_per_ticket": "0.01+"},
-    "Finn":          {"base": 5, "freq": 0.2, "flower_per_ticket": "0.52+"},
-    "Pharaoh":       {"base": 6, "freq": 0.2, "flower_per_ticket": "0.34+"},
-    "Cornwell":      {"base": 3, "freq": 0.333, "flower_per_ticket": "0.27"},
-    "Timmy":         {"base": 5, "freq": 0.333, "flower_per_ticket": "0.06+"},
-    "Tywin":         {"base": 10, "freq": 0.0, "flower_per_ticket": "2.99"},
-    "Jester":        {"base": 4, "freq": 0.0, "flower_per_ticket": "0.61"}
+    "Pumpkin' Pete": {"base": 1, "freq": 1.0},
+    "Bert":          {"base": 2, "freq": 1.0},
+    "Finley":        {"base": 2, "freq": 0.2},
+    "Raven":         {"base": 4, "freq": 0.333},
+    "Miranda":       {"base": 2, "freq": 0.0},
+    "Finn":          {"base": 5, "freq": 0.2},
+    "Pharaoh":       {"base": 6, "freq": 0.2},
+    "Cornwell":      {"base": 3, "freq": 0.333},
+    "Timmy":         {"base": 5, "freq": 0.333},
+    "Tywin":         {"base": 10, "freq": 0.0, "exclude": true},
+    "Jester":        {"base": 4, "freq": 0.0, "exclude": true}
   },
-  "_board_bonus": "Selling every non-animal board bounty gives +100 tickets a week (11 weeks with a bonus). Set to true if you do it.",
-  "board_bonus": false,
-  "board_bonus_weeks": 11,
+  "_board_items": "Weekly non-animal board. per_week = requests; tickets = base per request (GUESS until 9 Nov, replaced by the live board); share = how many you turn in.",
+  "board_items": {
+    "Flowers":     {"per_week": 5, "tickets": 3, "share": 0.4},
+    "Fish":        {"per_week": 5, "tickets": 2, "share": 1.0},
+    "Crustaceans": {"per_week": 3, "tickets": 4, "share": 1.0},
+    "Exotic":      {"per_week": 3, "tickets": 4, "share": 0.5},
+    "Giant Fruit": {"per_week": 3, "tickets": 4, "share": 0.0},
+    "Dolls":       {"per_week": 5, "tickets": 5, "share": 0.5},
+    "Obsidian":    {"per_week": 3, "tickets": 15, "share": 0.0, "exclude": true}
+  },
+  "board_bonus_tickets": 100,
+  "_chores": "Chore tickets per week (none shown yet on your board).",
+  "chore_tickets_per_week": 0,
   "ticket_goal": 9000
 }

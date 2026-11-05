@@ -1,0 +1,175 @@
+{
+ "fetched": "2026-11-05",
+ "season": "autumn",
+ "double_dates": [
+  "2026-11-05",
+  "2026-11-10",
+  "2026-11-19",
+  "2026-11-25",
+  "2026-12-05"
+ ],
+ "board": [
+  {
+   "label": "Purple Clover",
+   "category": "Flowers",
+   "tickets": null,
+   "done": false
+  },
+  {
+   "label": "Yellow Clover",
+   "category": "Flowers",
+   "tickets": null,
+   "done": false
+  },
+  {
+   "label": "Red Cosmos",
+   "category": "Flowers",
+   "tickets": null,
+   "done": false
+  },
+  {
+   "label": "Red Clover",
+   "category": "Flowers",
+   "tickets": null,
+   "done": false
+  },
+  {
+   "label": "Blue Clover",
+   "category": "Flowers",
+   "tickets": null,
+   "done": true
+  },
+  {
+   "label": "Olive Flounder",
+   "category": "Fish",
+   "tickets": null,
+   "done": true
+  },
+  {
+   "label": "Sea Bass",
+   "category": "Fish",
+   "tickets": null,
+   "done": true
+  },
+  {
+   "label": "Halibut",
+   "category": "Fish",
+   "tickets": null,
+   "done": true
+  },
+  {
+   "label": "Surgeonfish",
+   "category": "Fish",
+   "tickets": null,
+   "done": true
+  },
+  {
+   "label": "Zebra Turkeyfish",
+   "category": "Fish",
+   "tickets": null,
+   "done": true
+  },
+  {
+   "label": "Lobster",
+   "category": "Crustaceans",
+   "tickets": null,
+   "done": true
+  },
+  {
+   "label": "Anemone",
+   "category": "Crustaceans",
+   "tickets": null,
+   "done": false
+  },
+  {
+   "label": "Shrimp",
+   "category": "Crustaceans",
+   "tickets": null,
+   "done": true
+  },
+  {
+   "label": "White Carrot",
+   "category": "Exotic",
+   "tickets": null,
+   "done": false
+  },
+  {
+   "label": "Adirondack Potato",
+   "category": "Exotic",
+   "tickets": null,
+   "done": false
+  },
+  {
+   "label": "Warty Goblin Pumpkin",
+   "category": "Exotic",
+   "tickets": null,
+   "done": false
+  },
+  {
+   "label": "Obsidian",
+   "category": "Obsidian",
+   "tickets": null,
+   "done": false
+  },
+  {
+   "label": "Obsidian",
+   "category": "Obsidian",
+   "tickets": null,
+   "done": false
+  },
+  {
+   "label": "Obsidian",
+   "category": "Obsidian",
+   "tickets": null,
+   "done": false
+  },
+  {
+   "label": "Moo Doll",
+   "category": "Dolls",
+   "tickets": null,
+   "done": true
+  },
+  {
+   "label": "Gilded Doll",
+   "category": "Dolls",
+   "tickets": null,
+   "done": true
+  },
+  {
+   "label": "Crude Doll",
+   "category": "Dolls",
+   "tickets": null,
+   "done": false
+  },
+  {
+   "label": "Buzz Doll",
+   "category": "Dolls",
+   "tickets": null,
+   "done": false
+  },
+  {
+   "label": "Lunar Doll",
+   "category": "Dolls",
+   "tickets": null,
+   "done": false
+  },
+  {
+   "label": "Giant Orange",
+   "category": "Giant Fruit",
+   "tickets": null,
+   "done": true
+  },
+  {
+   "label": "Giant Banana",
+   "category": "Giant Fruit",
+   "tickets": null,
+   "done": false
+  },
+  {
+   "label": "Giant Apple",
+   "category": "Giant Fruit",
+   "tickets": null,
+   "done": false
+  }
+ ]
+}

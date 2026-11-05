@@ -29,15 +29,18 @@ Everything you may want to tweak is in `config.json`:
 | Key | What it is |
 | --- | --- |
 | `farm_id` | Your farm |
-| `sell_fee` | Marketplace cut on produce (0.125 = VIP on desert island) |
-| `builds` | Skill builds to compare: skills to remove and `{skill: rank}` to add, on top of your live skills |
-| `keep_animals` | Animals you never sell (default: Pig) |
-| `stop_feeding_at` | Stop feeding at this level and wait for a bounty (`"auto"` = highest level boards ask) |
-| `compare_barn_levels`, `building_levels` | Building levels to simulate |
-| `board_per_week` | Coin / gem / ticket bounties per week per building level |
-| `ticket_base` | Base Duende Caps per animal ticket bounty (guess until the board shows them; the live board overrides it) |
-| `ticket_npcs` | Each ticket NPC's base reward and how often you deliver (`freq`, share of days) |
-| `board_bonus` | Whether you sell the whole non-animal board for +100 a week |
+| `sell_fee` | Marketplace cut on produce and bristles (0.125 = VIP on desert island) |
+| `builds` | Skill builds to compare, on top of your live skills; the first one is your plan |
+| `buildings` | Building level by week, e.g. Barn L1 from week 1, L2 from week 3 |
+| `herd` | Per animal: sell or keep, `buffers` (animals beyond the week's requests; several are compared), `stop_feeding_at`, pig `policies` with `trade_in_at` |
+| `board_per_week`, `ticket_base` | Animal bounties per building level; base tickets per animal ticket bounty (guess until the live board shows them) |
+| `no_ticket_weeks` | Week(s) without ticket bounties |
+| `boosts` | Skills / NFTs to test; NFT prices come from the sfl-manager catalog |
+| `ticket_npcs` | Each ticket NPC's base reward and how often you deliver (`freq`) |
+| `board_items` | Weekly non-animal board: requests per week, tickets each, your `share` |
+| `double_delivery_days`, `delivery_days` | Delivery days in the chapter |
+
+`python run.py --quick` runs 10x fewer simulations for trying changes.
 
 ## What is simulated
 
@@ -54,9 +57,12 @@ Rules follow the game source (`src/features/game`):
 **Per-level bars:** one animal from level 0, many runs; distribution of profit per day, running total
 and days to reach each level.
 
-**Chapter herd:** a full building for 12 weeks. Each week a new board (bounty levels drawn from what
-boards have asked); every awake animal that meets an open request is sold (hardest request first) and
-replaced with a level-0 animal.
+**Chapter herd:** 12 weeks of weekly boards (bounty levels drawn from what boards have asked). Every
+awake animal that meets an open request is sold (hardest request first); the herd is kept at "requests
+this week + buffer" with level-0 replacements; capped animals wait unfed. Pigs can be traded in for bristles.
+
+**Also in the report:** cheap boost payback, Duende Cap projection (habits / cheap push / maximum), and a
+flower prep guide (weekly season calendar, cross-breed recipes, Raven's orders seen so far).
 
 ## Layout
 

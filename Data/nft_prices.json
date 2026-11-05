@@ -1,0 +1,65 @@
+{
+ "fetched": "2026-11-05",
+ "items": {
+  "Ascended Cow": {
+   "price": 24.9787,
+   "last_sale": 21.5001,
+   "chapter": "Ascension Age",
+   "tradable": true
+  },
+  "Ascended Sheep": {
+   "price": 24.9,
+   "last_sale": 22.0023,
+   "chapter": "Ascension Age",
+   "tradable": true
+  },
+  "Spa Cow": {
+   "price": 135,
+   "last_sale": 138.999,
+   "chapter": "Salt Awakening",
+   "tradable": true
+  },
+  "Spa Sheep": {
+   "price": 27.9997,
+   "last_sale": 27.98,
+   "chapter": "Salt Awakening",
+   "tradable": true
+  },
+  "Mermaid Sheep": {
+   "price": 48.9988,
+   "last_sale": 48.98,
+   "chapter": "Crabs and Traps",
+   "tradable": true
+  },
+  "Baby Cow": {
+   "price": 131,
+   "last_sale": 127.0001,
+   "chapter": "Better Together",
+   "tradable": true
+  },
+  "Mammoth": {
+   "price": 174.9999,
+   "last_sale": 174.999,
+   "chapter": "Winds of Change",
+   "tradable": true
+  },
+  "White Sheep Onesie": {
+   "price": 19.8996,
+   "last_sale": 19.8995,
+   "chapter": "Bull Run",
+   "tradable": true
+  },
+  "Dream Scarf": {
+   "price": 25.849,
+   "last_sale": 25.84,
+   "chapter": "Bull Run",
+   "tradable": true
+  },
+  "Alien Chicken": {
+   "price": 42.9799,
+   "last_sale": 42.9999,
+   "chapter": "Bull Run",
+   "tradable": true
+  }
+ }
+}

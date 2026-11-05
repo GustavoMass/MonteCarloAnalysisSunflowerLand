@@ -73,10 +73,14 @@ def herd_totals(results, coins_per_flower):
     """Chapter totals across herd runs."""
     def tot(r, k):
         return sum(r["weekly"][k])
-    keys = ("coins", "gems", "tickets", "produce", "feed", "buy_coins", "sold")
+    keys = ("coins", "gems", "tickets", "produce", "feed", "buy_coins", "sold", "traded", "bristles", "parked_days")
     out = {k: dist([tot(r, k) for r in results]) for k in keys}
-    out["net_flower"] = dist([tot(r, "produce") - tot(r, "feed") for r in results])
+    out["net_flower"] = dist([tot(r, "produce") + tot(r, "bristles") - tot(r, "feed") for r in results])
     out["coins_net"] = dist([tot(r, "coins") - tot(r, "buy_coins") for r in results])
+    # everything in FLOWER: coins at the purchase rate, gems ignored
+    out["value_flower"] = dist([tot(r, "produce") + tot(r, "bristles") - tot(r, "feed")
+                                + (tot(r, "coins") - tot(r, "buy_coins")) / coins_per_flower for r in results])
+    out["herd_size"] = [st.mean(r["weekly"]["herd"][w] for r in results) for w in range(len(results[0]["weekly"]["herd"]))]
     weeks = len(results[0]["weekly"]["tickets"])
     out["weekly"] = {k: [dist([r["weekly"][k][w] for r in results]) for w in range(weeks)]
                      for k in ("tickets", "coins", "produce", "feed")}
