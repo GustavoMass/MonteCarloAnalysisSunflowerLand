@@ -57,7 +57,7 @@ class Simulation(unittest.TestCase):
     def test_one_level_per_cycle_and_loves(self):
         farm = F.Farm({}, set())
         m = S.AnimalModel(farm, "Chicken", S.Economy(PRICES))
-        ev = S.simulate(m, None, 20, random.Random(1))  # perfect player
+        ev = S.simulate(m, 20, random.Random(1))
         levels = [e[1] for e in ev]
         self.assertEqual(levels[:15], list(range(1, 16)))
         # perfect player always fits both loves into every sleep
@@ -65,12 +65,27 @@ class Simulation(unittest.TestCase):
         # 24h sleep, no boosts: one claim per day
         self.assertAlmostEqual(ev[5][0] - ev[4][0], 24.0)
 
-    def test_two_logins_give_one_love(self):
-        farm = F.Farm({}, set())
+    def test_ready_animal_can_still_be_petted(self):
+        farm = F.Farm({"Heartwarming Instruments": 1}, set())
         m = S.AnimalModel(farm, "Chicken", S.Economy(PRICES))
-        ev = S.simulate(m, [8.0, 20.0], 10, random.Random(2), jitter_h=0)
-        self.assertTrue(all(e[4] == 1 for e in ev[1:]))
+        p = S.Pet(m, random.Random(3), xp=100.0)   # level 1, 20 XP short of level 2
+        p.feed_and_claim(0.0)                     # feeds to 120 and sleeps
+        p.xp, p.item = 230.0, "Music Box"         # 10 XP short of level 3
+        p.pet(p.next_time())
+        self.assertTrue(p.ready)
+        p.item = "Music Box"
+        p.pet(p.next_time())                      # second pet while already ready
+        self.assertEqual(p.xp, 230 + 75 + 75)     # XP kept, carries past level 3
 
+    def test_herd_sells_and_parks(self):
+        from sflmc import herd as H
+        m = S.AnimalModel(F.Farm({}, set()), "Cow", S.Economy(PRICES))
+        r = H.simulate_herd(m, random.Random(4), start_xp=[], capacity=5, weeks=3, sell=True,
+                            counts={"coins": 2, "tickets": 1}, level_pool=[3, 5], coin_points={"3": 500, "5": 900},
+                            ticket_amount=7, gems=5, stop_feeding_at=5)
+        self.assertEqual(sum(r["weekly"]["sold"]), 9)
+        self.assertEqual(sum(r["weekly"]["tickets"]), 21)
+        self.assertTrue(all(lv <= 5 for lv in r["sold_levels"]))
 
 if __name__ == "__main__":
     unittest.main()

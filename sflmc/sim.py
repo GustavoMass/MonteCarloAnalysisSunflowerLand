@@ -1,15 +1,17 @@
-"""Monte Carlo engine: one animal's life, driven by a player's login schedule.
+"""Monte Carlo engine for one animal.
 
 Mechanics (from the game source):
   * An awake animal is fed in one click until it is "ready": the batch is
     ceil(xpUntilReady / favouriteFoodXp) feeds (feedAnimal.ts getFeedBatchSize).
   * Ready -> claim produce of the level reached -> sleeps (24h * boosts).
-  * While asleep it can be loved twice: first slot opens at 1/3 of the sleep,
-    the second 1/3 after the first love (loveAnimal.ts). The requested tool is
-    random, weighted by level. Love XP can itself finish the level, in which
-    case the animal wakes "ready" and needs no food that cycle.
+  * While asleep it can be petted twice: first slot opens at 1/3 of the sleep,
+    the second 1/3 after the first pet (loveAnimal.ts). Petting only needs the
+    animal asleep: a "ready" animal can still be petted and the XP carries over.
+    The requested tool is random, weighted by level.
   * XP never resets; at level 15 every 320/960/640/960 XP (chicken/cow/sheep/pig)
     is one more produce cycle.
+
+The player is "perfect": pets the moment a slot opens and feeds on waking.
 """
 import math
 import random
@@ -18,20 +20,11 @@ from dataclasses import dataclass
 from . import farm as F
 from . import game as G
 
-# Login schedules (hour of day). "perfect" = player acts the moment anything opens.
-SCHEDULES = {
-    "1x/day": [20.0],
-    "2x/day": [8.0, 20.0],
-    "3x/day": [7.0, 15.0, 23.0],
-    "4x/day": [7.0, 12.0, 17.0, 22.0],
-    "perfect": None,
-}
-
 
 @dataclass
 class Economy:
     prices: dict            # FLOWER per unit (P2P)
-    sell_fee: float = 0.10  # marketplace cut when selling produce
+    sell_fee: float = 0.125  # marketplace cut when selling produce
     coins_per_flower: float = 320.0
 
     def unit(self, item):
@@ -40,8 +33,7 @@ class Economy:
     def food_cost(self, food):
         if food in G.FEED_RECIPES:
             return sum(self.unit(i) * q for i, q in G.FEED_RECIPES[food].items())
-        opts = [self.unit(i) * q for i, q in G.SLOP_OPTIONS[food].items() if self.unit(i) > 0]
-        return min(opts)
+        return self.cheapest_slop_ingredient(food)[1]
 
     def cheapest_slop_ingredient(self, food):
         return min(((i, self.unit(i) * q) for i, q in G.SLOP_OPTIONS[food].items() if self.unit(i) > 0),
@@ -49,7 +41,7 @@ class Economy:
 
 
 class AnimalModel:
-    """Pre-computes everything that depends only on (farm, animal, economy)."""
+    """Everything that depends only on (farm, animal, economy)."""
 
     def __init__(self, farm, animal, eco):
         self.animal = animal
@@ -58,8 +50,7 @@ class AnimalModel:
         self.xp_mult = F.feed_xp_multiplier(farm)
         self.love_xp = {i: F.love_xp(farm, animal, i) for i in G.LOVE_ITEMS}
         self.food_cost = {f: eco.food_cost(f) for f in set(G.FAVOURITE_FOOD[animal])}
-        self.produce = []        # FLOWER (after fee) of produce at each level
-        self.produce_units = []
+        self.produce, self.produce_units = [], []
         for lv in range(G.MAX_LEVEL + 1):
             units = {r: F.yield_amount(farm, animal, r, b) for r, b in G.DROPS[animal][lv].items()}
             self.produce_units.append(units)
@@ -69,92 +60,92 @@ class AnimalModel:
         self.bristle_value = [b * eco.unit("Pig Bristles") * (1 - eco.sell_fee) for b in self.bristles]
 
 
-def _draw_item(rng, level):
+def draw_item(rng, level):
     w = G.LOVE_WEIGHTS[level]
-    tot = sum(w)
-    if tot == 0:
-        return "Petting Hand"
-    x = rng.random() * tot
+    x = rng.random() * (sum(w) or 1)
     for item, wt in zip(G.LOVE_ITEMS, w):
         if x < wt:
             return item
         x -= wt
-    return G.LOVE_ITEMS[-1]
+    return "Petting Hand"
 
 
-def simulate(model, schedule, days, rng, jitter_h=0.33):
-    """Returns list of claim events: (t_hours, level, produce_flower, feed_flower_cycle, loves_cycle)."""
-    a = model.animal
-    T = model.sleep
-    third = T / 3
-    horizon = days * 24.0
+class Pet:
+    """One animal's state, advanced event by event by a perfect player."""
 
-    # login times
-    if schedule is not None:
-        logins = []
-        for d in range(days + 2):
-            for h in schedule:
-                logins.append(d * 24 + h + rng.gauss(0, jitter_h))
-        logins.sort()
-        t0 = logins[0]
-        logins = [t - t0 for t in logins]  # animal bought at first login
-        it = iter(logins)
-        next_login = lambda _t: next(it, None)  # noqa: E731
-    else:
-        next_login = None
+    def __init__(self, model, rng, xp=0.0, t=0.0):
+        self.m, self.rng = model, rng
+        self.xp = xp
+        self.asleep_at, self.wake_at, self.loved_at = -1e9, t, -1e9
+        self.loves, self.ready = 0, False
+        self.item = draw_item(rng, G.level_for_xp(model.animal, xp))
+        self.feed_acc, self.loves_acc = 0.0, 0
 
-    xp = 0.0
-    asleep_at = -1e9
-    wake_at = 0.0
-    loved_at = -1e9
-    loves = 0
-    ready = False
-    item = "Petting Hand"
-    feed_acc = 0.0
-    loves_acc = 0
-    events = []
+    @property
+    def level(self):
+        return G.level_for_xp(self.m.animal, self.xp)
 
-    t = 0.0
-    while t is not None and t <= horizon:
-        if t < wake_at:  # asleep
-            if loves < G.MAX_LOVES_PER_SLEEP and t >= asleep_at + third and t >= loved_at + third:
-                gained = model.love_xp[item]
-                before = xp
-                xp += gained
-                loves += 1
-                loves_acc += 1
-                loved_at = t
-                item = _draw_item(rng, G.level_for_xp(a, xp))
-                if G.completed_cycle(a, before, gained):
-                    ready = True
-        else:  # awake
-            if not ready:
-                lv = G.level_for_xp(a, xp)
-                fx = G.FAVOURITE_XP[lv] * model.xp_mult
-                need = G.xp_until_ready(a, xp)
-                feeds = max(1, math.ceil(need / fx - 1e-9))
-                xp += feeds * fx
-                feed_acc += feeds * model.food_qty * model.food_cost[G.FAVOURITE_FOOD[a][lv]]
-            lv = G.level_for_xp(a, xp)
-            events.append((t, lv, model.produce[lv], feed_acc, loves_acc))
-            feed_acc = 0.0
-            loves_acc = 0
-            ready = False
-            asleep_at, wake_at, loves = t, t + T, 0
+    def bounty_level(self):
+        lv = self.level
+        return lv - 1 if self.ready and lv < G.MAX_LEVEL else lv
 
-        # next action time
-        if schedule is not None:
-            t = next_login(t)
-        else:
-            if loves < G.MAX_LOVES_PER_SLEEP:
-                nxt = max(asleep_at + third, loved_at + third)
-                t = nxt if nxt < wake_at else wake_at
-            else:
-                t = wake_at
+    def next_time(self):
+        third = self.m.sleep / 3
+        if self.loves < G.MAX_LOVES_PER_SLEEP:
+            nxt = max(self.asleep_at + third, self.loved_at + third)
+            if nxt < self.wake_at:
+                return nxt
+        return self.wake_at
+
+    def awake(self, t):
+        return t >= self.wake_at - 1e-9
+
+    def pet(self, t):
+        gained = self.m.love_xp[self.item]
+        before = self.xp
+        self.xp += gained
+        self.loves += 1
+        self.loves_acc += 1
+        self.loved_at = t
+        self.item = draw_item(self.rng, self.level)
+        if G.completed_cycle(self.m.animal, before, gained):
+            self.ready = True
+
+    def feed_and_claim(self, t):
+        """Feed to ready if needed, claim produce, go to sleep. Returns claim event."""
+        a, m = self.m.animal, self.m
+        if not self.ready:
+            lv = self.level
+            fx = G.FAVOURITE_XP[lv] * m.xp_mult
+            feeds = max(1, math.ceil(G.xp_until_ready(a, self.xp) / fx - 1e-9))
+            self.xp += feeds * fx
+            self.feed_acc += feeds * m.food_qty * m.food_cost[G.FAVOURITE_FOOD[a][lv]]
+        lv = self.level
+        ev = (t, lv, m.produce[lv], self.feed_acc, self.loves_acc)
+        self.feed_acc, self.loves_acc, self.ready = 0.0, 0, False
+        self.asleep_at, self.wake_at, self.loves = t, t + m.sleep, 0
+        return ev
+
+    def act(self, t):
+        """Do whatever is due at time t. Returns a claim event or None."""
+        if not self.awake(t):
+            self.pet(t)
+            return None
+        return self.feed_and_claim(t)
+
+
+def simulate(model, days, rng):
+    """Claim events (t_hours, level, produce_flower, feed_flower, pets) for one animal from level 0."""
+    pet = Pet(model, rng)
+    events, t, horizon = [], 0.0, days * 24.0
+    while t <= horizon:
+        ev = pet.act(t)
+        if ev:
+            events.append(ev)
+        t = pet.next_time()
     return events
 
 
-def run_scenario(model, schedule_name, days=45, runs=1000, seed=7):
+def run_scenario(model, days=30, runs=1000, seed=7):
     rng = random.Random(seed)
-    sched = SCHEDULES[schedule_name]
-    return [simulate(model, sched, days, rng) for _ in range(runs)]
+    return [simulate(model, days, rng) for _ in range(runs)]
