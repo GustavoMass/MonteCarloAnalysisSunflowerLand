@@ -106,6 +106,26 @@ class Simulation(unittest.TestCase):
         self.assertGreater(sum(r["weekly"]["bristles"]), 0)
 
 
+    def test_sell_lowest_level_first(self):
+        from sflmc import herd as H
+        m = S.AnimalModel(F.Farm({}, set()), "Chicken", S.Economy(PRICES))
+        old = [G.ANIMAL_LEVELS["Chicken"][13]] * 5 + [G.ANIMAL_LEVELS["Chicken"][3]] * 5
+        kw = dict(start_xp=old, weeks=1, schedule=[(10, {"coins": 3})], level_pool=[3],
+                  coin_points={"3": 300}, ticket_amount=0, gems=0)
+        lo = H.simulate_herd(m, random.Random(8), sell_order="lowest", **kw)["sold_levels"]
+        hi = H.simulate_herd(m, random.Random(8), sell_order="highest", **kw)["sold_levels"]
+        self.assertTrue(lo and hi)
+        self.assertLess(max(lo), 10)          # young ones go first
+        self.assertGreaterEqual(min(hi), 13)  # old habit sells the old layers
+
+    def test_level_one_has_profit(self):
+        from sflmc import analysis as A
+        m = S.AnimalModel(F.Farm({}, set()), "Chicken", S.Economy(PRICES))
+        r = A.per_level(m, S.run_scenario(m, 20, 20, 3), 0.0)
+        self.assertIsNotNone(r["levels"][0]["profit_day"])
+        acc = [l["accumulated"]["p50"] for l in r["levels"][:5]]
+        self.assertEqual(acc, sorted(acc))    # eggs pay for the feed, so it only grows
+
 
 class FlowerPlan(unittest.TestCase):
     def test_season_gating_and_beds(self):

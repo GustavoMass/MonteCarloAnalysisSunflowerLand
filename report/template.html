@@ -93,6 +93,9 @@ code { font-family: var(--mono); font-size: 13px; }
     <div><span class="lbl">Measure</span><div class="seg" id="metricSeg"></div></div>
   </div>
   <div class="grid4" id="levelCharts"></div>
+  <h3 id="acc-h">Accumulated profit by level</h3>
+  <p class="muted">Running FLOWER total for one animal when it leaves each level: every feed it ate and everything it produced so far, from the day you buy it. Read it as “sell or trade it in after this level and this is what it made”.</p>
+  <div class="grid4" id="accCharts"></div>
 </section>
 
 <section aria-labelledby="h-h">
@@ -190,10 +193,10 @@ const A4 = ["Chicken", "Cow", "Sheep", "Pig"];
 const C = DATA.meta.config, PLAN = DATA.meta.plan;
 const BUILDS = Object.keys(C.builds);
 const METRICS = {
-  profit_day: { dp: 3, name: "Profit / day", y: "FLOWER per day", cap: "FLOWER per day during the sleep cycle that ends at this level (produce after tax − feed)." },
-  cum_at_reach: { dp: 2, name: "Running total", y: "FLOWER", cap: "Cumulative FLOWER from produce minus feed when it first reaches the level (the coin purchase price counts only if coins_per_flower is set). Below zero = not paid for itself yet." },
-  day_reached: { dp: 1, name: "Days to reach", y: "days", cap: "Days from buying it at level 0 until it reaches the level." },
+  profit_day: { dp: 3, name: "Profit / day", y: "FLOWER per day", cap: "FLOWER per day while it is at this level: produce of every sleep it was fed at this level, after tax, minus that feed." },
+  day_reached: { dp: 1, name: "Days to reach", y: "days", cap: "Days from buying it until it reaches the level." },
 };
+const ACC = { dp: 2, name: "Accumulated profit", y: "FLOWER", cap: "Below zero = it has not paid for its feed yet. Level 15 never ends, so its bar is the total after its first sleep there; after that it adds the level-15 profit per day." };
 const st = { build: BUILDS[0], metric: "profit_day" };
 const $ = id => document.getElementById(id);
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
@@ -233,16 +236,14 @@ const medianLabels = dp => ({ id: "medianLabels", afterDatasetsDraw(chart) {
   });
   ctx.restore(); } });
 
-function levelCharts() {
-  const m = METRICS[st.metric];
-  $("levelCharts").innerHTML = A4.map(a => `<div class="chart"><h3><span class="dot" style="background:var(--${a.toLowerCase()})"></span>${a}</h3>
-    <div class="box"><canvas id="lc-${a}" aria-label="${a} ${m.name} by level"></canvas></div><p class="cap" id="lcap-${a}"></p></div>`).join("");
+function levelGrid(box, key, m, prefix) {
+  $(box).innerHTML = A4.map(a => `<div class="chart"><h3><span class="dot" style="background:var(--${a.toLowerCase()})"></span>${a}</h3>
+    <div class="box"><canvas id="${prefix}-${a}" aria-label="${a} ${m.name} by level"></canvas></div><p class="cap" id="${prefix}cap-${a}"></p></div>`).join("");
   A4.forEach(a => {
-    const s = single(st.build, a), col = css("--" + a.toLowerCase()), d = s.levels.map(l => l[st.metric]);
+    const s = single(st.build, a), col = css("--" + a.toLowerCase()), d = s.levels.map(l => l[key]);
     const flat = d.map(x => x && Math.abs(x.p90 - x.p10) < 1e-9);
-    const none = s.levels.filter(l => !l[st.metric]).map(l => "L" + l.level);
-    charts["lc-" + a] = null;
-    mk("lc-" + a, { data: { labels: s.levels.map(l => "L" + l.level), datasets: [
+    const none = s.levels.filter(l => !l[key]).map(l => "L" + l.level);
+    mk(`${prefix}-${a}`, { data: { labels: s.levels.map(l => "L" + l.level), datasets: [
         { type: "bar", label: "P10–P90", data: d.map(x => x ? [x.p10, x.p90] : null), backgroundColor: col + "40", borderRadius: 3, grouped: false, barPercentage: .8, minBarLength: 6 },
         { type: "bar", label: "P25–P75", data: d.map(x => x ? [x.p25, x.p75] : null), backgroundColor: col, borderRadius: 2, grouped: false, barPercentage: .8, minBarLength: 6 },
         { type: "line", label: "Median", data: d.map(x => x ? x.p50 : null), showLine: false, pointStyle: "line", pointRadius: 9, pointBorderWidth: 3,
@@ -250,10 +251,15 @@ function levelCharts() {
       plugins: [medianLabels(m.dp)],
       options: { responsive: true, maintainAspectRatio: false, animation: false, layout: { padding: { top: 16 } },
         plugins: { legend: { display: false }, tooltip: rangeTip(m.dp) }, scales: axes("level", m.y, { y: { grace: "8%" } }) } });
-    $("lcap-" + a).innerHTML = `Sleeps ${s.sleep_h.toFixed(1)} h · ${s.food_qty.toFixed(2)} food per feed${s.xp_mult > 1 ? ` at ${s.xp_mult}x XP` : ""} · at level 15 ${sg(s.l15_day && s.l15_day.p50, 3)} FLOWER/day. ${m.cap}` +
-      (none.length ? ` ${none.join(", ")}: no sleep cycle ends at ${none.length > 1 ? "these levels" : "this level"} (it starts there or passes it in one feed), so there is nothing to show.` : "") +
+    const head = key === "profit_day" ? `Sleeps ${s.sleep_h.toFixed(1)} h · ${s.food_qty.toFixed(2)} food per feed${s.xp_mult > 1 ? ` at ${s.xp_mult}x XP` : ""} · at level 15 ${sg(s.l15_day && s.l15_day.p50, 3)} FLOWER/day. ` : "";
+    $(`${prefix}cap-${a}`).innerHTML = head + m.cap +
+      (none.length ? ` ${none.join(", ")}: not reached in the simulated days.` : "") +
       (flat.some(Boolean) ? " A thin bar with a dark mark means every run gave the same value." : "");
   });
+}
+function levelCharts() {
+  levelGrid("levelCharts", st.metric, METRICS[st.metric], "lc");
+  levelGrid("accCharts", "accumulated", ACC, "ac");
 }
 
 // ---------- lean herd
@@ -446,6 +452,10 @@ function verdicts(tot) {
   const keep = herds(plan, "Pig").find(h => /Keep/.test(h.policy)), trade = herds(plan, "Pig").find(h => /^Trade/.test(h.policy));
   const items = [
     ["Chonky Feed", "Good switch", `Chickens are unchanged (${sg(ch, 3)} vs ${sg(chOld, 3)} FLOWER/day at level 15). Over the chapter, cows + sheep come to ${sg(barnPlan, 0)} FLOWER with Chonky against ${sg(barnOld, 0)} with Clucky, and pigs ${sg(pigPlan, 0)} vs ${sg(pigOld, 0)}. ${COIN_TXT}`],
+    (() => { const hs = herds(plan, "Chicken"), lo = hs.find(h => /lowest/.test(h.policy)), hi = hs.find(h => /highest/.test(h.policy));
+      if (!lo || !hi) return null; const lv = single(plan, "Chicken").levels, pd = L => lv[L - 1].profit_day && lv[L - 1].profit_day.p50;
+      return ["Which chicken to sell", lo.value_flower.p50 >= hi.value_flower.p50 ? "The lowest level that fits" : "The highest level",
+        `Full Hen House over the chapter: ${sg(lo.value_flower.p50, 0)} FLOWER selling the lowest-level chicken each bounty accepts, ${sg(hi.value_flower.p50, 0)} selling the highest. A chicken makes ${sg(pd(1), 3)} FLOWER/day at level 1 and ${sg(pd(14), 3)} at level 14, so the old ones are the ones worth keeping.`]; })(),
     ["Herd size", "Needed + 0 or + 1 is enough", `A cow herd sized exactly to the week's requests fills ${nf(100 * b0.fill_rate.coins)}% of them; +2 animals fills ${nf(100 * b2.fill_rate.coins)}% but leaves ${nf(b2.parked_days.p50)} animal-days waiting unfed against ${nf(b0.parked_days.p50)}. A level-0 calf reaches level 9 in about a week, so replacements bought on the day you sell are ready for next week's board.`],
     ["Pigs", trade.value_flower.p50 > keep.value_flower.p50 ? "Trade in at level 9, don't keep" : "Keep them", `Keeping and feeding pigs: ${sg(keep.value_flower.p50, 0)} FLOWER over the chapter (from level 10 they eat Gourmet Slop). Trading in at level 9 and rebuying: ${sg(trade.value_flower.p50, 0)}. Most of that is bristles at ${DATA.meta.prices.prices["Pig Bristles"]} FLOWER each${(DATA.meta.prices.stale || {})["Pig Bristles"] ? ` (no listing right now; last price seen ${DATA.meta.prices.stale["Pig Bristles"]})` : ""}, but Truffles alone already cover a pig's feed up to level 9.`],
     ["Cheapest upgrades", top.map(b => b.name).join(", "), top.map(b => `${b.name}: ${sg(b.flower, 0)} a chapter${b.price ? ` for ${nf(b.price, 0)} FLOWER` : ""}`).join("; ") + ". Skill rows need a free point. " + (() => { const bb = DATA.boosts.find(b => /Bountiful/.test(b.name)); return bb ? `Bountiful Bounties adds only coins (${nf(bb.coins)} a chapter), so it is worth nothing in FLOWER here.` : ""; })()],
@@ -456,7 +466,7 @@ function verdicts(tot) {
       const parentOnly = Object.entries(fl).filter(([n, f]) => f.steps.some(x => x[1] && fl[x[0]] && (DATA.flowers.seeds[fl[x[0]].seed] || {}).seasons?.length === 1)).map(([n]) => n);
       return `Board flowers come from that week's seeds; the season rotates every Monday (winter on 9 Nov, then spring, summer, autumn). ${slow.length} flowers need another flower as a parent and take ${slow.at(-1)[1].days}–${slow[0][1].days} days from scratch, e.g. ${slow.slice(0, 3).map(([n, f]) => `${n} ${f.days} d`).join(", ")}. ${parentOnly.length} need a season-only parent (like ${parentOnly.slice(0, 2).join(", ")}), so you can only start them if you saved that parent from its season.`; })()],
   ];
-  $("verdicts").innerHTML = items.map(([k, v, p]) => `<div class="verdict"><span class="k">${k}</span><span class="v">${v}</span><p>${p}</p></div>`).join("");
+  $("verdicts").innerHTML = items.filter(Boolean).map(([k, v, p]) => `<div class="verdict"><span class="k">${k}</span><span class="v">${v}</span><p>${p}</p></div>`).join("");
 }
 
 function method() {

@@ -76,7 +76,7 @@ def run_herd(cfg, ctx, farm, animal, policy, buffer, runs, key):
                            ticket_amount=cfg["ticket_base"][animal] + ctx["wear"], gems=cfg["gems_per_bounty"],
                            coin_mult=F.bounty_coin_multiplier(farm), stop_feeding_at=stop,
                            trade_in_at=policy.get("trade_in_at"), no_ticket_weeks=set(cfg["no_ticket_weeks"]),
-                           live_board=live)
+                           live_board=live, sell_order=policy.get("sell_order"))
            for _ in range(runs)]
     return {"stop_feeding_at": stop, **A.herd_totals(res, eco.coins_per_flower)}
 

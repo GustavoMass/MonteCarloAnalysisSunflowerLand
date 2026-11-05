@@ -28,9 +28,12 @@ def make_board(rng, counts, level_pool, coin_points, ticket_amount, gems):
 
 def simulate_herd(model, rng, *, start_xp, weeks, schedule, sell=True, buffer=None,
                   level_pool, coin_points, ticket_amount, gems, coin_mult=1.0,
-                  stop_feeding_at=None, trade_in_at=None, no_ticket_weeks=(), live_board=None):
+                  stop_feeding_at=None, trade_in_at=None, no_ticket_weeks=(), live_board=None, sell_order=None):
     """schedule[w] = (capacity, {"coins": n, "gems": n, "tickets": n}) for week w.
-    buffer=None keeps the building full; an int keeps (requests this week + buffer) animals."""
+    buffer=None keeps the building full; an int keeps (requests this week + buffer) animals.
+    sell_order: None sells whichever qualifying animal wakes first; "lowest" (or
+    "highest") holds an animal back while another one with a lower (higher)
+    level could fill the same request, so that one is sold instead."""
     animal = model.animal
     horizon = weeks * WEEK_H
     pets, heap = {}, []
@@ -99,6 +102,12 @@ def simulate_herd(model, rng, *, start_xp, weeks, schedule, sell=True, buffer=No
             if cands:
                 order = {"tickets": 0, "coins": 1, "gems": 2}
                 r = max(cands, key=lambda r: (r["level"], -order[r["kind"]], r["amount"]))
+                others = [q.bounty_level() for j, q in pets.items() if j != i]
+                lower = any(r["level"] <= b < bl for b in others)
+                higher = any(b > bl for b in others)
+                if (sell_order == "lowest" and lower) or (sell_order == "highest" and higher):
+                    cands = []
+            if cands:
                 r["open"] = False
                 filled[r["kind"]] += 1
                 out[r["kind"]][w] += r["amount"] * (coin_mult if r["kind"] == "coins" else 1)
