@@ -115,5 +115,9 @@
 
   "_flower_plan": "Your clock: hours from UTC (Brazil = -3) and the hours you are awake to plant and harvest.",
   "timezone_offset_hours": -3,
-  "awake_hours": [6, 23]
+  "awake_hours": [6, 23],
+  "_must_have": "Harvests you need by a deadline (your local time), e.g. a weekly chore. Planned first.",
+  "flower_must_have": [
+    {"flower": "Red Daffodil", "count": 1, "by": "2026-11-08 21:00", "note": "Victoria chore: grow Red Daffodil 3x"}
+  ]
 }

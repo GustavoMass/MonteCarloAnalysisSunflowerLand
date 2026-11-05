@@ -12,10 +12,12 @@ Planner rules:
     of, or a flower grown earlier in the plan for that purpose. When a wanted
     flower needs a parent flower you lack, the parent is planted first and
     both grow times count.
-  * Priorities for the target week: season-only flowers of that week's
-    season (the board leans on them), then missing all-season colours, faster
-    ones first (Cosmos and Pansy lead: Raven has asked for Cosmos), then
-    spares. Season-only flowers of other weeks are only filler.
+  * Priorities: (1) must-haves you set, e.g. a chore that needs a harvest
+    by a deadline; (2) parent prep: hold one of every parent flower needed
+    by flowers that have no crop recipe, so any flower can be finished
+    inside the week it is asked for (season-only ones first, since their
+    parents can only be grown in their own season); (3) colours you hold
+    none of. Season-only flowers of other weeks are only filler.
 """
 import datetime as dt
 
@@ -27,7 +29,7 @@ EPIC = ("Prism Petal", "Celestial Frostbloom", "Primula Enigma")
 
 
 def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7,
-         tz_offset_h=-3, awake=(6, 23), board_now=()):
+         tz_offset_h=-3, awake=(6, 23), board_now=(), must_have=()):
     seeds, fl = flowers["seeds"], flowers["flowers"]
     inv = dict(farm.get("inventory", {}))
     stock = {n: int(inv.get(n, 0)) for n in fl}
@@ -75,24 +77,44 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
     def have(n):
         return stock[n] + sum(1 for _, p in pending if p == n)
 
+    flower_only = {x: [p for p, _ in f.get("parents", []) if p in fl and p not in EPIC]
+                   for x, f in fl.items() if x not in EPIC and not any(p not in fl for p, _ in f.get("parents", []))}
+    musts = [dict(m, done=0) for m in must_have]
+
+    def blocked(x):
+        """x has only flower parents and you hold none of them."""
+        return x in flower_only and all(have(p) == 0 for p in flower_only[x])
+
     def value(name, t):
-        """How much having one more of this flower is worth for the target week."""
+        """How much one more of this flower is worth now."""
+        v = 0
+        for m in musts:
+            if m["flower"] == name and m["done"] < m["count"] and next_awake(int(t + grow(name))) <= m["by"]:
+                v = max(v, 150)
         h = have(name) - sum(1 for p, x in reserved.items() if p == name)
-        if season_only(name):
-            if season_at(t) != season_at(target_start) or t < target_start:
-                return 12 if h == 0 else 0           # stock for a later week: filler
-            return 85 if h == 0 else 40 if h == 1 else 0
-        base = FAMILY_PRIORITY.get(family(name), 0)
-        days = seeds[fl[name]["seed"]]["days"]
         if h == 0:
-            return base - 6 * days
-        return base - 55 - 6 * days if h == 1 else 0
+            unlocks = [x for x in flower_only if name in flower_only[x] and blocked(x)]
+            if unlocks:
+                v = max(v, max(75 if season_only(x) else 55 for x in unlocks) + 3 * (len(unlocks) - 1)
+                        - 3 * seeds[fl[name]["seed"]]["days"])
+        if season_only(name):
+            if season_at(t) == season_at(target_start) and t >= target_start:
+                v = max(v, 30 if h == 0 else 10 if h == 1 else 0)
+            else:
+                v = max(v, 8 if h == 0 else 0)
+        elif h == 0:
+            v = max(v, FAMILY_PRIORITY.get(family(name), 0) // 3 - 3 * seeds[fl[name]["seed"]]["days"])
+        return v
+
+    def is_must(name):
+        return any(m["flower"] == name and m["done"] < m["count"] for m in musts)
 
     def direct_option(name):
         best = None
         for parent, qty in fl[name].get("parents", []):
             if parent in fl:
-                spare = stock.get(parent, 0) - (0 if reserved.get(parent) == name else 1)
+                keep = 0 if reserved.get(parent) == name or is_must(name) else 1
+                spare = stock.get(parent, 0) - keep
                 if spare < qty:
                     continue
                 cand = (0.5 if reserved.get(parent) != name else 0.0, parent, qty, 0)
@@ -106,6 +128,18 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
     def plantable(name, t):
         sd = fl[name]["seed"]
         return name not in EPIC and season_at(t) in seeds[sd]["seasons"] and seed_stock.get(sd, 0) > 0
+
+    def why_now(name, t):
+        for m in musts:
+            if m["flower"] == name and m["done"] < m["count"]:
+                return m.get("note") or "must-have"
+        if have(name) == 0:
+            unlocks = [x for x in flower_only if name in flower_only[x] and blocked(x)]
+            if unlocks:
+                return "parent prep: lets you grow " + ", ".join(unlocks[:3]) + ("…" if len(unlocks) > 3 else "")
+        if season_only(name):
+            return "this week's season-only" if season_at(t) == season_at(target_start) and t >= target_start else "season-only stock"
+        return "colour you hold none of" if have(name) == 0 else "spare"
 
     schedule = []
     for _ in range(400):
@@ -129,7 +163,10 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
                 if best is None or key > best[0]:
                     best = (key, name, opt, None)
                 continue
-            # needs a parent flower first: grow it now, the target after
+            # needs a parent flower first: grow it now, the target after.
+            # If a parent is already growing, wait for it instead.
+            if any(n == p for _, n in pending for p, _ in fl[name].get("parents", [])):
+                continue
             for parent, qty in fl[name].get("parents", []):
                 if parent not in fl or qty != 1 or reserved.get(parent) or not plantable(parent, t):
                     continue
@@ -145,6 +182,7 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
             bed["free"] = max(nxt, t + H)
             continue
         _, name, (cost, parent, qty, buy), target = best
+        why = f"parent for {target}" if target else why_now(name, t)
         seed_stock[fl[name]["seed"]] -= 1
         if parent in fl:
             stock[parent] -= qty
@@ -154,28 +192,34 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
             inv[parent] = max(0, inv.get(parent, 0) - qty)
         if target:
             reserved[name] = target
+        for m in musts:
+            if m["flower"] == name and m["done"] < m["count"] and next_awake(int(t + grow(name))) <= m["by"]:
+                m["done"] += 1
+                break
         ready = t + grow(name)
         pending.append((ready, name))
         schedule.append({"bed": bed["bed"], "plant": t, "ready": ready, "harvest": next_awake(int(ready)),
                          "flower": name, "seed": fl[name]["seed"], "cross": f"{qty} {parent}", "buy": buy,
                          "season": season_at(t),
-                         "why": f"parent for {target}" if target else reason(name, season_only(name), have(name) - 1,
-                                                                               season_at(t) == season_at(target_start) and t >= target_start)})
+                         "why": why})
         bed["free"] = ready
 
     end_stock = dict(stock)
     for r, n in pending:
         end_stock[n] += 1
+    readiness = []
+    for x in sorted(flower_only):
+        hold = [p for p in flower_only[x] if end_stock.get(p, 0) > 0]
+        readiness.append({"flower": x, "season_only": season_only(x), "parents": flower_only[x], "held_after_plan": hold,
+                          "held_now": [p for p in flower_only[x] if farm["inventory"].get(p)]})
+    end_stock = dict(stock)
+    for r, n in pending:
+        end_stock[n] += 1
     return {"speed": speed, "beds": beds, "schedule": schedule, "target_start": target_start, "horizon": horizon,
-            "tz_offset_h": tz_offset_h, "awake": list(awake),
+            "tz_offset_h": tz_offset_h, "awake": list(awake), "readiness": readiness,
+            "must_have": [{k: v for k, v in m.items()} for m in musts],
             "stock_now": {n: int(farm["inventory"].get(n, 0)) for n in fl if farm["inventory"].get(n)},
             "stock_end": {n: v for n, v in end_stock.items() if v},
             "seeds": {s: int(farm["inventory"].get(s, 0)) for s in seeds}}
 
 
-def reason(name, so, had, in_target_week):
-    if so:
-        if not in_target_week:
-            return "season-only, stock for its next week"
-        return "this week's season-only, none in stock" if had <= 0 else "this week's season-only, spare"
-    return "none in stock" if had <= 0 else "second copy"

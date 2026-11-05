@@ -137,8 +137,27 @@ class FlowerPlan(unittest.TestCase):
                 "flower_beds": [{"name": None}], "season": "winter", "season_started": start}
         r = FP.plan(farm, flowers, start, target_start_ms=start, target_days=5, tz_offset_h=0, awake=(0, 24))
         names = [s["flower"] for s in r["schedule"]]
-        self.assertEqual(names[:2], ["Yellow Daffodil", "Red Cosmos"])
-        self.assertEqual(r["schedule"][0]["why"], "parent for Red Cosmos")
+        self.assertEqual(names[0], "Yellow Daffodil")                  # parent stocked first
+        self.assertTrue(r["schedule"][0]["why"].startswith("parent prep"))
+        self.assertIn("Red Cosmos", names)                              # target grown later from a second parent
+        self.assertLess(names.index("Yellow Daffodil"), names.index("Red Cosmos"))
+
+    def test_must_have_first(self):
+        from sflmc import flowerplan as FP
+        H = 3600 * 1000
+        start = 1_000 * H
+        all4 = ["spring", "summer", "autumn", "winter"]
+        flowers = {"seeds": {"Sunpetal Seed": {"days": 1, "seasons": all4, "flowers": []},
+                             "Bloom Seed": {"days": 2, "seasons": all4, "flowers": []}},
+                   "flowers": {"Red Daffodil": {"seed": "Bloom Seed", "days": 2, "parents": [["Yellow Pansy", 1]]},
+                               "Yellow Pansy": {"seed": "Sunpetal Seed", "days": 1, "parents": [["Sunflower", 50]]},
+                               "Blue Cosmos": {"seed": "Sunpetal Seed", "days": 1, "parents": [["Cauliflower", 5]]}}}
+        farm = {"inventory": {"Sunpetal Seed": 5, "Bloom Seed": 5, "Sunflower": 500, "Cauliflower": 50, "Yellow Pansy": 2},
+                "flower_beds": [{"name": None}], "season": "winter", "season_started": start}
+        r = FP.plan(farm, flowers, start, target_start_ms=start, target_days=4, tz_offset_h=0, awake=(0, 24),
+                    must_have=[{"flower": "Red Daffodil", "count": 1, "by": start + 72 * H}])
+        self.assertEqual(r["schedule"][0]["flower"], "Red Daffodil")
+        self.assertEqual(r["must_have"][0]["done"], 1)
 
 
 if __name__ == "__main__":

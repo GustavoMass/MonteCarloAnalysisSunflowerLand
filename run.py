@@ -275,7 +275,11 @@ def main():
     if fl and farm_d.get("flower_beds") is not None and farm_d.get("season_started"):
         fp = flowerplan.plan(farm_d, fl, int(time.time() * 1000), prices["prices"],
                              tz_offset_h=cfg.get("timezone_offset_hours", 0), awake=tuple(cfg.get("awake_hours", (0, 24))),
-                             board_now=[b["label"] for b in board_week.get("board", []) if b["category"] == "Flowers"])
+                             board_now=[b["label"] for b in board_week.get("board", []) if b["category"] == "Flowers"],
+                             must_have=[{**m, "by": int((dt.datetime.strptime(m["by"], "%Y-%m-%d %H:%M")
+                                                         - dt.timedelta(hours=cfg.get("timezone_offset_hours", 0)))
+                                                        .replace(tzinfo=dt.timezone.utc).timestamp() * 1000)}
+                                        for m in cfg.get("flower_must_have", [])])
         out["flower_plan"] = fp
 
     os.makedirs(os.path.join(HERE, "results"), exist_ok=True)

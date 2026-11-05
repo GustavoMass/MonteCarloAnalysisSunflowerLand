@@ -146,8 +146,11 @@ code { font-family: var(--mono); font-size: 13px; }
 <section aria-labelledby="fp-h">
   <h2 id="fp-h">Your flower plan: 4 beds, starting now</h2>
   <p class="muted" id="fpIntro"></p>
-  <div class="tbl"><table id="stockTable"></table></div>
   <div class="tbl"><table id="planTable"></table></div>
+  <div class="grid4">
+    <div class="tbl"><table id="readyTable"></table></div>
+    <div class="tbl"><table id="stockTable"></table></div>
+  </div>
 </section>
 
 <section aria-labelledby="f-h">
@@ -396,12 +399,16 @@ function flowerPlanView() {
         <td>${r.cross}${r.buy ? ` <span class="tag">buy ${nf(r.buy)}</span>` : ""}</td><td><b>${r.flower}</b></td><td class="num">${fmt(r.ready)}</td>
         <td class="num">${r.harvest > r.ready + 60e3 ? fmt(r.harvest) : "—"}</td><td class="muted">${r.why}</td></tr>`; }).join("") + "</tbody>";
   const growing = P.beds.filter(b => b.growing).map(b => `bed ${b.bed}: ${b.growing} (ready ${fmt(b.ready)})`).join(", ");
+  const must = (P.must_have || []).map(m => `${m.note || m.flower} (${m.done}/${m.count} planned)`).join("; ");
   $("fpIntro").innerHTML = `Built from your farm at ${DATA.meta.generated}: flowers, seeds, crops, and your 4 beds (${growing}). Beds grow at ×${P.speed.toFixed(2)} of base time.
     Times are your clock (${tz}); you plant and harvest only between ${P.awake[0]}:00 and ${P.awake[1]}:00, so a bed that finishes at night waits until morning.
-    When a flower needs another flower as its parent and you have none to spare, the parent is planted first and both grow times count (marked “parent for …”).
-    Goal: be ready for the winter week. The board leans on that week's season-only flower (last week 4 of 5 were Clover), and you already hold one of every Edelweiss.
-    So the beds go first to all-season colours you lack, fast ones first (Cosmos and Pansy lead, Raven asks for Cosmos), then Edelweiss spares once winter starts on ${fmt(P.target_start)}.
-    Clover is left for its own week (30 Nov). Re-run <code>run.bat</code> after you plant or harvest; the plan rebuilds from your live beds.`;
+    Order of priority: <b>1. must-haves</b>${must ? ` (${must})` : ""}; <b>2. parent prep</b>: hold one of every parent flower for the flowers that have no crop recipe, so whatever the board or Raven asks you can finish inside that week. Season-only parents come first because they can only be grown in their own week;
+    <b>3.</b> colours you hold none of. If a parent is already growing, the plan waits for it rather than planting another. Re-run <code>run.bat</code> after you plant or harvest; the plan rebuilds from your live beds. Add chores to <code>flower_must_have</code> in <code>config.json</code>.`;
+  const R = P.readiness || [];
+  $("readyTable").innerHTML = `<thead><tr><th>Needs a flower parent</th><th>Parents</th><th>Now</th><th>After plan</th></tr></thead><tbody>` +
+    R.map(r => `<tr class="${r.held_after_plan.length ? "" : "hi"}"><td>${r.flower}${r.season_only ? ' <span class="muted">(season-only)</span>' : ""}</td>
+      <td style="white-space:normal">${r.parents.join(", ")}</td><td class="num ${r.held_now.length ? "pos" : "neg"}">${r.held_now.length ? "ready" : "missing"}</td>
+      <td class="num ${r.held_after_plan.length ? "pos" : "neg"}">${r.held_after_plan.length ? r.held_after_plan.join(", ") : "missing"}</td></tr>`).join("") + "</tbody>";
 }
 
 function verdicts(tot) {
