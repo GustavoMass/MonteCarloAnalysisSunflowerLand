@@ -188,7 +188,7 @@ def main():
             runs = S.run_scenario(model, cfg["days_single_animal"], cfg["runs_single_animal"], seed(bname, animal))
             out["single"].append({"build": bname, "animal": animal, "sleep_h": model.sleep, "food_qty": model.food_qty,
                                   "xp_mult": model.xp_mult, "produce_units": model.produce_units,
-                                  **A.per_level(model, runs, H.BUY_COINS[animal] / eco.coins_per_flower)})
+                                  **A.per_level(model, runs, eco.coin_flower(H.BUY_COINS[animal]))})
             for pname, pol in policies(cfg, animal).items():
                 for buf in pol.get("buffers", [None]):
                     r = run_herd(cfg, ctx, farm, animal, pol, buf, cfg["runs_herd"], ("herd", bname, animal, pname, buf))
@@ -255,7 +255,7 @@ def main():
             priced = sum(q * eco.unit(k) for k, q in items.items())
             out["upgrades"].append({"building": bld, "path": pname, "top_level": top, **tot,
                                     "cost_coins": coins, "cost_items": items,
-                                    "cost_flower": coins / eco.coins_per_flower + priced,
+                                    "cost_flower": eco.coin_flower(coins) + priced,
                                     "unpriced": {k: q for k, q in items.items() if not eco.unit(k)},
                                     "have": {k: farm_d.get("inventory", {}).get(k, 0) for k in items}})
         print(f"  upgrades {bld} ({time.time() - t0:.0f}s)")

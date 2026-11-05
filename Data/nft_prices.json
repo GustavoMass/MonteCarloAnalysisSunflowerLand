@@ -2,20 +2,20 @@
  "fetched": "2026-11-05",
  "items": {
   "Ascended Cow": {
-   "price": 24.9786,
-   "last_sale": 24.9786,
+   "price": 24.9788,
+   "last_sale": 24.9788,
    "chapter": "Ascension Age",
    "tradable": true
   },
   "Ascended Sheep": {
-   "price": 24.7999,
-   "last_sale": 24.7999,
+   "price": 24.8998,
+   "last_sale": 24.8998,
    "chapter": "Ascension Age",
    "tradable": true
   },
   "Spa Cow": {
-   "price": 134.9999,
-   "last_sale": 134.9999,
+   "price": 135,
+   "last_sale": 135,
    "chapter": "Salt Awakening",
    "tradable": true
   },
@@ -26,8 +26,8 @@
    "tradable": true
   },
   "Mermaid Sheep": {
-   "price": 48.9987,
-   "last_sale": 48.9987,
+   "price": 48.9,
+   "last_sale": 48.9,
    "chapter": "Crabs and Traps",
    "tradable": true
   },
@@ -38,14 +38,14 @@
    "tradable": true
   },
   "Mammoth": {
-   "price": 245,
-   "last_sale": 245,
+   "price": 247,
+   "last_sale": 247,
    "chapter": "Winds of Change",
    "tradable": true
   },
   "White Sheep Onesie": {
-   "price": 19.8996,
-   "last_sale": 19.8996,
+   "price": 19.8,
+   "last_sale": 19.8,
    "chapter": "Bull Run",
    "tradable": true
   },

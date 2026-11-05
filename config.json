@@ -6,7 +6,8 @@
 
   "_tax": "Marketplace cut when you sell produce or bristles. VIP on the desert island = 12.5%.",
   "sell_fee": 0.125,
-  "coins_per_flower": 320,
+  "_coins_per_flower": "Coins per FLOWER when coins are added into FLOWER totals. 0 = coins count as nothing (shown separately); e.g. 1000 to value them.",
+  "coins_per_flower": 0,
 
   "_builds": "Skill builds to compare, applied to your live skills: remove these skills, then add {skill: rank}. The first one is your plan.",
   "builds": {
@@ -67,7 +68,8 @@
   "_boosts": "Cheap upgrades to test on top of your plan (first build, buffer 1). price in FLOWER is refreshed from the sfl-manager NFT catalog when found.",
   "boosts": [
     {"name": "Bountiful Bounties R1", "type": "skill (1 point)", "skills": {"Bountiful Bounties": 1}, "price": 0},
-    {"name": "Bale Economy", "type": "skill (1 point)", "skills": {"Bale Economy": 1}, "price": 0},
+    {"name": "Fine Fibers R1", "type": "skill (1 point)", "skills": {"Fine Fibers": 1}, "price": 0},
+    {"name": "Truffle Yield R1", "type": "skill (2 points)", "skills": {"Truffle Yield": 1}, "price": 0},
     {"name": "Dream Scarf", "type": "wearable", "wearables": ["Dream Scarf"]},
     {"name": "White Sheep Onesie", "type": "wearable", "wearables": ["White Sheep Onesie"]},
     {"name": "Spa Sheep", "type": "collectible", "collectibles": ["Spa Sheep"]},

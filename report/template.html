@@ -76,7 +76,7 @@ code { font-family: var(--mono); font-size: 13px; }
   <span class="eyebrow">Farm #<span id="fid"></span> · Cave Dwellers · data <span id="gen"></span></span>
   <h1>Barnyard Monte Carlo</h1>
   <p class="muted">Every animal simulated pet by pet and feed by feed with the game's own rules, petting every slot the moment it opens.
-    FLOWER at today's P2P prices after the <span id="tax"></span> marketplace cut. Coins are converted at 1:320 (the price of buying them) where a single number is needed.</p>
+    FLOWER at today's P2P prices after the <span id="tax"></span> marketplace cut. <span class="coinNote"></span></p>
 </header>
 
 <section aria-labelledby="v-h">
@@ -99,8 +99,8 @@ code { font-family: var(--mono); font-size: 13px; }
   <h2 id="h-h">Lean herds: only the animals the board needs</h2>
   <p class="muted" id="herdIntro"></p>
   <div class="grid4">
-    <div class="chart"><h3>Chapter value per building (FLOWER, coins at 1:320)</h3><div class="box" style="height:260px"><canvas id="hcValue"></canvas></div>
-      <p class="cap">Produce + bristles − feed + bounty coins − coins spent on new animals. Bars: P10–P90 pale, P25–P75 solid.</p></div>
+    <div class="chart"><h3>Chapter value per building (FLOWER from produce)</h3><div class="box" style="height:260px"><canvas id="hcValue"></canvas></div>
+      <p class="cap"><span class="coinNote"></span> Bars: P10–P90 pale, P25–P75 solid.</p></div>
     <div class="chart"><h3>Animal-days spent waiting unfed (sickness exposure)</h3><div class="box" style="height:260px"><canvas id="hcParked"></canvas></div>
       <p class="cap">Days that capped animals stood awake waiting for a request, summed over the chapter. More buffer, more days at risk.</p></div>
   </div>
@@ -137,7 +137,7 @@ code { font-family: var(--mono); font-size: 13px; }
   <p class="muted" id="upIntro"></p>
   <div class="split">
     <div class="chart"><h3>Chapter tickets and value by upgrade path</h3><div class="box" style="height:300px"><canvas id="upChart"></canvas></div>
-      <p class="cap">Tickets from that building's animal bounties (bars, left axis) and value in FLOWER: produce + bristles − feed + coins at 1:320 (diamonds, right axis). Building cost not subtracted.</p></div>
+      <p class="cap">Tickets from that building's animal bounties (bars, left axis) and value in FLOWER: produce + bristles − feed (diamonds, right axis; <span class="coinNote"></span>). Building cost not subtracted.</p></div>
     <div class="tbl"><table id="costTable"></table></div>
   </div>
   <div class="tbl"><table id="upTable"></table></div>
@@ -191,7 +191,7 @@ const C = DATA.meta.config, PLAN = DATA.meta.plan;
 const BUILDS = Object.keys(C.builds);
 const METRICS = {
   profit_day: { dp: 3, name: "Profit / day", y: "FLOWER per day", cap: "FLOWER per day during the sleep cycle that ends at this level (produce after tax − feed)." },
-  cum_at_reach: { dp: 2, name: "Running total", y: "FLOWER", cap: "Cumulative FLOWER when it first reaches the level, purchase included. Below zero = not paid for itself yet." },
+  cum_at_reach: { dp: 2, name: "Running total", y: "FLOWER", cap: "Cumulative FLOWER from produce minus feed when it first reaches the level (the coin purchase price counts only if coins_per_flower is set). Below zero = not paid for itself yet." },
   day_reached: { dp: 1, name: "Days to reach", y: "days", cap: "Days from buying it at level 0 until it reaches the level." },
 };
 const st = { build: BUILDS[0], metric: "profit_day" };
@@ -199,6 +199,8 @@ const $ = id => document.getElementById(id);
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const nf = (x, d = 0) => x == null || Number.isNaN(x) ? "—" : x.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
 const sg = (x, d = 2) => x == null ? "—" : `<span class="${x >= 0 ? "pos" : "neg"}">${x >= 0 ? "+" : "−"}${nf(Math.abs(x), d)}</span>`;
+const coinFl = c => C.coins_per_flower ? c / C.coins_per_flower : 0;
+const COIN_TXT = C.coins_per_flower ? `Coins are counted at 1:${C.coins_per_flower}.` : "Coins are not counted in FLOWER (you have enough); FLOWER is only what produce sells for on the market, minus feed.";
 const single = (b, a) => DATA.single.find(s => s.build === b && s.animal === a);
 const herds = (b, a) => DATA.herd.filter(h => h.build === b && h.animal === a);
 const bufLabel = h => h.policy ? h.policy : h.buffer == null ? "full building" : `needed + ${h.buffer}`;
@@ -305,7 +307,7 @@ function boostView() {
     rows.map(b => `<tr class="${b.flower > 0 && (b.price === 0 || (b.payback && b.payback <= 3)) ? "hi" : ""}"><td>${b.name}</td><td>${b.type}</td><td>${b.animals.join(", ") || "—"}</td>
       <td class="num">${b.price == null ? "no listing" : nf(b.price, 1)}</td><td class="num">${sg(b.flower, 1)}</td><td class="num">${nf(b.coins)}</td>
       <td class="num">${sg(b.feed, 1)}</td><td class="num">${b.price === 0 ? "free" : b.payback ? nf(b.payback, 1) : "never"}</td></tr>`).join("") + "</tbody>";
-  $("boostIntro").innerHTML = `Each upgrade is added to your plan (${PLAN}, herds at needed + 1, pigs on bounties + trade-in) and the chapter is simulated again with the same random draws, so the difference is the upgrade alone. Gain counts coins at 1:320. All your ${DATA.meta.farm.skills ? Object.keys(DATA.meta.farm.skills).length : ""} skills use your 73 points, so a 1-point skill means dropping another one during your reset. NFTs keep their resale value; “chapters to pay back” ignores that.`;
+  $("boostIntro").innerHTML = `Each upgrade is added to your plan (${PLAN}, herds at needed + 1, pigs on bounties + trade-in) and the chapter is simulated again with the same random draws, so the difference is the upgrade alone. Gain is FLOWER from produce. ${COIN_TXT} Coins gained are shown in their own column. A skill row needs a free point (or dropping another skill). NFTs keep their resale value; “chapters to pay back” ignores that.`;
 }
 
 // ---------- tickets
@@ -391,10 +393,10 @@ function upgradeView() {
   ["Barn", "Pigpen"].forEach(b => [1, 2, 3].forEach(lv => { const c = (DATA.building_costs || {})[b]?.[lv]; if (c) rows.push([b, lv, c]); }));
   const inv = DATA.meta.farm.inventory || {}, price = DATA.meta.prices.prices;
   $("costTable").innerHTML = `<thead><tr><th>Level</th><th>Coins</th><th>Items (you have)</th><th>FLOWER</th></tr></thead><tbody>` +
-    rows.map(([b, lv, c]) => { const fl = c.coins / C.coins_per_flower + Object.entries(c.items).reduce((t, [k, q]) => t + q * (price[k] || 0), 0);
+    rows.map(([b, lv, c]) => { const fl = coinFl(c.coins) + Object.entries(c.items).reduce((t, [k, q]) => t + q * (price[k] || 0), 0);
       return `<tr><td>${b} L${lv}${lv === 1 ? " (build)" : ""}</td><td class="num">${nf(c.coins)}</td>
         <td style="white-space:normal">${Object.entries(c.items).map(([k, q]) => `${nf(q)} ${k} <span class="muted">(${nf(inv[k] || 0)})</span>`).join(", ")}</td><td class="num">${nf(fl, 1)}${Object.keys(c.items).some(k => !price[k]) ? "+" : ""}</td></tr>`; }).join("") + "</tbody>";
-  $("upIntro").innerHTML = `Costs come from the game code (construction, then each upgrade). FLOWER prices items at P2P and coins at 1:320; Oil and Mud have no market price (marked +). “Net cost per + ticket” = extra upgrade cost minus the extra coins and produce it earns this chapter, divided by the extra tickets. Tickets per bounty, and bounty counts below Barn L3, are guesses until 9 Nov. Barn = cows and sheep at “needed + 1”; Pigpen = pigs on bounties + trade-in at L9. Upgrades stay for later chapters, which this chapter-only view ignores.`;
+  $("upIntro").innerHTML = `Costs come from the game code (construction, then each upgrade). FLOWER prices items at P2P; ${COIN_TXT} Oil and Mud have no market price (marked +). “Net cost per + ticket” = extra upgrade cost minus the extra coins and produce it earns this chapter, divided by the extra tickets. Tickets per bounty, and bounty counts below Barn L3, are guesses until 9 Nov. Barn = cows and sheep at “needed + 1”; Pigpen = pigs on bounties + trade-in at L9. Upgrades stay for later chapters, which this chapter-only view ignores.`;
 }
 
 // ---------- flower plan
@@ -443,10 +445,10 @@ function verdicts(tot) {
   const top = [...DATA.boosts].filter(b => b.flower > 0).sort((x, y) => (y.flower / Math.max(y.price || 1, 1)) - (x.flower / Math.max(x.price || 1, 1))).slice(0, 4);
   const keep = herds(plan, "Pig").find(h => /Keep/.test(h.policy)), trade = herds(plan, "Pig").find(h => /^Trade/.test(h.policy));
   const items = [
-    ["Chonky Feed", "Good switch", `Chickens are unchanged (${sg(ch, 3)} vs ${sg(chOld, 3)} FLOWER/day at level 15). Over the chapter, cows + sheep come to ${sg(barnPlan, 0)} FLOWER with Chonky against ${sg(barnOld, 0)} with Clucky, and pigs ${sg(pigPlan, 0)} vs ${sg(pigOld, 0)}. Coins are included at 1:320.`],
+    ["Chonky Feed", "Good switch", `Chickens are unchanged (${sg(ch, 3)} vs ${sg(chOld, 3)} FLOWER/day at level 15). Over the chapter, cows + sheep come to ${sg(barnPlan, 0)} FLOWER with Chonky against ${sg(barnOld, 0)} with Clucky, and pigs ${sg(pigPlan, 0)} vs ${sg(pigOld, 0)}. ${COIN_TXT}`],
     ["Herd size", "Needed + 0 or + 1 is enough", `A cow herd sized exactly to the week's requests fills ${nf(100 * b0.fill_rate.coins)}% of them; +2 animals fills ${nf(100 * b2.fill_rate.coins)}% but leaves ${nf(b2.parked_days.p50)} animal-days waiting unfed against ${nf(b0.parked_days.p50)}. A level-0 calf reaches level 9 in about a week, so replacements bought on the day you sell are ready for next week's board.`],
-    ["Pigs", trade.value_flower.p50 > keep.value_flower.p50 ? "Trade in at level 9, don't keep" : "Keep them", `Keeping and feeding pigs: ${sg(keep.value_flower.p50, 0)} FLOWER over the chapter (from level 10 they eat Gourmet Slop). Trading in at level 9 and rebuying: ${sg(trade.value_flower.p50, 0)}. Most of that is bristles at ${DATA.meta.prices.prices["Pig Bristles"]} FLOWER each, but Truffles alone already cover a pig's feed up to level 9.`],
-    ["Cheapest upgrades", top.map(b => b.name).join(", "), top.map(b => `${b.name}: ${sg(b.flower, 0)} a chapter${b.price ? ` for ${nf(b.price, 0)} FLOWER` : ""}`).join("; ") + ". Bountiful Bounties needs one skill point, so swap out a 1-point skill you use least during the reset."],
+    ["Pigs", trade.value_flower.p50 > keep.value_flower.p50 ? "Trade in at level 9, don't keep" : "Keep them", `Keeping and feeding pigs: ${sg(keep.value_flower.p50, 0)} FLOWER over the chapter (from level 10 they eat Gourmet Slop). Trading in at level 9 and rebuying: ${sg(trade.value_flower.p50, 0)}. Most of that is bristles at ${DATA.meta.prices.prices["Pig Bristles"]} FLOWER each${(DATA.meta.prices.stale || {})["Pig Bristles"] ? ` (no listing right now; last price seen ${DATA.meta.prices.stale["Pig Bristles"]})` : ""}, but Truffles alone already cover a pig's feed up to level 9.`],
+    ["Cheapest upgrades", top.map(b => b.name).join(", "), top.map(b => `${b.name}: ${sg(b.flower, 0)} a chapter${b.price ? ` for ${nf(b.price, 0)} FLOWER` : ""}`).join("; ") + ". Skill rows need a free point. " + (() => { const bb = DATA.boosts.find(b => /Bountiful/.test(b.name)); return bb ? `Bountiful Bounties adds only coins (${nf(bb.coins)} a chapter), so it is worth nothing in FLOWER here.` : ""; })()],
     ["9,000 Duende Caps", tot[1] >= C.ticket_goal ? "Possible with the cheap push" : tot[2] >= C.ticket_goal ? "Only near the maximum" : "Out of reach this chapter",
       `Your habits: ~${nf(tot[0])}. Delivering to the five cheap NPCs every day and doing all flowers and mutant crops: ~${nf(tot[1])}. Everything except Tywin, Jester and obsidian: ~${nf(tot[2])}. Board and animal ticket amounts are guesses until 9 Nov; rerun then.`],
     ["Flowers", "Keep a stock; some need another flower first", (() => {
@@ -469,7 +471,7 @@ function method() {
   $("method").innerHTML = items.map(x => `<li>${x}</li>`).join("");
 }
 
-function all() { levelCharts(); herdView(); pigView(); boostView(); const t = ticketView(); upgradeView(); flowerPlanView(); flowerView(); verdicts(t); }
+function all() { document.querySelectorAll(".coinNote").forEach(e => e.textContent = COIN_TXT); levelCharts(); herdView(); pigView(); boostView(); const t = ticketView(); upgradeView(); flowerPlanView(); flowerView(); verdicts(t); }
 function init() {
   $("fid").textContent = DATA.meta.farm.farm_id; $("gen").textContent = DATA.meta.generated; $("tax").textContent = (C.sell_fee * 100) + "%";
   seg("buildSeg", BUILDS.map(b => [b, b]), "build", levelCharts);

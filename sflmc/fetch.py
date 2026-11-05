@@ -187,6 +187,17 @@ def refresh(data_dir, farm_id, nft_names=()):
         need |= set(o)
     snap = {"source": f"{API}/v1/prices (p2p, FLOWER per unit)", "fetched": time.strftime("%Y-%m-%d"),
             "prices": {k: prices[k] for k in sorted(need) if prices.get(k)}}
+    # An item with no listing right now comes back empty; keep its last known price
+    # instead of treating it as worthless (e.g. Truffle and Pig Bristles, Nov 2026).
+    ppath = os.path.join(data_dir, "prices_snapshot.json")
+    if os.path.exists(ppath):
+        with open(ppath, encoding="utf-8") as fh:
+            prev = json.load(fh)
+        kept = {k: v for k, v in prev.get("prices", {}).items() if k in need and k not in snap["prices"] and v}
+        if kept:
+            snap["prices"].update(kept)
+            snap["stale"] = {k: prev.get("stale", {}).get(k, prev.get("fetched")) for k in sorted(kept)}
+            print(f"  no current price for {', '.join(sorted(kept))}; using the last known one")
 
     # keep coin history: merge this week's coin levels into what we have seen before
     bpath = os.path.join(data_dir, "bounties_observed.json")
