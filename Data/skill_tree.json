@@ -1,0 +1,1496 @@
+[
+{
+"name": "Green Thumb",
+"tree": "Crops",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "x0.95 plot crop growth time"
+},
+{
+"name": "Young Farmer",
+"tree": "Crops",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "+0.1 Basic Crop yield"
+},
+{
+"name": "Experienced Farmer",
+"tree": "Crops",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "+0.1 Medium Crop yield"
+},
+{
+"name": "Old Farmer",
+"tree": "Crops",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "+0.1 Advanced Crop yield"
+},
+{
+"name": "Chonky Scarecrow",
+"tree": "Crops",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "Increases Basic Scarecrow's area of effect (AOE) to a 7x7 area; Additional x0.9 basic crop growth time"
+},
+{
+"name": "Betty's Friend",
+"tree": "Crops",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "Betty Coin delivery revenue increased by 30%"
+},
+{
+"name": "Strong Roots",
+"tree": "Crops",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "x0.9 Advanced crop growth time"
+},
+{
+"name": "Coin Swindler",
+"tree": "Crops",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "+10% coins when selling plot crops at the Market"
+},
+{
+"name": "Golden Sunflower",
+"tree": "Crops",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "1/700 chance for 0.35 gold when harvesting sunflowers (excluding Crop Machine)"
+},
+{
+"name": "Horror Mike",
+"tree": "Crops",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "Increases Scary Mike's area of effect (AOE) to a 7x7 area; Additional +0.1 medium crop yield"
+},
+{
+"name": "Laurie's Gains",
+"tree": "Crops",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "Increases Laurie the Chuckle Crow's area of effect (AOE) to a 7x7 area; Additional +0.1 advanced crop yield"
+},
+{
+"name": "Instant Growth",
+"tree": "Crops",
+"tier": 3,
+"points": 3,
+"island": "basic",
+"ranks": 3,
+"desc": "Grants the ability to instantly harvest all currently growing crops in plots"
+},
+{
+"name": "Acre Farm",
+"tree": "Crops",
+"tier": 3,
+"points": 3,
+"island": "basic",
+"ranks": 3,
+"desc": "+1 Advanced crop yield / -0.5 Basic and Medium crop yield"
+},
+{
+"name": "Hectare Farm",
+"tree": "Crops",
+"tier": 3,
+"points": 3,
+"island": "basic",
+"ranks": 3,
+"desc": "+1 Basic and Medium crop yield / -0.5 Advanced crop yield"
+},
+{
+"name": "Fruitful Fumble",
+"tree": "Fruit Patch",
+"tier": 1,
+"points": 1,
+"island": "spring",
+"ranks": 3,
+"desc": "+0.1 Fruit Patch yield"
+},
+{
+"name": "Fruity Heaven",
+"tree": "Fruit Patch",
+"tier": 1,
+"points": 1,
+"island": "spring",
+"ranks": 3,
+"desc": "x0.9 Fruit Patch seeds cost"
+},
+{
+"name": "Fruity Profit",
+"tree": "Fruit Patch",
+"tier": 1,
+"points": 1,
+"island": "spring",
+"ranks": 3,
+"desc": "+50% coins from Tango's deliveries"
+},
+{
+"name": "Loyal Macaw",
+"tree": "Fruit Patch",
+"tier": 1,
+"points": 1,
+"island": "spring",
+"ranks": 3,
+"desc": "Double Macaw's effect"
+},
+{
+"name": "No Axe No Worries",
+"tree": "Fruit Patch",
+"tier": 1,
+"points": 1,
+"island": "spring",
+"ranks": 3,
+"desc": "Chop fruit branches and stems without axes / -1 wood from fruit branches and stems"
+},
+{
+"name": "Catchup",
+"tree": "Fruit Patch",
+"tier": 2,
+"points": 2,
+"island": "spring",
+"ranks": 3,
+"desc": "x0.9 Fruit Patch growth time"
+},
+{
+"name": "Fruity Woody",
+"tree": "Fruit Patch",
+"tier": 2,
+"points": 2,
+"island": "spring",
+"ranks": 3,
+"desc": "+1 wood from fruit branches and stems"
+},
+{
+"name": "Pear Turbocharge",
+"tree": "Fruit Patch",
+"tier": 2,
+"points": 2,
+"island": "spring",
+"ranks": 3,
+"desc": "Double Immortal Pear's effect"
+},
+{
+"name": "Crime Fruit",
+"tree": "Fruit Patch",
+"tier": 2,
+"points": 2,
+"island": "spring",
+"ranks": 3,
+"desc": "+10 Tomato and Lemon seeds stock"
+},
+{
+"name": "Generous Orchard",
+"tree": "Fruit Patch",
+"tier": 3,
+"points": 3,
+"island": "spring",
+"ranks": 3,
+"desc": "20% chance of +1 Fruit Patch yield"
+},
+{
+"name": "Long Pickings",
+"tree": "Fruit Patch",
+"tier": 3,
+"points": 3,
+"island": "spring",
+"ranks": 3,
+"desc": "x0.75 Apple and Banana growth time / x1.1 growth time for all other fruit patch fruits"
+},
+{
+"name": "Short Pickings",
+"tree": "Fruit Patch",
+"tier": 3,
+"points": 3,
+"island": "spring",
+"ranks": 3,
+"desc": "x0.75 Blueberry and Orange growth time / x1.1 growth time for all other fruit patch fruits"
+},
+{
+"name": "Zesty Vibes",
+"tree": "Fruit Patch",
+"tier": 3,
+"points": 3,
+"island": "spring",
+"ranks": 3,
+"desc": "+1 Tomato and Lemon yield / -0.25 yield for all other fruit patch fruits"
+},
+{
+"name": "Lumberjack's Extra",
+"tree": "Trees",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "+0.1 wood yield"
+},
+{
+"name": "Tree Charge",
+"tree": "Trees",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "x0.9 tree growth time"
+},
+{
+"name": "More Axes",
+"tree": "Trees",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "+50 axe stock"
+},
+{
+"name": "Insta-Chop",
+"tree": "Trees",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 1,
+"desc": "1 Tap Trees"
+},
+{
+"name": "Tough Tree",
+"tree": "Trees",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "1/10 chance of x3 wood yield"
+},
+{
+"name": "Feller's Discount",
+"tree": "Trees",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "x0.8 axe coin cost"
+},
+{
+"name": "Money Tree",
+"tree": "Trees",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "1% chance of finding 200 Coins when chopping trees"
+},
+{
+"name": "Tree Turnaround",
+"tree": "Trees",
+"tier": 3,
+"points": 3,
+"island": "basic",
+"ranks": 3,
+"desc": "15% chance for trees to grow instantly"
+},
+{
+"name": "Tree Blitz",
+"tree": "Trees",
+"tier": 3,
+"points": 3,
+"island": "basic",
+"ranks": 3,
+"desc": "Ability to make all trees instantly grow"
+},
+{
+"name": "Fisherman's 5 Fold",
+"tree": "Fishing",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "+5 daily fishing reels"
+},
+{
+"name": "Fishy Chance",
+"tree": "Fishing",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "10% chance of +1 basic fish"
+},
+{
+"name": "Fishy Roll",
+"tree": "Fishing",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "10% chance of +1 advanced fish"
+},
+{
+"name": "Reel Deal",
+"tree": "Fishing",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "x0.5 rod coin cost"
+},
+{
+"name": "Fisherman's 10 Fold",
+"tree": "Fishing",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "+10 daily fishing reels"
+},
+{
+"name": "Fishy Fortune",
+"tree": "Fishing",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "+100% coins from Corale's deliveries"
+},
+{
+"name": "Fishy Gamble",
+"tree": "Fishing",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "20% chance of +1 expert fish"
+},
+{
+"name": "Frenzied Fish",
+"tree": "Fishing",
+"tier": 3,
+"points": 3,
+"island": "basic",
+"ranks": 3,
+"desc": "During fish frenzy, +1 fish and 50% chance of +1 fish"
+},
+{
+"name": "More With Less",
+"tree": "Fishing",
+"tier": 3,
+"points": 3,
+"island": "basic",
+"ranks": 3,
+"desc": "+10 daily fishing reels"
+},
+{
+"name": "Fishy Feast",
+"tree": "Fishing",
+"tier": 3,
+"points": 3,
+"island": "basic",
+"ranks": 3,
+"desc": "x1.2 Bumpkin XP from Fish"
+},
+{
+"name": "Efficient Feeding",
+"tree": "Animals",
+"tier": 1,
+"points": 1,
+"island": "spring",
+"ranks": 3,
+"desc": "x0.95 feed to feed all animals"
+},
+{
+"name": "Restless Animals",
+"tree": "Animals",
+"tier": 1,
+"points": 1,
+"island": "spring",
+"ranks": 3,
+"desc": "x0.9 Animal sleep time"
+},
+{
+"name": "Fine Fibers",
+"tree": "Animals",
+"tier": 1,
+"points": 1,
+"island": "spring",
+"ranks": 3,
+"desc": "+0.1 Feather, Leather and Merino Wool yield"
+},
+{
+"name": "Bountiful Bounties",
+"tree": "Animals",
+"tier": 1,
+"points": 1,
+"island": "spring",
+"ranks": 3,
+"desc": "x1.5 Coins from Animal Bounties"
+},
+{
+"name": "Double Bale",
+"tree": "Animals",
+"tier": 1,
+"points": 1,
+"island": "spring",
+"ranks": 3,
+"desc": "Double Bale's Effect"
+},
+{
+"name": "Bale Economy",
+"tree": "Animals",
+"tier": 1,
+"points": 1,
+"island": "spring",
+"ranks": 1,
+"desc": "Bale affects milk and wool production"
+},
+{
+"name": "Featherweight",
+"tree": "Animals",
+"tier": 1,
+"points": 1,
+"island": "spring",
+"ranks": 3,
+"desc": "+0.35 Feather yield / -0.1 Leather & Merino Wool yield"
+},
+{
+"name": "Abundant Harvest",
+"tree": "Animals",
+"tier": 2,
+"points": 2,
+"island": "spring",
+"ranks": 3,
+"desc": "+0.2 Egg, Wool and Milk yield"
+},
+{
+"name": "Heartwarming Instruments",
+"tree": "Animals",
+"tier": 2,
+"points": 2,
+"island": "spring",
+"ranks": 3,
+"desc": "x1.5 Animal XP from Animal Affection tools"
+},
+{
+"name": "Kale Mix",
+"tree": "Animals",
+"tier": 2,
+"points": 2,
+"island": "spring",
+"ranks": 3,
+"desc": "Mixed Grain requires 3 kale to mix instead"
+},
+{
+"name": "Healthy Livestock",
+"tree": "Animals",
+"tier": 2,
+"points": 2,
+"island": "spring",
+"ranks": 3,
+"desc": "x0.5 chance of sickness"
+},
+{
+"name": "Merino Whisperer",
+"tree": "Animals",
+"tier": 2,
+"points": 2,
+"island": "spring",
+"ranks": 3,
+"desc": "+0.35 Merino Wool yield / -0.1 Leather & Feather yield"
+},
+{
+"name": "Truffle Yield",
+"tree": "Animals",
+"tier": 2,
+"points": 2,
+"island": "spring",
+"ranks": 3,
+"desc": "x1.1 Truffle yield"
+},
+{
+"name": "Clucky Grazing",
+"tree": "Animals",
+"tier": 3,
+"points": 3,
+"island": "spring",
+"ranks": 3,
+"desc": "x0.75 feed to feed Chickens / x1.5 feed to feed other animals"
+},
+{
+"name": "Sheepwise Diet",
+"tree": "Animals",
+"tier": 3,
+"points": 3,
+"island": "spring",
+"ranks": 3,
+"desc": "x0.75 feed to feed Sheep / x1.5 feed to feed other animals"
+},
+{
+"name": "Cow-Smart Nutrition",
+"tree": "Animals",
+"tier": 3,
+"points": 3,
+"island": "spring",
+"ranks": 3,
+"desc": "x0.75 feed to feed Cows / x1.5 feed to feed other animals"
+},
+{
+"name": "Swill Savvy",
+"tree": "Animals",
+"tier": 3,
+"points": 3,
+"island": "spring",
+"ranks": 3,
+"desc": "x0.75 feed to feed Pigs / x1.5 feed to feed other animals"
+},
+{
+"name": "Bristle Payout",
+"tree": "Animals",
+"tier": 3,
+"points": 3,
+"island": "spring",
+"ranks": 3,
+"desc": "x1.1 Pig Bristles from trading in Pigs"
+},
+{
+"name": "Chonky Feed",
+"tree": "Animals",
+"tier": 3,
+"points": 3,
+"island": "spring",
+"ranks": 3,
+"desc": "2x animal xp from animal feed / x1.5 feed to feed all animals"
+},
+{
+"name": "Leathercraft Mastery",
+"tree": "Animals",
+"tier": 3,
+"points": 3,
+"island": "spring",
+"ranks": 3,
+"desc": "+0.35 Leather yield / -0.1 Feather & Merino Wool yield"
+},
+{
+"name": "Barnyard Rouse",
+"tree": "Animals",
+"tier": 3,
+"points": 3,
+"island": "spring",
+"ranks": 3,
+"desc": "Instantly wakes up all animals"
+},
+{
+"name": "Glass Room",
+"tree": "Greenhouse",
+"tier": 1,
+"points": 1,
+"island": "desert",
+"ranks": 3,
+"desc": "+0.1 Greenhouse produce yield"
+},
+{
+"name": "Seedy Business",
+"tree": "Greenhouse",
+"tier": 1,
+"points": 1,
+"island": "desert",
+"ranks": 3,
+"desc": "x0.85 Greenhouse seeds cost"
+},
+{
+"name": "Rice and Shine",
+"tree": "Greenhouse",
+"tier": 1,
+"points": 1,
+"island": "desert",
+"ranks": 3,
+"desc": "x0.95 growth time for greenhouse produce"
+},
+{
+"name": "Victoria's Secretary",
+"tree": "Greenhouse",
+"tier": 1,
+"points": 1,
+"island": "desert",
+"ranks": 3,
+"desc": "+50% Coins from Victoria's deliveries"
+},
+{
+"name": "Olive Express",
+"tree": "Greenhouse",
+"tier": 2,
+"points": 2,
+"island": "desert",
+"ranks": 3,
+"desc": "x0.9 Olive growth time"
+},
+{
+"name": "Rice Rocket",
+"tree": "Greenhouse",
+"tier": 2,
+"points": 2,
+"island": "desert",
+"ranks": 3,
+"desc": "x0.9 Rice growth time"
+},
+{
+"name": "Vine Velocity",
+"tree": "Greenhouse",
+"tier": 2,
+"points": 2,
+"island": "desert",
+"ranks": 3,
+"desc": "x0.9 Grape growth time"
+},
+{
+"name": "Seeded Bounty",
+"tree": "Greenhouse",
+"tier": 2,
+"points": 2,
+"island": "desert",
+"ranks": 3,
+"desc": "+0.5 Greenhouse produce yield / +1 Greenhouse seed to plant"
+},
+{
+"name": "Greenhouse Guru",
+"tree": "Greenhouse",
+"tier": 3,
+"points": 3,
+"island": "desert",
+"ranks": 3,
+"desc": "Ability to make all greenhouse produce currently growing ready to be harvested"
+},
+{
+"name": "Greenhouse Gamble",
+"tree": "Greenhouse",
+"tier": 3,
+"points": 3,
+"island": "desert",
+"ranks": 3,
+"desc": "30% chance of +1 greenhouse produce"
+},
+{
+"name": "Slick Saver",
+"tree": "Greenhouse",
+"tier": 3,
+"points": 3,
+"island": "desert",
+"ranks": 3,
+"desc": "-1 Oil to grow greenhouse produce"
+},
+{
+"name": "Greasy Plants",
+"tree": "Greenhouse",
+"tier": 3,
+"points": 3,
+"island": "desert",
+"ranks": 3,
+"desc": "+1 Greenhouse produce yield / x2 Oil consumption in greenhouse"
+},
+{
+"name": "Rock'N'Roll",
+"tree": "Mining",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "+0.1 Stone Yield"
+},
+{
+"name": "Iron Bumpkin",
+"tree": "Mining",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "+0.1 Iron Yield"
+},
+{
+"name": "Speed Miner",
+"tree": "Mining",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "x0.8 Stone recovery time"
+},
+{
+"name": "Tap Prospector",
+"tree": "Mining",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 1,
+"desc": "1 tap small mineral nodes"
+},
+{
+"name": "Forge-Ward Profits",
+"tree": "Mining",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "+20% Blacksmith deliveries revenue"
+},
+{
+"name": "Iron Hustle",
+"tree": "Mining",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "x0.7 Iron recovery time"
+},
+{
+"name": "Frugal Miner",
+"tree": "Mining",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "x0.8 all pickaxes coin cost"
+},
+{
+"name": "Rocky Favor",
+"tree": "Mining",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "+1 Stone yield / -0.5 Iron yield"
+},
+{
+"name": "Fire Kissed",
+"tree": "Mining",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "+1 Crimstone yield on 5th consecutive mine"
+},
+{
+"name": "Midas Sprint",
+"tree": "Mining",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "x0.9 Gold recovery time"
+},
+{
+"name": "Ferrous Favor",
+"tree": "Mining",
+"tier": 3,
+"points": 3,
+"island": "basic",
+"ranks": 3,
+"desc": "+1 Iron yield / -0.5 Stone yield"
+},
+{
+"name": "Golden Touch",
+"tree": "Mining",
+"tier": 3,
+"points": 3,
+"island": "basic",
+"ranks": 3,
+"desc": "+0.5 Gold Yield"
+},
+{
+"name": "More Picks",
+"tree": "Mining",
+"tier": 3,
+"points": 3,
+"island": "basic",
+"ranks": 3,
+"desc": "Increased stock: +70 Pickaxe, +20 Stone Pickaxe, +7 Iron Pickaxe, +2 Gold Pickaxe"
+},
+{
+"name": "Fireside Alchemist",
+"tree": "Mining",
+"tier": 3,
+"points": 3,
+"island": "basic",
+"ranks": 3,
+"desc": "x0.85 Crimstone recovery time"
+},
+{
+"name": "Midas Rush",
+"tree": "Mining",
+"tier": 3,
+"points": 3,
+"island": "basic",
+"ranks": 3,
+"desc": "x0.8 Gold recovery time"
+},
+{
+"name": "Fast Feasts",
+"tree": "Cooking",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "x0.9 Firepit and Kitchen cooking time"
+},
+{
+"name": "Nom Nom",
+"tree": "Cooking",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "+10% Food deliveries revenue"
+},
+{
+"name": "Munching Mastery",
+"tree": "Cooking",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "x1.05 Bumpkin XP"
+},
+{
+"name": "Swift Sizzle",
+"tree": "Cooking",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "x0.6 Fire Pit cooking time with oil"
+},
+{
+"name": "Frosted Cakes",
+"tree": "Cooking",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "x0.9 Cakes cooking time"
+},
+{
+"name": "Juicy Boost",
+"tree": "Cooking",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "x1.1 Bumpkin XP from drinks"
+},
+{
+"name": "Turbo Fry",
+"tree": "Cooking",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "x0.5 Kitchen cooking time with oil"
+},
+{
+"name": "Drive-Through Deli",
+"tree": "Cooking",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "x1.15 Bumpkin XP from Deli"
+},
+{
+"name": "Instant Gratification",
+"tree": "Cooking",
+"tier": 3,
+"points": 3,
+"island": "basic",
+"ranks": 3,
+"desc": "Ability to make all meals currently cooking ready to be eaten"
+},
+{
+"name": "Double Nom",
+"tree": "Cooking",
+"tier": 3,
+"points": 3,
+"island": "basic",
+"ranks": 3,
+"desc": "+1 food from cooking / 2x ingredients required for cooking"
+},
+{
+"name": "Fiery Jackpot",
+"tree": "Cooking",
+"tier": 3,
+"points": 3,
+"island": "basic",
+"ranks": 3,
+"desc": "+20% Chance of +1 food from Firepit"
+},
+{
+"name": "Fry Frenzy",
+"tree": "Cooking",
+"tier": 3,
+"points": 3,
+"island": "basic",
+"ranks": 3,
+"desc": "x0.4 Deli cooking time with oil"
+},
+{
+"name": "Sweet Bonus",
+"tree": "Bees & Flowers",
+"tier": 1,
+"points": 1,
+"island": "spring",
+"ranks": 3,
+"desc": "+0.1 Honey per hive"
+},
+{
+"name": "Hyper Bees",
+"tree": "Bees & Flowers",
+"tier": 1,
+"points": 1,
+"island": "spring",
+"ranks": 3,
+"desc": "+0.1 Honey production speed"
+},
+{
+"name": "Blooming Boost",
+"tree": "Bees & Flowers",
+"tier": 1,
+"points": 1,
+"island": "spring",
+"ranks": 3,
+"desc": "x0.9 Flower growth time"
+},
+{
+"name": "Flower Sale",
+"tree": "Bees & Flowers",
+"tier": 1,
+"points": 1,
+"island": "spring",
+"ranks": 3,
+"desc": "x0.8 Flower Seeds cost"
+},
+{
+"name": "Buzzworthy Treats",
+"tree": "Bees & Flowers",
+"tier": 2,
+"points": 2,
+"island": "spring",
+"ranks": 3,
+"desc": "x1.1 Bumpkin XP from Honey Foods"
+},
+{
+"name": "Blossom Bonding",
+"tree": "Bees & Flowers",
+"tier": 2,
+"points": 2,
+"island": "spring",
+"ranks": 3,
+"desc": "+2 relationship points for gifting flowers"
+},
+{
+"name": "Pollen Power Up",
+"tree": "Bees & Flowers",
+"tier": 2,
+"points": 2,
+"island": "spring",
+"ranks": 3,
+"desc": "Additional +0.1 crop yield after pollination (total +0.3)"
+},
+{
+"name": "Petalled Perk",
+"tree": "Bees & Flowers",
+"tier": 2,
+"points": 2,
+"island": "spring",
+"ranks": 3,
+"desc": "10% chance of +1 Flower"
+},
+{
+"name": "Bee Collective",
+"tree": "Bees & Flowers",
+"tier": 3,
+"points": 3,
+"island": "spring",
+"ranks": 3,
+"desc": "+20% Bee Swarm chance"
+},
+{
+"name": "Flower Power",
+"tree": "Bees & Flowers",
+"tier": 3,
+"points": 3,
+"island": "spring",
+"ranks": 3,
+"desc": "x0.8 Flower growth time"
+},
+{
+"name": "Flowery Abode",
+"tree": "Bees & Flowers",
+"tier": 3,
+"points": 3,
+"island": "spring",
+"ranks": 3,
+"desc": "+0.5 Honey production speed / x1.5 Flower growth time"
+},
+{
+"name": "Petal Blessed",
+"tree": "Bees & Flowers",
+"tier": 3,
+"points": 3,
+"island": "spring",
+"ranks": 3,
+"desc": "Ability to make all flowers currently growing ready to be harvested"
+},
+{
+"name": "Crop Extension Module I",
+"tree": "Machinery",
+"tier": 1,
+"points": 1,
+"island": "desert",
+"ranks": 1,
+"desc": "Allow Rhubarb and Zucchini seeds to be used in crop machine"
+},
+{
+"name": "Crop Processor Unit",
+"tree": "Machinery",
+"tier": 1,
+"points": 1,
+"island": "desert",
+"ranks": 3,
+"desc": "x0.95 Crop Machine growth time / +10% Oil consumption in Crop Machine"
+},
+{
+"name": "Oil Gadget",
+"tree": "Machinery",
+"tier": 1,
+"points": 1,
+"island": "desert",
+"ranks": 3,
+"desc": "x0.9 Oil consumption in Crop Machine"
+},
+{
+"name": "Oil Extraction",
+"tree": "Machinery",
+"tier": 1,
+"points": 1,
+"island": "desert",
+"ranks": 3,
+"desc": "+1 Oil when collecting from reserves"
+},
+{
+"name": "Leak-Proof Tank",
+"tree": "Machinery",
+"tier": 1,
+"points": 1,
+"island": "desert",
+"ranks": 3,
+"desc": "Triple oil tank capacity in crop machine"
+},
+{
+"name": "Crop Extension Module II",
+"tree": "Machinery",
+"tier": 2,
+"points": 2,
+"island": "desert",
+"ranks": 1,
+"desc": "Allow Carrot and Cabbage seeds to be used in crop machine"
+},
+{
+"name": "Crop Extension Module III",
+"tree": "Machinery",
+"tier": 2,
+"points": 2,
+"island": "desert",
+"ranks": 1,
+"desc": "Allow Yam and Broccoli seeds to be used in crop machine"
+},
+{
+"name": "Rapid Rig",
+"tree": "Machinery",
+"tier": 2,
+"points": 2,
+"island": "desert",
+"ranks": 3,
+"desc": "x0.8 Crop Machine growth time / +40% Oil consumption in Crop Machine"
+},
+{
+"name": "Oil Be Back",
+"tree": "Machinery",
+"tier": 2,
+"points": 2,
+"island": "desert",
+"ranks": 3,
+"desc": "x0.8 Oil refill time"
+},
+{
+"name": "Oil Rig",
+"tree": "Machinery",
+"tier": 2,
+"points": 2,
+"island": "desert",
+"ranks": 3,
+"desc": "Oil Drill requires 20 Wool instead of Leather to craft"
+},
+{
+"name": "Field Expansion Module",
+"tree": "Machinery",
+"tier": 3,
+"points": 3,
+"island": "desert",
+"ranks": 3,
+"desc": "+5 packs added to machine queue system"
+},
+{
+"name": "Field Extension Module",
+"tree": "Machinery",
+"tier": 3,
+"points": 3,
+"island": "desert",
+"ranks": 3,
+"desc": "+5 plots added to machine"
+},
+{
+"name": "Efficiency Extension Module",
+"tree": "Machinery",
+"tier": 3,
+"points": 3,
+"island": "desert",
+"ranks": 3,
+"desc": "x0.7 Oil consumption in Crop Machine"
+},
+{
+"name": "Grease Lightning",
+"tree": "Machinery",
+"tier": 3,
+"points": 3,
+"island": "desert",
+"ranks": 3,
+"desc": "Ability to make empty oil wells instantly refill"
+},
+{
+"name": "Efficient Bin",
+"tree": "Compost",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "+5 Sprout Mix"
+},
+{
+"name": "Turbo Charged",
+"tree": "Compost",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "+5 Fruitful Blend"
+},
+{
+"name": "Wormy Treat",
+"tree": "Compost",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "+1 Worm"
+},
+{
+"name": "Feathery Business",
+"tree": "Compost",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "Use feathers instead of eggs to boost composters / 2x feathers to boost composters"
+},
+{
+"name": "Sprout Surge",
+"tree": "Compost",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 1,
+"desc": ""
+},
+{
+"name": "Blend-tastic",
+"tree": "Compost",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 1,
+"desc": ""
+},
+{
+"name": "Premium Worms",
+"tree": "Compost",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "+10 Rapid Root"
+},
+{
+"name": "Fruitful Bounty",
+"tree": "Compost",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "Double Fruitful Blend's Effect"
+},
+{
+"name": "Swift Decomposer",
+"tree": "Compost",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "x0.9 compost time"
+},
+{
+"name": "Composting Bonanza",
+"tree": "Compost",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "Speed up composters by an additional hour when boosting / 2x resources to boost composters"
+},
+{
+"name": "Root Rocket",
+"tree": "Compost",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 1,
+"desc": ""
+},
+{
+"name": "Composting Overhaul",
+"tree": "Compost",
+"tier": 3,
+"points": 3,
+"island": "basic",
+"ranks": 3,
+"desc": "+2 Worms"
+},
+{
+"name": "Composting Revamp",
+"tree": "Compost",
+"tier": 3,
+"points": 3,
+"island": "basic",
+"ranks": 3,
+"desc": "+5 fertilisers / -2 Worms"
+},
+{
+"name": "Cheap Rakes",
+"tree": "Aging",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "x0.8 salt rake coin cost"
+},
+{
+"name": "Speedy Aging",
+"tree": "Aging",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "x0.9 Fish Aging time"
+},
+{
+"name": "Salty Seas",
+"tree": "Aging",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "x0.9 salt charge replenishment time"
+},
+{
+"name": "Wide Rakes",
+"tree": "Aging",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "+2 Salt per harvest"
+},
+{
+"name": "Bacalhau",
+"tree": "Aging",
+"tier": 1,
+"points": 1,
+"island": "basic",
+"ranks": 3,
+"desc": "+1 Bait yield from fermentation rack"
+},
+{
+"name": "Fish Smoking",
+"tree": "Aging",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "Doubled chance Aged Fish becomes Prime Aged"
+},
+{
+"name": "Refiner",
+"tree": "Aging",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "15% chance of +1 Refined Salt when making Refined Salt"
+},
+{
+"name": "Sea Blessed",
+"tree": "Aging",
+"tier": 2,
+"points": 2,
+"island": "basic",
+"ranks": 3,
+"desc": "5% chance to restore 1 charge to 4 Salt Nodes on harvest"
+},
+{
+"name": "Ager",
+"tree": "Aging",
+"tier": 3,
+"points": 3,
+"island": "basic",
+"ranks": 3,
+"desc": "2\u00d7 output from Aging Shed Racks / 2\u00d7 Aging Shed inputs (ingredients, fish & salt)"
+},
+{
+"name": "Salt Surge",
+"tree": "Aging",
+"tier": 3,
+"points": 3,
+"island": "basic",
+"ranks": 3,
+"desc": "Recharge all Salt Nodes to max"
+},
+{
+"name": "Lean Compost",
+"tree": "Cave",
+"tier": 1,
+"points": 1,
+"island": "spring",
+"ranks": 3,
+"desc": "x0.95 Myco Bin ingredients"
+},
+{
+"name": "Rapid Mycelium",
+"tree": "Cave",
+"tier": 1,
+"points": 1,
+"island": "spring",
+"ranks": 3,
+"desc": "x0.95 Myco Bin growth time"
+},
+{
+"name": "Mushroom Bloom",
+"tree": "Cave",
+"tier": 1,
+"points": 1,
+"island": "spring",
+"ranks": 3,
+"desc": "+1 Mushroom tile in each Cave patch"
+},
+{
+"name": "Muddy Bounty",
+"tree": "Cave",
+"tier": 1,
+"points": 1,
+"island": "spring",
+"ranks": 3,
+"desc": "x1.1 Mud from Cave patches"
+},
+{
+"name": "Sturdy Shovel",
+"tree": "Cave",
+"tier": 1,
+"points": 1,
+"island": "spring",
+"ranks": 3,
+"desc": "10% chance a Cave dig keeps its Sand Shovel"
+},
+{
+"name": "Fungal Harvest",
+"tree": "Cave",
+"tier": 2,
+"points": 2,
+"island": "spring",
+"ranks": 3,
+"desc": "+0.2 Mushrooms from each Cave Mushroom tile"
+},
+{
+"name": "Beetle Nest",
+"tree": "Cave",
+"tier": 2,
+"points": 2,
+"island": "spring",
+"ranks": 3,
+"desc": "+1 Beetle tile in each Beetle recipe patch"
+},
+{
+"name": "Sturdy Drill",
+"tree": "Cave",
+"tier": 2,
+"points": 2,
+"island": "spring",
+"ranks": 3,
+"desc": "20% chance a Cave drill keeps its Sand Drill"
+},
+{
+"name": "Tool Hoarder",
+"tree": "Cave",
+"tier": 2,
+"points": 2,
+"island": "spring",
+"ranks": 3,
+"desc": "Increased stock: +25 Sand Shovel, +5 Sand Drill"
+},
+{
+"name": "Rare Breeds",
+"tree": "Cave",
+"tier": 3,
+"points": 3,
+"island": "spring",
+"ranks": 3,
+"desc": "Beetle odds: 35% Green, 35% Blue, 15% Pink, 15% Amber"
+},
+{
+"name": "Twin Beetles",
+"tree": "Cave",
+"tier": 3,
+"points": 3,
+"island": "spring",
+"ranks": 3,
+"desc": "5% chance of +1 Beetle when digging one up in the Cave"
+}
+]

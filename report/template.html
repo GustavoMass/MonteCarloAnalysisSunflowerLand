@@ -95,6 +95,16 @@ code { font-family: var(--mono); font-size: 13px; }
   <div class="tbl"><table id="boostTable"></table></div>
 </section>
 
+<section aria-labelledby="fw-h">
+  <h2 id="fw-h">Beyond animals: other skills and crop items</h2>
+  <p class="muted" id="fwIntro"></p>
+  <div class="tbl"><table id="fwTable" class="compact"></table></div>
+  <h3>Crop items</h3>
+  <div class="tbl"><table id="fwItems" class="compact"></table></div>
+  <h3>Later, on the volcano: Greenhouse and Crop Machine skills</h3>
+  <div class="tbl"><table id="fwLater" class="compact"></table></div>
+</section>
+
 <section aria-labelledby="t-h">
   <h2 id="t-h">Duende Caps: what is the most you can get?</h2>
   <div class="chart"><h3>Chapter tickets by source</h3><div class="box" style="height:300px"><canvas id="ticketChart"></canvas></div>
@@ -230,6 +240,31 @@ function boostView() {
   $("boostIntro").innerHTML = `Each upgrade is added to your plan (${PLAN}, herds at needed + 1, pigs on bounties + trade-in) and the chapter is simulated again with the same random draws, so the difference is the upgrade alone. Gain is FLOWER from produce. ${COIN_TXT} Coins gained are shown in their own column. A skill row needs a free point (or dropping another skill). NFTs keep their resale value; “chapters to pay back” ignores that. Items that take more than ${MAXPB} chapters to pay back are left out${hidden.length ? `: ${hidden.map(b => `${b.name} (${b.price == null ? "no listing" : b.flower > 0 ? nf(b.payback, 0) + " chapters" : "never"})`).join(", ")}` : ""}.`;
 }
 
+// ---------- other trees and crop items
+function farmwideView() {
+  const W = DATA.farmwide; if (!W) return;
+  const rate = W.coins_per_flower, R = W.rates, pts = r => `${r.points} pt · T${r.tier}${r.open ? "" : " <span class=\"neg\">(tier locked)</span>"}`;
+  const flowerOrUnits = r => r.flower || r.coins ? sg(r.flower, 1) : "—";
+  const skills = W.rows.filter(r => r.kind === "skill").sort((a, b) => b.total - a.total || a.group.localeCompare(b.group));
+  $("fwTable").innerHTML = `<thead><tr><th>Area</th><th>Skill</th><th>Cost</th><th>FLOWER / chapter</th><th>Coins / chapter</th><th>Total (coins at 1:${nf(rate)})</th><th>Other effect</th><th>How</th></tr></thead><tbody>` +
+    skills.map(r => `<tr class="${r.total >= 10 ? "hi" : ""}"><td>${r.group}</td><td title="${r.desc}">${r.name}</td><td>${pts(r)}</td><td class="num">${flowerOrUnits(r)}</td>
+      <td class="num">${r.coins ? sg(r.coins, 0) : "—"}</td><td class="num">${r.flower || r.coins ? sg(r.total, 1) : "—"}</td>
+      <td>${r.other || ""}</td><td class="muted">${r.note || ""}</td></tr>`).join("") + "</tbody>";
+  const items = W.rows.filter(r => r.kind === "item").sort((a, b) => b.flower - a.flower);
+  $("fwItems").innerHTML = `<thead><tr><th>Item</th><th>Effect</th><th>FLOWER / chapter</th><th>Pays back in 20 chapters if it costs under</th><th>Price</th><th>Chapters to pay back</th></tr></thead><tbody>` +
+    items.map(r => `<tr><td>${r.name}</td><td class="muted">${r.note}</td><td class="num">${sg(r.flower, 1)}</td><td class="num">${nf(20 * r.flower, 0)} FLOWER</td>
+      <td class="num">${r.price ? nf(r.price, 0) : "not listed"}</td><td class="num">${r.price && r.flower > 0 ? nf(r.price / r.flower, 1) : "—"}</td></tr>`).join("") + "</tbody>";
+  $("fwLater").innerHTML = `<thead><tr><th>Skill</th><th>Tree</th><th>Cost</th><th>Effect</th></tr></thead><tbody>` +
+    W.later.map(r => `<tr><td>${r.name}</td><td>${r.tree}</td><td>${r.points} pt · T${r.tier}</td><td class="muted">${r.desc}</td></tr>`).join("") + "</tbody>";
+  $("fwIntro").innerHTML = `Valued from your own farm counters over ${nf(R.weeks_played, 1)} weeks: ${nf(R.chops)} tree chops, ${nf(R.stone_mines)} stone mines, ${nf(R.gold_mines)} gold mines,
+    ${nf(R.crimstone_mines)} crimstone mines and ${nf(R.fruit_harvests)} fruit harvests a week; your plot crops sell for about ${nf(R.crop_value_week, 1)} FLOWER a week after tax.
+    Things you sell lose the ${C.sell_fee * 100}% tax; wood, iron, gold, crimstone and oil count at full price because you use or buy them.
+    Faster regrowth gets ${nf(100 * W.speed_credit)}% of its theoretical extra harvests, since you do not collect every cycle (<code>farmwide.speed_credit</code>).
+    Net per extra mine after tools: stone ${nf(R.per_stone_mine, 3)}, gold ${nf(R.per_gold_mine, 3)}, crimstone ${nf(R.per_crim_mine, 3)} FLOWER (iron is left out: you buy it).
+    Fish, fertilisers, salt products and XP have no market price, so those rows show the effect instead of FLOWER. “Tier locked” = you need more points in that tree first.
+    Crop items are not in the sfl-manager price catalog: put what the marketplace asks into <code>farmwide.item_prices</code> in <code>config.json</code> and the payback appears.`;
+}
+
 // ---------- tickets
 function ticketView() {
   const T = DATA.tickets, goal = T.goal;
@@ -340,7 +375,7 @@ function method() {
   $("method").innerHTML = items.map(x => `<li>${x}</li>`).join("");
 }
 
-function all() { document.querySelectorAll(".coinNote").forEach(e => e.textContent = COIN_TXT); levelCharts(); boostView(); ticketView(); upgradeView(); flowerPlanView(); }
+function all() { document.querySelectorAll(".coinNote").forEach(e => e.textContent = COIN_TXT); levelCharts(); boostView(); farmwideView(); ticketView(); upgradeView(); flowerPlanView(); }
 function init() {
   $("fid").textContent = DATA.meta.farm.farm_id; $("gen").textContent = DATA.meta.generated; $("tax").textContent = (C.sell_fee * 100) + "%";
   method(); all();
