@@ -101,8 +101,6 @@ code { font-family: var(--mono); font-size: 13px; }
   <div class="tbl"><table id="fwTable" class="compact"></table></div>
   <h3>Crop items</h3>
   <div class="tbl"><table id="fwItems" class="compact"></table></div>
-  <h3>Later, on the volcano: Greenhouse and Crop Machine skills</h3>
-  <div class="tbl"><table id="fwLater" class="compact"></table></div>
 </section>
 
 <section aria-labelledby="t-h">
@@ -154,6 +152,7 @@ const nf = (x, d = 0) => x == null || Number.isNaN(x) ? "—" : x.toLocaleString
 const sg = (x, d = 2) => x == null ? "—" : `<span class="${x >= 0 ? "pos" : "neg"}">${x >= 0 ? "+" : "−"}${nf(Math.abs(x), d)}</span>`;
 const coinFl = c => C.coins_per_flower ? c / C.coins_per_flower : 0;
 const COIN_TXT = C.coins_per_flower ? `Coins are counted at 1:${C.coins_per_flower}.` : "Coins are not counted in FLOWER (you have enough); FLOWER is only what produce sells for on the market, minus feed.";
+const PAYBACK = (C.farmwide || {}).payback_chapters || 12;
 const single = (b, a) => DATA.single.find(s => s.build === b && s.animal === a);
 const herds = (b, a) => DATA.herd.filter(h => h.build === b && h.animal === a);
 const bufLabel = h => h.policy ? h.policy : h.buffer == null ? "full building" : `needed + ${h.buffer}`;
@@ -226,7 +225,7 @@ function levelCharts() {
 
 // ---------- boosts
 function boostView() {
-  const MAXPB = 20, all = [...DATA.boosts].map(b => ({ ...b, payback: b.price && b.flower > 0 ? b.price / b.flower : null }));
+  const MAXPB = PAYBACK, all = [...DATA.boosts].map(b => ({ ...b, payback: b.price && b.flower > 0 ? b.price / b.flower : null }));
   const owned = new Set(DATA.meta.boosts_owned || []);
   // skills cost no FLOWER and always show; items only if they pay back within MAXPB chapters
   const keep = b => b.price === 0 || (b.payback != null && b.payback <= MAXPB);
@@ -251,13 +250,11 @@ function farmwideView() {
       <td class="num">${r.coins ? sg(r.coins, 0) : "—"}</td><td class="num">${r.flower || r.coins ? sg(r.total, 1) : "—"}</td>
       <td>${r.other || ""}</td><td class="muted">${r.note || ""}</td></tr>`).join("") + "</tbody>";
   const items = W.rows.filter(r => r.kind === "item").sort((a, b) => b.flower - a.flower);
-  $("fwItems").innerHTML = `<thead><tr><th>Item</th><th>Effect</th><th>FLOWER / chapter</th><th>Pays back in 20 chapters if it costs under</th><th>Price</th><th>Chapters to pay back</th></tr></thead><tbody>` +
-    items.map(r => `<tr><td>${r.name}</td><td class="muted">${r.note}</td><td class="num">${sg(r.flower, 1)}</td><td class="num">${nf(20 * r.flower, 0)} FLOWER</td>
-      <td class="num">${r.price ? nf(r.price, 0) : "not listed"}</td><td class="num">${r.price && r.flower > 0 ? nf(r.price / r.flower, 1) : "—"}</td></tr>`).join("") + "</tbody>";
-  $("fwLater").innerHTML = `<thead><tr><th>Skill</th><th>Tree</th><th>Cost</th><th>Effect</th></tr></thead><tbody>` +
-    W.later.map(r => `<tr><td>${r.name}</td><td>${r.tree}</td><td>${r.points} pt · T${r.tier}</td><td class="muted">${r.desc}</td></tr>`).join("") + "</tbody>";
+  $("fwItems").innerHTML = `<thead><tr><th>Item</th><th>Effect</th><th>FLOWER / chapter</th><th>Pays back in ${PAYBACK} chapters if it costs under</th><th>Price</th><th>Chapters to pay back</th></tr></thead><tbody>` +
+    items.map(r => `<tr><td>${r.name}</td><td class="muted">${r.note}</td><td class="num">${sg(r.flower, 1)}</td><td class="num">${nf(PAYBACK * r.flower, 0)} FLOWER</td>
+      <td class="num">${r.price ? nf(r.price, 0) : "not listed"}</td><td class="num ${r.price && r.flower > 0 ? (r.price / r.flower <= PAYBACK ? "pos" : "neg") : ""}">${r.price && r.flower > 0 ? nf(r.price / r.flower, 1) : "—"}</td></tr>`).join("") + "</tbody>";
   $("fwIntro").innerHTML = `Valued from your own farm counters over ${nf(R.weeks_played, 1)} weeks: ${nf(R.chops)} tree chops, ${nf(R.stone_mines)} stone mines, ${nf(R.gold_mines)} gold mines,
-    ${nf(R.crimstone_mines)} crimstone mines and ${nf(R.fruit_harvests)} fruit harvests a week; your plot crops sell for about ${nf(R.crop_value_week, 1)} FLOWER a week after tax.
+    ${nf(R.crimstone_mines)} crimstone mines and ${nf(R.fruit_harvests)} fruit harvests a week; your plot crops: ${R.crop_plan ? `${Object.entries(R.crop_plan).map(([c, n]) => `${n} ${c}`).join(" + ")} cycles a week on ${R.plots} plots at ${nf(R.crop_yield, 2)} crops per harvest (<code>farmwide.crop_plan</code>)` : "lifetime harvest counters"}, ${nf(R.crop_harvests_week)} harvests selling for about ${nf(R.crop_value_week, 1)} FLOWER a week after tax.
     Things you sell lose the ${C.sell_fee * 100}% tax; wood, iron, gold, crimstone and oil count at full price because you use or buy them.
     Faster regrowth gets ${nf(100 * W.speed_credit)}% of its theoretical extra harvests, since you do not collect every cycle (<code>farmwide.speed_credit</code>).
     Net per extra mine after tools: stone ${nf(R.per_stone_mine, 3)}, gold ${nf(R.per_gold_mine, 3)}, crimstone ${nf(R.per_crim_mine, 3)} FLOWER (iron is left out: you buy it).
