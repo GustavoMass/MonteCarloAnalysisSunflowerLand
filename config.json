@@ -9,6 +9,11 @@
   "_coins_per_flower": "Coins per FLOWER when coins are added into FLOWER totals. 0 = coins count as nothing (shown separately); e.g. 1000 to value them.",
   "coins_per_flower": 0,
 
+  "_farmwide": "Other-tree skills and crop items. speed_credit: share of a faster regrowth you actually use (you do not collect on every cycle). coins_per_flower: rate used to add coins into the total column.",
+  "farmwide": {"speed_credit": 0.5, "coins_per_flower": 1000,
+               "item_prices": {"Nancy": null, "Scarecrow": null, "Kuebiko": null, "Lunar Calendar": null,
+                               "Green Amulet": null, "Sir Goldensnout": null, "Seed Specialist": null}},
+
   "_price_overrides": "Your own price for an item until a date (then the market price is used again).",
   "price_overrides": {"Pig Bristles": {"price": 1.0747, "until": "2026-11-20"}},
   "_derived_prices": "Price items the market does not list from what they cost to make. Oil: one Oil Drill (20 Wood, 9 Iron, 10 Leather) per drill; drills give 10, 10, then 30 = 50 per 3.",

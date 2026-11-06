@@ -89,6 +89,9 @@ def parse_farm(raw, farm_id):
                         for b in ((f.get("flowers") or {}).get("flowerBeds") or {}).values()],
         "season": (f.get("season") or {}).get("season"),
         "season_started": (f.get("season") or {}).get("startedAt"),
+        # lifetime counters (trees chopped, stone mined, ...) and farm age, for per-week rates
+        "activity": {k: v for k, v in (f.get("farmActivity") or {}).items() if isinstance(v, (int, float))},
+        "weeks_played": ((raw.get("fetched_at") or time.time() * 1000) - (f.get("createdAt") or 0)) / 6.048e8,
     }
 
 
@@ -178,7 +181,9 @@ def refresh(data_dir, farm_id, nft_names=()):
     board = parse_board(raw)
 
     need = {"Egg", "Feather", "Milk", "Leather", "Wool", "Merino Wool", "Truffle", "Pig Bristles",
-            "Wood", "Stone", "Iron", "Gold", "Crimstone", "Oil", "Mud",
+            "Wood", "Stone", "Iron", "Gold", "Crimstone", "Oil", "Mud", "Salt", "Honey",
+            "Apple", "Blueberry", "Orange", "Lemon", "Tomato", "Potato", "Pumpkin", "Carrot", "Cabbage", "Soybean",
+            "Zucchini", "Yam", "Broccoli", "Rhubarb", "Corn", "Onion", "Turnip", "Wheat", "Artichoke", "Parsnip",
             "Sunflower", "Beetroot", "Cauliflower", "Radish", "Parsnip", "Kale", "Eggplant", "Blueberry",
             "Banana", "Apple", "Rhubarb", "Pepper", "Artichoke", "Onion", "Barley"}
     for r in G.FEED_RECIPES.values():

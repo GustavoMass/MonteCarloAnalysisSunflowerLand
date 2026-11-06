@@ -18,6 +18,7 @@ import webbrowser
 import zlib
 
 from sflmc import analysis as A
+from sflmc import farmwide
 from sflmc import farm as F
 from sflmc import fetch
 from sflmc import flowerplan
@@ -195,7 +196,7 @@ def main():
         cfg["runs_single_animal"] = max(20, cfg["runs_single_animal"] // 10)
         cfg["runs_herd"] = max(10, cfg["runs_herd"] // 10)
     fid = cfg["farm_id"]
-    nft_names = [n for b in cfg["boosts"] for n in b.get("collectibles", []) + b.get("wearables", [])]
+    nft_names = [n for b in cfg["boosts"] for n in b.get("collectibles", []) + b.get("wearables", [])] + list(farmwide.CROP_ITEMS)
 
     if not args.offline:
         try:
@@ -304,6 +305,11 @@ def main():
                                     "have": {k: farm_d.get("inventory", {}).get(k, 0) for k in items}})
         print(f"  upgrades {bld} ({time.time() - t0:.0f}s)")
 
+    fw = cfg.get("farmwide", {})
+    out["farmwide"] = farmwide.evaluate(farm_d, prices["prices"], load(os.path.join(DATA, "skill_tree.json"), []), nfts,
+                                        tax=cfg["sell_fee"], speed_credit=fw.get("speed_credit", 0.5),
+                                        coins_per_flower=fw.get("coins_per_flower", 1000), weeks=cfg["chapter_weeks"],
+                                        item_prices=fw.get("item_prices"))
     herd_tickets = {}
     for animal in G.ANIMALS:
         pname, pol, buf = pick(animal)
