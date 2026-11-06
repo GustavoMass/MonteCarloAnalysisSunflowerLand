@@ -22,7 +22,7 @@ BASIC_MEDIUM = ["Sunflower", "Potato", "Rhubarb", "Pumpkin", "Zucchini", "Carrot
 ADVANCED = ["Eggplant", "Corn", "Onion", "Radish", "Wheat", "Turnip", "Kale", "Artichoke", "Barley"]
 FRUIT_SEED_COINS = {"Tomato": 5, "Lemon": 15, "Blueberry": 30, "Orange": 50, "Apple": 70, "Banana": 70}
 FRUIT_SEED_ITEM = {"Banana": "Banana Plant"}
-CROP_ITEMS = ["Nancy", "Scarecrow", "Kuebiko", "Lunar Calendar", "Green Amulet", "Sir Goldensnout", "Seed Specialist"]
+CROP_ITEMS = ["Nancy", "Scarecrow", "Lunar Calendar", "Green Amulet", "Sir Goldensnout", "Seed Specialist"]
 LATER_TREES = ("Greenhouse", "Machinery")
 NOW_MACHINERY = ("Oil Extraction", "Oil Rig", "Oil Be Back")   # oil reserves work without the crop machine
 
@@ -40,7 +40,9 @@ def _tier_unlocked(tree_skills, owned):
 
 
 def evaluate(farm, prices, skill_tree, nfts, tax=0.125, speed_credit=0.5, coins_per_flower=1000, weeks=12,
-             item_prices=None):
+             item_prices=None, crop_plan=None, crop_yield=None):
+    """crop_plan {crop: cycles per week on every plot}; crop_yield {"boosted_plots", "boosted", "other"}
+    = crops per harvest. Without a plan, the lifetime harvest counters at 1 crop per harvest are used."""
     act, wk = farm.get("activity", {}), max(farm.get("weeks_played") or 1, 1)
     r = lambda k: act.get(k, 0) / wk                                   # noqa: E731  per week
     p = lambda k: prices.get(k) or 0.0                                 # noqa: E731
@@ -63,7 +65,16 @@ def evaluate(farm, prices, skill_tree, nfts, tax=0.125, speed_credit=0.5, coins_
     fruit_y = 1 + 0.1 + 0.2              # Fruitful Fumble, Macaw x2 (Loyal Macaw)
     chops, mines, gold_m, crim_m = r("Tree Chopped"), r("Stone Mined"), r("Gold Mined"), r("Crimstone Mined")
     fruit = {f: r(f"{f} Harvested") for f in FRUIT_SEED_COINS}
-    crop_val = sum(sold(c, r(f"{c} Harvested")) for c in BASIC_MEDIUM + ADVANCED)
+    plots = farm.get("plots") or 60
+    if crop_plan:
+        cy = crop_yield or {}
+        nb = min(plots, cy.get("boosted_plots", 0))
+        y = (nb * cy.get("boosted", 1) + (plots - nb) * cy.get("other", 1)) / plots
+        harv = {c: n * plots for c, n in crop_plan.items()}
+    else:
+        y, harv = 1.0, {c: r(f"{c} Harvested") for c in BASIC_MEDIUM + ADVANCED}
+    crop_val = sum(sold(c, q * y) for c, q in harv.items())           # what your crops sell for a week
+    base_val = sum(sold(c, q) for c, q in harv.items())               # one crop per harvest: what x-multipliers act on
     per_stone_mine = sold("Stone", stone_y) - used("Wood", 3)
     per_gold_mine = used("Gold", gold_y) - used("Iron", 5) - used("Wood", 3)
     per_crim_mine = used("Crimstone", crim_y) - used("Gold", 3) - used("Wood", 3)
@@ -149,18 +160,16 @@ def evaluate(farm, prices, skill_tree, nfts, tax=0.125, speed_credit=0.5, coins_
     def price(n):   # your own price in config wins; these items are not in the sfl-manager catalog
         return (item_prices or {}).get(n) or (nfts.get(n) or {}).get("price")
     add("Crop items", "Nancy", flower_wk=crop_val * sp(0.85), price=price("Nancy"), note="crops grow 15% faster")
-    add("Crop items", "Scarecrow", flower_wk=crop_val * (sp(0.85) + 0.2), price=price("Scarecrow"), note="15% faster and x1.2 crops")
-    add("Crop items", "Kuebiko", flower_wk=crop_val * (sp(0.85) + 0.2), price=price("Kuebiko"), note="same crop boosts as Scarecrow")
+    add("Crop items", "Scarecrow", flower_wk=crop_val * sp(0.85) + base_val * 0.2, price=price("Scarecrow"), note="15% faster and x1.2 on the base crop (before the +yield bonuses)")
     add("Crop items", "Lunar Calendar", flower_wk=crop_val * sp(0.9), price=price("Lunar Calendar"), note="crops grow 10% faster")
     add("Crop items", "Seed Specialist", flower_wk=crop_val * sp(0.9), price=price("Seed Specialist"), note="crops grow 10% faster")
-    add("Crop items", "Green Amulet", flower_wk=crop_val * 0.9, price=price("Green Amulet"), note="10% chance of x10 on every crop harvest")
-    add("Crop items", "Sir Goldensnout", flower_wk=crop_val * 0.5 * 8 / 61, price=price("Sir Goldensnout"),
+    add("Crop items", "Green Amulet", flower_wk=base_val * 0.9, price=price("Green Amulet"), note="10% chance of x10 on the base crop of every harvest")
+    add("Crop items", "Sir Goldensnout", flower_wk=crop_val / y * 0.5 * 8 / plots, price=price("Sir Goldensnout"),
         note="+0.5 crop on the ~8 plots around it")
 
     out = [x for x in rows if not x.get("owned")]
-    later = [{"name": s["name"], "tree": s["tree"], "tier": s["tier"], "points": s["points"], "desc": s["desc"]}
-             for s in skill_tree if s["tree"] in LATER_TREES and s["name"] not in owned and s["name"] not in NOW_MACHINERY]
     rates = {"chops": chops, "stone_mines": mines, "gold_mines": gold_m, "crimstone_mines": crim_m,
-             "fruit_harvests": sum(fruit.values()), "crop_value_week": crop_val, "weeks_played": wk,
+             "fruit_harvests": sum(fruit.values()), "crop_value_week": crop_val, "crop_yield": y, "crop_harvests_week": sum(harv.values()),
+             "crop_plan": crop_plan, "plots": plots, "weeks_played": wk,
              "per_stone_mine": per_stone_mine, "per_gold_mine": per_gold_mine, "per_crim_mine": per_crim_mine}
-    return {"rows": out, "later": later, "rates": rates, "speed_credit": speed_credit, "coins_per_flower": coins_per_flower}
+    return {"rows": out, "rates": rates, "speed_credit": speed_credit, "coins_per_flower": coins_per_flower}

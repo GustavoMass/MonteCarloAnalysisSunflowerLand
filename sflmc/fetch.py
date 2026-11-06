@@ -91,6 +91,7 @@ def parse_farm(raw, farm_id):
         "season_started": (f.get("season") or {}).get("startedAt"),
         # lifetime counters (trees chopped, stone mined, ...) and farm age, for per-week rates
         "activity": {k: v for k, v in (f.get("farmActivity") or {}).items() if isinstance(v, (int, float))},
+        "plots": len(f.get("crops") or {}),
         "weeks_played": ((raw.get("fetched_at") or time.time() * 1000) - (f.get("createdAt") or 0)) / 6.048e8,
     }
 

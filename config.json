@@ -10,9 +10,13 @@
   "coins_per_flower": 0,
 
   "_farmwide": "Other-tree skills and crop items. speed_credit: share of a faster regrowth you actually use (you do not collect on every cycle). coins_per_flower: rate used to add coins into the total column.",
-  "farmwide": {"speed_credit": 0.5, "coins_per_flower": 1000,
-               "item_prices": {"Nancy": null, "Scarecrow": null, "Kuebiko": null, "Lunar Calendar": null,
-                               "Green Amulet": null, "Sir Goldensnout": null, "Seed Specialist": null}},
+  "farmwide": {"speed_credit": 0.5, "coins_per_flower": 1000, "payback_chapters": 12,
+               "_crop_plan": "Cycles per week on every plot. Yours: 5 wheat (24 h), 2 two-day crops with Instant Growth, 2 artichoke-type.",
+               "crop_plan": {"Wheat": 5, "Barley": 2, "Artichoke": 2},
+               "_crop_yield": "Crops per harvest: plots under Laurie's area, and the rest.",
+               "crop_yield": {"boosted_plots": 49, "boosted": 2.4, "other": 2.1},
+               "item_prices": {"Nancy": 157, "Scarecrow": 598, "Lunar Calendar": 200, "Green Amulet": 3259,
+                               "Sir Goldensnout": null, "Seed Specialist": null}},
 
   "_price_overrides": "Your own price for an item until a date (then the market price is used again).",
   "price_overrides": {"Pig Bristles": {"price": 1.0747, "until": "2026-11-20"}},

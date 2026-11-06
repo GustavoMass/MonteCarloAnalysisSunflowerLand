@@ -1,7 +1,7 @@
 {
  "farm_id": 3621107187220366,
  "source": "https://sfl-manager.com/api/v3/land/3621107187220366",
- "fetched": "2026-11-06 15:01",
+ "fetched": "2026-11-06 15:34",
  "skills": {
   "Efficient Feeding": 1,
   "Restless Animals": 2,
@@ -232,7 +232,7 @@
   "Fire Pit": 1.0,
   "Gold Rock": 7.0,
   "Time Warp Totem": 1.0,
-  "Stone": 129.1,
+  "Stone": 9.1,
   "Carrot": 48.0,
   "Basic Bear": 1.0,
   "Water Well": 1.0,
@@ -306,7 +306,7 @@
   "Broccoli": 19.6,
   "Artichoke": 158.7,
   "Yam": 37.2,
-  "Tomato": 294.2000000000001,
+  "Tomato": 295.6000000000001,
   "Potion Ticket": 1807.0,
   "Macaw": 1.0,
   "Construction Bear": 1.0,
@@ -537,7 +537,7 @@
   "Prime Aged Surgeonfish": 1.0,
   "White Carnation": 2.0,
   "Salt Rake": 12.0,
-  "Cheese": 1.0,
+  "Cheese": 3.0,
   "Yellow Edelweiss": 1.0,
   "Parrotfish": 3.0,
   "Aged Porgy": 7.0,
@@ -924,9 +924,9 @@
   "Yam Planted": 1076,
   "Tomato Seed Planted": 216,
   "Yam Harvested": 1076,
-  "Tomato Harvested": 1075,
+  "Tomato Harvested": 1076,
   "Potion Mixed": 99,
-  "Cheese Cooked": 616,
+  "Cheese Cooked": 618,
   "Rock Blackfish Caught": 19,
   "White Carrot Crafted": 3,
   "White Carrot Bountied": 3,
@@ -1397,5 +1397,6 @@
   "Crude Doll Crafting Started": 1,
   "Crude Doll Crafted": 1
  },
- "weeks_played": 14.276313063822752
+ "plots": 61,
+ "weeks_played": 14.279619462632276
 }

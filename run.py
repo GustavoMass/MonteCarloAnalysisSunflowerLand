@@ -309,7 +309,8 @@ def main():
     out["farmwide"] = farmwide.evaluate(farm_d, prices["prices"], load(os.path.join(DATA, "skill_tree.json"), []), nfts,
                                         tax=cfg["sell_fee"], speed_credit=fw.get("speed_credit", 0.5),
                                         coins_per_flower=fw.get("coins_per_flower", 1000), weeks=cfg["chapter_weeks"],
-                                        item_prices=fw.get("item_prices"))
+                                        item_prices=fw.get("item_prices"), crop_plan=fw.get("crop_plan"),
+                                        crop_yield=fw.get("crop_yield"))
     herd_tickets = {}
     for animal in G.ANIMALS:
         pname, pol, buf = pick(animal)
