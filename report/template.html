@@ -103,6 +103,19 @@ code { font-family: var(--mono); font-size: 13px; }
   <div class="tbl"><table id="fwItems" class="compact"></table></div>
 </section>
 
+<section aria-labelledby="g-h">
+  <h2 id="g-h">Land expansions or levels: where the next FLOWER goes</h2>
+  <p class="muted" id="gIntro"></p>
+  <div class="tbl"><table id="gSum" class="compact"></table></div>
+  <h3>Levels bought with <span id="gFood"></span></h3>
+  <p class="muted" id="gFoodNote"></p>
+  <div class="tbl"><table id="gLevels" class="compact"></table></div>
+  <h3>Expansions to the next island</h3>
+  <div class="tbl"><table id="gExp" class="compact"></table></div>
+  <div class="tbl"><table id="gNeeds" class="compact"></table></div>
+  <p class="muted" id="gNodes"></p>
+</section>
+
 <section aria-labelledby="t-h">
   <h2 id="t-h">Duende Caps: what is the most you can get?</h2>
   <div class="chart"><h3>Chapter tickets by source</h3><div class="box" style="height:300px"><canvas id="ticketChart"></canvas></div>
@@ -372,7 +385,46 @@ function method() {
   $("method").innerHTML = items.map(x => `<li>${x}</li>`).join("");
 }
 
-function all() { document.querySelectorAll(".coinNote").forEach(e => e.textContent = COIN_TXT); levelCharts(); boostView(); farmwideView(); ticketView(); upgradeView(); flowerPlanView(); }
+function growthView() {
+  const G = DATA.growth; if (!G) return;
+  const F = G.food, L = G.levels, E = G.expansions, pb = (c, v) => v > 0.05 ? c / v : null;
+  const pbCell = x => `<td class="num ${x == null ? "" : x <= PAYBACK ? "pos" : "neg"}">${x == null ? "never" : nf(x, 1)}</td>`;
+  $("gFood").textContent = F.food;
+  $("gFoodNote").innerHTML = `${nf(F.xp)} XP each (${F.boosts.join(", ") || "no boosts"}); ${nf(F.hours, 0)} h on the Fire Pit${F.extra ? `, ${nf(100 * F.extra)}% chance of a second one (Fiery Jackpot)` : ""}.
+    One cook costs ${nf(F.cost_buy, 2)} FLOWER at market (${F.lines.map(l => `${nf(l.qty)} ${l.item} ${nf(l.flower, 2)}`).join(", ")}), or ${nf(F.cost_own, 2)} if you use your own produce instead of selling it.
+    The ${nf(F.have)} you hold count as eaten. Days assume ${nf(G.cooks_per_day, 1)} cook a day (<code>growth.cooks_per_day</code>). Each level gives 1 skill point; skills are bought best FLOWER per point first.
+    ${L.locked.length ? `Left out until their tier opens: ${L.locked.map(s => `${s.name} (${sg(s.flower, 1)})`).join(", ")}.` : ""}`;
+  let cumF = 0;
+  $("gLevels").innerHTML = `<thead><tr><th>Reach level</th><th>Buy</th><th>Cooks (total)</th><th>Days (total)</th><th>Step cost</th><th>Total cost</th><th>+FLOWER / chapter</th><th>Coins / chapter</th><th>Step pays back in</th><th>Total pays back in</th></tr></thead><tbody>` +
+    L.steps.map(s => { cumF += s.flower; return `<tr class="${pb(s.step_cost, s.flower) != null && pb(s.step_cost, s.flower) <= PAYBACK ? "hi" : ""}"><td>${s.level}</td>
+      <td>${s.skills.map(k => `${k.name} <span class="muted">${k.points} pt</span>`).join(", ") || `<span class="muted">${s.spare_points} spare points</span>`}</td>
+      <td class="num">${nf(s.cooks)}</td><td class="num">${nf(s.days)}</td><td class="num">${nf(s.step_cost, 0)}</td><td class="num">${nf(s.cost, 0)}</td>
+      <td class="num">${s.flower ? sg(s.flower, 1) : "—"}</td><td class="num">${s.coins ? sg(s.coins, 0) : "—"}</td>${pbCell(pb(s.step_cost, s.flower))}${pbCell(pb(s.cost, cumF))}</tr>`; }).join("") + "</tbody>";
+  const gives = g => Object.entries(g).map(([k, q]) => `${q > 1 ? q + " " : ""}${k}`).join(", ");
+  $("gExp").innerHTML = `<thead><tr><th>Expansion</th><th>Needs level</th><th>Resources</th><th>FLOWER</th><th>Coins</th><th>Gems</th><th>Build</th><th>Gives</th><th>+FLOWER / chapter</th></tr></thead><tbody>` +
+    E.rows.map(r => `<tr><td>${r.expansion}</td><td class="num">${r.level || "—"}</td><td class="muted">${Object.entries(r.items).filter(([k]) => k !== "Gem").map(([k, q]) => `${nf(q)} ${k}`).join(", ")}</td>
+      <td class="num">${nf(r.flower_cost, 0)}</td><td class="num">${r.coins ? nf(r.coins) : "—"}</td><td class="num">${r.gems || "—"}</td><td class="num">${r.hours ? r.hours + " h" : "—"}</td>
+      <td>${gives(r.gives) || "<span class=\"muted\">new island</span>"}</td><td class="num">${r.value ? sg(r.value, 1) : "—"}</td></tr>`).join("") +
+    `<tr class="hi"><td>Total</td><td class="num">${E.level_needed}</td><td></td><td class="num">${nf(E.flower_cost, 0)}</td><td class="num">${nf(E.coins)}</td><td class="num">${nf(E.gems)}</td><td class="num">${nf(E.hours / 24, 1)} d</td><td></td><td class="num">${sg(E.value, 1)}</td></tr></tbody>`;
+  $("gNeeds").innerHTML = `<thead><tr><th>Bottleneck</th><th>Need</th><th>Have</th><th>Buy the rest for</th><th>Your rate</th><th>Weeks to make it yourself</th></tr></thead><tbody>` +
+    E.needs.map(n => `<tr><td>${n.item}</td><td class="num">${nf(n.need)}</td><td class="num">${nf(n.have)}</td><td class="num">${n.flower == null ? "not sold" : nf(n.flower, 0) + " FLOWER"}</td>
+      <td class="num">${n.per_week ? nf(n.per_week, 0) + " a week" : "—"}</td><td class="num">${n.weeks == null ? "—" : nf(n.weeks, 1)}</td></tr>`).join("") + "</tbody>";
+  $("gNodes").innerHTML = "One more node is worth, per chapter: " + Object.entries(G.nodes).map(([k, v]) => `${k} ${sg(v.flower, 1)}${v.coins ? ` (${nf(v.coins / 1000, 1)}k coins)` : ""} <span class="muted">${v.note}</span>`).join("; ") + ".";
+  const first = L.steps.find(s => !(pb(s.step_cost, s.flower) <= PAYBACK));   // first step that does not pay for itself
+  const good = L.steps.filter(s => !first || s.level < first.level), last = good[good.length - 1];
+  const sumF = a => a.reduce((t, s) => t + s.flower, 0), top = L.steps[L.steps.length - 1];
+  const rows = [];
+  if (last) rows.push(["Levels " + (L.now + 1) + "–" + last.level, last.cost, `${nf(last.days)} days of ${F.food}`, sumF(good)]);
+  if (first) rows.push(["Levels " + (last ? last.level + 1 : L.now + 1) + "–" + top.level, top.cost - (last ? last.cost : 0), `${nf(top.days - (last ? last.days : 0))} more days`, sumF(L.steps) - sumF(good)]);
+  rows.push([`Expansions ${E.have + 1}–${E.rows.filter(r => typeof r.expansion === "number").slice(-1)[0]?.expansion} + ${E.rows.slice(-1)[0]?.expansion}`, E.flower_cost + E.level_cost,
+    `${nf(E.coins)} coins, ${nf(E.gems)} gems (you have ${nf(E.gems_have)}), ${nf(E.hours / 24, 1)} days building${E.level_cost ? `; includes ${nf(E.level_cost, 0)} FLOWER of ${F.food} to reach level ${E.level_needed}` : ""}`, E.value]);
+  $("gSum").innerHTML = `<thead><tr><th>Path</th><th>FLOWER</th><th>Also costs</th><th>+FLOWER / chapter</th><th>Pays back in (chapters)</th></tr></thead><tbody>` +
+    rows.map(r => `<tr><td>${r[0]}</td><td class="num">${nf(r[1], 0)}</td><td class="muted">${r[2]}</td><td class="num">${sg(r[3], 1)}</td>${pbCell(pb(r[1], r[3]))}</tr>`).join("") + "</tbody>";
+  $("gIntro").innerHTML = `Two ways to spend FLOWER on growth: buy levels (skill points) by cooking ${F.food}, or buy the land expansions to ${E.rows.slice(-1)[0]?.expansion || "the next island"}.
+    Everything at market prices; FLOWER per chapter comes from the skill and node values above (your own counters). Coins are shown but not counted. The new island itself is not valued.
+    Payback under ${PAYBACK} chapters is green.`;
+}
+function all() { document.querySelectorAll(".coinNote").forEach(e => e.textContent = COIN_TXT); levelCharts(); boostView(); farmwideView(); growthView(); ticketView(); upgradeView(); flowerPlanView(); }
 function init() {
   $("fid").textContent = DATA.meta.farm.farm_id; $("gen").textContent = DATA.meta.generated; $("tax").textContent = (C.sell_fee * 100) + "%";
   method(); all();
