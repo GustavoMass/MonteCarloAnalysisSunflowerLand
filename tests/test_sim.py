@@ -181,6 +181,22 @@ class FlowerPlan(unittest.TestCase):
 
 
 class GrowthTest(unittest.TestCase):
+    def test_max_rates_use_nodes_not_history(self):
+        from sflmc import growth
+        farm = {"inventory": {"Oil Reserve": 2, "Crimstone Rock": 3}, "skills": {}}
+        r = growth.max_rates(farm, {}, 10 + 20 / 3, 1.6)
+        self.assertAlmostEqual(r["Oil"], 2 * 168 / 20 * (10 + 20 / 3))   # 280 a week
+        self.assertAlmostEqual(r["Crimstone"], 3 * 7 * 1.6)
+        farm["skills"]["Oil Be Back"] = 1
+        self.assertAlmostEqual(growth.max_rates(farm, {}, 10, 1.6)["Oil"], 2 * 168 / 16 * 10)
+
+    def test_faction_pet_multiplies_food_xp(self):
+        from sflmc import growth
+        rules = {"foods": {"P": {"xp": 100, "hours": 20, "ingredients": {"Wheat": 1}}}, "made": {},
+                 "xp_boosts": {}, "fire_pit": {"Fast Feasts": [0.9], "Fiery Jackpot": [0.2]}}
+        f = growth.xp_food({"skills": {}}, {"Wheat": 1}, rules, "P", 0.1, faction_pet=1.5)
+        self.assertAlmostEqual(f["xp"], 150)
+
     def test_level_path_buys_skills_as_points_arrive(self):
         from sflmc import growth
         rules = {"level_xp": {"1": 0, "2": 100, "3": 200, "4": 300}}
