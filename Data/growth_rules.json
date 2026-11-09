@@ -1,0 +1,35 @@
+{
+  "_source": "sunflower-land game code: lib/level.ts (LEVEL_EXPERIENCE), types/consumables.ts, types/expansions.ts (DESERT_LAND_20..25 requirements and layouts), events/landExpansion/upgradeFarm.ts (desert -> volcano: 25 expansions + 200 Oil), expansion/lib/boosts.ts (getFoodExpBoost, Fast Feasts), collectRecipe.ts (Fiery Jackpot)",
+  "level_xp": {
+    "73": 6263905, "74": 6793905, "75": 7333905, "76": 7883905, "77": 8443905, "78": 9013905, "79": 9593905,
+    "80": 10183905, "81": 10783905, "82": 11393905, "83": 12013905, "84": 12643905, "85": 13283905,
+    "86": 13933905, "87": 14593905, "88": 15263905, "89": 15943905, "90": 16633905, "91": 17333905,
+    "92": 18043905, "93": 18763905, "94": 19493905, "95": 20233905, "96": 20983905, "97": 21743905,
+    "98": 22513905, "99": 23293905, "100": 24083905
+  },
+  "foods": {
+    "Pizza Margherita": {"xp": 25000, "hours": 20, "building": "Fire Pit",
+                         "ingredients": {"Tomato": 30, "Cheese": 5, "Wheat": 20}}
+  },
+  "made": {"Cheese": {"Milk": 3}},
+  "xp_boosts": {"Golden Spatula": 1.1, "Blossombeard": 1.1, "Pan": 1.25, "Observatory": 1.05, "Astrolabe": 1.05,
+                "VIP": 1.1, "Munching Mastery": [1.05, 1.10, 1.15]},
+  "fire_pit": {"Fast Feasts": [0.9, 0.8, 0.7], "Fiery Jackpot": [0.2, 0.25, 0.3]},
+  "island_upgrade": {"desert": {"to": "volcano", "expansions": 25, "items": {"Oil": 200}}},
+  "expansions": {
+    "desert": {
+      "20": {"items": {"Wood": 525, "Stone": 200, "Iron": 35, "Gold": 30, "Crimstone": 42, "Oil": 250, "Gem": 60}, "coins": 7680, "hours": 48, "level": 68,
+             "gives": {"Stone Rock": 1, "Tree": 1, "Oil Reserve": 1}},
+      "21": {"items": {"Wood": 550, "Stone": 150, "Iron": 30, "Gold": 25, "Crimstone": 45, "Oil": 350, "Gem": 60}, "coins": 9600, "hours": 48, "level": 70,
+             "gives": {"Crop Plot": 1, "Iron Rock": 1, "Sunstone Rock": 1}},
+      "22": {"items": {"Wood": 600, "Stone": 200, "Iron": 35, "Gold": 30, "Crimstone": 48, "Oil": 450, "Gem": 75}, "coins": 9600, "hours": 48, "level": 72,
+             "gives": {"Fruit Patch": 1, "Tree": 1}},
+      "23": {"items": {"Wood": 650, "Stone": 250, "Iron": 40, "Gold": 35, "Crimstone": 51, "Oil": 500, "Gem": 75}, "coins": 9600, "hours": 60, "level": 73,
+             "gives": {"Crop Plot": 1, "Crimstone Rock": 1}},
+      "24": {"items": {"Wood": 700, "Stone": 300, "Iron": 50, "Gold": 45, "Crimstone": 54, "Oil": 550, "Gem": 75}, "coins": 11520, "hours": 60, "level": 74,
+             "gives": {"Crop Plot": 1, "Sunstone Rock": 1}},
+      "25": {"items": {"Wood": 750, "Stone": 350, "Iron": 50, "Gold": 50, "Crimstone": 60, "Oil": 650, "Gem": 75}, "coins": 13440, "hours": 60, "level": 75,
+             "gives": {"Crop Plot": 1, "Stone Rock": 1}}
+    }
+  }
+}

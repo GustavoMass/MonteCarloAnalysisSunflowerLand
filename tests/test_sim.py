@@ -180,5 +180,17 @@ class FlowerPlan(unittest.TestCase):
         self.assertEqual(r["must_have"][0]["done"], 1)
 
 
+class GrowthTest(unittest.TestCase):
+    def test_level_path_buys_skills_as_points_arrive(self):
+        from sflmc import growth
+        rules = {"level_xp": {"1": 0, "2": 100, "3": 200, "4": 300}}
+        food = {"xp": 50, "extra": 0, "have": 0, "cost_buy": 1.0}
+        queue = [{"name": "A", "points": 1, "flower": 5, "coins": 0}, {"name": "B", "points": 2, "flower": 4, "coins": 0}]
+        r = growth.level_path({"experience": 0}, food, queue, rules, cooks_per_day=1, top=4)
+        self.assertEqual(r["now"], 1)
+        self.assertEqual([(s["level"], [k["name"] for k in s["skills"]]) for s in r["steps"]], [(2, ["A"]), (4, ["B"])])
+        self.assertAlmostEqual(r["steps"][-1]["cost"], 6.0)    # 300 XP / 50 per cook
+
+
 if __name__ == "__main__":
     unittest.main()

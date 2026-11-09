@@ -18,7 +18,7 @@ import webbrowser
 import zlib
 
 from sflmc import analysis as A
-from sflmc import farmwide
+from sflmc import farmwide, growth
 from sflmc import farm as F
 from sflmc import fetch
 from sflmc import flowerplan
@@ -311,6 +311,12 @@ def main():
                                         coins_per_flower=fw.get("coins_per_flower", 1000), weeks=cfg["chapter_weeks"],
                                         item_prices=fw.get("item_prices"), crop_plan=fw.get("crop_plan"),
                                         crop_yield=fw.get("crop_yield"))
+    gw = cfg.get("growth", {})
+    out["growth"] = growth.evaluate(farm_d, prices["prices"], load(os.path.join(DATA, "growth_rules.json"), {}),
+                                    out["farmwide"], out["boosts"], load(os.path.join(DATA, "skill_tree.json"), []),
+                                    tax=cfg["sell_fee"], weeks=cfg["chapter_weeks"],
+                                    food=gw.get("xp_food", "Pizza Margherita"), cooks_per_day=gw.get("cooks_per_day", 1.0),
+                                    oil_per_drill=cfg.get("derived_prices", {}).get("Oil", {}).get("per", 16.6667))
     herd_tickets = {}
     for animal in G.ANIMALS:
         pname, pol, buf = pick(animal)

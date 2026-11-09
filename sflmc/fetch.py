@@ -83,6 +83,7 @@ def parse_farm(raw, farm_id):
         "island": (f.get("island") or {}).get("type"),
         "chapter_wearables": chapter_wearables,
         "coins": f.get("coins"),
+        "experience": float((f.get("bumpkin") or {}).get("experience", 0) or 0),
         "inventory": {k: float(v) for k, v in inv.items()},
         "flower_beds": [{"name": (b.get("flower") or {}).get("name"), "planted_at": (b.get("flower") or {}).get("plantedAt"),
                          "boosted_ms": (b.get("flower") or {}).get("boostedTime", 0)}

@@ -39,7 +39,7 @@ def _tier_unlocked(tree_skills, owned):
     return out
 
 
-def evaluate(farm, prices, skill_tree, nfts, tax=0.125, speed_credit=0.5, coins_per_flower=1000, weeks=12,
+def evaluate(farm, prices, skill_tree, nfts, tax=0.125, speed_credit=0.8, coins_per_flower=1000, weeks=12,
              item_prices=None, crop_plan=None, crop_yield=None):
     """crop_plan {crop: cycles per week on every plot}; crop_yield {"boosted_plots", "boosted", "other"}
     = crops per harvest. Without a plan, the lifetime harvest counters at 1 crop per harvest are used."""
@@ -171,5 +171,7 @@ def evaluate(farm, prices, skill_tree, nfts, tax=0.125, speed_credit=0.5, coins_
     rates = {"chops": chops, "stone_mines": mines, "gold_mines": gold_m, "crimstone_mines": crim_m,
              "fruit_harvests": sum(fruit.values()), "crop_value_week": crop_val, "crop_yield": y, "crop_harvests_week": sum(harv.values()),
              "crop_plan": crop_plan, "plots": plots, "weeks_played": wk,
-             "per_stone_mine": per_stone_mine, "per_gold_mine": per_gold_mine, "per_crim_mine": per_crim_mine}
+             "per_stone_mine": per_stone_mine, "per_gold_mine": per_gold_mine, "per_crim_mine": per_crim_mine,
+             "wood_per_chop": wood_y, "wood_price": used("Wood", 1),
+             "fruit_value_week": sum(sold(f, q * fruit_y) for f, q in fruit.items())}
     return {"rows": out, "rates": rates, "speed_credit": speed_credit, "coins_per_flower": coins_per_flower}

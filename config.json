@@ -10,6 +10,8 @@
   "coins_per_flower": 0,
 
   "_farmwide": "Other-tree skills and crop items. speed_credit: share of a faster regrowth you actually use (you do not collect on every cycle). coins_per_flower: rate used to add coins into the total column.",
+  "_growth": "Land expansions to the next island vs. levels bought with an XP food. cooks_per_day: how often you restart the Fire Pit.",
+  "growth": {"xp_food": "Pizza Margherita", "cooks_per_day": 1},
   "farmwide": {"speed_credit": 0.5, "coins_per_flower": 1000, "payback_chapters": 12,
                "_crop_plan": "Cycles per week on every plot. Yours: 5 wheat (24 h), 2 two-day crops with Instant Growth, 2 artichoke-type.",
                "crop_plan": {"Wheat": 5, "Barley": 2, "Artichoke": 2},
