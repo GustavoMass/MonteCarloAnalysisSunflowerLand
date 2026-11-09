@@ -189,6 +189,7 @@ def main():
     ap.add_argument("--offline", action="store_true", help="skip the sfl-manager refresh")
     ap.add_argument("--no-open", action="store_true", help="don't open the report")
     ap.add_argument("--quick", action="store_true", help="10x fewer runs")
+    ap.add_argument("--force", action="store_true", help="fetch everything again, even files fetched minutes ago")
     ap.add_argument("--config", default=os.path.join(HERE, "config.json"))
     args = ap.parse_args()
     cfg = load(args.config)
@@ -201,7 +202,8 @@ def main():
     if not args.offline:
         try:
             print("Fetching farm, board, prices and NFT floors from sfl-manager ...")
-            fetch.refresh(DATA, fid, nft_names)
+            fetch.refresh(DATA, fid, nft_names,
+                          {k: 0 for k in fetch.MAX_AGE} if args.force else cfg.get("refresh_max_age_hours"))
         except Exception as e:  # network down, API changed: keep going on cached data
             print(f"  refresh failed ({e}); using cached files in Data/", file=sys.stderr)
     farm_d = load(os.path.join(DATA, f"farm_{fid}.json"))
@@ -330,13 +332,15 @@ def main():
 
     fl = load(os.path.join(DATA, "flowers.json"), {})
     if fl and farm_d.get("flower_beds") is not None and farm_d.get("season_started"):
-        fp = flowerplan.plan(farm_d, fl, int(time.time() * 1000), prices["prices"],
+        owed = flowerplan.needs(farm_d, fl, board_week, int(time.time() * 1000), fetch.TICKET)
+        fp = flowerplan.plan_week(farm_d, fl, int(time.time() * 1000), prices["prices"],
                              tz_offset_h=cfg.get("timezone_offset_hours", 0), awake=tuple(cfg.get("awake_hours", (0, 24))),
                              board_now=[b["label"] for b in board_week.get("board", []) if b["category"] == "Flowers"],
                              must_have=[{**m, "by": int((dt.datetime.strptime(m["by"], "%Y-%m-%d %H:%M")
                                                          - dt.timedelta(hours=cfg.get("timezone_offset_hours", 0)))
                                                         .replace(tzinfo=dt.timezone.utc).timestamp() * 1000)}
-                                        for m in cfg.get("flower_must_have", [])])
+                                        for m in cfg.get("flower_must_have", [])] + [m for m in owed if m["count"] > 0])
+        fp["owed"] = owed
         out["flower_plan"] = fp
 
     os.makedirs(os.path.join(HERE, "results"), exist_ok=True)

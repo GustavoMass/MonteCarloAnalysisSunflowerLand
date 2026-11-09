@@ -1,174 +1,175 @@
 {
- "fetched": "2026-11-06",
- "season": "autumn",
+ "fetched": "2026-11-09",
+ "season": "winter",
  "double_dates": [
   "2026-11-10",
   "2026-11-19",
   "2026-11-25",
-  "2026-12-05"
+  "2026-12-05",
+  "2026-12-08"
  ],
  "board": [
   {
-   "label": "Purple Clover",
+   "label": "Purple Pansy",
    "category": "Flowers",
-   "tickets": null,
+   "tickets": 3,
    "done": false
   },
   {
-   "label": "Yellow Clover",
+   "label": "Yellow Daffodil",
    "category": "Flowers",
-   "tickets": null,
+   "tickets": 7,
+   "done": true
+  },
+  {
+   "label": "Purple Edelweiss",
+   "category": "Flowers",
+   "tickets": 3,
+   "done": true
+  },
+  {
+   "label": "Blue Daffodil",
+   "category": "Flowers",
+   "tickets": 7,
    "done": false
   },
   {
-   "label": "Red Cosmos",
+   "label": "White Carnation",
    "category": "Flowers",
-   "tickets": null,
-   "done": false
-  },
-  {
-   "label": "Red Clover",
-   "category": "Flowers",
-   "tickets": null,
-   "done": false
-  },
-  {
-   "label": "Blue Clover",
-   "category": "Flowers",
-   "tickets": null,
+   "tickets": 6,
    "done": true
   },
   {
-   "label": "Olive Flounder",
+   "label": "Football fish",
    "category": "Fish",
-   "tickets": null,
+   "tickets": 2,
    "done": true
   },
   {
-   "label": "Sea Bass",
+   "label": "Coelacanth",
    "category": "Fish",
-   "tickets": null,
+   "tickets": 10,
    "done": true
   },
   {
-   "label": "Halibut",
+   "label": "Angelfish",
    "category": "Fish",
-   "tickets": null,
+   "tickets": 2,
    "done": true
   },
   {
-   "label": "Surgeonfish",
+   "label": "Blowfish",
    "category": "Fish",
-   "tickets": null,
+   "tickets": 5,
    "done": true
   },
   {
-   "label": "Zebra Turkeyfish",
+   "label": "Weakfish",
    "category": "Fish",
-   "tickets": null,
+   "tickets": 2,
    "done": true
   },
   {
-   "label": "Lobster",
+   "label": "Oyster",
    "category": "Crustaceans",
-   "tickets": null,
+   "tickets": 12,
    "done": true
   },
   {
-   "label": "Anemone",
+   "label": "Octopus",
    "category": "Crustaceans",
-   "tickets": null,
+   "tickets": 20,
    "done": false
   },
   {
-   "label": "Shrimp",
+   "label": "Hermit Crab",
    "category": "Crustaceans",
-   "tickets": null,
+   "tickets": 8,
+   "done": true
+  },
+  {
+   "label": "Warty Goblin Pumpkin",
+   "category": "Exotic",
+   "tickets": 4,
    "done": true
   },
   {
    "label": "White Carrot",
    "category": "Exotic",
-   "tickets": null,
-   "done": false
+   "tickets": 3,
+   "done": true
   },
   {
    "label": "Adirondack Potato",
    "category": "Exotic",
-   "tickets": null,
-   "done": false
+   "tickets": 6,
+   "done": true
   },
   {
-   "label": "Warty Goblin Pumpkin",
-   "category": "Exotic",
-   "tickets": null,
+   "label": "Obsidian",
+   "category": "Obsidian",
+   "tickets": 30,
    "done": false
   },
   {
    "label": "Obsidian",
    "category": "Obsidian",
-   "tickets": null,
+   "tickets": 40,
    "done": false
   },
   {
    "label": "Obsidian",
    "category": "Obsidian",
-   "tickets": null,
+   "tickets": 40,
    "done": false
-  },
-  {
-   "label": "Obsidian",
-   "category": "Obsidian",
-   "tickets": null,
-   "done": false
-  },
-  {
-   "label": "Moo Doll",
-   "category": "Dolls",
-   "tickets": null,
-   "done": true
-  },
-  {
-   "label": "Gilded Doll",
-   "category": "Dolls",
-   "tickets": null,
-   "done": true
-  },
-  {
-   "label": "Crude Doll",
-   "category": "Dolls",
-   "tickets": null,
-   "done": false
-  },
-  {
-   "label": "Buzz Doll",
-   "category": "Dolls",
-   "tickets": null,
-   "done": true
   },
   {
    "label": "Lunar Doll",
    "category": "Dolls",
-   "tickets": null,
+   "tickets": 25,
+   "done": true
+  },
+  {
+   "label": "Moo Doll",
+   "category": "Dolls",
+   "tickets": 20,
+   "done": false
+  },
+  {
+   "label": "Bloom Doll",
+   "category": "Dolls",
+   "tickets": 30,
+   "done": false
+  },
+  {
+   "label": "Ember Doll",
+   "category": "Dolls",
+   "tickets": 30,
+   "done": false
+  },
+  {
+   "label": "Lumber Doll",
+   "category": "Dolls",
+   "tickets": 15,
    "done": false
   },
   {
    "label": "Giant Orange",
    "category": "Giant Fruit",
-   "tickets": null,
+   "tickets": 7,
    "done": true
   },
   {
    "label": "Giant Banana",
    "category": "Giant Fruit",
-   "tickets": null,
+   "tickets": 30,
    "done": false
   },
   {
    "label": "Giant Apple",
    "category": "Giant Fruit",
-   "tickets": null,
-   "done": true
+   "tickets": 14,
+   "done": false
   }
  ]
 }

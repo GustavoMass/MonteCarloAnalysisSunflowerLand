@@ -68,6 +68,10 @@ tr.hi td { background: var(--band); }
 pre { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; overflow-x: auto; font: 13px/1.6 var(--mono); margin: 0; }
 ol.steps, ul.method { margin: 0; padding-left: 22px; display: grid; gap: 8px; max-width: 82ch; }
 code { font-family: var(--mono); font-size: 13px; }
+.toc { position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; gap: 6px 14px; padding: 10px 0; margin-bottom: 8px;
+  background: var(--paper); border-bottom: 1px solid var(--rule); font-size: 14px; }
+.toc a { color: inherit; text-decoration: none; opacity: .8; } .toc a:hover { opacity: 1; text-decoration: underline; }
+h2 { scroll-margin-top: 56px; }
 </style>
 
 <div class="wrap">
@@ -77,6 +81,11 @@ code { font-family: var(--mono); font-size: 13px; }
   <p class="muted">Every animal simulated pet by pet and feed by feed with the game's own rules, petting every slot the moment it opens.
     FLOWER at today's P2P prices after the <span id="tax"></span> marketplace cut. <span class="coinNote"></span></p>
 </header>
+
+<nav class="toc" aria-label="Sections">
+  <a href="#l-h">Animals by level</a><a href="#b-h">Cheap boosts</a><a href="#fw-h">Crop items</a><a href="#g-h">Expansions or levels</a>
+  <a href="#t-h">Duende Caps</a><a href="#u-h">Barn and Pigpen</a><a href="#fp-h">Flower plan</a><a href="#m-h">How it was modelled</a>
+</nav>
 
 <section aria-labelledby="l-h">
   <h2 id="l-h">Every level, every animal: the Monte Carlo spread</h2>
@@ -96,10 +105,8 @@ code { font-family: var(--mono); font-size: 13px; }
 </section>
 
 <section aria-labelledby="fw-h">
-  <h2 id="fw-h">Beyond animals: other skills and crop items</h2>
+  <h2 id="fw-h">Crop items</h2>
   <p class="muted" id="fwIntro"></p>
-  <div class="tbl"><table id="fwTable" class="compact"></table></div>
-  <h3>Crop items</h3>
   <div class="tbl"><table id="fwItems" class="compact"></table></div>
 </section>
 
@@ -137,6 +144,8 @@ code { font-family: var(--mono); font-size: 13px; }
 <section aria-labelledby="fp-h">
   <h2 id="fp-h">Your flower plan: 4 beds, starting now</h2>
   <p class="muted" id="fpIntro"></p>
+  <h3>What you owe this week</h3>
+  <div class="tbl"><table id="owedTable" class="compact"></table></div>
   <div class="tbl"><table id="planTable"></table></div>
   <div class="tbl"><table id="readyTable" class="compact"></table></div>
   <div class="tbl"><table id="stockTable"></table></div>
@@ -258,21 +267,12 @@ function farmwideView() {
   const rate = W.coins_per_flower, R = W.rates, pts = r => `${r.points} pt · T${r.tier}${r.open ? "" : " <span class=\"neg\">(tier locked)</span>"}`;
   const flowerOrUnits = r => r.flower || r.coins ? sg(r.flower, 1) : "—";
   const skills = W.rows.filter(r => r.kind === "skill").sort((a, b) => b.total - a.total || a.group.localeCompare(b.group));
-  $("fwTable").innerHTML = `<thead><tr><th>Area</th><th>Skill</th><th>Cost</th><th>FLOWER / chapter</th><th>Coins / chapter</th><th>Total (coins at 1:${nf(rate)})</th><th>Other effect</th><th>How</th></tr></thead><tbody>` +
-    skills.map(r => `<tr class="${r.total >= 10 ? "hi" : ""}"><td>${r.group}</td><td title="${r.desc}">${r.name}</td><td>${pts(r)}</td><td class="num">${flowerOrUnits(r)}</td>
-      <td class="num">${r.coins ? sg(r.coins, 0) : "—"}</td><td class="num">${r.flower || r.coins ? sg(r.total, 1) : "—"}</td>
-      <td>${r.other || ""}</td><td class="muted">${r.note || ""}</td></tr>`).join("") + "</tbody>";
   const items = W.rows.filter(r => r.kind === "item").sort((a, b) => b.flower - a.flower);
   $("fwItems").innerHTML = `<thead><tr><th>Item</th><th>Effect</th><th>FLOWER / chapter</th><th>Pays back in ${PAYBACK} chapters if it costs under</th><th>Price</th><th>Chapters to pay back</th></tr></thead><tbody>` +
     items.map(r => `<tr><td>${r.name}</td><td class="muted">${r.note}</td><td class="num">${sg(r.flower, 1)}</td><td class="num">${nf(PAYBACK * r.flower, 0)} FLOWER</td>
       <td class="num">${r.price ? nf(r.price, 0) : "not listed"}</td><td class="num ${r.price && r.flower > 0 ? (r.price / r.flower <= PAYBACK ? "pos" : "neg") : ""}">${r.price && r.flower > 0 ? nf(r.price / r.flower, 1) : "—"}</td></tr>`).join("") + "</tbody>";
-  $("fwIntro").innerHTML = `Valued from your own farm counters over ${nf(R.weeks_played, 1)} weeks: ${nf(R.chops)} tree chops, ${nf(R.stone_mines)} stone mines, ${nf(R.gold_mines)} gold mines,
-    ${nf(R.crimstone_mines)} crimstone mines and ${nf(R.fruit_harvests)} fruit harvests a week; your plot crops: ${R.crop_plan ? `${Object.entries(R.crop_plan).map(([c, n]) => `${n} ${c}`).join(" + ")} cycles a week on ${R.plots} plots at ${nf(R.crop_yield, 2)} crops per harvest (<code>farmwide.crop_plan</code>)` : "lifetime harvest counters"}, ${nf(R.crop_harvests_week)} harvests selling for about ${nf(R.crop_value_week, 1)} FLOWER a week after tax.
-    Things you sell lose the ${C.sell_fee * 100}% tax; wood, iron, gold, crimstone and oil count at full price because you use or buy them.
-    Faster regrowth gets ${nf(100 * W.speed_credit)}% of its theoretical extra harvests, since you do not collect every cycle (<code>farmwide.speed_credit</code>).
-    Net per extra mine after tools: stone ${nf(R.per_stone_mine, 3)}, gold ${nf(R.per_gold_mine, 3)}, crimstone ${nf(R.per_crim_mine, 3)} FLOWER (iron is left out: you buy it).
-    Fish, fertilisers, salt products and XP have no market price, so those rows show the effect instead of FLOWER. “Tier locked” = you need more points in that tree first.
-    Crop items are not in the sfl-manager price catalog: put what the marketplace asks into <code>farmwide.item_prices</code> in <code>config.json</code> and the payback appears.`;
+  $("fwIntro").innerHTML = `Your plot crops: ${R.crop_plan ? `${Object.entries(R.crop_plan).map(([c, n]) => `${n} ${c}`).join(" + ")} cycles a week on ${R.plots} plots at ${nf(R.crop_yield, 2)} crops per harvest (<code>farmwide.crop_plan</code>)` : "lifetime harvest counters"}, about ${nf(R.crop_value_week, 1)} FLOWER a week after tax.
+    Faster growth gets ${nf(100 * W.speed_credit)}% of its theoretical extra harvests (<code>farmwide.speed_credit</code>). These items are not in the sfl-manager price catalog: set what the marketplace asks in <code>farmwide.item_prices</code>.`;
 }
 
 // ---------- tickets
@@ -353,7 +353,14 @@ function flowerPlanView() {
         const n = `${c} ${f}`, x = P.stock_now[n] || 0, y = P.stock_end[n] || 0;
         return `<td class="num ${x === 0 ? (y > 0 ? "pos" : "neg") : ""}">${x}${y !== x ? " → " + y : ""}</td>`; }).join("") +
         `<td class="num">${P.seeds[(seedOf[f] || f) + " Seed"] ?? "—"}</td></tr>`).join("") + "</tbody>";
-  const group = ms => ms < P.target_start ? `Before winter week (until ${fmt(P.target_start)})` : ms < P.horizon ? "Winter week (board week 1)" : "After";
+  const group = ms => ms < P.target_start ? `This week (until ${fmt(P.target_start)})` : ms < P.horizon ? "Next week" : "After";
+  const O = P.owed || [], dropped = (P.dropped || []).map(d => d.note);
+  $("owedTable").innerHTML = `<thead><tr><th>Flower</th><th>For</th><th>Reward</th><th>Need</th><th>Held / harvested</th><th>Growing</th><th>Still to plant</th><th>Plan</th></tr></thead><tbody>` +
+    O.map(o => { const left = o.count, drop = dropped.includes(o.note), m = (P.must_have || []).find(x => x.note === o.note && x.flower === o.flower);
+      const rw = o.kind === "grow" ? Object.entries((o.reward || {}).items || {}).map(([k, q]) => `${q} ${k}`).concat((o.reward || {}).coins ? [`${nf(o.reward.coins)} coins`] : []).join(", ") : "";
+      return `<tr><td><b>${o.flower}</b></td><td>${o.note}</td><td>${rw || "—"}</td><td class="num">${o.owed}</td><td class="num">${o.held}</td><td class="num">${o.growing || "—"}</td>
+      <td class="num">${left}</td><td class="${left === 0 ? "pos" : drop ? "neg" : m && m.done >= m.count ? "pos" : "neg"}">${left === 0 ? (o.kind === "deliver" ? (o.held >= o.owed ? "deliver now" : "deliver after harvest") : "done") :
+        drop ? "skipped: does not fit with the others this week" : m && m.done >= m.count ? "planned below" : `only ${m ? m.done : 0} fit`}</td></tr>`; }).join("") + "</tbody>";
   let last = "";
   $("planTable").innerHTML = `<thead><tr><th>Bed</th><th>Plant (${tz})</th><th>Seed</th><th>Cross-breed with</th><th>Gives</th><th>Ready</th><th>Harvest when awake</th><th>Why</th></tr></thead><tbody>` +
     P.schedule.map(r => { const g = group(r.plant), head = g !== last ? `<tr class="hi"><td colspan="8"><b>${g}</b></td></tr>` : ""; last = g;
@@ -365,7 +372,7 @@ function flowerPlanView() {
   $("fpIntro").innerHTML = `Built from your farm at ${DATA.meta.generated}: flowers, seeds, crops, and your 4 beds (${growing}). Beds grow at ×${P.speed.toFixed(2)} of base time.
     Times are your clock (${tz}); you plant and harvest only between ${P.awake[0]}:00 and ${P.awake[1]}:00, so a bed that finishes at night waits until morning.
     Order of priority: <b>1. must-haves</b>${must ? ` (${must})` : ""}; <b>2. parent prep</b>: hold one of every parent flower for the flowers that have no crop recipe, so whatever the board or Raven asks you can finish inside that week. Season-only parents come first because they can only be grown in their own week;
-    <b>3.</b> colours you hold none of. If a parent is already growing, the plan waits for it rather than planting another. Re-run <code>run.bat</code> after you plant or harvest; the plan rebuilds from your live beds. Add chores to <code>flower_must_have</code> in <code>config.json</code>.`;
+    <b>3.</b> colours you hold none of. If a parent is already growing, the plan waits for it rather than planting another. Re-run <code>run.bat</code> after you plant or harvest; the plan rebuilds from your live beds. Board flowers, delivery orders and “Grow …” chores are read from your farm; a chore pays only when finished, so the plan keeps the set of chores that fits the week with the most tickets. Add anything else to <code>flower_must_have</code> in <code>config.json</code>.`;
   const R = P.readiness || [];
   $("readyTable").innerHTML = `<thead><tr><th>Flower</th><th>Parents (bold = you hold one)</th><th>Now</th></tr></thead><tbody>` +
     R.map(r => `<tr><td>${r.flower}${r.season_only ? ' <span class="muted">(season-only)</span>' : ""}</td>

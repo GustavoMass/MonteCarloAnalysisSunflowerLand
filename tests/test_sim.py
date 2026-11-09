@@ -192,5 +192,23 @@ class GrowthTest(unittest.TestCase):
         self.assertAlmostEqual(r["steps"][-1]["cost"], 6.0)    # 300 XP / 50 per cook
 
 
+class FlowerNeedsTest(unittest.TestCase):
+    def test_owed_flowers_count_stock_growing_and_chore_harvests(self):
+        from sflmc import flowerplan
+        fl = {"flowers": {"Blue Pansy": {}, "Purple Pansy": {}, "Red Balloon Flower": {}}}
+        farm = {"season_started": 0, "inventory": {"Red Balloon Flower": 2},
+                "flower_beds": [{"name": "Purple Pansy", "planted_at": 1}],
+                "orders": [{"from": "guria", "items": {"Red Balloon Flower": 1, "Wheat": 5}}],
+                "chores": [{"npc": "guria", "name": "Grow Blue Pansy 6 times", "initial": 10,
+                            "reward": {"items": {"Duende Cap": 3}}}],
+                "activity": {"Blue Pansy Harvested": 12}}
+        board = {"board": [{"category": "Flowers", "label": "Purple Pansy", "done": False}]}
+        got = {(n["kind"], n["flower"]): n for n in flowerplan.needs(farm, fl, board, now_ms=1)}
+        self.assertEqual(got[("deliver", "Red Balloon Flower")]["count"], 0)   # held
+        self.assertEqual(got[("deliver", "Purple Pansy")]["count"], 0)         # growing
+        self.assertEqual(got[("grow", "Blue Pansy")]["count"], 4)              # 2 of 6 harvested
+        self.assertEqual(got[("grow", "Blue Pansy")]["tickets"], 3)
+
+
 if __name__ == "__main__":
     unittest.main()
