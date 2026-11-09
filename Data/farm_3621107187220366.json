@@ -1,7 +1,7 @@
 {
- "farm_id": 3621107187220366,
+ "farm_id": "3621107187220366",
  "source": "https://sfl-manager.com/api/v3/land/3621107187220366",
- "fetched": "2026-11-09 08:51",
+ "fetched": "2026-11-09 10:36",
  "skills": {
   "Efficient Feeding": 1,
   "Restless Animals": 2,
@@ -1799,5 +1799,6 @@
   "Hermit Crab Bountied": 1
  },
  "plots": 61,
+ "pet_streak": 3,
  "weeks_played": 14.668236846891535
 }

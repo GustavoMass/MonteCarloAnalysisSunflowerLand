@@ -17,8 +17,11 @@ def _level(xp, table):
     return lv
 
 
-def xp_food(farm, prices, rules, food, tax):
-    """XP and FLOWER per cook of one food, with your XP boosts and Fire Pit skills."""
+def xp_food(farm, prices, rules, food, tax, faction_pet=1.0):
+    """XP and FLOWER per cook of one food, with your XP boosts and Fire Pit skills.
+
+    faction_pet: the Faction Pet XP multiplier you eat under (factions.ts: x1.5 the week after an
+    8-week fed streak). Eating only in those weeks makes every level cheaper by that factor."""
     f = rules["foods"][food]
     owned = set(farm.get("collectibles", [])) | set(farm.get("wearables", []))
     skills = farm.get("skills", {})
@@ -32,6 +35,9 @@ def xp_food(farm, prices, rules, food, tax):
         elif (name == "VIP" and farm.get("vip")) or name in owned:
             mult *= m
             used.append(f"{name} x{m}")
+    if faction_pet and faction_pet != 1:
+        mult *= faction_pet
+        used.append(f"Faction Pet x{faction_pet}")
     fp = rules["fire_pit"]
     hours = f["hours"] * (fp["Fast Feasts"][skills["Fast Feasts"] - 1] if skills.get("Fast Feasts") else 1)
     extra = fp["Fiery Jackpot"][skills["Fiery Jackpot"] - 1] if skills.get("Fiery Jackpot") else 0
@@ -111,6 +117,22 @@ def node_values(farm, rates, prices, weeks):
     return {k: {"flower": a * weeks, "coins": c * weeks, "note": note} for k, (a, c, note) in v.items()}
 
 
+def max_rates(farm, rules, oil_per_drill, crim_per_mine):
+    """What your nodes give a week if you drill/mine every time they are ready (you mine these
+    only when you need them, so stock and past rate do not matter). Oil reserves refill in 20 h
+    (Oil Be Back shortens it), crimstone rocks in 24 h."""
+    inv, skills = farm.get("inventory", {}), farm.get("skills", {})
+    obb = [0.8, 0.7, 0.6]
+    oil_h = 20 * (obb[skills["Oil Be Back"] - 1] if skills.get("Oil Be Back") else 1)
+    fa = [0.85, 0.75, 0.65]
+    crim_h = 24 * (fa[skills["Fireside Alchemist"] - 1] if skills.get("Fireside Alchemist") else 1)
+    reserves = float(inv.get("Oil Reserve", 0) or 0)
+    rocks = float(inv.get("Crimstone Rock", 0) or 0)
+    return {"Oil": reserves * 168 / oil_h * oil_per_drill, "Crimstone": rocks * 168 / crim_h * crim_per_mine,
+            "_oil": {"nodes": reserves, "hours": oil_h, "per": oil_per_drill},
+            "_crim": {"nodes": rocks, "hours": crim_h, "per": crim_per_mine}}
+
+
 def expansion_path(farm, prices, rules, nodes, activity, weeks_played, level_xp):
     island = farm.get("island")
     table = rules["expansions"].get(island, {})
@@ -136,17 +158,16 @@ def expansion_path(farm, prices, rules, nodes, activity, weeks_played, level_xp)
                      "gems": 0, "hours": 0, "level": 0, "gives": {}, "value": 0, "value_coins": 0})
         for i, q in up["items"].items():
             tot_items[i] = tot_items.get(i, 0) + q
-    wk = max(weeks_played, 1e-9)
-    rate = {"Oil": activity.get("Oil Drilled", 0) / wk * prices.get("_oil_per_drill", 16.6667),
-            "Crimstone": activity.get("Crimstone Mined", 0) / wk * 1.2}
+    rate = max_rates(farm, rules, prices.get("_oil_per_drill", 16.6667), prices.get("_crim_per_mine", 1.6))
     needs = []
     for i, q in sorted(tot_items.items(), key=lambda x: -x[1] * (prices.get(x[0]) or 0)):
         have = float(inv.get(i, 0) or 0)
         short = max(0.0, q - have)
         needs.append({"item": i, "need": q, "have": have, "flower": short * (prices.get(i) or 0) if i != "Gem" else None,
                       "weeks": short / rate[i] if rate.get(i) else None, "per_week": rate.get(i)})
+    rate_basis = {"Oil": rate["_oil"], "Crimstone": rate["_crim"]}
     lv_needed = max((r["level"] for r in rows if isinstance(r["expansion"], int)), default=0)
-    return {"island": island, "have": have_land, "rows": rows, "needs": needs,
+    return {"island": island, "have": have_land, "rows": rows, "needs": needs, "rate_basis": rate_basis,
             "flower_cost": sum(r["flower_cost"] for r in rows), "coins": sum(r["coins"] for r in rows),
             "gems": tot_items.get("Gem", 0), "gems_have": float(inv.get("Gem", 0) or 0),
             "hours": sum(r["hours"] for r in rows), "value": sum(r["value"] for r in rows),
@@ -155,9 +176,9 @@ def expansion_path(farm, prices, rules, nodes, activity, weeks_played, level_xp)
 
 
 def evaluate(farm, prices, rules, farmwide, boosts, skill_tree, tax, weeks, food="Pizza Margherita",
-             cooks_per_day=1.0, oil_per_drill=16.6667):
-    prices = dict(prices, _oil_per_drill=oil_per_drill)
-    f = xp_food(farm, prices, rules, food, tax)
+             cooks_per_day=1.0, oil_per_drill=16.6667, faction_pet=1.0):
+    prices = dict(prices, _oil_per_drill=oil_per_drill, _crim_per_mine=farmwide["rates"].get("crim_per_mine", 1.6))
+    f = xp_food(farm, prices, rules, food, tax, faction_pet)
     nodes = node_values(farm, farmwide["rates"], prices, weeks)
     q, locked = skill_queue(farmwide, boosts, skill_tree)
     lv = level_path(farm, f, q, rules, cooks_per_day)
@@ -169,4 +190,5 @@ def evaluate(farm, prices, rules, farmwide, boosts, skill_tree, tax, weeks, food
         ex["level_cost"] = cooks * f["cost_buy"]
     else:
         ex["level_cost"] = 0.0
-    return {"food": f, "levels": lv, "expansions": ex, "nodes": nodes, "cooks_per_day": cooks_per_day}
+    return {"food": f, "levels": lv, "expansions": ex, "nodes": nodes, "cooks_per_day": cooks_per_day,
+            "faction_pet": faction_pet, "pet_streak": farm.get("pet_streak")}

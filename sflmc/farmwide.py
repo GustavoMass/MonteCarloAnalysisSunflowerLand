@@ -58,10 +58,12 @@ def evaluate(farm, prices, skill_tree, nfts, tax=0.125, speed_credit=0.8, coins_
     sp = lambda mult: (1 / mult - 1) * speed_credit                    # noqa: E731  extra share of harvests
 
     # your current yields per action (base 1 + what you own; see stoneMine.ts, mineGold.ts, chop.ts)
-    stone_y = 1 + 1 + 0.1 + 0.1          # Rocky Favor, Rock'N'Roll, Stone Beetle
-    gold_y = 1 + 0.5 + 0.1               # Golden Touch, Gold Beetle
-    crim_y = 1 + 0.2                     # Fire Kissed: +1 on every 5th
-    wood_y = 1.2 * (1 + 0.2) + 0.3       # Woody x1.2, Tough Tree 10% x3, +0.1 x3
+    # NATIVE: every chop/stone/gold mine has a 20% chance of +1 (prngChance(20, "Native")), so +0.2 on average
+    NATIVE = 0.2
+    stone_y = 1 + 1 + 0.1 + 0.1 + NATIVE     # Rocky Favor, Rock'N'Roll, Stone Beetle, Native (2.2, or 3.2 on a crit)
+    gold_y = 1 + 0.5 + 0.1 + NATIVE          # Golden Touch, Gold Beetle, Native
+    crim_y = 1 + (2 + 1) / 5                 # every 5th mine in a daily streak: Streak Bonus +2, Fire Kissed +1
+    wood_y = 1.2 * (1 + 0.2) + 0.3 + NATIVE  # Woody x1.2, Tough Tree 10% x3, +0.1 x3, Native
     fruit_y = 1 + 0.1 + 0.2              # Fruitful Fumble, Macaw x2 (Loyal Macaw)
     chops, mines, gold_m, crim_m = r("Tree Chopped"), r("Stone Mined"), r("Gold Mined"), r("Crimstone Mined")
     fruit = {f: r(f"{f} Harvested") for f in FRUIT_SEED_COINS}
@@ -171,7 +173,7 @@ def evaluate(farm, prices, skill_tree, nfts, tax=0.125, speed_credit=0.8, coins_
     rates = {"chops": chops, "stone_mines": mines, "gold_mines": gold_m, "crimstone_mines": crim_m,
              "fruit_harvests": sum(fruit.values()), "crop_value_week": crop_val, "crop_yield": y, "crop_harvests_week": sum(harv.values()),
              "crop_plan": crop_plan, "plots": plots, "weeks_played": wk,
-             "per_stone_mine": per_stone_mine, "per_gold_mine": per_gold_mine, "per_crim_mine": per_crim_mine,
+             "per_stone_mine": per_stone_mine, "crim_per_mine": crim_y, "per_gold_mine": per_gold_mine, "per_crim_mine": per_crim_mine,
              "wood_per_chop": wood_y, "wood_price": used("Wood", 1),
              "fruit_value_week": sum(sold(f, q * fruit_y) for f, q in fruit.items())}
     return {"rows": out, "rates": rates, "speed_credit": speed_credit, "coins_per_flower": coins_per_flower}
