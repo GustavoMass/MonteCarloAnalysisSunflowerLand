@@ -14,11 +14,17 @@ python run.py
 ```
 
 That pulls your farm, the bounty board and P2P prices from the public sfl-manager API, runs the
-simulation (about 2 minutes) and opens `report/index.html` in your browser.
+simulation (about 30 seconds) and opens `report/index.html` in your browser.
+
+To go easy on sfl-manager, a normal run makes 4 requests (live-reload, farm, prices, weekly board)
+and none at all if the farm was fetched in the last 15 minutes. The flower book, delivery catalog
+and NFT floors are fetched at most once a day (`MAX_AGE` in `sflmc/fetch.py`, or
+`refresh_max_age_hours` in `config.json`).
 
 ```bash
 python run.py --offline   # reuse the data already in Data/
 python run.py --no-open   # don't open the browser
+python run.py --force     # fetch everything again, ignoring the cache
 python -m unittest discover -s tests -t .
 ```
 

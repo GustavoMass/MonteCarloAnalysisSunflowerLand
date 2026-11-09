@@ -14,8 +14,12 @@ UA = {"User-Agent": "Mozilla/5.0 (MonteCarloAnalysisSunflowerLand)"}
 TICKET = "Duende Cap"  # Cave Dwellers chapter ticket
 
 
+CALLS = []   # every request this run, to keep the load on sfl-manager visible
+
+
 def _get(url, tries=4):
     """GET JSON, backing off politely when the API rate-limits (HTTP 429)."""
+    CALLS.append(url)
     for i in range(tries):
         try:
             req = urllib.request.Request(url, headers=UA)
@@ -84,6 +88,12 @@ def parse_farm(raw, farm_id):
         "chapter_wearables": chapter_wearables,
         "coins": f.get("coins"),
         "experience": float((f.get("bumpkin") or {}).get("experience", 0) or 0),
+        # open NPC chores ("Grow Blue Pansy 6 times") and open delivery orders, for the flower planner
+        "chores": [{"npc": npc, "name": c.get("name"), "initial": c.get("initialProgress", 0), "reward": c.get("reward")}
+                   for npc, c in ((f.get("choreBoard") or {}).get("chores") or {}).items() if not c.get("completedAt")],
+        "orders": [{"from": o.get("from"), "items": o.get("items") or {}, "reward": o.get("reward") or {},
+                    "ready_at": o.get("readyAt")}
+                   for o in ((f.get("delivery") or {}).get("orders") or []) if not o.get("completedAt")],
         "inventory": {k: float(v) for k, v in inv.items()},
         "flower_beds": [{"name": (b.get("flower") or {}).get("name"), "planted_at": (b.get("flower") or {}).get("plantedAt"),
                          "boosted_ms": (b.get("flower") or {}).get("boostedTime", 0)}
@@ -168,6 +178,7 @@ def _ask_live_copy(farm_id):
     """sfl-manager serves a cached copy (can be hours old). Its own land page asks
     for a live reload with this POST before reading; do the same, ignore failures."""
     try:
+        CALLS.append(f"POST {API}/v3/land/{farm_id}/refresh")
         req = urllib.request.Request(f"{API}/v3/land/{farm_id}/refresh", data=b"", headers=UA, method="POST")
         with urllib.request.urlopen(req, timeout=60) as r:
             r.read()
@@ -175,7 +186,22 @@ def _ask_live_copy(farm_id):
         print(f"  live reload not available ({e}); using sfl-manager's cached copy")
 
 
-def refresh(data_dir, farm_id, nft_names=()):
+# How old (hours) each cached file may be before it is fetched again. Farm and board
+# change as you play; the flower book, delivery catalog and NFT floors barely move.
+MAX_AGE = {"land": 0.25, "prices": 1, "flowers": 24, "deliveries": 24, "board": 0.25, "nft": 24}
+
+
+def _age_h(path):
+    return (time.time() - os.path.getmtime(path)) / 3600 if os.path.exists(path) else 1e9
+
+
+def refresh(data_dir, farm_id, nft_names=(), max_age=None):
+    age = {**MAX_AGE, **(max_age or {})}
+    fresh = lambda key, name: _age_h(os.path.join(data_dir, name)) < age[key]  # noqa: E731
+    del CALLS[:]
+    if fresh("land", f"farm_{farm_id}.json") and fresh("prices", "prices_snapshot.json"):
+        print(f"  farm and prices fetched under {age['land'] * 60:.0f} min ago; not calling sfl-manager")
+        return
     _ask_live_copy(farm_id)
     raw = _get(f"{API}/v3/land/{farm_id}")
     prices = _get(f"{API}/v1/prices")["p2p"]
@@ -187,7 +213,7 @@ def refresh(data_dir, farm_id, nft_names=()):
             "Apple", "Blueberry", "Orange", "Lemon", "Tomato", "Potato", "Pumpkin", "Carrot", "Cabbage", "Soybean",
             "Zucchini", "Yam", "Broccoli", "Rhubarb", "Corn", "Onion", "Turnip", "Wheat", "Artichoke", "Parsnip",
             "Sunflower", "Beetroot", "Cauliflower", "Radish", "Parsnip", "Kale", "Eggplant", "Blueberry",
-            "Banana", "Apple", "Rhubarb", "Pepper", "Artichoke", "Onion", "Barley"}
+            "Banana", "Apple", "Rhubarb", "Pepper", "Artichoke", "Onion", "Barley", "Obsidian"}
     for r in G.FEED_RECIPES.values():
         need |= set(r)
     for o in G.SLOP_OPTIONS.values():
@@ -224,12 +250,14 @@ def refresh(data_dir, farm_id, nft_names=()):
     files = [(f"farm_{farm_id}.json", farm), ("prices_snapshot.json", snap), ("bounties_observed.json", bounties)]
     # optional extras: a failure here should not stop the simulation
     try:
-        files.append(("flowers.json", _flowers(_get(f"{API}/v3/info/flowers"))))
+        if not fresh("flowers", "flowers.json"):
+            files.append(("flowers.json", _flowers(_get(f"{API}/v3/info/flowers"))))
     except Exception as e:  # noqa: BLE001
         print(f"  flowers not refreshed: {e}")
     try:
-        files.append(("ticket_orders_history.json",
-                      _merge_orders(os.path.join(data_dir, "ticket_orders_history.json"), _get(f"{API}/v3/info/deliveries"))))
+        if not fresh("deliveries", "ticket_orders_history.json"):
+            files.append(("ticket_orders_history.json",
+                          _merge_orders(os.path.join(data_dir, "ticket_orders_history.json"), _get(f"{API}/v3/info/deliveries"))))
     except Exception as e:  # noqa: BLE001
         print(f"  delivery orders not refreshed: {e}")
     try:
@@ -242,7 +270,7 @@ def refresh(data_dir, farm_id, nft_names=()):
                                           "double_dates": st.get("double_dates", []), "board": board_items}))
     except Exception as e:  # noqa: BLE001
         print(f"  board not refreshed: {e}")
-    if nft_names:
+    if nft_names and not fresh("nft", "nft_prices.json"):
         try:
             files.append(("nft_prices.json", {"fetched": time.strftime("%Y-%m-%d"), "items": nft_prices(nft_names)}))
         except Exception as e:  # noqa: BLE001
@@ -250,4 +278,5 @@ def refresh(data_dir, farm_id, nft_names=()):
     for name, obj in files:
         with open(os.path.join(data_dir, name), "w", encoding="utf-8") as fh:
             json.dump(obj, fh, indent=1)
+    print(f"  {len(CALLS)} requests to sfl-manager this run: " + ", ".join(sorted({c.split('/api/')[1].split('/')[0] + '/' + c.split('/api/')[1].split('/')[1] for c in CALLS})))
     return farm, snap, bounties

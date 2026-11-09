@@ -10,7 +10,8 @@
    "9": 260,
    "10": 310,
    "11": 390,
-   "12": 470
+   "12": 470,
+   "15": 720
   },
   "Cow": {
    "3": 540,
@@ -32,18 +33,18 @@
  },
  "gems_per_gem_bounty": 5,
  "gem_flower": 0.067,
- "updated": "2026-11-06",
+ "updated": "2026-11-09",
  "current_board": {
   "Chicken": [
    {
-    "level": 10,
+    "level": 11,
     "kind": "coins",
-    "amount": 310
+    "amount": 390
    },
    {
-    "level": 12,
+    "level": 9,
     "kind": "coins",
-    "amount": 470
+    "amount": 260
    },
    {
     "level": 5,
@@ -51,39 +52,9 @@
     "amount": 120
    },
    {
-    "level": 8,
-    "kind": "coins",
-    "amount": 220
-   },
-   {
     "level": 6,
     "kind": "coins",
     "amount": 140
-   },
-   {
-    "level": 12,
-    "kind": "coins",
-    "amount": 470
-   },
-   {
-    "level": 7,
-    "kind": "coins",
-    "amount": 180
-   },
-   {
-    "level": 7,
-    "kind": "coins",
-    "amount": 180
-   },
-   {
-    "level": 8,
-    "kind": "coins",
-    "amount": 220
-   },
-   {
-    "level": 7,
-    "kind": "coins",
-    "amount": 180
    },
    {
     "level": 3,
@@ -96,14 +67,9 @@
     "amount": 220
    },
    {
-    "level": 5,
+    "level": 15,
     "kind": "coins",
-    "amount": 120
-   },
-   {
-    "level": 9,
-    "kind": "coins",
-    "amount": 260
+    "amount": 720
    },
    {
     "level": 11,
@@ -111,9 +77,14 @@
     "amount": 390
    },
    {
+    "level": 7,
+    "kind": "coins",
+    "amount": 180
+   },
+   {
     "level": 5,
-    "kind": "gems",
-    "amount": 5
+    "kind": "coins",
+    "amount": 120
    },
    {
     "level": 5,
@@ -121,73 +92,103 @@
     "amount": 5
    },
    {
-    "level": 5,
+    "level": 3,
     "kind": "gems",
     "amount": 5
+   },
+   {
+    "level": 8,
+    "kind": "tickets",
+    "amount": 2
+   },
+   {
+    "level": 5,
+    "kind": "tickets",
+    "amount": 1
    },
    {
     "level": 6,
-    "kind": "gems",
-    "amount": 10
+    "kind": "tickets",
+    "amount": 2
    },
    {
-    "level": 4,
-    "kind": "gems",
-    "amount": 5
+    "level": 3,
+    "kind": "tickets",
+    "amount": 1
+   },
+   {
+    "level": 9,
+    "kind": "tickets",
+    "amount": 2
+   },
+   {
+    "level": 9,
+    "kind": "tickets",
+    "amount": 2
+   },
+   {
+    "level": 13,
+    "kind": "tickets",
+    "amount": 3
+   },
+   {
+    "level": 8,
+    "kind": "tickets",
+    "amount": 2
    }
   ],
   "Cow": [
-   {
-    "level": 7,
-    "kind": "coins",
-    "amount": 1810
-   },
    {
     "level": 3,
     "kind": "coins",
     "amount": 540
    },
    {
-    "level": 5,
-    "kind": "coins",
-    "amount": 930
-   },
-   {
-    "level": 9,
-    "kind": "coins",
-    "amount": 2980
-   },
-   {
-    "level": 3,
-    "kind": "gems",
-    "amount": 5
-   }
-  ],
-  "Sheep": [
-   {
     "level": 4,
-    "kind": "coins",
-    "amount": 400
+    "kind": "tickets",
+    "amount": 3
+   },
+   {
+    "level": 12,
+    "kind": "tickets",
+    "amount": 5
+   },
+   {
+    "level": 6,
+    "kind": "tickets",
+    "amount": 4
    },
    {
     "level": 8,
-    "kind": "coins",
-    "amount": 1070
-   },
-   {
-    "level": 3,
-    "kind": "coins",
-    "amount": 320
-   },
+    "kind": "tickets",
+    "amount": 4
+   }
+  ],
+  "Sheep": [
    {
     "level": 6,
     "kind": "coins",
     "amount": 600
    },
    {
+    "level": 6,
+    "kind": "tickets",
+    "amount": 3
+   },
+   {
     "level": 5,
-    "kind": "gems",
-    "amount": 10
+    "kind": "tickets",
+    "amount": 2
+   },
+   {
+    "level": 8,
+    "kind": "tickets",
+    "amount": 3
+   },
+   {
+    "level": 12,
+    "kind": "tickets",
+    "amount": 4
    }
   ],
   "Pig": [
@@ -197,19 +198,24 @@
     "amount": 6730
    },
    {
-    "level": 6,
-    "kind": "coins",
-    "amount": 1340
-   },
-   {
-    "level": 14,
-    "kind": "coins",
-    "amount": 7710
-   },
-   {
     "level": 4,
     "kind": "gems",
     "amount": 5
+   },
+   {
+    "level": 6,
+    "kind": "tickets",
+    "amount": 4
+   },
+   {
+    "level": 14,
+    "kind": "tickets",
+    "amount": 5
+   },
+   {
+    "level": 3,
+    "kind": "tickets",
+    "amount": 3
    }
   ]
  }

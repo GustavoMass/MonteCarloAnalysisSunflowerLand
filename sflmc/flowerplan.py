@@ -20,6 +20,7 @@ Planner rules:
     none of. Season-only flowers of other weeks are only filler.
 """
 import datetime as dt
+import re
 
 SEASONS = ["spring", "summer", "autumn", "winter"]
 H = 3600 * 1000
@@ -80,6 +81,10 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
     flower_only = {x: [p for p, _ in f.get("parents", []) if p in fl and p not in EPIC]
                    for x, f in fl.items() if x not in EPIC and not any(p not in fl for p, _ in f.get("parents", []))}
     musts = [dict(m, done=0) for m in must_have]
+    protect = {}
+    for m in must_have:
+        if m.get("kind") == "deliver":
+            protect[m["flower"]] = protect.get(m["flower"], 0) + m.get("owed", m["count"])
 
     def blocked(x):
         """x has only flower parents and you hold none of them."""
@@ -89,8 +94,12 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
         """How much one more of this flower is worth now."""
         v = 0
         for m in musts:
-            if m["flower"] == name and m["done"] < m["count"] and next_awake(int(t + grow(name))) <= m["by"]:
-                v = max(v, 150)
+            done_at = next_awake(int(t + grow(name)))
+            if m["flower"] == name and m["done"] < m["count"] and done_at <= m["by"]:
+                # deliveries (tickets) before chores; within each, least slack first so long grows still fit
+                slack = (m["by"] - done_at) / DAY
+                rate = 40 * m.get("tickets", 0) / max(1, m["count"] * grow(name) / DAY)   # tickets per bed-day
+                v = max(v, (160 if m.get("kind") == "deliver" else 150 + rate) + max(0.0, 7 - slack))
         h = have(name) - sum(1 for p, x in reserved.items() if p == name)
         if h == 0:
             unlocks = [x for x in flower_only if name in flower_only[x] and blocked(x)]
@@ -114,6 +123,7 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
         for parent, qty in fl[name].get("parents", []):
             if parent in fl:
                 keep = 0 if reserved.get(parent) == name or is_must(name) else 1
+                keep += protect.get(parent, 0)       # never cross-breed away a flower you owe
                 spare = stock.get(parent, 0) - keep
                 if spare < qty:
                     continue
@@ -223,3 +233,63 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
             "seeds": {s: int(farm["inventory"].get(s, 0)) for s in seeds}}
 
 
+
+
+def needs(farm, flowers, board, now_ms, ticket="Duende Cap"):
+    """Flowers you owe right now, as planner must-haves due at the end of this week:
+    weekly-board flowers not delivered yet and open delivery orders (minus the ones
+    you hold), plus chores like "Grow Blue Pansy 6 times" (only fresh harvests count)."""
+    fl = flowers["flowers"]
+    s_start = farm["season_started"]
+    by = s_start + (int((now_ms - s_start) // (7 * DAY)) + 1) * 7 * DAY - H
+    inv = farm.get("inventory", {})
+    owe, why = {}, {}
+    for b in board.get("board", []):
+        if b["category"] == "Flowers" and not b["done"] and b["label"] in fl:
+            owe[b["label"]] = owe.get(b["label"], 0) + 1
+            why.setdefault(b["label"], []).append("weekly board")
+    for o in farm.get("orders", []):
+        for item, q in o["items"].items():
+            if item in fl:
+                owe[item] = owe.get(item, 0) + q
+                why.setdefault(item, []).append(f"{o['from'].title()} order")
+    act = farm.get("activity", {})
+    growing = {}
+    for b in farm.get("flower_beds", []):
+        if b.get("name") in fl and b.get("planted_at"):
+            growing[b["name"]] = growing.get(b["name"], 0) + 1
+    chores = []
+    for c in farm.get("chores", []):
+        m = re.match(r"Grow (.+?) (\d+) times?", c.get("name") or "")
+        if m and m.group(1) in fl:
+            done = act.get(f"{m.group(1)} Harvested", 0) - (c.get("initial") or 0)
+            chores.append((c, m.group(1), int(m.group(2)), int(done)))
+    out = []
+    for c, f, n, done in chores:
+        left = max(0, n - done - growing.get(f, 0))
+        out.append({"flower": f, "count": left, "owed": n, "held": done, "growing": growing.get(f, 0), "by": by,
+                    "kind": "grow", "note": f"{c['npc'].title()} chore: grow {f} {n}x", "reward": c.get("reward"),
+                    "tickets": ((c.get("reward") or {}).get("items") or {}).get(ticket, 0)})
+    for f, q in owe.items():
+        # what you hold and what is already growing count; chore harvests do not, since a chore may not fit the week
+        short = q - int(inv.get(f, 0)) - growing.get(f, 0)
+        out.insert(0, {"flower": f, "count": max(0, short), "owed": q, "held": int(inv.get(f, 0)),
+                       "growing": growing.get(f, 0), "by": by, "kind": "deliver", "note": " + ".join(why[f])})
+    return out
+
+
+def plan_week(farm, flowers, now_ms, prices=None, must_have=(), **kw):
+    """plan(), but a chore only pays when finished. Try every set of chores (most tickets
+    first) and keep the first one whose chores all fit the week; chore harvests can feed
+    each other (Purple Cosmos grown for one chore are parents for Blue Pansy)."""
+    from itertools import combinations
+    chores = [m for m in must_have if m.get("kind") == "grow" and m["count"] > 0]
+    rest = [m for m in must_have if m not in chores]
+    sets = [c for k in range(len(chores), -1, -1) for c in combinations(chores, k)]
+    sets.sort(key=lambda c: -sum(m.get("tickets", 0) for m in c))
+    for chosen in sets:
+        r = plan(farm, flowers, now_ms, prices, must_have=rest + list(chosen), **kw)
+        if all(m["done"] >= m["count"] for m in r["must_have"] if m.get("kind") == "grow"):
+            r["dropped"] = [m for m in chores if m not in chosen]
+            return r
+    return r
