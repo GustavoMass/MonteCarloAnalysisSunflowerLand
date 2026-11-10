@@ -175,6 +175,27 @@ def expansion_path(farm, prices, rules, nodes, activity, weeks_played, level_xp)
             "level_xp_needed": max(0.0, level_xp.get(str(lv_needed), 0) - farm.get("experience", 0))}
 
 
+def daily_mining(farm, prices, rates, tax):
+    """FLOWER a week from mining every gold and crimstone rock once a day (both refill in 24 h).
+    Crimstone is sold (after the marketplace cut); its Gold Pickaxe uses your own gold first."""
+    inv = farm.get("inventory", {})
+    p = lambda k: float(prices.get(k) or 0)   # noqa: E731
+    g_rocks, c_rocks = float(inv.get("Gold Rock", 0) or 0), float(inv.get("Crimstone Rock", 0) or 0)
+    g_mines, c_mines = g_rocks * 7, c_rocks * 7
+    gold = g_mines * rates.get("gold_per_mine", 1.8)
+    crim = c_mines * rates.get("crim_per_mine", 1.6)
+    gold_for_crim = c_mines * 3
+    crim_sell = crim * p("Crimstone") * (1 - tax)
+    crim_cost = gold_for_crim * p("Gold") + c_mines * 3 * p("Wood")         # pickaxes, gold at market
+    gold_cost = g_mines * (5 * p("Iron") + 3 * p("Wood"))
+    gold_left = gold - gold_for_crim
+    return {"gold_rocks": g_rocks, "crim_rocks": c_rocks, "gold_week": gold, "crim_week": crim,
+            "gold_for_crim": gold_for_crim, "gold_left": gold_left,
+            "crim_net": crim_sell - crim_cost, "gold_net": gold * p("Gold") - gold_cost,
+            "both_net": crim_sell + gold_left * p("Gold") * (1 - tax if gold_left > 0 else 1) - gold_cost - c_mines * 3 * p("Wood"),
+            "coins": -(g_mines * 80 + c_mines * 100)}
+
+
 def evaluate(farm, prices, rules, farmwide, boosts, skill_tree, tax, weeks, food="Pizza Margherita",
              cooks_per_day=1.0, oil_per_drill=16.6667, faction_pet=1.0):
     prices = dict(prices, _oil_per_drill=oil_per_drill, _crim_per_mine=farmwide["rates"].get("crim_per_mine", 1.6))
@@ -191,4 +212,5 @@ def evaluate(farm, prices, rules, farmwide, boosts, skill_tree, tax, weeks, food
     else:
         ex["level_cost"] = 0.0
     return {"food": f, "levels": lv, "expansions": ex, "nodes": nodes, "cooks_per_day": cooks_per_day,
-            "faction_pet": faction_pet, "pet_streak": farm.get("pet_streak")}
+            "faction_pet": faction_pet, "pet_streak": farm.get("pet_streak"),
+            "mining": daily_mining(farm, prices, farmwide["rates"], tax)}
