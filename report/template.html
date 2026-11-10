@@ -83,9 +83,19 @@ h2 { scroll-margin-top: 56px; }
 </header>
 
 <nav class="toc" aria-label="Sections">
-  <a href="#l-h">Animals by level</a><a href="#b-h">Cheap boosts</a><a href="#fw-h">Crop items</a><a href="#g-h">Expansions or levels</a>
+  <a href="#n-h">Best next step</a><a href="#l-h">Animals by level</a><a href="#b-h">Cheap boosts</a><a href="#fw-h">Crop items</a><a href="#g-h">Expansions or levels</a>
   <a href="#t-h">Duende Caps</a><a href="#u-h">Barn and Pigpen</a><a href="#fp-h">Flower plan</a><a href="#m-h">How it was modelled</a>
 </nav>
+
+<section aria-labelledby="n-h">
+  <h2 id="n-h">Best next step: where the next FLOWER goes first</h2>
+  <p class="muted" id="nIntro"></p>
+  <div class="tbl"><table id="nTable"></table></div>
+  <p id="nVerdict"></p>
+  <h3>Barn L2 and Pigpen L2 if you bought everything</h3>
+  <div class="tbl"><table id="nCost" class="compact"></table></div>
+  <p class="muted" id="nMining"></p>
+</section>
 
 <section aria-labelledby="l-h">
   <h2 id="l-h">Every level, every animal: the Monte Carlo spread</h2>
@@ -432,7 +442,66 @@ function growthView() {
     Everything at market prices; FLOWER per chapter comes from the skill and node values above (your own counters). Coins are shown but not counted. The new island itself is not valued.
     Payback under ${PAYBACK} chapters is green.`;
 }
-function all() { document.querySelectorAll(".coinNote").forEach(e => e.textContent = COIN_TXT); levelCharts(); boostView(); farmwideView(); growthView(); ticketView(); upgradeView(); flowerPlanView(); }
+// ---------- best next step
+function nextView() {
+  const U = DATA.upgrades || [], G = DATA.growth, W = DATA.farmwide || {}; if (!G) return;
+  const price = DATA.meta.prices.prices, inv = DATA.meta.farm.inventory || {}, owned = DATA.meta.farm.buildings || {};
+  const up = (b, lv) => U.find(u => u.building === b && u.top_level === lv);
+  const itemsFl = u => Object.entries(u.step_items).filter(([k]) => k !== "Mud").reduce((a, [k, q]) => a + q * (price[k] || 0), 0);
+  const opts = [];
+  for (const b of ["Pigpen", "Barn"]) {
+    const lv = (owned[b] || 0) + 1, u = up(b, lv), p = up(b, lv - 1);
+    if (!u || !p) continue;
+    opts.push({ name: `${b} L${lv}`, bld: true, cost: itemsFl(u), coins: u.step_coins, flower: u.value - p.value, tickets: u.tickets - p.tickets,
+      coinsCh: u.coins - p.coins, time: "now (2 h build)",
+      note: b === "Barn" ? `${nf(u.tickets - p.tickets)} more caps from cow and sheep bounties` : "more pigs: bounties, produce and trade-in" });
+  }
+  const L = G.levels, last = L.steps.filter(s => s.level <= 79), top = last[last.length - 1];
+  if (top) opts.push({ name: `Feast: levels ${L.now + 1}–${top.level} on ${G.food.food}`, cost: top.cost, coins: 0,
+    flower: last.reduce((a, s) => a + s.flower, 0), tickets: 0, coinsCh: last.reduce((a, s) => a + s.coins, 0),
+    time: `${nf(top.cooks)} cooks, ${nf(top.days)} days`, note: `skills: ${last.flatMap(s => s.skills.map(k => k.name)).join(", ")}` });
+  const nan = (W.rows || []).find(r => r.name === "Nancy" && !r.owned);
+  if (nan) opts.push({ name: "Nancy", cost: nan.price || 0, coins: 0, flower: nan.flower, tickets: 0, coinsCh: 0, time: "now", note: nan.note });
+  const E = G.expansions, oil = (E.needs || []).find(n => n.item === "Oil");
+  opts.push({ name: `Expansions ${E.have + 1}–25 + ${(E.rows[E.rows.length - 1] || {}).expansion || "next island"}`, cost: E.flower_cost + (E.level_cost || 0), coins: E.coins,
+    flower: E.value, tickets: 0, coinsCh: E.value_coins, time: oil && oil.weeks ? `${nf(oil.weeks, 1)} weeks of oil` : "—",
+    note: `${nf(E.gems)} gems (you have ${nf(E.gems_have)})` });
+  opts.forEach(o => o.pb = o.flower > 0.05 ? o.cost / o.flower : null);
+  const rank = o => o.pb != null && o.pb <= PAYBACK ? o.pb : (o.tickets > 0 ? PAYBACK + o.cost / o.tickets : 1e3 + (o.pb || 1e6));
+  opts.sort((a, b) => rank(a) - rank(b));
+  $("nIntro").innerHTML = `Each option priced as if you bought every item at today's P2P (Mud left out; coins shown apart and not counted). “+ per chapter” is over one ${C.chapter_weeks}-week chapter against what you have now. Ranked by FLOWER payback; options that pay mostly in Duende Caps come after those that pay back within ${PAYBACK} chapters, cheapest cap first. Building levels stay for every later chapter.`;
+  $("nTable").innerHTML = `<thead><tr><th>#</th><th>Option</th><th>FLOWER</th><th>Coins</th><th>+FLOWER / chapter</th><th>+Caps / chapter</th><th>+Coins / chapter</th><th>Pays back in</th><th>FLOWER per cap</th><th>Time</th><th>Note</th></tr></thead><tbody>` +
+    opts.map((o, i) => `<tr class="${i < 2 ? "hi" : ""}"><td>${i + 1}</td><td>${o.name}</td><td class="num">${nf(o.cost, 0)}</td><td class="num">${o.coins ? nf(o.coins) : "—"}</td>
+      <td class="num">${Math.abs(o.flower) > 0.05 ? sg(o.flower, 1) : "—"}</td><td class="num">${o.tickets ? "+" + nf(o.tickets) : "—"}</td><td class="num">${o.coinsCh ? sg(o.coinsCh, 0) : "—"}</td>
+      <td class="num ${o.pb == null ? "" : o.pb <= PAYBACK ? "pos" : "neg"}">${o.pb == null ? "—" : nf(o.pb, 1) + " ch"}</td>
+      <td class="num">${o.tickets > 0 ? nf(o.cost / o.tickets, 2) : "—"}</td><td>${o.time}</td><td class="muted" style="white-space:normal">${o.note}</td></tr>`).join("") + "</tbody>";
+  const pet = G.pet_streak == null ? 0 : G.pet_streak, oilW = oil && oil.weeks ? nf(oil.weeks, 0) : "?";
+  const capBest = opts.filter(o => o.tickets > 0).sort((a, b) => a.cost / a.tickets - b.cost / b.tickets)[0];
+  $("nVerdict").innerHTML = `<b>Do first: ${opts[0].name}, then ${opts[1].name}.</b> ` +
+    (capBest ? `For Duende Caps the cheapest is ${capBest.name}: ${nf(capBest.cost / capBest.tickets, 2)} FLOWER per cap, ${nf(capBest.tickets)} caps a chapter, every chapter. ` : "") +
+    `Meanwhile keep the Fire Pit busy: pizzas cooked now are eaten in the x${G.faction_pet} week after your pet streak reaches 8 (it is ${pet} now, so about ${Math.max(0, 8 - pet)} more fed weeks). ` +
+    `Expansions come last: the most FLOWER per chapter once built, but the slowest payback and about ${oilW} weeks of drilling.`;
+  // full cost of the next level of both buildings
+  const nx = ["Barn", "Pigpen"].map(b => up(b, (owned[b] || 0) + 1)).filter(Boolean);
+  if (!nx.length) return;
+  const keys = [...new Set(nx.flatMap(u => Object.keys(u.step_items)))].filter(k => k !== "Mud");
+  const qty = k => nx.reduce((a, u) => a + (u.step_items[k] || 0), 0);
+  const tot = keys.reduce((a, k) => a + qty(k) * (price[k] || 0), 0);
+  const short = keys.reduce((a, k) => a + Math.max(0, qty(k) - (inv[k] || 0)) * (price[k] || 0), 0);
+  $("nCost").innerHTML = `<thead><tr><th>Item</th>${nx.map(u => `<th>${u.building} L${u.top_level}</th>`).join("")}<th>Total</th><th>Price</th><th>FLOWER</th><th>You have</th><th>Still to buy</th></tr></thead><tbody>` +
+    keys.map(k => `<tr><td>${k}</td>${nx.map(u => `<td class="num">${u.step_items[k] ? nf(u.step_items[k]) : "—"}</td>`).join("")}<td class="num">${nf(qty(k))}</td>
+      <td class="num">${nf(price[k] || 0, 4)}</td><td class="num">${nf(qty(k) * (price[k] || 0), 1)}</td><td class="num">${nf(inv[k] || 0)}</td>
+      <td class="num">${nf(Math.max(0, qty(k) - (inv[k] || 0)) * (price[k] || 0), 1)}</td></tr>`).join("") +
+    `<tr><td>Coins</td>${nx.map(u => `<td class="num">${nf(u.step_coins)}</td>`).join("")}<td class="num">${nf(nx.reduce((a, u) => a + u.step_coins, 0))}</td><td></td><td class="num">—</td><td></td><td></td></tr>` +
+    `<tr class="hi"><td>Total FLOWER</td>${nx.map(u => `<td class="num">${nf(itemsFl(u), 1)}</td>`).join("")}<td></td><td></td><td class="num">${nf(tot, 1)}</td><td></td><td class="num">${nf(short, 1)}</td></tr></tbody>`;
+  const M = G.mining;
+  if (M) $("nMining").innerHTML = `Daily mining (every rock once a day, both refill in 24 h): ${nf(M.gold_rocks)} gold rocks give ${nf(M.gold_week, 0)} Gold a week, ${nf(M.crim_rocks)} crimstone rocks ${nf(M.crim_week, 1)} Crimstone with the 5-day streak bonus. ` +
+    `Selling the crimstone nets ${sg(M.crim_net, 1)} FLOWER a week after its pickaxes (3 Gold + 3 Wood each, gold at market); selling gold alone nets ${sg(M.gold_net, 1)}. ` +
+    `Feeding your own gold to the crimstone pickaxes (${nf(M.gold_for_crim)} a week, ${nf(M.gold_left, 0)} left to sell) and selling both: about ${sg(M.both_net, 1)} FLOWER a week, plus ${nf(-M.coins)} coins of pickaxes. ` +
+    `At that pace mining alone pays for both buildings in about ${nf(tot / Math.max(M.both_net, 0.1), 1)} weeks.`;
+}
+
+function all() { document.querySelectorAll(".coinNote").forEach(e => e.textContent = COIN_TXT); nextView(); levelCharts(); boostView(); farmwideView(); growthView(); ticketView(); upgradeView(); flowerPlanView(); }
 function init() {
   $("fid").textContent = DATA.meta.farm.farm_id; $("gen").textContent = DATA.meta.generated; $("tax").textContent = (C.sell_fee * 100) + "%";
   method(); all();

@@ -173,7 +173,7 @@ def evaluate(farm, prices, skill_tree, nfts, tax=0.125, speed_credit=0.8, coins_
     rates = {"chops": chops, "stone_mines": mines, "gold_mines": gold_m, "crimstone_mines": crim_m,
              "fruit_harvests": sum(fruit.values()), "crop_value_week": crop_val, "crop_yield": y, "crop_harvests_week": sum(harv.values()),
              "crop_plan": crop_plan, "plots": plots, "weeks_played": wk,
-             "per_stone_mine": per_stone_mine, "crim_per_mine": crim_y, "per_gold_mine": per_gold_mine, "per_crim_mine": per_crim_mine,
+             "per_stone_mine": per_stone_mine, "crim_per_mine": crim_y, "gold_per_mine": gold_y, "per_gold_mine": per_gold_mine, "per_crim_mine": per_crim_mine,
              "wood_per_chop": wood_y, "wood_price": used("Wood", 1),
              "fruit_value_week": sum(sold(f, q * fruit_y) for f, q in fruit.items())}
     return {"rows": out, "rates": rates, "speed_credit": speed_credit, "coins_per_flower": coins_per_flower}
