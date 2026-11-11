@@ -151,6 +151,11 @@
   "awake_hours": [6, 23],
   "_must_have": "Extra harvests you need by a deadline (your local time). Board flowers, delivery orders and Grow-flower chores are added automatically.",
   "flower_must_have": [],
-  "_flower_stock": "Flowers to keep in stock for orders that come back, counted after this week's deliveries and planned below them (never used as a cross-breed parent below this count). Guria asks for balloon flowers and Purple Daffodil; Raven asked for Red + Yellow Edelweiss in winter.",
-  "flower_stock": {"Purple Daffodil": 2, "Blue Balloon Flower": 2, "Red Balloon Flower": 2, "Red Edelweiss": 2, "Yellow Edelweiss": 2}
+  "_flower_priorities": "Flower goals in strict order: 1 weekly board + delivery orders; 2 one parent for every flower whose path takes more than parents_over_days; 3 guria_each of Guria's flowers and seasonal_each of every seasonal flower; 4 Bloom Doll; 5 Grow-flower chores; 6 every_each of every flower; 7 Floral Bed (flowers only). Prism Petal, Celestial Frostbloom and Primula Enigma are rare mutations: tracked, never planted for. Recipes from primerascripto.com (not in the game code).",
+  "flower_priorities": {"parents_over_days": 5,
+                        "guria": ["Purple Daffodil", "Blue Balloon Flower", "Red Balloon Flower"], "guria_each": 2,
+                        "seasonal_each": 2, "every_each": 2,
+                        "bloom_doll": {"Prism Petal": 3, "Celestial Frostbloom": 2, "Primula Enigma": 3},
+                        "floral_bed": {"Prism Petal": 1, "Celestial Frostbloom": 1, "Primula Enigma": 1,
+                                       "Red Pansy": 1, "Blue Pansy": 1, "Yellow Pansy": 1}}
 }

@@ -80,7 +80,8 @@ def food_multiplier(farm, animal):
 
 
 def feed_xp_multiplier(farm):
-    return _r(farm, "Chonky Feed", "xp") or 1.0
+    """feedAnimal.ts: Chonky Feed, then Pig Onesie x1.05 (worn by you or a farm hand; every animal)."""
+    return (_r(farm, "Chonky Feed", "xp") or 1.0) * (1.05 if "Pig Onesie" in farm.wearables else 1.0)
 
 
 def love_xp(farm, animal, item):

@@ -12,12 +12,13 @@ Planner rules:
     of, or a flower grown earlier in the plan for that purpose. When a wanted
     flower needs a parent flower you lack, the parent is planted first and
     both grow times count.
-  * Priorities: (1) must-haves you set, e.g. a chore that needs a harvest
-    by a deadline; (2) parent prep: hold one of every parent flower needed
-    by flowers that have no crop recipe, so any flower can be finished
-    inside the week it is asked for (season-only ones first, since their
-    parents can only be grown in their own season); (3) colours you hold
-    none of. Season-only flowers of other weeks are only filler.
+  * Strict priority tiers (needs() builds them, config flower_priorities):
+    1 weekly board + delivery orders, 2 a parent for every flower that takes
+    more than 5 days, 3 two of Guria's flowers and of every seasonal one,
+    4 Bloom Doll, 5 "Grow ..." chores, 6 two of every flower, 7 Floral Bed.
+    A tier never uses a flower that an equal or higher tier keeps as a parent.
+    Epic flowers (Prism Petal, Celestial Frostbloom, Primula Enigma) are rare
+    mutations: shown in the goals, never planted for.
 """
 import datetime as dt
 import re
@@ -27,6 +28,9 @@ H = 3600 * 1000
 DAY = 24 * H
 FAMILY_PRIORITY = {"Cosmos": 90, "Pansy": 80, "Daffodil": 70, "Balloon Flower": 65, "Carnation": 55, "Lotus": 50}
 EPIC = ("Prism Petal", "Celestial Frostbloom", "Primula Enigma")
+TIER_BASE = {1: 200, 2: 180, 3: 160, 4: 140, 5: 120, 6: 100, 7: 80}
+TIER_NAME = {1: "board + orders", 2: "parents for 5+ day flowers", 3: "Guria + seasonal stock",
+             4: "Bloom Doll", 5: "weekly chores", 6: "2 of every flower", 7: "Floral Bed"}
 
 
 def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7,
@@ -80,51 +84,44 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
 
     flower_only = {x: [p for p, _ in f.get("parents", []) if p in fl and p not in EPIC]
                    for x, f in fl.items() if x not in EPIC and not any(p not in fl for p, _ in f.get("parents", []))}
-    musts = [dict(m, done=0) for m in must_have]
-    protect = {}
-    for m in must_have:
-        if m.get("kind") in ("deliver", "stock"):     # never cross-breed away a flower you owe or keep
-            protect[m["flower"]] = protect.get(m["flower"], 0) + m.get("owed", m["count"])
+    musts = sorted((dict(m, done=0) for m in must_have), key=lambda m: m.get("tier", 1))
+    # flowers a tier keeps (owed, parents, stock): a tier may not cross-breed them away below that count
+    protect = [(m.get("tier", 1), m["flower"], m.get("keep", m.get("owed", m["count"])))
+               for m in must_have if m.get("kind") != "grow"]
+
+    def tier_of(name):
+        return min((m.get("tier", 1) for m in musts if m["flower"] == name and m["done"] < m["count"]), default=99)
 
     def blocked(x):
         """x has only flower parents and you hold none of them."""
         return x in flower_only and all(have(p) == 0 for p in flower_only[x])
 
     def value(name, t):
-        """How much one more of this flower is worth now."""
+        """Worth of one more of this flower now: its best unmet tier. Inside tier 1, least slack
+        first so long grows still make the deadline; chores also by caps per bed-day."""
         v = 0
         for m in musts:
             done_at = next_awake(int(t + grow(name)))
             if m["flower"] == name and m["done"] < m["count"] and done_at <= m["by"]:
-                # deliveries (tickets) before chores; within each, least slack first so long grows still fit
-                slack = (m["by"] - done_at) / DAY
-                rate = 40 * m.get("tickets", 0) / max(1, m["count"] * grow(name) / DAY)   # tickets per bed-day
-                base = {"deliver": 160, "stock": 100}.get(m.get("kind"), 150 + rate)
-                v = max(v, base + max(0.0, 7 - slack))
-        h = have(name) - sum(1 for p, x in reserved.items() if p == name)
-        if h == 0:
-            unlocks = [x for x in flower_only if name in flower_only[x] and blocked(x)]
-            if unlocks:
-                v = max(v, max(75 if season_only(x) else 55 for x in unlocks) + 3 * (len(unlocks) - 1)
-                        - 3 * seeds[fl[name]["seed"]]["days"])
-        if season_only(name):
-            if season_at(t) == season_at(target_start) and t >= target_start:
-                v = max(v, 30 if h == 0 else 10 if h == 1 else 0)
-            else:
-                v = max(v, 8 if h == 0 else 0)
-        elif h == 0:
-            v = max(v, FAMILY_PRIORITY.get(family(name), 0) // 3 - 3 * seeds[fl[name]["seed"]]["days"])
+                tier = m.get("tier", 1)
+                extra = max(0.0, 7 - (m["by"] - done_at) / DAY) if tier in (1, 5) else 0.0
+                if tier == 5:
+                    extra += min(5.0, 5 * m.get("tickets", 0) / max(1, m["count"] * grow(name) / DAY))
+                v = max(v, TIER_BASE.get(tier, 0) + extra)
         return v
 
     def is_must(name):
         return any(m["flower"] == name and m["done"] < m["count"] for m in musts)
 
-    def direct_option(name):
+    def direct_option(name, tier=None):
+        tier = tier_of(name) if tier is None else tier
         best = None
         for parent, qty in fl[name].get("parents", []):
             if parent in fl:
-                keep = 0 if reserved.get(parent) == name or is_must(name) else 1
-                keep += protect.get(parent, 0)       # never cross-breed away a flower you owe
+                if reserved.get(parent) == name:       # grown for this very flower
+                    keep = 0
+                else:
+                    keep = sum(q for tr, f, q in protect if f == parent and tr <= tier)
                 spare = stock.get(parent, 0) - keep
                 if spare < qty:
                     continue
@@ -138,22 +135,16 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
 
     def plantable(name, t):
         sd = fl[name]["seed"]
-        return name not in EPIC and season_at(t) in seeds[sd]["seasons"] and seed_stock.get(sd, 0) > 0
+        return name not in EPIC and season_at(t) in seeds[sd]["seasons"]
 
     def why_now(name, t):
         for m in musts:
             if m["flower"] == name and m["done"] < m["count"]:
-                return m.get("note") or "must-have"
-        if have(name) == 0:
-            unlocks = [x for x in flower_only if name in flower_only[x] and blocked(x)]
-            if unlocks:
-                return "parent prep: lets you grow " + ", ".join(unlocks[:3]) + ("…" if len(unlocks) > 3 else "")
-        if season_only(name):
-            return "this week's season-only" if season_at(t) == season_at(target_start) and t >= target_start else "season-only stock"
-        return "colour you hold none of" if have(name) == 0 else "spare"
+                return f"{m.get('tier', 1)} · {m.get('note') or TIER_NAME.get(m.get('tier', 1))}"
+        return "spare"
 
     schedule = []
-    for _ in range(400):
+    for _ in range(1500):
         bed = min(beds, key=lambda b: b["free"])
         t = next_awake(bed["free"])
         if t >= horizon:
@@ -181,7 +172,7 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
             for parent, qty in fl[name].get("parents", []):
                 if parent not in fl or qty != 1 or reserved.get(parent) or not plantable(parent, t):
                     continue
-                popt = direct_option(parent)
+                popt = direct_option(parent, tier_of(name))
                 done = t + grow(parent) + grow(name)
                 if not popt or done > horizon:
                     continue
@@ -193,8 +184,7 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
             bed["free"] = max(nxt, t + H)
             continue
         _, name, (cost, parent, qty, buy), target = best
-        why = f"parent for {target}" if target else why_now(name, t)
-        seed_stock[fl[name]["seed"]] -= 1
+        why = f"{tier_of(target)} · parent for {target}" if target else why_now(name, t)
         if parent in fl:
             stock[parent] -= qty
             if reserved.get(parent) == name:
@@ -210,7 +200,7 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
         ready = t + grow(name)
         pending.append((ready, name))
         schedule.append({"bed": bed["bed"], "plant": t, "ready": ready, "harvest": next_awake(int(ready)),
-                         "flower": name, "seed": fl[name]["seed"], "cross": f"{qty} {parent}", "buy": buy,
+                         "flower": name, "cross": f"{qty} {parent}", "buy": buy,
                          "season": season_at(t),
                          "why": why})
         bed["free"] = ready
@@ -230,20 +220,39 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
             "tz_offset_h": tz_offset_h, "awake": list(awake), "readiness": readiness,
             "must_have": [{k: v for k, v in m.items()} for m in musts],
             "stock_now": {n: int(farm["inventory"].get(n, 0)) for n in fl if farm["inventory"].get(n)},
-            "stock_end": {n: v for n, v in end_stock.items() if v},
-            "seeds": {s: int(farm["inventory"].get(s, 0)) for s in seeds}}
+            "stock_end": {n: v for n, v in end_stock.items() if v}}
 
 
 
 
-def needs(farm, flowers, board, now_ms, ticket="Duende Cap", stock=None):
-    """Flowers you owe right now, as planner must-haves due at the end of this week:
-    weekly-board flowers not delivered yet and open delivery orders (minus the ones
-    you hold), plus chores like "Grow Blue Pansy 6 times" (only fresh harvests count)."""
+def needs(farm, flowers, board, now_ms, ticket="Duende Cap", prio=None):
+    """Your flower goals as planner must-haves, in strict priority tiers (see module doc).
+
+    Held and growing flowers are handed out tier by tier: what tier 1 owes uses them first,
+    the rest counts toward the stock tiers below it. Chores count only fresh harvests."""
+    prio = prio or {}
     fl = flowers["flowers"]
     s_start = farm["season_started"]
     by = s_start + (int((now_ms - s_start) // (7 * DAY)) + 1) * 7 * DAY - H
+    far = by + 400 * DAY
     inv = farm.get("inventory", {})
+    growing = {}
+    for b in farm.get("flower_beds", []):
+        if b.get("name") in fl and b.get("planted_at"):
+            growing[b["name"]] = growing.get(b["name"], 0) + 1
+    avail = {f: int(inv.get(f, 0)) + growing.get(f, 0) for f in fl}
+    out = []
+
+    def add(tier, f, q, note, kind="stock", deadline=far, **kw):
+        if f not in fl or q <= 0:
+            return
+        cover = min(avail.get(f, 0), q)
+        avail[f] = avail.get(f, 0) - cover
+        out.append({"flower": f, "count": q - cover, "owed": q, "keep": q, "held": int(inv.get(f, 0)),
+                    "growing": growing.get(f, 0), "covered": cover, "by": deadline, "kind": kind, "tier": tier,
+                    "note": note, "epic": f in EPIC, **kw})
+
+    # 1: weekly board (mega bounty) + open delivery orders
     owe, why = {}, {}
     for b in board.get("board", []):
         if b["category"] == "Flowers" and not b["done"] and b["label"] in fl:
@@ -254,38 +263,49 @@ def needs(farm, flowers, board, now_ms, ticket="Duende Cap", stock=None):
             if item in fl:
                 owe[item] = owe.get(item, 0) + q
                 why.setdefault(item, []).append(f"{o['from'].title()} order")
+    for f, q in owe.items():
+        add(1, f, q, " + ".join(why[f]), kind="deliver", deadline=by)
+    # 2: one parent for every flower that takes more than N days (whole path, from flowers.json)
+    over = prio.get("parents_over_days", 5)
+    parents = {}
+    for x, d in fl.items():
+        if x in EPIC or d.get("days", 0) <= over:
+            continue
+        steps = d.get("steps") or []
+        par = steps[-2][0] if len(steps) >= 2 else None
+        if par in fl and par not in EPIC:
+            parents.setdefault(par, []).append(x)
+    for par, xs in sorted(parents.items()):
+        add(2, par, 1, "parent for " + ", ".join(xs[:3]) + ("…" if len(xs) > 3 else ""))
+    # 3: Guria's flowers and every seasonal one
+    for f in prio.get("guria", []):
+        add(3, f, prio.get("guria_each", 2), "Guria asks for it")
+    seeds = flowers.get("seeds", {})
+    for f in sorted(fl):
+        if f not in EPIC and len(seeds.get(fl[f].get("seed"), {}).get("seasons", [1, 2])) == 1:
+            add(3, f, prio.get("seasonal_each", 2), f"seasonal ({seeds[fl[f]['seed']]['seasons'][0]})")
+    # 4: Bloom Doll
+    for f, q in prio.get("bloom_doll", {}).items():
+        add(4, f, q, "Bloom Doll")
+    # 5: chores
     act = farm.get("activity", {})
-    growing = {}
-    for b in farm.get("flower_beds", []):
-        if b.get("name") in fl and b.get("planted_at"):
-            growing[b["name"]] = growing.get(b["name"], 0) + 1
-    chores = []
     for c in farm.get("chores", []):
         m = re.match(r"Grow (.+?) (\d+) times?", c.get("name") or "")
         if m and m.group(1) in fl:
-            done = act.get(f"{m.group(1)} Harvested", 0) - (c.get("initial") or 0)
-            chores.append((c, m.group(1), int(m.group(2)), int(done)))
-    out = []
-    for c, f, n, done in chores:
-        left = max(0, n - done - growing.get(f, 0))
-        out.append({"flower": f, "count": left, "owed": n, "held": done, "growing": growing.get(f, 0), "by": by,
-                    "kind": "grow", "note": f"{c['npc'].title()} chore: grow {f} {n}x", "reward": c.get("reward"),
-                    "tickets": ((c.get("reward") or {}).get("items") or {}).get(ticket, 0)})
-    for f, q in owe.items():
-        # what you hold and what is already growing count; chore harvests do not, since a chore may not fit the week
-        short = q - int(inv.get(f, 0)) - growing.get(f, 0)
-        out.insert(0, {"flower": f, "count": max(0, short), "owed": q, "held": int(inv.get(f, 0)),
-                       "growing": growing.get(f, 0), "by": by, "kind": "deliver", "note": " + ".join(why[f])})
-    # stock to keep for orders that come back (e.g. Guria's balloon flowers): counted after
-    # this week's deliveries, due by the end of next week
-    for f, q in (stock or {}).items():
-        if f not in fl:
-            continue
-        left_after = int(inv.get(f, 0)) - owe.get(f, 0)
-        short = q - max(0, left_after) - max(0, growing.get(f, 0) - max(0, owe.get(f, 0) - int(inv.get(f, 0))))
-        out.append({"flower": f, "count": max(0, short), "owed": q, "held": max(0, left_after),
-                    "growing": growing.get(f, 0), "by": by + 7 * DAY, "kind": "stock",
-                    "note": f"keep {q} in stock"})
+            f, n = m.group(1), int(m.group(2))
+            done = int(act.get(f"{f} Harvested", 0) - (c.get("initial") or 0))
+            left = max(0, n - done - growing.get(f, 0))
+            out.append({"flower": f, "count": left, "owed": n, "held": done, "growing": growing.get(f, 0), "by": by,
+                        "kind": "grow", "tier": 5, "note": f"{c['npc'].title()} chore: grow {f} {n}x",
+                        "reward": c.get("reward"),
+                        "tickets": ((c.get("reward") or {}).get("items") or {}).get(ticket, 0)})
+    # 6: two of every flower
+    for f in sorted(fl):
+        if f not in EPIC:
+            add(6, f, prio.get("every_each", 2), "2 of every flower")
+    # 7: Floral Bed (flowers only)
+    for f, q in prio.get("floral_bed", {}).items():
+        add(7, f, q, "Floral Bed")
     return out
 
 

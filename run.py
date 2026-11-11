@@ -334,7 +334,7 @@ def main():
     fl = load(os.path.join(DATA, "flowers.json"), {})
     if fl and farm_d.get("flower_beds") is not None and farm_d.get("season_started"):
         owed = flowerplan.needs(farm_d, fl, board_week, int(time.time() * 1000), fetch.TICKET,
-                                stock=cfg.get("flower_stock", {}))
+                                prio=cfg.get("flower_priorities", {}))
         fp = flowerplan.plan_week(farm_d, fl, int(time.time() * 1000), prices["prices"],
                              tz_offset_h=cfg.get("timezone_offset_hours", 0), awake=tuple(cfg.get("awake_hours", (0, 24))),
                              board_now=[b["label"] for b in board_week.get("board", []) if b["category"] == "Flowers"],
