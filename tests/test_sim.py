@@ -180,7 +180,7 @@ class FlowerPlan(unittest.TestCase):
         r = FP.plan(farm, flowers, start, target_start_ms=start, target_days=4, tz_offset_h=0, awake=(0, 24),
                     must_have=[{"flower": "Red Daffodil", "count": 1, "by": start + 72 * H}])
         self.assertEqual(r["schedule"][0]["flower"], "Red Daffodil")
-        self.assertEqual(r["must_have"][0]["done"], 1)
+        self.assertEqual(r["must_have"][0]["left_after_full"], 0)
 
 
 class FlowerStockTest(unittest.TestCase):

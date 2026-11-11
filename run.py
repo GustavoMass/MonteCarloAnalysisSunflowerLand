@@ -336,6 +336,7 @@ def main():
         owed = flowerplan.needs(farm_d, fl, board_week, int(time.time() * 1000), fetch.TICKET,
                                 prio=cfg.get("flower_priorities", {}))
         fp = flowerplan.plan_week(farm_d, fl, int(time.time() * 1000), prices["prices"],
+                             extend_days=7 * cfg.get("flower_plan_weeks", 26),   # unseen: goals planned through
                              tz_offset_h=cfg.get("timezone_offset_hours", 0), awake=tuple(cfg.get("awake_hours", (0, 24))),
                              board_now=[b["label"] for b in board_week.get("board", []) if b["category"] == "Flowers"],
                              must_have=[{**m, "by": int((dt.datetime.strptime(m["by"], "%Y-%m-%d %H:%M")
