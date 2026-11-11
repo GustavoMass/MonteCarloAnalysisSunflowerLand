@@ -152,6 +152,22 @@ class FlowerPlanInvariants(unittest.TestCase):
                          extend_days=8 * 7, keep_full=True)
         check(self, farm, flowers, r, tz, awake, "live farm")
 
+    @unittest.skipUnless(os.path.exists(os.path.join(DATA, "farm_3621107187220366.json")), "needs your farm")
+    def test_bloom_doll_first_takes_weeks_not_months(self):
+        """3 Primula Enigma, 3 Prism Petal, 2 Celestial Frostbloom with all 4 beds: the chains run side by
+        side, the longest (Primula, 4 steps) first. Must finish inside 4 weeks."""
+        farm, flowers = _load("farm_3621107187220366.json"), _load("flowers.json")
+        cfg = _load(os.path.join("..", "config.json"))
+        now = max([b["planted_at"] for b in farm["flower_beds"] if b.get("planted_at")] + [farm["season_started"]])
+        doll = [m for m in FP.needs(farm, flowers, {}, now, prio=cfg["flower_priorities"]) if m["note"] == "Bloom Doll"]
+        for m in doll:
+            m["tier"], m["by"] = 1, now + 400 * DAY
+        r = FP.plan_week(farm, flowers, now, {}, must_have=doll, tz_offset_h=-3, awake=(6, 23),
+                         extend_days=8 * 7, keep_full=True)
+        self.assertEqual(sum(m["left_after_full"] for m in r["must_have"]), 0)
+        self.assertLess(r["tiers"][1]["done_at"] - now, 28 * DAY)
+        check(self, farm, flowers, r, -3, (6, 23), "doll first")
+
 
 if __name__ == "__main__":
     unittest.main()
