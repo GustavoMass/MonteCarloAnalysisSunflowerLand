@@ -17,8 +17,9 @@ Planner rules:
     more than 5 days, 3 two of Guria's flowers and of every seasonal one,
     4 Bloom Doll, 5 "Grow ..." chores, 6 two of every flower, 7 Floral Bed.
     A tier never uses a flower that an equal or higher tier keeps as a parent.
-    Epic flowers (Prism Petal, Celestial Frostbloom, Primula Enigma) are rare
-    mutations: shown in the goals, never planted for.
+    Epic flowers have fixed recipes like the rest (sfl.world/info/flowers):
+    Prism Petal = Sunpetal + Blue Lotus, Celestial Frostbloom = Bloom + White
+    Pansy, Primula Enigma = Lily + Purple Balloon Flower.
 """
 import datetime as dt
 import re
@@ -27,7 +28,6 @@ SEASONS = ["spring", "summer", "autumn", "winter"]
 H = 3600 * 1000
 DAY = 24 * H
 FAMILY_PRIORITY = {"Cosmos": 90, "Pansy": 80, "Daffodil": 70, "Balloon Flower": 65, "Carnation": 55, "Lotus": 50}
-EPIC = ("Prism Petal", "Celestial Frostbloom", "Primula Enigma")
 TIER_BASE = {1: 200, 2: 180, 3: 160, 4: 140, 5: 120, 6: 100, 7: 80}
 TIER_NAME = {1: "board + orders", 2: "parents for 5+ day flowers", 3: "Guria + seasonal stock",
              4: "Bloom Doll", 5: "weekly chores", 6: "2 of every flower", 7: "Floral Bed"}
@@ -82,8 +82,8 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
     def have(n):
         return stock[n] + sum(1 for _, p in pending if p == n)
 
-    flower_only = {x: [p for p, _ in f.get("parents", []) if p in fl and p not in EPIC]
-                   for x, f in fl.items() if x not in EPIC and not any(p not in fl for p, _ in f.get("parents", []))}
+    flower_only = {x: [p for p, _ in f.get("parents", []) if p in fl]
+                   for x, f in fl.items() if not any(p not in fl for p, _ in f.get("parents", []))}
     musts = sorted((dict(m, done=0) for m in must_have), key=lambda m: m.get("tier", 1))
     # flowers a tier keeps (owed, parents, stock): a tier may not cross-breed them away below that count
     protect = [(m.get("tier", 1), m["flower"], m.get("keep", m.get("owed", m["count"])))
@@ -135,7 +135,7 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
 
     def plantable(name, t):
         sd = fl[name]["seed"]
-        return name not in EPIC and season_at(t) in seeds[sd]["seasons"]
+        return season_at(t) in seeds[sd]["seasons"]
 
     def why_now(name, t):
         for m in musts:
@@ -250,7 +250,7 @@ def needs(farm, flowers, board, now_ms, ticket="Duende Cap", prio=None):
         avail[f] = avail.get(f, 0) - cover
         out.append({"flower": f, "count": q - cover, "owed": q, "keep": q, "held": int(inv.get(f, 0)),
                     "growing": growing.get(f, 0), "covered": cover, "by": deadline, "kind": kind, "tier": tier,
-                    "note": note, "epic": f in EPIC, **kw})
+                    "note": note, **kw})
 
     # 1: weekly board (mega bounty) + open delivery orders
     owe, why = {}, {}
@@ -269,11 +269,11 @@ def needs(farm, flowers, board, now_ms, ticket="Duende Cap", prio=None):
     over = prio.get("parents_over_days", 5)
     parents = {}
     for x, d in fl.items():
-        if x in EPIC or d.get("days", 0) <= over:
+        if d.get("days", 0) <= over:
             continue
         steps = d.get("steps") or []
         par = steps[-2][0] if len(steps) >= 2 else None
-        if par in fl and par not in EPIC:
+        if par in fl:
             parents.setdefault(par, []).append(x)
     for par, xs in sorted(parents.items()):
         add(2, par, 1, "parent for " + ", ".join(xs[:3]) + ("…" if len(xs) > 3 else ""))
@@ -282,7 +282,7 @@ def needs(farm, flowers, board, now_ms, ticket="Duende Cap", prio=None):
         add(3, f, prio.get("guria_each", 2), "Guria asks for it")
     seeds = flowers.get("seeds", {})
     for f in sorted(fl):
-        if f not in EPIC and len(seeds.get(fl[f].get("seed"), {}).get("seasons", [1, 2])) == 1:
+        if len(seeds.get(fl[f].get("seed"), {}).get("seasons", [1, 2])) == 1:
             add(3, f, prio.get("seasonal_each", 2), f"seasonal ({seeds[fl[f]['seed']]['seasons'][0]})")
     # 4: Bloom Doll
     for f, q in prio.get("bloom_doll", {}).items():
@@ -301,8 +301,7 @@ def needs(farm, flowers, board, now_ms, ticket="Duende Cap", prio=None):
                         "tickets": ((c.get("reward") or {}).get("items") or {}).get(ticket, 0)})
     # 6: two of every flower
     for f in sorted(fl):
-        if f not in EPIC:
-            add(6, f, prio.get("every_each", 2), "2 of every flower")
+        add(6, f, prio.get("every_each", 2), "2 of every flower")
     # 7: Floral Bed (flowers only)
     for f, q in prio.get("floral_bed", {}).items():
         add(7, f, q, "Floral Bed")

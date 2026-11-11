@@ -325,8 +325,7 @@ function flowerPlanView() {
   $("prioTable").innerHTML = `<thead><tr><th>#</th><th>Goal</th><th>Flowers</th><th>Have or growing</th><th>Still to grow</th><th>Planned below</th><th>Left after the plan</th></tr></thead><tbody>` +
     [1, 2, 3, 4, 5, 6, 7].map(t => { const ms = ALL.filter(o => o.tier === t), need = ms.reduce((a, o) => a + o.owed, 0), left = ms.reduce((a, o) => a + o.count, 0);
       const pl = Math.min(left, planned[t] || 0);
-      const epic = ms.filter(o => o.epic && o.count > 0).map(o => o.flower);
-      return `<tr><td>${t}</td><td>${TN[t]}${epic.length ? ` <span class="muted">(${[...new Set(epic)].join(", ")}: rare mutations, cannot be planted for)</span>` : ""}${t === 5 && dropped.length ? ` <span class="muted">(skipped: ${dropped.length} do not fit after tiers 1–4)</span>` : ""}</td>
+      return `<tr><td>${t}</td><td>${TN[t]}${t === 5 && dropped.length ? ` <span class="muted">(skipped: ${dropped.length} do not fit after tiers 1–4)</span>` : ""}</td>
         <td class="num">${need}</td><td class="num">${need - left}</td><td class="num">${left}</td><td class="num">${pl || "—"}</td><td class="num ${left - pl > 0 ? "neg" : "pos"}">${left - pl}</td></tr>`; }).join("") + "</tbody>";
   $("owedTable").innerHTML = `<thead><tr><th>Flower</th><th>For</th><th>Reward</th><th>Need</th><th>Held / harvested</th><th>Growing</th><th>Still to plant</th><th>Plan</th></tr></thead><tbody>` +
     O.map(o => { const left = o.count, drop = dropped.includes(o.note), m = (P.must_have || []).find(x => x.note === o.note && x.flower === o.flower);
