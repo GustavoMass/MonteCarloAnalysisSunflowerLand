@@ -180,6 +180,20 @@ class FlowerPlan(unittest.TestCase):
         self.assertEqual(r["must_have"][0]["done"], 1)
 
 
+class FlowerStockTest(unittest.TestCase):
+    def test_stock_counts_after_deliveries_and_growing(self):
+        from sflmc import flowerplan
+        fl = {"flowers": {"Red Edelweiss": {"seed": "Edelweiss Seed", "days": 3, "parents": []},
+                          "Red Balloon Flower": {"seed": "Bloom Seed", "days": 2, "parents": []}}}
+        farm = {"season_started": 0, "inventory": {"Red Edelweiss": 1, "Red Balloon Flower": 3},
+                "orders": [{"from": "raven", "items": {"Red Edelweiss": 1}}],
+                "flower_beds": [{"name": "Red Edelweiss", "planted_at": 1}], "chores": [], "activity": {}}
+        out = flowerplan.needs(farm, fl, {}, 1000, stock={"Red Edelweiss": 2, "Red Balloon Flower": 2})
+        st = {m["flower"]: m for m in out if m["kind"] == "stock"}
+        self.assertEqual(st["Red Edelweiss"]["count"], 1)      # 1 held goes to Raven, 1 growing, 1 to plant
+        self.assertEqual(st["Red Balloon Flower"]["count"], 0)
+
+
 class GrowthTest(unittest.TestCase):
     def test_max_rates_use_nodes_not_history(self):
         from sflmc import growth
