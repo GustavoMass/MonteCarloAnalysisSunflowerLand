@@ -138,7 +138,9 @@ class FlowerPlan(unittest.TestCase):
                                "Blue Clover": {"seed": "Clover Seed", "days": 3, "parents": [["Rhubarb", 25]]}}}
         farm = {"inventory": {"Sunpetal Seed": 5, "Clover Seed": 5, "Cauliflower": 50, "Rhubarb": 100},
                 "flower_beds": [{"name": None}, {"name": None}], "season": "winter", "season_started": start}
-        r = FP.plan(farm, flowers, start + H, target_start_ms=start, target_days=3, tz_offset_h=0, awake=(6, 23))
+        want = [{"flower": f, "count": 2, "by": start + 99 * H, "tier": 6} for f in ("Blue Cosmos", "Blue Clover")]
+        r = FP.plan(farm, flowers, start + H, target_start_ms=start, target_days=3, tz_offset_h=0, awake=(6, 23),
+                    must_have=want)
         self.assertTrue(all(s["flower"] != "Blue Clover" for s in r["schedule"]))   # clover is autumn-only
         self.assertEqual(r["schedule"][0]["flower"], "Blue Cosmos")
         for s in r["schedule"]:                                                     # never planted while asleep
@@ -155,10 +157,11 @@ class FlowerPlan(unittest.TestCase):
                                "Yellow Daffodil": {"seed": "Bloom Seed", "days": 2, "parents": [["Radish", 5]]}}}
         farm = {"inventory": {"Sunpetal Seed": 5, "Bloom Seed": 5, "Radish": 50},
                 "flower_beds": [{"name": None}], "season": "winter", "season_started": start}
-        r = FP.plan(farm, flowers, start, target_start_ms=start, target_days=5, tz_offset_h=0, awake=(0, 24))
+        r = FP.plan(farm, flowers, start, target_start_ms=start, target_days=5, tz_offset_h=0, awake=(0, 24),
+                    must_have=[{"flower": "Red Cosmos", "count": 1, "by": start + 999 * H, "tier": 6}])
         names = [s["flower"] for s in r["schedule"]]
-        self.assertEqual(names[0], "Yellow Daffodil")                  # parent stocked first
-        self.assertTrue(r["schedule"][0]["why"].startswith("parent prep"))
+        self.assertEqual(names[0], "Yellow Daffodil")                  # parent grown first
+        self.assertIn("parent for Red Cosmos", r["schedule"][0]["why"])
         self.assertIn("Red Cosmos", names)                              # target grown later from a second parent
         self.assertLess(names.index("Yellow Daffodil"), names.index("Red Cosmos"))
 
@@ -188,10 +191,16 @@ class FlowerStockTest(unittest.TestCase):
         farm = {"season_started": 0, "inventory": {"Red Edelweiss": 1, "Red Balloon Flower": 3},
                 "orders": [{"from": "raven", "items": {"Red Edelweiss": 1}}],
                 "flower_beds": [{"name": "Red Edelweiss", "planted_at": 1}], "chores": [], "activity": {}}
-        out = flowerplan.needs(farm, fl, {}, 1000, stock={"Red Edelweiss": 2, "Red Balloon Flower": 2})
-        st = {m["flower"]: m for m in out if m["kind"] == "stock"}
-        self.assertEqual(st["Red Edelweiss"]["count"], 1)      # 1 held goes to Raven, 1 growing, 1 to plant
-        self.assertEqual(st["Red Balloon Flower"]["count"], 0)
+        fl["seeds"] = {"Edelweiss Seed": {"days": 3, "seasons": ["winter"]},
+                       "Bloom Seed": {"days": 2, "seasons": ["spring", "summer", "autumn", "winter"]}}
+        out = flowerplan.needs(farm, fl, {}, 1000, prio={"guria": ["Red Balloon Flower"], "guria_each": 2,
+                                                          "seasonal_each": 2, "every_each": 2})
+        tier = lambda t, f: next(m for m in out if m["tier"] == t and m["flower"] == f)   # noqa: E731
+        self.assertEqual(tier(1, "Red Edelweiss")["count"], 0)   # held one goes to Raven
+        self.assertEqual(tier(3, "Red Edelweiss")["count"], 1)   # growing one counts, 1 more to plant
+        self.assertEqual(tier(3, "Red Balloon Flower")["count"], 0)
+        self.assertEqual(tier(6, "Red Balloon Flower")["count"], 1)  # 3 held: 2 kept for Guria, 1 here
+        self.assertEqual(tier(6, "Red Edelweiss")["count"], 2)
 
 
 class GrowthTest(unittest.TestCase):
