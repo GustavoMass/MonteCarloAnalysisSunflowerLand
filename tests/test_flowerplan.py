@@ -151,6 +151,23 @@ class FlowerPlanInvariants(unittest.TestCase):
         r = FP.plan_week(farm, flowers, now, {}, must_have=owed, tz_offset_h=tz, awake=awake,
                          extend_days=8 * 7, keep_full=True)
         check(self, farm, flowers, r, tz, awake, "live farm")
+        # a goal grows parents only for its own copies (not for lower goals' copies of the same flower)
+        owed = {}
+        for m in r["must_have"]:
+            owed[(m.get("tier", 1), m["flower"])] = owed.get((m.get("tier", 1), m["flower"]), 0) + m["count"]
+        used = {}                                   # a flower crossed away may be grown again
+        for x in r["schedule_full"]:
+            q, parent = x["cross"].split(" ", 1)
+            used[parent] = used.get(parent, 0) + int(q)
+        last = {}
+        for x in r["schedule_full"]:
+            w = x["why"].split(" · parent for ")
+            if len(w) == 2 and "(via" not in w[1] and x["parent_for"]:   # last step of a chain
+                k = (int(w[0]), w[1])
+                last[k] = last.get(k, 0) + 1
+        for k, n in last.items():
+            self.assertLessEqual(n, owed.get(k, 0) + used.get(k[1], 0),
+                                 f"{n} chains for tier {k[0]} {k[1]}, owed {owed.get(k, 0)}")
 
     @unittest.skipUnless(os.path.exists(os.path.join(DATA, "farm_3621107187220366.json")), "needs your farm")
     def test_bloom_doll_first_takes_weeks_not_months(self):
