@@ -83,7 +83,7 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
     musts = [dict(m, done=0) for m in must_have]
     protect = {}
     for m in must_have:
-        if m.get("kind") == "deliver":
+        if m.get("kind") in ("deliver", "stock"):     # never cross-breed away a flower you owe or keep
             protect[m["flower"]] = protect.get(m["flower"], 0) + m.get("owed", m["count"])
 
     def blocked(x):
@@ -99,7 +99,8 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
                 # deliveries (tickets) before chores; within each, least slack first so long grows still fit
                 slack = (m["by"] - done_at) / DAY
                 rate = 40 * m.get("tickets", 0) / max(1, m["count"] * grow(name) / DAY)   # tickets per bed-day
-                v = max(v, (160 if m.get("kind") == "deliver" else 150 + rate) + max(0.0, 7 - slack))
+                base = {"deliver": 160, "stock": 100}.get(m.get("kind"), 150 + rate)
+                v = max(v, base + max(0.0, 7 - slack))
         h = have(name) - sum(1 for p, x in reserved.items() if p == name)
         if h == 0:
             unlocks = [x for x in flower_only if name in flower_only[x] and blocked(x)]
@@ -235,7 +236,7 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
 
 
 
-def needs(farm, flowers, board, now_ms, ticket="Duende Cap"):
+def needs(farm, flowers, board, now_ms, ticket="Duende Cap", stock=None):
     """Flowers you owe right now, as planner must-haves due at the end of this week:
     weekly-board flowers not delivered yet and open delivery orders (minus the ones
     you hold), plus chores like "Grow Blue Pansy 6 times" (only fresh harvests count)."""
@@ -275,6 +276,16 @@ def needs(farm, flowers, board, now_ms, ticket="Duende Cap"):
         short = q - int(inv.get(f, 0)) - growing.get(f, 0)
         out.insert(0, {"flower": f, "count": max(0, short), "owed": q, "held": int(inv.get(f, 0)),
                        "growing": growing.get(f, 0), "by": by, "kind": "deliver", "note": " + ".join(why[f])})
+    # stock to keep for orders that come back (e.g. Guria's balloon flowers): counted after
+    # this week's deliveries, due by the end of next week
+    for f, q in (stock or {}).items():
+        if f not in fl:
+            continue
+        left_after = int(inv.get(f, 0)) - owe.get(f, 0)
+        short = q - max(0, left_after) - max(0, growing.get(f, 0) - max(0, owe.get(f, 0) - int(inv.get(f, 0))))
+        out.append({"flower": f, "count": max(0, short), "owed": q, "held": max(0, left_after),
+                    "growing": growing.get(f, 0), "by": by + 7 * DAY, "kind": "stock",
+                    "note": f"keep {q} in stock"})
     return out
 
 

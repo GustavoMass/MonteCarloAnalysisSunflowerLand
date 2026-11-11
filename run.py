@@ -333,14 +333,15 @@ def main():
 
     fl = load(os.path.join(DATA, "flowers.json"), {})
     if fl and farm_d.get("flower_beds") is not None and farm_d.get("season_started"):
-        owed = flowerplan.needs(farm_d, fl, board_week, int(time.time() * 1000), fetch.TICKET)
+        owed = flowerplan.needs(farm_d, fl, board_week, int(time.time() * 1000), fetch.TICKET,
+                                stock=cfg.get("flower_stock", {}))
         fp = flowerplan.plan_week(farm_d, fl, int(time.time() * 1000), prices["prices"],
                              tz_offset_h=cfg.get("timezone_offset_hours", 0), awake=tuple(cfg.get("awake_hours", (0, 24))),
                              board_now=[b["label"] for b in board_week.get("board", []) if b["category"] == "Flowers"],
                              must_have=[{**m, "by": int((dt.datetime.strptime(m["by"], "%Y-%m-%d %H:%M")
                                                          - dt.timedelta(hours=cfg.get("timezone_offset_hours", 0)))
                                                         .replace(tzinfo=dt.timezone.utc).timestamp() * 1000)}
-                                        for m in cfg.get("flower_must_have", [])] + [m for m in owed if m["count"] > 0])
+                                        for m in cfg.get("flower_must_have", [])] + list(owed))   # count 0 still protects what you owe
         fp["owed"] = owed
         out["flower_plan"] = fp
 

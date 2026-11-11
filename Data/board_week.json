@@ -1,8 +1,7 @@
 {
- "fetched": "2026-11-10",
+ "fetched": "2026-11-11",
  "season": "winter",
  "double_dates": [
-  "2026-11-10",
   "2026-11-19",
   "2026-11-25",
   "2026-12-05",
@@ -13,7 +12,7 @@
    "label": "Purple Pansy",
    "category": "Flowers",
    "tickets": 3,
-   "done": false
+   "done": true
   },
   {
    "label": "Yellow Daffodil",
@@ -79,7 +78,7 @@
    "label": "Octopus",
    "category": "Crustaceans",
    "tickets": 20,
-   "done": false
+   "done": true
   },
   {
    "label": "Hermit Crab",
@@ -163,7 +162,7 @@
    "label": "Giant Banana",
    "category": "Giant Fruit",
    "tickets": 30,
-   "done": false
+   "done": true
   },
   {
    "label": "Giant Apple",

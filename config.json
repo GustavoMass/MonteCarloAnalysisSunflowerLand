@@ -150,5 +150,7 @@
   "timezone_offset_hours": -3,
   "awake_hours": [6, 23],
   "_must_have": "Extra harvests you need by a deadline (your local time). Board flowers, delivery orders and Grow-flower chores are added automatically.",
-  "flower_must_have": []
+  "flower_must_have": [],
+  "_flower_stock": "Flowers to keep in stock for orders that come back, counted after this week's deliveries and planned below them (never used as a cross-breed parent below this count). Guria asks for balloon flowers and Purple Daffodil; Raven asked for Red + Yellow Edelweiss in winter.",
+  "flower_stock": {"Purple Daffodil": 2, "Blue Balloon Flower": 2, "Red Balloon Flower": 2, "Red Edelweiss": 2, "Yellow Edelweiss": 2}
 }
