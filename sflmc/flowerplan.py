@@ -15,7 +15,7 @@ Planner rules:
   * Goals come in strict tiers (needs() builds them, config flower_priorities):
     1 weekly board + delivery orders, 2 a parent for every flower that takes
     more than 5 days, 3 two of Guria's flowers and of every seasonal one,
-    4 Bloom Doll, 5 "Grow ..." chores, 6 two of every flower, 7 Floral Bed.
+    4 Bloom Doll, 5 "Grow ..." chores, 6 Floral Bed, 7 two of every flower.
     A free bed always takes the best tier it can start; tiers may be met in part.
   * Goal progress counts flowers that exist (held + growing), handed out tier by
     tier. A flower grown only to be crossed into another counts toward nothing.
@@ -35,7 +35,7 @@ H = 3600 * 1000
 DAY = 24 * H
 TIER_BASE = {1: 200, 2: 180, 3: 160, 4: 140, 5: 120, 6: 100, 7: 80}
 TIER_NAME = {1: "board + orders", 2: "parents for 5+ day flowers", 3: "Guria + seasonal stock",
-             4: "Bloom Doll", 5: "weekly chores", 6: "2 of every flower", 7: "Floral Bed"}
+             4: "Bloom Doll", 5: "weekly chores", 6: "Floral Bed", 7: "2 of every flower"}
 SKILL_MULT = {"Blooming Boost": [0.9, 0.875, 0.85], "Flower Power": [0.8, 0.7, 0.6], "Flowery Abode": [1.5, 1.6, 1.7]}
 
 
@@ -96,8 +96,8 @@ class _Planner:
         for m in self.musts:
             if m.get("kind") != "grow":
                 self.protect.setdefault(m["flower"], []).append((m.get("tier", 1), m.get("keep", m.get("owed", m["count"]))))
-        self.reserved = {}                         # flower -> the flower it will be crossed into
-        self.intent = {}                           # flower -> [(final flower, tier)]: middle step of a chain
+        self.reserved = {}                         # (flower, flower it will be crossed into) -> count
+        self.intent = {}                           # flower -> [(next flower, final flower, tier)]: chain middle steps
         self.need = {}
         self.schedule = []
 
@@ -129,8 +129,8 @@ class _Planner:
         left = dict(self.stock)
         for _, n in self.pending:
             left[n] = left.get(n, 0) + 1
-        for p in self.reserved:
-            left[p] = left.get(p, 0) - 1
+        for (p, _), k in self.reserved.items():
+            left[p] = left.get(p, 0) - k
         for m in self.musts:
             if m.get("kind") == "grow":
                 self.need[m["_i"]] = max(0, m["count"] - m["done"])
@@ -138,16 +138,20 @@ class _Planner:
             owed = m.get("owed", m["count"])
             pool = left.get(m["flower"], 0)
             if m.get("tier", 1) == 1:              # only what is ready by the deadline
-                on_time = (self.stock.get(m["flower"], 0) - sum(1 for p in self.reserved if p == m["flower"])
+                on_time = (self.stock.get(m["flower"], 0) - self.kept(m["flower"])
                            + sum(1 for r, n in self.pending if n == m["flower"] and self.next_awake(r) <= m["by"]))
                 pool = min(pool, on_time)
             got = max(0, min(pool, owed))
             left[m["flower"]] = left.get(m["flower"], 0) - got
             self.need[m["_i"]] = owed - got
 
+    def kept(self, flower, target=None):
+        """How many of flower are kept to be crossed (into target, or into anything)."""
+        return sum(k for (f, tg), k in self.reserved.items() if f == flower and (target is None or tg == target))
+
     def tier_of(self, name):
         t = min((m.get("tier", 1) for m in self.by_flower.get(name, []) if self.need.get(m["_i"], 0) > 0), default=99)
-        return min([t] + [tr for _, tr in self.intent.get(name, [])])
+        return min([t] + [tr for _, _, tr in self.intent.get(name, [])])
 
     def value(self, name, t):
         """Worth of one more of this flower planted at t: its best unmet tier."""
@@ -159,8 +163,8 @@ class _Planner:
                 if tier == 5:
                     extra += min(5.0, 5 * m.get("tickets", 0) / max(1, m["count"] * self.grow(name) / DAY))
                 v = max(v, TIER_BASE.get(tier, 0) + extra)
-        for _, tr in self.intent.get(name, []):
-            v = max(v, TIER_BASE.get(tr, 0) - 6)
+        for _, _, tr in self.intent.get(name, []):  # a chain already started goes on first
+            v = max(v, TIER_BASE.get(tr, 0) + 1)
         return v
 
     def why(self, name):
@@ -175,13 +179,15 @@ class _Planner:
         best = None
         for parent, qty in self.fl[name].get("parents", []):
             if parent in self.fl:
-                if self.reserved.get(parent) == name:
-                    keep = 0
+                mine = self.kept(parent, name)          # grown for this very flower
+                ready_mine = min(mine, self.stock.get(parent, 0))
+                if ready_mine >= qty:
+                    cand = (0.0, parent, qty, 0)
                 else:
-                    keep = sum(q for tr, q in self.protect.get(parent, []) if tr <= tier)
-                if self.stock.get(parent, 0) - keep < qty:
-                    continue
-                cand = (0.0 if self.reserved.get(parent) == name else 0.5, parent, qty, 0)
+                    keep = sum(q for tr, q in self.protect.get(parent, []) if tr <= tier) + self.kept(parent)
+                    if self.stock.get(parent, 0) - keep < qty:
+                        continue
+                    cand = (0.5, parent, qty, 0)
             else:
                 buy = max(0, qty - self.inv.get(parent, 0))
                 cand = (buy * (self.prices.get(parent) or 99), parent, qty, buy)
@@ -190,23 +196,33 @@ class _Planner:
         return best
 
     def chain(self, name, tier, t, depth, seen=()):
-        """Ways to start a missing parent of name: (plant now, option, kept for, grow until name, steps)."""
+        """Paths to grow a missing parent of name, as [flower to plant now, ..., name], with the
+        option for the first flower and the grow time until name can be planted."""
         for parent, qty in self.fl[name].get("parents", []):
-            if parent not in self.fl or qty != 1 or self.reserved.get(parent) or parent in seen or not self.plantable(parent, t):
+            if parent not in self.fl or qty != 1 or parent in seen or not self.plantable(parent, t):
                 continue
             opt = self.option(parent, tier)
             if opt:
-                yield parent, opt, name, self.grow(parent), 1
+                yield [parent, name], opt, self.grow(parent)
             elif depth > 0:
-                for q, qopt, tgt, g, d in self.chain(parent, tier, t, depth - 1, seen + (name,)):
-                    yield q, qopt, tgt, g + self.grow(parent), d + 1
+                for path, qopt, g in self.chain(parent, tier, t, depth - 1, seen + (name,)):
+                    yield path + [name], qopt, g + self.grow(parent)
+
+    def coming(self, name):
+        """How many of name are on their way through chains (parent kept for it, or a step planned)."""
+        return sum(k for (_, tg), k in self.reserved.items() if tg == name) + \
+            sum(1 for lst in self.intent.values() for nxt, _, _ in lst if nxt == name)
 
     def waiting_on_parent(self, name):
-        ps = [p for p, _ in self.fl[name].get("parents", [])]
-        return any(n in ps for _, n in self.pending) or any(self.intent.get(p) for p in ps)
+        """Enough chains for name already running? One per flower still needed, side by side
+        (3 Primula Enigma = 3 chains at once, bed room permitting)."""
+        wanted = sum(self.need.get(m["_i"], 0) for m in self.by_flower.get(name, [])) + len(self.intent.get(name, []))
+        return self.coming(name) >= wanted
 
     # ---- one bed decision
     def pick(self, t):
+        """Best planting for a free bed: highest goal first; inside a goal, the flower whose
+        (shortest) path is longest starts first, so the goal is done soonest."""
         best = None
         for name in self.fl:
             v = self.value(name, t)
@@ -215,43 +231,52 @@ class _Planner:
             now_ok = self.plantable(name, t)
             opt = self.option(name, self.tier_of(name)) if now_ok else None
             if opt:
-                key = (v, -self.grow(name))
+                key = (v, self.grow(name))
                 if best is None or key > best[0]:
                     best = (key, name, opt, None)
                 continue
             if self.waiting_on_parent(name):
                 continue
-            for q, qopt, tgt, g, depth in self.chain(name, self.tier_of(name), t, 2):
-                if t + g + self.grow(name) > self.full_until:
-                    continue
-                key = (v - 12 * depth - (0 if now_ok else 10), -(g + self.grow(name)))
-                if best is None or key > best[0]:
-                    best = (key, q, qopt, (tgt, name))
+            paths = [(g, path, qopt) for path, qopt, g in self.chain(name, self.tier_of(name), t, 2)
+                     if t + g + self.grow(name) <= self.full_until]
+            if not paths:
+                continue
+            g, path, qopt = min(paths, key=lambda x: (x[0], len(x[1])))     # shortest way there
+            key = (v - (0 if now_ok else 10), g + self.grow(name))
+            if best is None or key > best[0]:
+                best = (key, path[0], qopt, path)
         return best
 
     def plant(self, bed, t, choice):
-        _, name, (cost, parent, qty, buy), chained = choice
+        _, name, (cost, parent, qty, buy), path = choice
         target = None
-        if chained:
-            target, final = chained
-            if target != final:
-                self.intent.setdefault(target, []).append((final, self.tier_of(final)))
-            why = f"{self.tier_of(final)} · parent for {final}" + (f" (via {target})" if target != final else "")
-        elif self.intent.get(name) and self.tier_of(name) == min(tr for _, tr in self.intent[name]):
-            final, tr = self.intent[name].pop(0)
+        if path:                                   # first step of a chain: keep each step for the next
+            final = path[-1]                       # label with the goal itself, not a chain passing through
+            tier = min((m.get("tier", 1) for m in self.by_flower.get(final, []) if self.need.get(m["_i"], 0) > 0),
+                       default=self.tier_of(final))
+            target = path[1]
+            for a, b in zip(path[1:-1], path[2:]):
+                self.intent.setdefault(a, []).append((b, final, tier))
+            why = f"{tier} · parent for {final}" + (f" (via {', '.join(path[1:-1])})" if len(path) > 2 else "")
+        elif self.intent.get(name) and self.tier_of(name) == min(tr for _, _, tr in self.intent[name]):
+            nxt, final, tr = self.intent[name].pop(0)  # a middle step: kept for the next flower
             if not self.intent[name]:
                 del self.intent[name]
-            target, why = final, f"{tr} · parent for {final}"
+            target = nxt
+            why = f"{tr} · parent for {final}" + (f" (via {nxt})" if nxt != final else "")
         else:
             why = self.why(name)
         if parent in self.fl:
             self.stock[parent] -= qty
-            if self.reserved.get(parent) == name:
-                del self.reserved[parent]
+            k = self.kept(parent, name)
+            if k:
+                self.reserved[(parent, name)] = k - min(k, qty)
+                if not self.reserved[(parent, name)]:
+                    del self.reserved[(parent, name)]
         else:
             self.inv[parent] = max(0, self.inv.get(parent, 0) - qty)
         if target:
-            self.reserved[name] = target
+            self.reserved[(name, target)] = self.reserved.get((name, target), 0) + 1
         else:                                       # chores count fresh harvests
             for m in self.by_flower.get(name, []):
                 if m.get("kind") == "grow" and m["done"] < m["count"] and self.next_awake(t + self.grow(name)) <= m["by"]:
@@ -407,12 +432,12 @@ def needs(farm, flowers, board, now_ms, ticket="Duende Cap", prio=None):
                         "kind": "grow", "tier": 5, "note": f"{c['npc'].title()} chore: grow {f} {n}x",
                         "reward": c.get("reward"),
                         "tickets": ((c.get("reward") or {}).get("items") or {}).get(ticket, 0)})
-    # 6: two of every flower
-    for f in sorted(fl):
-        add(6, f, prio.get("every_each", 2), "2 of every flower")
-    # 7: Floral Bed (flowers only)
+    # 6: Floral Bed (flowers only)
     for f, q in prio.get("floral_bed", {}).items():
-        add(7, f, q, "Floral Bed")
+        add(6, f, q, "Floral Bed")
+    # 7: two of every flower
+    for f in sorted(fl):
+        add(7, f, prio.get("every_each", 2), "2 of every flower")
     return out
 
 

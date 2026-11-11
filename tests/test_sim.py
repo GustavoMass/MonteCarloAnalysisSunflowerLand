@@ -199,8 +199,8 @@ class FlowerStockTest(unittest.TestCase):
         self.assertEqual(tier(1, "Red Edelweiss")["count"], 0)   # held one goes to Raven
         self.assertEqual(tier(3, "Red Edelweiss")["count"], 1)   # growing one counts, 1 more to plant
         self.assertEqual(tier(3, "Red Balloon Flower")["count"], 0)
-        self.assertEqual(tier(6, "Red Balloon Flower")["count"], 1)  # 3 held: 2 kept for Guria, 1 here
-        self.assertEqual(tier(6, "Red Edelweiss")["count"], 2)
+        self.assertEqual(tier(7, "Red Balloon Flower")["count"], 1)  # 3 held: 2 kept for Guria, 1 here
+        self.assertEqual(tier(7, "Red Edelweiss")["count"], 2)
 
 
 class GrowthTest(unittest.TestCase):

@@ -320,7 +320,7 @@ function flowerPlanView() {
   const group = ms => ms < P.target_start ? `This week (until ${fmt(P.target_start)})` : ms < P.horizon ? "Next week" : "After";
   const ALL = P.owed || [], O = ALL.filter(o => o.tier === 1 || o.tier === 5), dropped = (P.dropped || []).map(d => d.note);
   const TN = {1: "Weekly board + delivery orders", 2: "One parent for every flower that takes more than 5 days", 3: "2 of Guria's flowers and of every seasonal one",
-    4: "Bloom Doll", 5: "Weekly “Grow …” chores", 6: "2 of every flower", 7: "Floral Bed (flowers only)"};
+    4: "Bloom Doll", 5: "Weekly “Grow …” chores", 6: "Floral Bed (flowers only)", 7: "2 of every flower"};
   const T = P.tiers || {}, until = fmt(P.horizon).split(",")[0], weeks = Math.round((P.full_until - P.target_start) / 6048e5);
   $("prioTable").innerHTML = `<thead><tr><th>#</th><th>Goal</th><th>Flowers</th><th>Have now</th><th>Planted by ${until}</th><th>Goal met</th></tr></thead><tbody>` +
     [1, 2, 3, 4, 5, 6, 7].map(t => { const ms = ALL.filter(o => o.tier === t), need = ms.reduce((a, o) => a + o.owed, 0), have = ms.reduce((a, o) => a + (o.owed - o.count), 0), x = T[t];

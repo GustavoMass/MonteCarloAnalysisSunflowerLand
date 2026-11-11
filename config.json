@@ -151,7 +151,7 @@
   "awake_hours": [6, 23],
   "_must_have": "Extra harvests you need by a deadline (your local time). Board flowers, delivery orders and Grow-flower chores are added automatically.",
   "flower_must_have": [],
-  "_flower_priorities": "Flower goals in strict order: 1 weekly board + delivery orders; 2 one parent for every flower whose path takes more than parents_over_days; 3 guria_each of Guria's flowers and seasonal_each of every seasonal flower; 4 Bloom Doll; 5 Grow-flower chores; 6 every_each of every flower; 7 Floral Bed (flowers only). Flower and crafting recipes from sfl.world/info/flowers and sfl.world/info/crafting.",
+  "_flower_priorities": "Flower goals in strict order: 1 weekly board + delivery orders; 2 one parent for every flower whose path takes more than parents_over_days; 3 guria_each of Guria's flowers and seasonal_each of every seasonal flower; 4 Bloom Doll; 5 Grow-flower chores; 6 Floral Bed (flowers only); 7 every_each of every flower. Flower and crafting recipes from sfl.world/info/flowers and sfl.world/info/crafting.",
   "_flower_plan_weeks": "Weeks the flower plan runs on unseen after the two shown, so goal dates are real.",
   "flower_plan_weeks": 26,
   "flower_priorities": {"parents_over_days": 5,
