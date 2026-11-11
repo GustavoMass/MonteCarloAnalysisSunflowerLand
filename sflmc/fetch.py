@@ -96,7 +96,8 @@ def parse_farm(raw, farm_id):
                    for o in ((f.get("delivery") or {}).get("orders") or []) if not o.get("completedAt")],
         "inventory": {k: float(v) for k, v in inv.items()},
         "flower_beds": [{"name": (b.get("flower") or {}).get("name"), "planted_at": (b.get("flower") or {}).get("plantedAt"),
-                         "boosted_ms": (b.get("flower") or {}).get("boostedTime", 0)}
+                         "boosted_ms": (b.get("flower") or {}).get("boostedTime", 0),
+                         "base_duration_ms": (b.get("flower") or {}).get("baseDurationMs")}
                         for b in ((f.get("flowers") or {}).get("flowerBeds") or {}).values()],
         "season": (f.get("season") or {}).get("season"),
         "season_started": (f.get("season") or {}).get("startedAt"),
