@@ -69,9 +69,40 @@ def check(tc, farm, flowers, r, tz, awake, label):
     for x in sched:
         season = SEASONS[(SEASONS.index(season0) + int((x["plant"] - s0) // (7 * DAY))) % 4]
         tc.assertIn(season, seeds[fl[x["flower"]]["seed"]]["seasons"], f"{label}: {x['flower']} out of season")
-    # 6. shown part is the first two weeks only
+    # 6. grow time is the game's: seed base time x your permanent boosts (never faster)
+    mult, _ = FP.grow_multiplier(farm)
+    for x in sched:
+        base = seeds[fl[x["flower"]]["seed"]]["days"] * DAY
+        tc.assertAlmostEqual(x["ready"] - x["plant"], base * mult, delta=1000,
+                             msg=f"{label}: {x['flower']} grows in {(x['ready'] - x['plant']) / H:.1f} h")
+    # 7. beds growing now are ready when the game says (plantedAt + baseDurationMs)
+    for b, fb in zip(r["beds"], farm["flower_beds"]):
+        if b.get("growing"):
+            tc.assertEqual(b["ready"], FP.bed_ready(fb, flowers))
+    # 8. shown part is the first two weeks only
     for x in r["schedule"]:
         tc.assertLess(x["plant"], r["horizon"])
+
+
+class GrowTimeRules(unittest.TestCase):
+    def test_multiplier_from_boosts(self):
+        self.assertEqual(FP.grow_multiplier({})[0], 1.0)
+        self.assertAlmostEqual(FP.grow_multiplier({"skills": {"Blooming Boost": 1}})[0], 0.9)
+        self.assertAlmostEqual(FP.grow_multiplier({"skills": {"Blooming Boost": 2, "Flower Power": 1},
+                                                   "wearables": ["Flower Crown"], "collectibles": ["Flower Fox"]})[0],
+                               0.875 * 0.8 * 0.5 * 0.9)
+
+    def test_bed_ready_uses_base_duration(self):
+        fl = {"flowers": {"Purple Cosmos": {"seed": "Sunpetal Seed"}}, "seeds": {"Sunpetal Seed": {"days": 1}}}
+        self.assertEqual(FP.bed_ready({"name": "Purple Cosmos", "planted_at": 1000, "base_duration_ms": 77_760_000}, fl),
+                         1000 + 77_760_000)                                  # speed-rate model
+        self.assertEqual(FP.bed_ready({"name": "Purple Cosmos", "planted_at": 1000}, fl), 1000 + DAY)  # legacy
+
+    @unittest.skipUnless(os.path.exists(os.path.join(DATA, "farm_3621107187220366.json")), "needs your farm")
+    def test_live_sunpetal_takes_most_of_a_day(self):
+        farm, flowers = _load("farm_3621107187220366.json"), _load("flowers.json")
+        mult, _ = FP.grow_multiplier(farm)
+        self.assertGreaterEqual(flowers["seeds"]["Sunpetal Seed"]["days"] * DAY * mult, 12 * H)
 
 
 class FlowerPlanInvariants(unittest.TestCase):

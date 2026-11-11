@@ -1,7 +1,7 @@
 {
  "farm_id": "3621107187220366",
  "source": "https://sfl-manager.com/api/v3/land/3621107187220366",
- "fetched": "2026-11-11 08:22",
+ "fetched": "2026-11-11 09:42",
  "skills": {
   "Efficient Feeding": 1,
   "Restless Animals": 2,
@@ -934,22 +934,26 @@
   {
    "name": "Yellow Lotus",
    "planted_at": 1794364113732,
-   "boosted_ms": 285318817
+   "boosted_ms": 285318817,
+   "base_duration_ms": 146681183
   },
   {
    "name": "Purple Cosmos",
    "planted_at": 1794387349132,
-   "boosted_ms": 0
+   "boosted_ms": 0,
+   "base_duration_ms": 77760000
   },
   {
    "name": "Purple Carnation",
    "planted_at": 1794364113732,
-   "boosted_ms": 192469952
+   "boosted_ms": 192469952,
+   "base_duration_ms": 239530048
   },
   {
    "name": "Blue Daffodil",
    "planted_at": 1794387363616,
-   "boosted_ms": 0
+   "boosted_ms": 0,
+   "base_duration_ms": 155520000
   }
  ],
  "season": "winter",
