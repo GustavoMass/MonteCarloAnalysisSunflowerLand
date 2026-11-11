@@ -34,7 +34,12 @@ TIER_NAME = {1: "board + orders", 2: "parents for 5+ day flowers", 3: "Guria + s
 
 
 def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7,
-         tz_offset_h=-3, awake=(6, 23), board_now=(), must_have=()):
+         tz_offset_h=-3, awake=(6, 23), board_now=(), must_have=(), extend_days=0, keep_full=False):
+    """Plan beds until the shown horizon (end of next week) and, unseen, extend_days more,
+    so long goals are planned through; only the shown part is returned as the schedule.
+
+    Goal progress is counted from flowers that exist (held + growing, minus parents
+    reserved to be crossed away), handed out tier by tier, never from planting counters."""
     seeds, fl = flowers["seeds"], flowers["flowers"]
     inv = dict(farm.get("inventory", {}))
     stock = {n: int(inv.get(n, 0)) for n in fl}
@@ -43,6 +48,7 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
     prices = prices or {}
     target_start = target_start_ms or (s_start + 7 * DAY)
     horizon = target_start + target_days * DAY
+    full = horizon + extend_days * DAY
 
     def season_at(ms):
         return SEASONS[(SEASONS.index(season_now) + int((ms - s_start) // (7 * DAY))) % 4]
@@ -85,12 +91,43 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
     flower_only = {x: [p for p, _ in f.get("parents", []) if p in fl]
                    for x, f in fl.items() if not any(p not in fl for p, _ in f.get("parents", []))}
     musts = sorted((dict(m, done=0) for m in must_have), key=lambda m: m.get("tier", 1))
+    for i, m in enumerate(musts):
+        m["_i"] = i
     # flowers a tier keeps (owed, parents, stock): a tier may not cross-breed them away below that count
     protect = [(m.get("tier", 1), m["flower"], m.get("keep", m.get("owed", m["count"])))
                for m in must_have if m.get("kind") != "grow"]
 
+    need = {}
+
+    def refresh_need():
+        """Remaining need per goal: flowers that exist (held + growing, not reserved as a parent)
+        handed out tier by tier; tier 1 only counts what is ready by its deadline.
+        Chores ("grow") count fresh harvests planted in the plan."""
+        have_now = dict(stock)
+        late = {}
+        for r, n in pending:
+            have_now[n] = have_now.get(n, 0) + 1
+        for p, _ in reserved.items():
+            have_now[p] = have_now.get(p, 0) - 1
+        left = dict(have_now)
+        for m in musts:
+            if m.get("kind") == "grow":
+                need[m["_i"]] = max(0, m["count"] - m["done"])
+                continue
+            pool = left.get(m["flower"], 0)
+            if m.get("tier", 1) == 1:      # only flowers ready by the deadline
+                pool = min(pool, stock.get(m["flower"], 0) - sum(1 for p in reserved if p == m["flower"])
+                           + sum(1 for r, n in pending if n == m["flower"] and next_awake(int(r)) <= m["by"]))
+            owed = m.get("owed", m["count"])
+            got = max(0, min(pool, owed))
+            left[m["flower"]] = left.get(m["flower"], 0) - got
+            need[m["_i"]] = owed - got
+
+    intent = {}              # flower -> [(final flower, tier)]: an in-between step of a parent chain
+
     def tier_of(name):
-        return min((m.get("tier", 1) for m in musts if m["flower"] == name and m["done"] < m["count"]), default=99)
+        t = min((m.get("tier", 1) for m in musts if m["flower"] == name and need.get(m["_i"], 0) > 0), default=99)
+        return min([t] + [tr for _, tr in intent.get(name, [])])
 
     def blocked(x):
         """x has only flower parents and you hold none of them."""
@@ -102,16 +139,16 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
         v = 0
         for m in musts:
             done_at = next_awake(int(t + grow(name)))
-            if m["flower"] == name and m["done"] < m["count"] and done_at <= m["by"]:
+            if m["flower"] == name and need.get(m["_i"], 0) > 0 and done_at <= m["by"]:
                 tier = m.get("tier", 1)
                 extra = max(0.0, 7 - (m["by"] - done_at) / DAY) if tier in (1, 5) else 0.0
                 if tier == 5:
                     extra += min(5.0, 5 * m.get("tickets", 0) / max(1, m["count"] * grow(name) / DAY))
                 v = max(v, TIER_BASE.get(tier, 0) + extra)
+        for _, tr in intent.get(name, []):
+            v = max(v, TIER_BASE.get(tr, 0) - 6)
         return v
 
-    def is_must(name):
-        return any(m["flower"] == name and m["done"] < m["count"] for m in musts)
 
     def direct_option(name, tier=None):
         tier = tier_of(name) if tier is None else tier
@@ -139,52 +176,89 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
 
     def why_now(name, t):
         for m in musts:
-            if m["flower"] == name and m["done"] < m["count"]:
+            if m["flower"] == name and need.get(m["_i"], 0) > 0:
                 return f"{m.get('tier', 1)} · {m.get('note') or TIER_NAME.get(m.get('tier', 1))}"
         return "spare"
 
-    schedule = []
-    for _ in range(1500):
+    def chain(name, tier, t, depth, seen=()):
+        """Ways to start growing name's missing parent: (flower to plant now, its option, the flower
+        it is reserved for, grow time until name can be planted, steps)."""
+        for parent, qty in fl[name].get("parents", []):
+            if parent not in fl or qty != 1 or reserved.get(parent) or parent in seen or not plantable(parent, t):
+                continue
+            popt = direct_option(parent, tier)
+            if popt:
+                yield parent, popt, name, grow(parent), 1
+            elif depth > 0:
+                for q, qopt, tgt, g, d in chain(parent, tier, t, depth - 1, seen + (name,)):
+                    yield q, qopt, tgt, g + grow(parent), d + 1
+
+    schedule, shown_end, tier_done = [], None, {}
+
+    def snapshot():
+        out = dict(stock)
+        for r, n in pending:
+            out[n] = out.get(n, 0) + 1
+        return out
+
+    for _ in range(20000):
         bed = min(beds, key=lambda b: b["free"])
         t = next_awake(bed["free"])
-        if t >= horizon:
+        if t >= horizon and shown_end is None:
+            shown_end = snapshot()
+        if t >= full:
             break
         for r, n in [p for p in pending if p[0] <= t]:
             stock[n] += 1
             pending.remove((r, n))
+        refresh_need()
+        for tr in {m.get("tier", 1) for m in musts}:
+            if tr not in tier_done and all(need[m["_i"]] == 0 for m in musts if m.get("tier", 1) == tr):
+                tier_done[tr] = max([t] + [r for r, n in pending if any(m["flower"] == n and m.get("tier", 1) == tr
+                                                                         for m in musts)])
         best = None
         for name in fl:
-            if not plantable(name, t):
-                continue
             v = value(name, t)
             if v <= 0:
                 continue
-            opt = direct_option(name)
+            now_ok = plantable(name, t)
+            opt = direct_option(name) if now_ok else None
             if opt:
                 key = (v, -grow(name))
                 if best is None or key > best[0]:
                     best = (key, name, opt, None)
                 continue
-            # needs a parent flower first: grow it now, the target after.
-            # If a parent is already growing, wait for it instead.
-            if any(n == p for _, n in pending for p, _ in fl[name].get("parents", [])):
+            # needs a parent flower first: grow the nearest ancestor you can grow now (up to 3 steps),
+            # each step reserved for the next. If a parent is already growing or planned, wait for it.
+            if any(n == p for _, n in pending for p, _ in fl[name].get("parents", [])) or \
+                    any(intent.get(p) for p, _ in fl[name].get("parents", [])):
                 continue
-            for parent, qty in fl[name].get("parents", []):
-                if parent not in fl or qty != 1 or reserved.get(parent) or not plantable(parent, t):
+            for q, qopt, tgt, g, depth in chain(name, tier_of(name), t, 2):
+                if t + g + grow(name) > full:
                     continue
-                popt = direct_option(parent, tier_of(name))
-                done = t + grow(parent) + grow(name)
-                if not popt or done > horizon:
-                    continue
-                key = (v - 12, -(grow(parent) + grow(name)))
+                # out of season now: grow its parent in the parent's own season, kept for later
+                key = (v - 12 * depth - (0 if now_ok else 10), -(g + grow(name)))
                 if best is None or key > best[0]:
-                    best = (key, parent, popt, name)
+                    best = (key, q, qopt, (tgt, name))
         if best is None:
-            nxt = min([r for r, _ in pending if r > t] + [week_end(t), horizon])
+            nxt = min([r for r, _ in pending if r > t] + [week_end(t), full])
             bed["free"] = max(nxt, t + H)
             continue
-        _, name, (cost, parent, qty, buy), target = best
-        why = f"{tier_of(target)} · parent for {target}" if target else why_now(name, t)
+        _, name, (cost, parent, qty, buy), chained = best
+        target = None
+        if chained:                        # first step of a parent chain
+            target, final = chained
+            if target != final:
+                intent.setdefault(target, []).append((final, tier_of(final)))
+            why = f"{tier_of(final)} · parent for {final}" + (f" (via {target})" if target != final else "")
+        elif intent.get(name) and tier_of(name) == min(tr for _, tr in intent[name]):
+            final, tr = intent[name].pop(0)  # in-between step: reserved for the next flower in the chain
+            if not intent[name]:
+                del intent[name]
+            target = final
+            why = f"{tr} · parent for {final}"
+        else:
+            why = why_now(name, t)
         if parent in fl:
             stock[parent] -= qty
             if reserved.get(parent) == name:
@@ -193,30 +267,44 @@ def plan(farm, flowers, now_ms, prices=None, target_start_ms=None, target_days=7
             inv[parent] = max(0, inv.get(parent, 0) - qty)
         if target:
             reserved[name] = target
-        for m in musts:
-            if m["flower"] == name and m["done"] < m["count"] and next_awake(int(t + grow(name))) <= m["by"]:
-                m["done"] += 1
-                break
+        if not target:                     # a parent grown to be crossed away counts toward no goal
+            for m in musts:
+                if (m.get("kind") == "grow" and m["flower"] == name and m["done"] < m["count"]
+                        and next_awake(int(t + grow(name))) <= m["by"]):
+                    m["done"] += 1
+                    break
         ready = t + grow(name)
+        goal = int(why.split(" ·")[0]) if why[0].isdigit() else 99
         pending.append((ready, name))
         schedule.append({"bed": bed["bed"], "plant": t, "ready": ready, "harvest": next_awake(int(ready)),
                          "flower": name, "cross": f"{qty} {parent}", "buy": buy,
-                         "season": season_at(t),
+                         "season": season_at(t), "tier": goal, "parent_for": target,
                          "why": why})
         bed["free"] = ready
 
-    end_stock = dict(stock)
-    for r, n in pending:
-        end_stock[n] += 1
+    refresh_need()
+    if shown_end is None:
+        shown_end = snapshot()
+    end_stock = shown_end
     readiness = []
     for x in sorted(flower_only):
         hold = [p for p in flower_only[x] if end_stock.get(p, 0) > 0]
         readiness.append({"flower": x, "season_only": season_only(x), "parents": flower_only[x], "held_after_plan": hold,
                           "held_now": [p for p in flower_only[x] if farm["inventory"].get(p)]})
-    end_stock = dict(stock)
-    for r, n in pending:
-        end_stock[n] += 1
-    return {"speed": speed, "beds": beds, "schedule": schedule, "target_start": target_start, "horizon": horizon,
+    for m in musts:
+        m["left_after_full"] = need.get(m["_i"], 0)
+    shown = [x for x in schedule if x["plant"] < horizon]
+    tiers = {}
+    for m in musts:
+        tr = m.get("tier", 1)
+        d = tiers.setdefault(tr, {"done_at": tier_done.get(tr), "planted_shown": 0, "left_after_full": 0})
+        d["left_after_full"] += m["left_after_full"]
+    for x in shown:
+        if x["tier"] in tiers and not x["parent_for"]:
+            tiers[x["tier"]]["planted_shown"] += 1
+    return {"speed": speed, "beds": beds, "schedule": shown, "target_start": target_start, "horizon": horizon,
+            "full_until": full, "tiers": tiers, "planted_total": len(schedule),
+            **({"schedule_full": schedule} if keep_full else {}),
             "tz_offset_h": tz_offset_h, "awake": list(awake), "readiness": readiness,
             "must_have": [{k: v for k, v in m.items()} for m in musts],
             "stock_now": {n: int(farm["inventory"].get(n, 0)) for n in fl if farm["inventory"].get(n)},
@@ -308,7 +396,7 @@ def needs(farm, flowers, board, now_ms, ticket="Duende Cap", prio=None):
     return out
 
 
-def plan_week(farm, flowers, now_ms, prices=None, must_have=(), **kw):
+def plan_week(farm, flowers, now_ms, prices=None, must_have=(), extend_days=0, **kw):
     """plan(), but a chore only pays when finished. Try every set of chores (most tickets
     first) and keep the first one whose chores all fit the week; chore harvests can feed
     each other (Purple Cosmos grown for one chore are parents for Blue Pansy)."""
@@ -317,9 +405,12 @@ def plan_week(farm, flowers, now_ms, prices=None, must_have=(), **kw):
     rest = [m for m in must_have if m not in chores]
     sets = [c for k in range(len(chores), -1, -1) for c in combinations(chores, k)]
     sets.sort(key=lambda c: -sum(m.get("tickets", 0) for m in c))
+    pick = ()
     for chosen in sets:
         r = plan(farm, flowers, now_ms, prices, must_have=rest + list(chosen), **kw)
         if all(m["done"] >= m["count"] for m in r["must_have"] if m.get("kind") == "grow"):
-            r["dropped"] = [m for m in chores if m not in chosen]
-            return r
+            pick = chosen
+            break
+    r = plan(farm, flowers, now_ms, prices, must_have=rest + list(pick), extend_days=extend_days, **kw)
+    r["dropped"] = [m for m in chores if m not in pick]
     return r
