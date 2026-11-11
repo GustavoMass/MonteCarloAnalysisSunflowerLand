@@ -318,15 +318,15 @@ function flowerPlanView() {
         const n = `${c} ${f}`, x = P.stock_now[n] || 0, y = P.stock_end[n] || 0;
         return `<td class="num ${x === 0 ? (y > 0 ? "pos" : "neg") : ""}">${x}${y !== x ? " → " + y : ""}</td>`; }).join("") + `</tr>`).join("") + "</tbody>";
   const group = ms => ms < P.target_start ? `This week (until ${fmt(P.target_start)})` : ms < P.horizon ? "Next week" : "After";
-  const ALL = P.owed || [], O = ALL.filter(o => o.tier === 1 || o.tier === 5), dropped = (P.dropped || []).map(d => d.note);
-  const TN = {1: "Weekly board + delivery orders", 2: "One parent for every flower that takes more than 5 days", 3: "2 of Guria's flowers and of every seasonal one",
-    4: "Bloom Doll", 5: "Weekly “Grow …” chores", 6: "Floral Bed (flowers only)", 7: "2 of every flower"};
+  const ALL = P.owed || [], O = ALL.filter(o => o.tier === 1 || o.tier === 6), dropped = (P.dropped || []).map(d => d.note);
+  const TN = {1: "Weekly board + delivery orders", 2: "One parent for every flower that takes more than 5 days", 3: "2 of Guria's flowers + 1 of every seasonal one",
+    4: "Bloom Doll", 5: "2nd of every seasonal flower", 6: "Weekly “Grow …” chores", 7: "Floral Bed (flowers only)", 8: "2 of every flower"};
   const T = P.tiers || {}, until = fmt(P.horizon).split(",")[0], weeks = Math.round((P.full_until - P.target_start) / 6048e5);
   $("prioTable").innerHTML = `<thead><tr><th>#</th><th>Goal</th><th>Flowers</th><th>Have now</th><th>Planted by ${until}</th><th>Goal met</th></tr></thead><tbody>` +
-    [1, 2, 3, 4, 5, 6, 7].map(t => { const ms = ALL.filter(o => o.tier === t), need = ms.reduce((a, o) => a + o.owed, 0), have = ms.reduce((a, o) => a + (o.owed - o.count), 0), x = T[t];
+    [1, 2, 3, 4, 5, 6, 7, 8].map(t => { const ms = ALL.filter(o => o.tier === t), need = ms.reduce((a, o) => a + o.owed, 0), have = ms.reduce((a, o) => a + (o.owed - o.count), 0), x = T[t];
       if (!ms.length) return "";
       const met = t === 5 ? (dropped.length ? `${dropped.length} skipped` : "this week") : !x ? "—" : x.done_at ? (x.done_at <= Date.now() ? "now" : fmt(x.done_at).split(",")[0]) : `${x.left_after_full} left after ${weeks} weeks`;
-      return `<tr><td>${t}</td><td>${TN[t]}</td><td class="num">${need}</td><td class="num">${Math.max(0, have)}</td><td class="num">${x && x.planted_shown ? x.planted_shown : "—"}</td><td class="${x && x.done_at || (t === 5 && !dropped.length) ? "pos" : "neg"}">${met}</td></tr>`; }).join("") + "</tbody>";
+      return `<tr><td>${t}</td><td>${TN[t]}</td><td class="num">${need}</td><td class="num">${Math.max(0, have)}</td><td class="num">${x && x.planted_shown ? x.planted_shown : "—"}</td><td class="${x && x.done_at || (t === 6 && !dropped.length) ? "pos" : "neg"}">${met}</td></tr>`; }).join("") + "</tbody>";
   $("owedTable").innerHTML = `<thead><tr><th>Flower</th><th>For</th><th>Reward</th><th>Need</th><th>Held / harvested</th><th>Growing</th><th>Still to plant</th><th>Plan</th></tr></thead><tbody>` +
     O.map(o => { const left = o.count, drop = dropped.includes(o.note), m = (P.must_have || []).find(x => x.note === o.note && x.flower === o.flower);
       const rw = o.kind === "grow" ? Object.entries((o.reward || {}).items || {}).map(([k, q]) => `${q} ${k}`).concat((o.reward || {}).coins ? [`${nf(o.reward.coins)} coins`] : []).join(", ") : "";

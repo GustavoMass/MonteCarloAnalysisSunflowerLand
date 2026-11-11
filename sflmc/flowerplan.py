@@ -14,8 +14,9 @@ Planner rules:
   * You plant and harvest only while awake. One flower per bed at a time.
   * Goals come in strict tiers (needs() builds them, config flower_priorities):
     1 weekly board + delivery orders, 2 a parent for every flower that takes
-    more than 5 days, 3 two of Guria's flowers and of every seasonal one,
-    4 Bloom Doll, 5 "Grow ..." chores, 6 Floral Bed, 7 two of every flower.
+    more than 5 days, 3 two of Guria's flowers and one of every seasonal one,
+    4 Bloom Doll, 5 a second of every seasonal flower, 6 "Grow ..." chores,
+    7 Floral Bed, 8 two of every flower.
     A free bed always takes the best tier it can start; tiers may be met in part.
   * Goal progress counts flowers that exist (held + growing), handed out tier by
     tier. A flower grown only to be crossed into another counts toward nothing.
@@ -33,9 +34,9 @@ from itertools import combinations
 SEASONS = ["spring", "summer", "autumn", "winter"]
 H = 3600 * 1000
 DAY = 24 * H
-TIER_BASE = {1: 200, 2: 180, 3: 160, 4: 140, 5: 120, 6: 100, 7: 80}
-TIER_NAME = {1: "board + orders", 2: "parents for 5+ day flowers", 3: "Guria + seasonal stock",
-             4: "Bloom Doll", 5: "weekly chores", 6: "Floral Bed", 7: "2 of every flower"}
+TIER_BASE = {1: 200, 2: 180, 3: 160, 4: 140, 5: 120, 6: 100, 7: 80, 8: 60}
+TIER_NAME = {1: "board + orders", 2: "parents for 5+ day flowers", 3: "Guria + 1 of each seasonal",
+             4: "Bloom Doll", 5: "2nd of each seasonal", 6: "weekly chores", 7: "Floral Bed", 8: "2 of every flower"}
 SKILL_MULT = {"Blooming Boost": [0.9, 0.875, 0.85], "Flower Power": [0.8, 0.7, 0.6], "Flowery Abode": [1.5, 1.6, 1.7]}
 
 
@@ -159,8 +160,9 @@ class _Planner:
         for m in self.by_flower.get(name, []):
             if self.need.get(m["_i"], 0) > 0 and done_at <= m["by"]:
                 tier = m.get("tier", 1)
-                extra = max(0.0, 7 - (m["by"] - done_at) / DAY) if tier in (1, 5) else 0.0
-                if tier == 5:
+                chore = m.get("kind") == "grow"
+                extra = max(0.0, 7 - (m["by"] - done_at) / DAY) if tier == 1 or chore else 0.0
+                if chore:
                     extra += min(5.0, 5 * m.get("tickets", 0) / max(1, m["count"] * self.grow(name) / DAY))
                 v = max(v, TIER_BASE.get(tier, 0) + extra)
         for _, _, tr in self.intent.get(name, []):  # a chain already started goes on first
@@ -202,6 +204,8 @@ class _Planner:
             if parent not in self.fl or qty != 1 or parent in seen or not self.plantable(parent, t):
                 continue
             opt = self.option(parent, tier)
+            if opt and opt[1] in seen + (name,):    # crossing the very flower we are making: a pointless swap
+                opt = None
             if opt:
                 yield [parent, name], opt, self.grow(parent)
             elif depth > 0:
@@ -216,7 +220,8 @@ class _Planner:
     def waiting_on_parent(self, name):
         """Enough chains for name already running? One per flower still needed, side by side
         (3 Primula Enigma = 3 chains at once, bed room permitting)."""
-        wanted = sum(self.need.get(m["_i"], 0) for m in self.by_flower.get(name, [])) + len(self.intent.get(name, []))
+        tr = self.tier_of(name)                     # only the copies of the goal being served now
+        wanted = sum(self.need.get(m["_i"], 0) for m in self.by_flower.get(name, []) if m.get("tier", 1) == tr) +             len(self.intent.get(name, []))
         return self.coming(name) >= wanted
 
     # ---- one bed decision
@@ -410,17 +415,21 @@ def needs(farm, flowers, board, now_ms, ticket="Duende Cap", prio=None):
             parents.setdefault(par, []).append(x)
     for par, xs in sorted(parents.items()):
         add(2, par, 1, "parent for " + ", ".join(xs[:3]) + ("…" if len(xs) > 3 else ""))
-    # 3: Guria's flowers and every seasonal one
+    # 3: Guria's flowers and one of every seasonal one
     for f in prio.get("guria", []):
         add(3, f, prio.get("guria_each", 2), "Guria asks for it")
     seeds = flowers.get("seeds", {})
-    for f in sorted(fl):
-        if len(seeds.get(fl[f].get("seed"), {}).get("seasons", [1, 2])) == 1:
-            add(3, f, prio.get("seasonal_each", 2), f"seasonal ({seeds[fl[f]['seed']]['seasons'][0]})")
+    seasonal = [f for f in sorted(fl) if len(seeds.get(fl[f].get("seed"), {}).get("seasons", [1, 2])) == 1]
+    first = min(prio.get("seasonal_first", 1), prio.get("seasonal_each", 2))
+    for f in seasonal:
+        add(3, f, first, f"seasonal ({seeds[fl[f]['seed']]['seasons'][0]})")
     # 4: Bloom Doll
     for f, q in prio.get("bloom_doll", {}).items():
         add(4, f, q, "Bloom Doll")
-    # 5: chores
+    # 5: the rest of every seasonal one (on top of tier 3's)
+    for f in seasonal:
+        add(5, f, prio.get("seasonal_each", 2) - first, f"seasonal ({seeds[fl[f]['seed']]['seasons'][0]}), 2nd")
+    # 6: chores
     act = farm.get("activity", {})
     for c in farm.get("chores", []):
         m = re.match(r"Grow (.+?) (\d+) times?", c.get("name") or "")
@@ -429,15 +438,15 @@ def needs(farm, flowers, board, now_ms, ticket="Duende Cap", prio=None):
             done = int(act.get(f"{f} Harvested", 0) - (c.get("initial") or 0))
             left = max(0, n - done - growing.get(f, 0))
             out.append({"flower": f, "count": left, "owed": n, "held": done, "growing": growing.get(f, 0), "by": by,
-                        "kind": "grow", "tier": 5, "note": f"{c['npc'].title()} chore: grow {f} {n}x",
+                        "kind": "grow", "tier": 6, "note": f"{c['npc'].title()} chore: grow {f} {n}x",
                         "reward": c.get("reward"),
                         "tickets": ((c.get("reward") or {}).get("items") or {}).get(ticket, 0)})
-    # 6: Floral Bed (flowers only)
+    # 7: Floral Bed (flowers only)
     for f, q in prio.get("floral_bed", {}).items():
-        add(6, f, q, "Floral Bed")
-    # 7: two of every flower
+        add(7, f, q, "Floral Bed")
+    # 8: two of every flower
     for f in sorted(fl):
-        add(7, f, prio.get("every_each", 2), "2 of every flower")
+        add(8, f, prio.get("every_each", 2), "2 of every flower")
     return out
 
 
