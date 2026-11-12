@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-11",
+ "fetched": "2026-11-12",
  "season": "winter",
  "double_dates": [
   "2026-11-19",
@@ -150,7 +150,7 @@
    "label": "Lumber Doll",
    "category": "Dolls",
    "tickets": 15,
-   "done": false
+   "done": true
   },
   {
    "label": "Giant Orange",

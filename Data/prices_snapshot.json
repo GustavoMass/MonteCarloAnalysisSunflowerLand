@@ -1,6 +1,6 @@
 {
  "source": "https://sfl-manager.com/api/v1/prices (p2p, FLOWER per unit)",
- "fetched": "2026-11-11",
+ "fetched": "2026-11-12",
  "prices": {
   "Apple": 0.0183,
   "Artichoke": 0.009833,
@@ -35,7 +35,7 @@
   "Orange": 0.013988,
   "Parsnip": 0.011974,
   "Pepper": 0.006974,
-  "Pig Bristles": 0.2364,
+  "Pig Bristles": 0.2283,
   "Potato": 0.0002964,
   "Pumpkin": 0.000999,
   "Radish": 0.008574,
@@ -46,7 +46,7 @@
   "Stone": 0.021034,
   "Sunflower": 0.0002949090909090909,
   "Tomato": 0.004781666666666667,
-  "Truffle": 0.1146753247,
+  "Truffle": 0.11301875,
   "Turnip": 0.010614975845410627,
   "Wheat": 0.018653,
   "Wood": 0.0130824,
