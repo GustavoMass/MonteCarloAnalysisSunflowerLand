@@ -21,6 +21,7 @@ import webbrowser
 import zlib
 
 from sflmc import analysis as A
+from sflmc import board
 from sflmc import farmwide, growth
 from sflmc import farm as F
 from sflmc import fetch
@@ -352,6 +353,11 @@ def main():
                                         for m in cfg.get("flower_must_have", [])] + list(owed))   # count 0 still protects what you owe
         fp["owed"] = owed
         out["flower_plan"] = fp
+    out["weekly_board"] = board.open_items(
+        board_week, prices["prices"], farm_d.get("inventory", {}),
+        load(os.path.join(DATA, "crafting_recipes.json"), {"grids": {}})["grids"],
+        load(os.path.join(DATA, "fish_rules.json"), {"fish": {}}), set(fl.get("flowers", {})),
+        (out.get("flower_plan") or {}).get("schedule", []), farm_d.get("season"))
 
     os.makedirs(os.path.join(HERE, "results"), exist_ok=True)
     with open(os.path.join(HERE, "results", "results.json"), "w", encoding="utf-8") as f:

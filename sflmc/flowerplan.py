@@ -291,6 +291,9 @@ class _Planner:
         self.pending.append((ready, name))
         self.schedule.append({"bed": bed["bed"], "plant": int(t), "ready": int(ready),
                               "harvest": self.next_awake(ready), "flower": name, "cross": f"{qty} {parent}",
+                              "seed": self.fl[name].get("seed"),
+                              "alts": [f"{q} {p}" for p, q in self.fl[name].get("parents", [])
+                                       if p not in self.fl and p != parent],
                               "buy": buy, "season": self.season_at(t), "parent_for": target, "why": why,
                               "tier": int(why.split(" ·")[0]) if why[0].isdigit() else 99})
         bed["free"] = ready

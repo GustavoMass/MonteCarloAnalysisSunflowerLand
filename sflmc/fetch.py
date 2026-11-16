@@ -11,7 +11,8 @@ import urllib.request
 from . import game as G
 
 API = "https://sfl-manager.com/api"
-OFFICIAL = "https://api.sunflower-land.com/community/farms"
+OFFICIAL_BASE = "https://api.sunflower-land.com"
+OFFICIAL = f"{OFFICIAL_BASE}/community/farms"
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 UA = {"User-Agent": "Mozilla/5.0 (MonteCarloAnalysisSunflowerLand)"}
 TICKET = "Duende Cap"  # Cave Dwellers chapter ticket
@@ -60,6 +61,34 @@ def _official_raw(farm_id, key):
             body = gzip.decompress(body)
     d = json.loads(body.decode("utf-8"))
     return {"raw": {"farm": d["farm"]}, "fetched_at": time.time() * 1000, "updated_at": d.get("updatedAt")}
+
+
+def _official_get(path, key):
+    CALLS.append(f"{OFFICIAL_BASE}{path}")
+    req = urllib.request.Request(f"{OFFICIAL_BASE}{path}", headers={**UA, "x-api-key": key, "Accept-Encoding": "gzip"})
+    with urllib.request.urlopen(req, timeout=60) as r:
+        body = r.read()
+        if r.headers.get("Content-Encoding") == "gzip":
+            body = gzip.decompress(body)
+    return json.loads(body.decode("utf-8"))
+
+
+def _official_prices(data_dir, key):
+    """Today's marketplace report (1 request): floor price in FLOWER of every tradeable item,
+    keyed by the game's item ids (Data/known_ids.json). Only the items the report uses are kept:
+    animal produce, feed, crops, flowers and what the weekly board asks for. NFTs are left alone."""
+    with open(os.path.join(data_dir, "known_ids.json"), encoding="utf-8") as fh:
+        by_id = {v: k for k, v in json.load(fh)["ids"].items()}
+    rep = _official_get("/community/data?type=marketplaceActivity", key)["data"]["reports"]
+    items = rep[max(rep)]["items"]
+    out = {}
+    for k, v in items.items():
+        kind, _, num = k.partition("-")
+        name = by_id.get(int(num)) if kind == "collectibles" and num.isdigit() else None
+        price = v.get("floor") or v.get("latestSale")
+        if name and price:
+            out[name] = price
+    return out, max(rep)
 
 
 def _official_board(raw, data_dir):
@@ -247,7 +276,8 @@ def _age_h(path):
 
 
 def refresh(data_dir, farm_id, nft_names=(), max_age=None, extras=()):
-    """Daily refresh: farm + weekly board (3 calls). extras adds "prices" (1 call),
+    """Daily refresh. With SFL_API_KEY: farm + today's market prices from the official API (2 calls).
+    Without: farm + weekly board from sfl-manager (3 calls). extras adds "prices" (1 call),
     "info" (flower book + delivery catalog, 2 calls) or "nft" (one per NFT season, ~15 calls)."""
     age = {**MAX_AGE, **(max_age or {})}
     extras = set(extras)
@@ -265,7 +295,14 @@ def refresh(data_dir, farm_id, nft_names=(), max_age=None, extras=()):
     farm = parse_farm(raw, farm_id)
     board = parse_board(raw)
     files = []
-    if "prices" in extras:
+    if key:                                          # daily: today's market report, 1 more request
+        try:
+            time.sleep(5)                            # Community API: about one request per 5 s
+            market, day = _official_prices(data_dir, key)
+            files.append(("prices_snapshot.json", _price_snapshot(data_dir, market, day, extra=_board_items(data_dir))))
+        except Exception as e:  # noqa: BLE001
+            print(f"  prices not refreshed: {e}")
+    elif "prices" in extras:
         files.append(("prices_snapshot.json", _price_snapshot(data_dir, _get(f"{API}/v1/prices")["p2p"])))
 
     _write(data_dir, files + _daily_files(data_dir, farm_id, raw, farm, board, nft_names, extras))
@@ -281,7 +318,19 @@ def _write(data_dir, files):
             json.dump(obj, fh, indent=1)
 
 
-def _price_snapshot(data_dir, prices):
+def _board_items(data_dir):
+    """Names whose price the weekly-board tab needs: crafting grids and crustacean chums."""
+    names = set()
+    try:
+        with open(os.path.join(data_dir, "crafting_recipes.json"), encoding="utf-8") as fh:
+            for k, cells in json.load(fh)["grids"].items():
+                names |= {k} | {c for c in cells if c}
+    except Exception:  # noqa: BLE001
+        pass
+    return names | {c for t in G.CRUSTACEAN_CHUMS.values() for c in t} | set(G.EXOTIC_TICKETS)
+
+
+def _price_snapshot(data_dir, prices, day=None, extra=()):
     need = {"Egg", "Feather", "Milk", "Leather", "Wool", "Merino Wool", "Truffle", "Pig Bristles",
             "Wood", "Stone", "Iron", "Gold", "Crimstone", "Oil", "Mud", "Salt", "Honey",
             "Apple", "Blueberry", "Orange", "Lemon", "Tomato", "Potato", "Pumpkin", "Carrot", "Cabbage", "Soybean",
@@ -292,7 +341,14 @@ def _price_snapshot(data_dir, prices):
         need |= set(r)
     for o in G.SLOP_OPTIONS.values():
         need |= set(o)
-    snap = {"source": f"{API}/v1/prices (p2p, FLOWER per unit)", "fetched": time.strftime("%Y-%m-%d"),
+    need |= set(extra)
+    try:
+        with open(os.path.join(data_dir, "flowers.json"), encoding="utf-8") as fh:
+            need |= set(json.load(fh)["flowers"])
+    except Exception:  # noqa: BLE001
+        pass
+    src = "official marketplace report (floor, FLOWER per unit)" if day else f"{API}/v1/prices (p2p, FLOWER per unit)"
+    snap = {"source": src, "fetched": day or time.strftime("%Y-%m-%d"),
             "prices": {k: prices[k] for k in sorted(need) if prices.get(k)}}
     # An item with no listing right now comes back empty; keep its last known price
     # instead of treating it as worthless (e.g. Truffle and Pig Bristles, Nov 2026).

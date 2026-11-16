@@ -1,0 +1,711 @@
+{
+"source": "sunflower-land src/features/game/types/fishing.ts",
+"fish": {
+"Anchovy": {
+"baits": [
+"Earthworm"
+],
+"type": "basic",
+"likes": [
+"Carrot",
+"Egg"
+],
+"seasons": [
+"spring",
+"summer",
+"autumn",
+"winter"
+]
+},
+"Butterflyfish": {
+"baits": [
+"Earthworm"
+],
+"type": "basic",
+"likes": [
+"Sunflower"
+],
+"seasons": [
+"summer",
+"autumn"
+]
+},
+"Blowfish": {
+"baits": [
+"Earthworm"
+],
+"type": "basic",
+"likes": [
+"Yam"
+],
+"seasons": [
+"winter"
+]
+},
+"Clownfish": {
+"baits": [
+"Earthworm"
+],
+"type": "basic",
+"likes": [
+"Cabbage"
+],
+"seasons": [
+"summer",
+"winter"
+]
+},
+"Sea Bass": {
+"baits": [
+"Earthworm"
+],
+"type": "basic",
+"likes": [
+"Anchovy"
+],
+"seasons": [
+"spring",
+"autumn"
+]
+},
+"Sea Horse": {
+"baits": [
+"Earthworm"
+],
+"type": "basic",
+"likes": [
+"Seaweed"
+],
+"seasons": [
+"spring",
+"summer"
+]
+},
+"Horse Mackerel": {
+"baits": [
+"Earthworm"
+],
+"type": "basic",
+"likes": [
+"Blueberry"
+],
+"seasons": [
+"summer",
+"winter"
+]
+},
+"Halibut": {
+"baits": [
+"Earthworm"
+],
+"type": "basic",
+"likes": [
+"Anchovy"
+],
+"seasons": [
+"spring",
+"autumn"
+]
+},
+"Squid": {
+"baits": [
+"Earthworm"
+],
+"type": "basic",
+"likes": [
+"Eggplant",
+"Onion"
+],
+"seasons": [
+"spring",
+"winter"
+]
+},
+"Porgy": {
+"baits": [
+"Earthworm"
+],
+"type": "basic",
+"likes": [
+"Yam"
+],
+"seasons": [
+"spring"
+]
+},
+"Muskellunge": {
+"baits": [
+"Earthworm"
+],
+"type": "basic",
+"likes": [
+"Turnip"
+],
+"seasons": [
+"autumn"
+]
+},
+"Red Snapper": {
+"baits": [
+"Grub",
+"Red Wiggler",
+"Fishing Lure"
+],
+"type": "advanced",
+"likes": [
+"Apple",
+"Honey"
+],
+"seasons": [
+"spring",
+"summer",
+"autumn",
+"winter"
+]
+},
+"Moray Eel": {
+"baits": [
+"Earthworm",
+"Grub",
+"Fishing Lure"
+],
+"type": "advanced",
+"likes": [
+"Gold"
+],
+"seasons": [
+"summer",
+"autumn"
+]
+},
+"Olive Flounder": {
+"baits": [
+"Earthworm",
+"Grub",
+"Fishing Lure"
+],
+"type": "advanced",
+"likes": [
+"Rhubarb"
+],
+"seasons": [
+"spring",
+"autumn"
+]
+},
+"Napoleanfish": {
+"baits": [
+"Grub",
+"Fishing Lure"
+],
+"type": "advanced",
+"likes": [
+"Carrot"
+],
+"seasons": [
+"summer",
+"autumn"
+]
+},
+"Surgeonfish": {
+"baits": [
+"Grub",
+"Fishing Lure"
+],
+"type": "advanced",
+"likes": [
+"Orange"
+],
+"seasons": [
+"summer",
+"autumn"
+]
+},
+"Angelfish": {
+"baits": [
+"Grub",
+"Fishing Lure"
+],
+"type": "advanced",
+"likes": [
+"Banana"
+],
+"seasons": [
+"summer",
+"winter"
+]
+},
+"Zebra Turkeyfish": {
+"baits": [
+"Grub",
+"Fishing Lure"
+],
+"type": "advanced",
+"likes": [
+"Beetroot",
+"Rhubarb"
+],
+"seasons": [
+"spring",
+"summer"
+]
+},
+"Ray": {
+"baits": [
+"Grub",
+"Fishing Lure"
+],
+"type": "advanced",
+"likes": [
+"Squid"
+],
+"seasons": [
+"spring",
+"summer"
+]
+},
+"Hammerhead shark": {
+"baits": [
+"Grub",
+"Fishing Lure"
+],
+"type": "advanced",
+"likes": [
+"Iron"
+],
+"seasons": [
+"summer",
+"autumn"
+]
+},
+"Barred Knifejaw": {
+"baits": [
+"Grub",
+"Fishing Lure"
+],
+"type": "advanced",
+"likes": [
+"Anchovy"
+],
+"seasons": [
+"spring",
+"summer"
+]
+},
+"Walleye": {
+"baits": [
+"Grub"
+],
+"type": "advanced",
+"likes": [
+"Broccoli"
+],
+"seasons": [
+"winter"
+]
+},
+"Rock Blackfish": {
+"baits": [
+"Grub"
+],
+"type": "advanced",
+"likes": [
+"Onion"
+],
+"seasons": [
+"autumn"
+]
+},
+"Tilapia": {
+"baits": [
+"Grub"
+],
+"type": "advanced",
+"likes": [
+"Zucchini"
+],
+"seasons": [
+"summer"
+]
+},
+"Tuna": {
+"baits": [
+"Grub",
+"Red Wiggler",
+"Fishing Lure"
+],
+"type": "expert",
+"likes": [
+"Orange",
+"Wild Mushroom"
+],
+"seasons": [
+"spring",
+"summer",
+"autumn",
+"winter"
+]
+},
+"Mahi Mahi": {
+"baits": [
+"Grub",
+"Red Wiggler",
+"Fishing Lure"
+],
+"type": "expert",
+"likes": [
+"Corn"
+],
+"seasons": [
+"summer",
+"autumn"
+]
+},
+"Blue Marlin": {
+"baits": [
+"Grub",
+"Red Wiggler",
+"Fishing Lure"
+],
+"type": "expert",
+"likes": [
+"Wheat"
+],
+"seasons": [
+"summer",
+"winter"
+]
+},
+"Oarfish": {
+"baits": [
+"Red Wiggler",
+"Fishing Lure"
+],
+"type": "expert",
+"likes": [
+"Kale"
+],
+"seasons": [
+"spring",
+"winter"
+]
+},
+"Football fish": {
+"baits": [
+"Red Wiggler",
+"Fishing Lure"
+],
+"type": "expert",
+"likes": [
+"Sunflower"
+],
+"seasons": [
+"winter"
+]
+},
+"Sunfish": {
+"baits": [
+"Red Wiggler",
+"Fishing Lure"
+],
+"type": "expert",
+"likes": [
+"Anchovy"
+],
+"seasons": [
+"summer",
+"autumn"
+]
+},
+"Coelacanth": {
+"baits": [
+"Red Wiggler",
+"Fishing Lure"
+],
+"type": "expert",
+"likes": [
+"Cabbage"
+],
+"seasons": [
+"spring",
+"winter"
+]
+},
+"Parrotfish": {
+"baits": [
+"Red Wiggler",
+"Fishing Lure"
+],
+"type": "expert",
+"likes": [
+"Seaweed"
+],
+"seasons": [
+"spring",
+"summer"
+]
+},
+"Whale Shark": {
+"baits": [
+"Red Wiggler",
+"Fishing Lure"
+],
+"type": "expert",
+"likes": [
+"Crab",
+"Fat Chicken"
+],
+"seasons": [
+"summer",
+"winter"
+]
+},
+"Saw Shark": {
+"baits": [
+"Red Wiggler",
+"Fishing Lure"
+],
+"type": "expert",
+"likes": [
+"Red Snapper",
+"Speed Chicken"
+],
+"seasons": [
+"spring",
+"summer"
+]
+},
+"White Shark": {
+"baits": [
+"Red Wiggler",
+"Fishing Lure"
+],
+"type": "expert",
+"likes": [
+"Tuna",
+"Rich Chicken"
+],
+"seasons": [
+"summer",
+"winter"
+]
+},
+"Cobia": {
+"baits": [
+"Red Wiggler"
+],
+"type": "expert",
+"likes": [
+"Broccoli"
+],
+"seasons": [
+"summer"
+]
+},
+"Trout": {
+"baits": [
+"Red Wiggler"
+],
+"type": "expert",
+"likes": [
+"Pepper"
+],
+"seasons": [
+"winter"
+]
+},
+"Weakfish": {
+"baits": [
+"Red Wiggler"
+],
+"type": "expert",
+"likes": [
+"Artichoke"
+],
+"seasons": [
+"spring"
+]
+},
+"Twilight Anglerfish": {
+"baits": [
+"Red Wiggler",
+"Grub",
+"Fishing Lure"
+],
+"type": "marine marvel",
+"likes": [
+"Sunfish"
+],
+"seasons": [
+"winter",
+"spring",
+"summer",
+"autumn"
+]
+},
+"Starlight Tuna": {
+"baits": [
+"Red Wiggler",
+"Fishing Lure"
+],
+"type": "marine marvel",
+"likes": [
+"Horse Mackerel",
+"Zebra Turkeyfish"
+],
+"seasons": [
+"winter",
+"spring",
+"summer",
+"autumn"
+]
+},
+"Radiant Ray": {
+"baits": [
+"Red Wiggler",
+"Fishing Lure"
+],
+"type": "marine marvel",
+"likes": [
+"Iron"
+],
+"seasons": [
+"winter",
+"spring",
+"summer",
+"autumn"
+]
+},
+"Phantom Barracuda": {
+"baits": [
+"Grub",
+"Fishing Lure"
+],
+"type": "marine marvel",
+"likes": [
+"Squid"
+],
+"seasons": [
+"winter",
+"spring",
+"summer",
+"autumn"
+]
+},
+"Gilded Swordfish": {
+"baits": [
+"Earthworm",
+"Red Wiggler",
+"Fishing Lure"
+],
+"type": "marine marvel",
+"likes": [
+"Gold"
+],
+"seasons": [
+"winter",
+"spring",
+"summer",
+"autumn"
+]
+}
+},
+"guaranteed_bait": {
+"Fish Flake": [
+"Anchovy",
+"Butterflyfish",
+"Halibut",
+"Blowfish",
+"Porgy",
+"Clownfish",
+"Sea Bass",
+"Sea Horse",
+"Muskellunge",
+"Horse Mackerel",
+"Squid",
+"Moray Eel",
+"Olive Flounder",
+"Tilapia",
+"Napoleanfish",
+"Surgeonfish",
+"Zebra Turkeyfish",
+"Walleye",
+"Angelfish",
+"Ray"
+],
+"Fish Stick": [
+"Rock Blackfish",
+"Hammerhead shark",
+"Tuna",
+"Mahi Mahi",
+"Blue Marlin",
+"Weakfish",
+"Oarfish",
+"Football fish",
+"Sunfish",
+"Cobia"
+],
+"Fish Oil": [
+"Barred Knifejaw",
+"Trout",
+"Coelacanth",
+"Saw Shark"
+],
+"Crab Stick": [
+"Barred Knifejaw",
+"Whale Shark",
+"White Shark",
+"Parrotfish"
+]
+},
+"chum_amounts": {
+"Gold": 1,
+"Wild Mushroom": 1,
+"Honey": 1,
+"Iron": 5,
+"Stone": 5,
+"Egg": 5,
+"Sunflower": 50,
+"Potato": 20,
+"Yam": 20,
+"Rhubarb": 20,
+"Pumpkin": 20,
+"Carrot": 10,
+"Cabbage": 10,
+"Broccoli": 10,
+"Pepper": 10,
+"Beetroot": 10,
+"Onion": 5,
+"Cauliflower": 5,
+"Parsnip": 5,
+"Eggplant": 5,
+"Corn": 5,
+"Radish": 5,
+"Turnip": 5,
+"Wheat": 5,
+"Kale": 5,
+"Barley": 3,
+"Artichoke": 3,
+"Blueberry": 3,
+"Orange": 3,
+"Apple": 3,
+"Banana": 3,
+"Seaweed": 1,
+"Crab": 2,
+"Anchovy": 1,
+"Red Snapper": 1,
+"Tuna": 1,
+"Squid": 1,
+"Wood": 5,
+"Red Pansy": 1,
+"Fat Chicken": 3,
+"Rich Chicken": 3,
+"Speed Chicken": 3,
+"Horse Mackerel": 1,
+"Sunfish": 1,
+"Zebra Turkeyfish": 1,
+"Zucchini": 20,
+"Weed": 3,
+"Acorn": 3
+}
+}
