@@ -460,7 +460,7 @@ function toolsView() {
   const T = DATA.tools; if (!T) return;
   const hh = h => `${Math.floor(h)}h${String(Math.round((h % 1) * 60)).padStart(2, "0")}`;
   const ck = T.checks, win = `${hh(ck[0])}–${hh(ck[ck.length - 1])} every ${nf(ck[1] - ck[0], 0)} h`;
-  $("tIntro").innerHTML = `Gold Rocks refill in 24 h (no ore refill skills in your plan). Tools count only their coin price at 1 FLOWER = ${nf(DATA.meta.config.tool_coins_per_flower || 1200)} coins; their wood, stone, iron and gold are not subtracted. ` +
+  $("tIntro").innerHTML = `Gold Rocks refill in 24 h (no ore refill skills in your plan). Tools cost their ingredients at market (Iron Pickaxe 5 Iron + 3 Wood, Gold Pickaxe 3 Gold + 3 Wood, Pickaxe 3 Wood); coins are not counted. ` +
     `Your day: checks ${win}.`;
   $("tGold").innerHTML = "";
   const tools = ["Axe", "Pickaxe", "Stone Pickaxe", "Iron Pickaxe", "Gold Pickaxe"];
@@ -485,8 +485,8 @@ function toolsView() {
     `You have ${nf(T.currency["Love Charm"])} Love Charms (${nf(T.currency["Love Charm"] / 100, 0)} Time Warp Totems), ${T.currency["Time Warp Totem"]} totem in stock and ${nf(T.currency.Mark)} Marks (${Math.floor(T.currency.Mark / 8000)} Ore Hourglasses): one placed on a day you drifted pulls the rocks back.`;
   const S = T.sunstone, gr = Object.entries(S.gold.flower_week);
   const cw = DATA.meta.config.chapter_weeks, gw = gr[0][1];
-  $("tSun").innerHTML = `<b>Sunstone (you have ${T.sunstone_have}):</b> one more Tree (${S.tree.cost}) gives about ${nf(S.tree.flower_week * cw, 1)} FLOWER of wood a chapter after axes ` +
-    `(${nf(S.tree.flower_week * cw / S.tree.cost, 2)} per Sunstone). One more Gold Rock (${S.gold.cost}) gives ${nf(gw * cw, 1)} a chapter after its pickaxe (${nf(gw * cw / S.gold.cost, 2)} per Sunstone).`;
+  $("tSun").innerHTML = `<b>Sunstone (you have ${T.sunstone_have}):</b> one more Tree (${S.tree.cost}) gives about ${nf(S.tree.flower_week * cw, 1)} FLOWER of wood a chapter ` +
+    `(${nf(S.tree.flower_week * cw / S.tree.cost, 2)} per Sunstone; axes are coins only). One more Gold Rock (${S.gold.cost}) gives ${nf(gw * cw, 1)} a chapter after 5 Iron + 3 Wood per pickaxe (${nf(gw * cw / S.gold.cost, 2)} per Sunstone).`;
 }
 function method() {
   const p = DATA.meta.prices.prices, sl = DATA.meta.slops, f = DATA.meta.farm;
@@ -598,8 +598,8 @@ function nextView() {
     `<tr class="hi"><td>Total FLOWER</td>${nx.map(u => `<td class="num">${nf(itemsFl(u), 1)}</td>`).join("")}<td></td><td></td><td class="num">${nf(tot, 1)}</td><td></td><td class="num">${nf(short, 1)}</td></tr></tbody>`;
   const M = G.mining;
   if (M) $("nMining").innerHTML = `Daily mining (every rock once a day, both refill in 24 h): ${nf(M.gold_rocks)} gold rocks give ${nf(M.gold_week, 0)} Gold a week, ${nf(M.crim_rocks)} crimstone rocks ${nf(M.crim_week, 1)} Crimstone with the 5-day streak bonus. ` +
-    `Selling the crimstone nets ${sg(M.crim_net, 1)} FLOWER a week and selling the gold ${sg(M.gold_net, 1)} (after the marketplace cut); both together ${sg(M.both_net, 1)} FLOWER a week. ` +
-    `Pickaxes count only their coins (${nf(-M.coins)} a week) at 1 FLOWER = ${nf(M.tool_rate)} coins. ` +
+    `Selling the crimstone nets ${sg(M.crim_net, 1)} FLOWER a week after its pickaxes (3 Gold + 3 Wood each, gold at market); selling gold alone nets ${sg(M.gold_net, 1)} after 5 Iron + 3 Wood per pickaxe. ` +
+    `Feeding your own gold to the crimstone pickaxes (${nf(M.gold_for_crim)} a week, ${nf(M.gold_left, 0)} left to sell) and selling both: about ${sg(M.both_net, 1)} FLOWER a week. Pickaxe coins (${nf(-M.coins)} a week) are not counted. ` +
     `At that pace mining alone pays for both buildings in about ${nf(tot / Math.max(M.both_net, 0.1), 1)} weeks.`;
 }
 

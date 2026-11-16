@@ -27,5 +27,5 @@ Everything else is secondary.
 - Crop items get 100% of their speed (`farmwide.crop_speed_credit`).
 - Sheep question: Barn L3 with 11 / 12 / 15 sheep, each fed to its most profitable level, then sold to a bounty (`sheep_fixed`).
 - Iron is bought, not mined (Rocky Favor makes iron mining a loss).
-- Tools (axes, pickaxes) cost only their coin price, at 1 FLOWER = 1,200 coins (`tool_coins_per_flower`). Never subtract their wood, stone, iron or gold.
+- Tools cost their ingredients at market (Pickaxe 3 Wood, Stone Pickaxe 3 Wood + 5 Stone, Iron Pickaxe 5 Iron + 3 Wood, Gold Pickaxe 3 Gold + 3 Wood). Never count coins: the player has enough.
 - No ore refill skills at all (Midas Sprint/Rush, Fireside Alchemist, Iron Hustle, Speed Miner).
