@@ -1,7 +1,7 @@
 {
  "farm_id": 3621107187220366,
  "source": "https://sfl-manager.com/api/v3/land/3621107187220366",
- "fetched": "2026-11-16 09:30",
+ "fetched": "2026-11-16 09:51",
  "skills": {
   "Efficient Feeding": 1,
   "Restless Animals": 2,
@@ -1774,5 +1774,5 @@
  },
  "plots": 61,
  "pet_streak": 4,
- "weeks_played": 15.672083695321058
+ "weeks_played": 15.674150650044194
 }

@@ -61,6 +61,10 @@ th { font: 600 11px/1.2 var(--mono); letter-spacing: .05em; text-transform: uppe
 th:first-child, td:first-child { text-align: left; }
 td.num { font-family: var(--mono); font-size: 13px; }
 tr.hi td { background: var(--band); }
+.cgrid { border-collapse: collapse; width: auto; }
+.cgrid td { width: 88px; height: 44px; border: 1px solid var(--rule); text-align: center; white-space: normal; font-size: 12px; padding: 4px; }
+.wbrow { display: flex; flex-wrap: wrap; gap: 12px; align-items: start; }
+.wbcard { margin-bottom: 14px; }
 .pos { color: var(--good); } .neg { color: var(--bad); }
 .tag { font: 600 11px/1 var(--mono); padding: 3px 7px; border-radius: 999px; border: 1px solid currentColor; }
 .split { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 14px; align-items: start; }
@@ -83,19 +87,9 @@ h2 { scroll-margin-top: 56px; }
 </header>
 
 <nav class="toc" aria-label="Sections">
-  <a href="#n-h">Best next step</a><a href="#l-h">Animals by level</a><a href="#b-h">Cheap boosts</a><a href="#fw-h">Crop items</a><a href="#g-h">Expansions or levels</a>
-<a href="#u-h">Barn and Pigpen</a><a href="#fp-h">Flower plan</a><a href="#m-h">How it was modelled</a>
+  <a href="#l-h"><b>Animals by level</b></a><a href="#fp-h"><b>Flower plan</b></a><a href="#wb-h"><b>Weekly board</b></a>
+<a href="#n-h">Best next step</a><a href="#b-h">Cheap boosts</a><a href="#fw-h">Crop items</a><a href="#g-h">Expansions or levels</a><a href="#u-h">Barn and Pigpen</a><a href="#m-h">How it was modelled</a>
 </nav>
-
-<section aria-labelledby="n-h">
-  <h2 id="n-h">Best next step: where the next FLOWER goes first</h2>
-  <p class="muted" id="nIntro"></p>
-  <div class="tbl"><table id="nTable"></table></div>
-  <p id="nVerdict"></p>
-  <h3>Barn L2 and Pigpen L2 if you bought everything</h3>
-  <div class="tbl"><table id="nCost" class="compact"></table></div>
-  <p class="muted" id="nMining"></p>
-</section>
 
 <section aria-labelledby="l-h">
   <h2 id="l-h">Every level, every animal: the Monte Carlo spread</h2>
@@ -107,6 +101,34 @@ h2 { scroll-margin-top: 56px; }
   <p class="muted">Running FLOWER total for one animal when it leaves each level: every feed it ate and everything it produced so far, from the day you buy it. Read it as “sell or trade it in after this level and this is what it made”.</p>
   <div class="grid4" id="accCharts"></div>
 </section>
+
+<section aria-labelledby="fp-h">
+  <h2 id="fp-h">Your flower plan: 4 beds, starting now</h2>
+  <p class="muted" id="fpIntro"></p>
+  <h3>What you owe this week</h3>
+  <div class="tbl"><table id="prioTable" class="compact"></table></div>
+  <div class="tbl"><table id="owedTable" class="compact"></table></div>
+  <div class="tbl"><table id="planTable"></table></div>
+  <div class="tbl"><table id="readyTable" class="compact"></table></div>
+  <div class="tbl"><table id="stockTable"></table></div>
+</section>
+
+<section aria-labelledby="wb-h">
+  <h2 id="wb-h">Weekly board: what is still open</h2>
+  <p class="muted" id="wbIntro"></p>
+  <div id="wbBody"></div>
+</section>
+
+<section aria-labelledby="n-h">
+  <h2 id="n-h">Best next step: where the next FLOWER goes first</h2>
+  <p class="muted" id="nIntro"></p>
+  <div class="tbl"><table id="nTable"></table></div>
+  <p id="nVerdict"></p>
+  <h3>Barn L2 and Pigpen L2 if you bought everything</h3>
+  <div class="tbl"><table id="nCost" class="compact"></table></div>
+  <p class="muted" id="nMining"></p>
+</section>
+
 
 <section aria-labelledby="b-h">
   <h2 id="b-h">Cheap ways to make the animals pay more</h2>
@@ -141,16 +163,6 @@ h2 { scroll-margin-top: 56px; }
   <div class="tbl"><table id="upTable"></table></div>
 </section>
 
-<section aria-labelledby="fp-h">
-  <h2 id="fp-h">Your flower plan: 4 beds, starting now</h2>
-  <p class="muted" id="fpIntro"></p>
-  <h3>What you owe this week</h3>
-  <div class="tbl"><table id="prioTable" class="compact"></table></div>
-  <div class="tbl"><table id="owedTable" class="compact"></table></div>
-  <div class="tbl"><table id="planTable"></table></div>
-  <div class="tbl"><table id="readyTable" class="compact"></table></div>
-  <div class="tbl"><table id="stockTable"></table></div>
-</section>
 
 <section aria-labelledby="m-h">
   <h2 id="m-h">How it was modelled</h2>
@@ -337,7 +349,7 @@ function flowerPlanView() {
   const hm = ms => new Date(ms + off * 3600e3).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" });
   const nb = P.beds.length, days = [];
   P.schedule.forEach(r => { const d = day(r.plant); if (!days.includes(d)) days.push(d); });
-  const cell = r => `<div><b>${hm(r.plant)} ${r.flower}</b><br><span class="muted">${r.cross}${r.buy ? ` (buy ${nf(r.buy)})` : ""} · ready ${day(r.ready) === day(r.plant) ? "" : day(r.ready).slice(0, 3) + " "}${hm(r.ready)} · ${r.why}</span></div>`;
+  const cell = r => `<div><b>${hm(r.plant)} ${r.flower}</b><br><span class="muted">${r.seed ? r.seed.replace(/ Seed$/, "") + " seed + " : ""}${r.cross}${(r.alts || []).length ? ` (or ${r.alts.join(" or ")})` : ""} · ready ${day(r.ready) === day(r.plant) ? "" : day(r.ready).slice(0, 3) + " "}${hm(r.ready)} · ${r.why}</span></div>`;
   let lastG = "";
   $("planTable").innerHTML = `<thead><tr><th>Day (${tz})</th>${P.beds.map(b => `<th>Bed ${b.bed}</th>`).join("")}</tr></thead><tbody>` +
     days.map(d => { const rs = P.schedule.filter(r => day(r.plant) === d), g = group(rs[0].plant), head = g !== lastG ? `<tr class="hi"><td colspan="${nb + 1}"><b>${g}</b></td></tr>` : ""; lastG = g;
@@ -355,13 +367,55 @@ function flowerPlanView() {
       <td class="num ${r.held_now.length ? "pos" : "neg"}">${r.held_now.length ? "ready" : "missing"}</td></tr>`).join("") + "</tbody>";
 }
 
+// ---------- weekly board: what is still open
+function boardView() {
+  const W = DATA.weekly_board; if (!W) return;
+  const P = DATA.flower_plan || {}, off = P.tz_offset_h || 0;
+  const when = ms => new Date(ms + off * 3600e3).toLocaleString("en-GB", { weekday: "short", day: "2-digit", hour: "2-digit", minute: "2-digit", timeZone: "UTC" });
+  const fl = v => v == null ? "—" : nf(v, 2);
+  const tk = r => r.tickets ? `${r.tickets} Duende Caps` : "";
+  const head = (r, extra) => `<h3>${r.name} <span class="muted">· ${tk(r)}${r.have ? ` · you have ${r.have}` : ""}${extra || ""}</span></h3>`;
+  const grid = cells => `<table class="cgrid">${[0, 3, 6].map(i => `<tr>${cells.slice(i, i + 3).map(c => `<td>${c || ""}</td>`).join("")}</tr>`).join("")}</table>`;
+  const groups = { craft: [], crustacean: [], flower: [], fish: [], exotic: [], other: [] };
+  W.forEach(r => groups[r.kind].push(r));
+  let h = "";
+  if (groups.craft.length) {
+    h += `<h3>Crafting box</h3>` + groups.craft.map(r => `<div class="wbcard">${head(r, ` · ≈ ${fl(r.total)} FLOWER${r.partial ? "+" : ""}${r.tickets && r.total ? ` (${nf(r.total / r.tickets, 3)} per cap)` : ""}`)}
+      <div class="wbrow">${grid(r.grid)}<div class="tbl"><table class="compact"><thead><tr><th>Item</th><th>Qty</th><th>Have</th><th>Each</th><th>FLOWER</th></tr></thead><tbody>
+      ${r.lines.map(l => `<tr><td>${l.item}${l.sub ? ` <span class="muted">(craft: ${Object.entries(l.sub).map(([k, q]) => `${q} ${k}`).join(" + ")})</span>` : ""}</td><td class="num">${l.qty}</td><td class="num">${l.have || "—"}</td><td class="num">${fl(l.unit)}</td><td class="num">${fl(l.cost)}</td></tr>`).join("")}
+      </tbody></table></div></div></div>`).join("");
+  }
+  if (groups.crustacean.length) {
+    h += `<h3>Crustaceans</h3><div class="tbl"><table class="compact"><thead><tr><th>Crustacean</th><th>Reward</th><th>Trap</th><th>Chum</th><th>Have</th><th>FLOWER</th></tr></thead><tbody>` +
+      groups.crustacean.map(r => r.ways.map((w, i) => `<tr><td>${i ? "" : `<b>${r.name}</b>`}</td><td>${i ? "" : tk(r)}</td><td>${w.trap} (${w.hours} h)</td>
+        <td style="white-space:normal">${w.chum ? `${w.qty} ${w.chum}${w.recipe ? ` <span class="muted">— not tradeable; Fish Market this season: ${Object.entries(w.recipe).map(([k, q]) => `${q} ${k}`).join(", ")}</span>` : ""}` : "no chum"}</td>
+        <td class="num">${w.have == null ? "—" : w.have}</td><td class="num">${w.chum ? (w.cost == null ? "your fish" : fl(w.cost)) : "0"}</td></tr>`).join("")).join("") + "</tbody></table></div>";
+  }
+  if (groups.flower.length) {
+    h += `<h3>Flowers</h3><div class="tbl"><table class="compact"><thead><tr><th>Flower</th><th>Reward</th><th>Have</th><th>Plan</th></tr></thead><tbody>` +
+      groups.flower.map(r => { const x = (r.plan || [])[0];
+        return `<tr><td><b>${r.name}</b></td><td>${tk(r)}</td><td class="num">${r.have || "—"}</td><td style="white-space:normal">${r.have ? "deliver now" : x ? `bed ${x.bed}: plant ${when(x.plant)} (${x.seed ? x.seed.replace(/ Seed$/, "") + " seed + " : ""}${x.cross}), ready ${when(x.ready)}` : `<span class="neg">cannot be ready before the week turns</span>`}</td></tr>`; }).join("") + "</tbody></table></div>";
+  }
+  if (groups.fish.length) {
+    h += `<h3>Fish</h3><div class="tbl"><table class="compact"><thead><tr><th>Fish</th><th>Reward</th><th>Bait</th><th>Chum it likes</th><th>Seasons</th><th>Guaranteed with</th></tr></thead><tbody>` +
+      groups.fish.map(r => `<tr><td><b>${r.name}</b></td><td>${tk(r)}</td><td>${r.baits.join(", ")}</td><td style="white-space:normal">${r.likes.map(c => `${c.qty || "?"} ${c.chum}${c.cost != null ? ` (${fl(c.cost)})` : ""}`).join(", ") || "—"}</td><td>${r.seasons.join(", ")}</td><td>${r.guaranteed.join(", ") || "—"}</td></tr>`).join("") + "</tbody></table></div>";
+  }
+  if (groups.exotic.length) {
+    h += `<h3>Exotic crops and giant fruit</h3><div class="tbl"><table class="compact"><thead><tr><th>Item</th><th>Reward</th><th>Have</th><th>Where from</th></tr></thead><tbody>` +
+      groups.exotic.map(r => `<tr><td><b>${r.name}</b></td><td>${tk(r)}</td><td class="num">${r.have || "—"}</td><td style="white-space:normal">${r.how}</td></tr>`).join("") + "</tbody></table></div>";
+  }
+  if (groups.other.length) h += `<p class="muted">Also open: ${groups.other.map(r => `${r.name} (${tk(r)})`).join(", ")}.</p>`;
+  $("wbBody").innerHTML = h || `<p class="pos">Nothing left: the board is done.</p>`;
+  $("wbIntro").innerHTML = `Only what you still have to deliver this week (it turns Monday 00:00 UTC); animals and Obsidian are left out. FLOWER at today's floor prices; each square is bought or crafted, whichever is cheaper. Crafting grids from sfl.world, everything else from the game code.`;
+}
+
 function method() {
   const p = DATA.meta.prices.prices, sl = DATA.meta.slops, f = DATA.meta.farm;
   const items = [
     `Rules mirror <code>sunflower-land</code> main: level XP tables, favourite feed (60 XP, 80 from level 10), one-click feed to the next level, one produce claim per level-up, sleep 24 h × boosts, two pets per sleep at ⅓ and ⅔ of it, pet tool drawn by level weights. A “ready” animal can still be petted and keeps the XP. A sold “ready” animal counts one level lower.`,
     `Your farm (pulled ${f.fetched}): ${f.collectibles.length} placed collectibles, VIP ${f.vip ? "yes" : "no"}, ${f.island} island, ${f.chapter_wearables.length} Duende wearables worn.`,
     `${C.runs_single_animal} runs per animal and build for the level bars; ${C.runs_herd} runs per herd setup. Randomness: pet tools, and each week's bounty levels drawn from levels boards have asked for.`,
-    `Prices: sfl-manager P2P ${DATA.meta.prices.fetched}; produce and bristles after ${C.sell_fee * 100}%. Egg ${p.Egg}, Milk ${p.Milk}, Leather ${p.Leather}, Wool ${p.Wool}, Truffle ${p.Truffle}, Pig Bristles ${p["Pig Bristles"]}. Slop from the cheapest tradeable ingredient: ${Object.entries(sl).map(([k, v]) => `${k} ${v[0]}`).join(", ")}.`,
+    `Prices: ${DATA.meta.prices.source || "P2P"}, ${DATA.meta.prices.fetched}; produce and bristles after ${C.sell_fee * 100}%. Egg ${p.Egg}, Milk ${p.Milk}, Leather ${p.Leather}, Wool ${p.Wool}, Truffle ${p.Truffle}, Pig Bristles ${p["Pig Bristles"]}. Slop from the cheapest tradeable ingredient: ${Object.entries(sl).map(([k, v]) => `${k} ${v[0]}`).join(", ")}.`,
     `Not modelled: sickness itself (server-side), Buckaroo, shrines, treats, mud, gem value. Building costs are not subtracted.`,
   ];
   $("method").innerHTML = items.map(x => `<li>${x}</li>`).join("");
@@ -469,7 +523,7 @@ function nextView() {
     `At that pace mining alone pays for both buildings in about ${nf(tot / Math.max(M.both_net, 0.1), 1)} weeks.`;
 }
 
-function all() { document.querySelectorAll(".coinNote").forEach(e => e.textContent = COIN_TXT); nextView(); levelCharts(); boostView(); farmwideView(); growthView(); upgradeView(); flowerPlanView(); }
+function all() { document.querySelectorAll(".coinNote").forEach(e => e.textContent = COIN_TXT); nextView(); levelCharts(); boostView(); farmwideView(); growthView(); upgradeView(); flowerPlanView(); boardView(); }
 function init() {
   $("fid").textContent = DATA.meta.farm.farm_id; $("gen").textContent = DATA.meta.generated; $("tax").textContent = (C.sell_fee * 100) + "%";
   method(); all();

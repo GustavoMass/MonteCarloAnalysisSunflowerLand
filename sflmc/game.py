@@ -148,3 +148,39 @@ BUILDING_COSTS = {
         3: {"coins": 37500, "items": {"Wood": 2250, "Iron": 135, "Gold": 90, "Crimstone": 50, "Oil": 100, "Mud": 100}},
     },
 }
+
+
+# ---- weekly board helpers (sunflower-land src/features/game/types/crustaceans.ts, collectibles.ts,
+# monuments.ts). Crafting grids are in Data/crafting_recipes.json, fish rules in Data/fish_rules.json.
+# trap -> {chum or None: crustacean}; chum amounts per trap
+CRUSTACEAN_TRAPS = {
+    "Crab Pot": {None: "Isopod", "Heart leaf": "Blue Crab", "Ribbon": "Blue Crab", "Wild Grass": "Lobster",
+                 "Frost Pebble": "Lobster", "Grape": "Hermit Crab", "Rice": "Hermit Crab", "Crimstone": "Shrimp",
+                 "Moonfur": "Mussel", "Fish Stick": "Oyster", "Fish Oil": "Anemone", "Crab Stick": "Anemone"},
+    "Mariner Pot": {None: "Barnacle", "Crimstone": "Sea Slug", "Chewed Bone": "Sea Snail", "Ruffroot": "Sea Snail",
+                    "Dewberry": "Garden Eel", "Duskberry": "Garden Eel", "Lunara": "Sea Grapes", "Moonfur": "Octopus",
+                    "Fish Stick": "Sea Urchin", "Crab Stick": "Horseshoe Crab"},
+}
+CRUSTACEAN_CHUMS = {
+    "Crab Pot": {"Heart leaf": 3, "Ribbon": 3, "Wild Grass": 3, "Frost Pebble": 3, "Grape": 5, "Rice": 5,
+                 "Crimstone": 2, "Moonfur": 1, "Fish Stick": 2, "Fish Oil": 2, "Crab Stick": 2},
+    "Mariner Pot": {"Crimstone": 2, "Chewed Bone": 3, "Ruffroot": 3, "Dewberry": 3, "Duskberry": 3, "Lunara": 3,
+                    "Moonfur": 1, "Fish Stick": 2, "Crab Stick": 2},
+}
+TRAP_HOURS = {"Crab Pot": 4, "Mariner Pot": 8}
+# exotic crops: Potion House, paid in Potion Tickets
+EXOTIC_TICKETS = {"Black Magic": 8000, "Golden Helios": 4000, "Chiogga": 2000, "Purple Cauliflower": 800,
+                  "Adirondack Potato": 600, "Warty Goblin Pumpkin": 400, "White Carrot": 200}
+# giant fruit: harvest of a village project (cheered by visitors)
+GIANT_FRUIT = {"Giant Orange": "Big Orange", "Giant Apple": "Big Apple", "Giant Banana": "Big Banana"}
+# Fish Market baits, by season (sfl.world/info/fishing); not tradeable, so made from these
+FISH_MARKET = {
+    "Fish Flake": {"winter": {"Anchovy": 4, "Blowfish": 2, "Clownfish": 2}, "spring": {"Anchovy": 4, "Porgy": 2, "Sea Bass": 2},
+                   "summer": {"Anchovy": 4, "Butterflyfish": 2, "Sea Horse": 2}, "autumn": {"Anchovy": 4, "Halibut": 2, "Muskellunge": 2}},
+    "Fish Stick": {"winter": {"Red Snapper": 6, "Walleye": 2, "Angelfish": 2}, "spring": {"Red Snapper": 6, "Olive Flounder": 2, "Zebra Turkeyfish": 2},
+                   "summer": {"Red Snapper": 6, "Surgeonfish": 2, "Tilapia": 2}, "autumn": {"Red Snapper": 6, "Moray Eel": 2, "Napoleanfish": 2}},
+    "Fish Oil": {"winter": {"Tuna": 8, "Blue Marlin": 2, "Football fish": 2}, "spring": {"Tuna": 8, "Weakfish": 2, "Oarfish": 2},
+                 "summer": {"Tuna": 8, "Cobia": 2, "Sunfish": 2}, "autumn": {"Tuna": 8, "Mahi Mahi": 4, "Crab": 2}},
+    "Crab Stick": {"winter": {"Crab": 1, "Oyster": 1, "Isopod": 1, "Garden Eel": 1}, "spring": {"Crab": 1, "Blue Crab": 1, "Hermit Crab": 1, "Sea Slug": 1},
+                   "summer": {"Crab": 1, "Mussel": 1, "Isopod": 1, "Sea Snail": 1}, "autumn": {"Crab": 1, "Shrimp": 1, "Lobster": 1, "Barnacle": 1}},
+}
