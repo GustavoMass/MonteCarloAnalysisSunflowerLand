@@ -52,6 +52,35 @@ def harvests_per_day(cycle_h, check_hours, days=240):
     return best
 
 
+def with_misses(cycle_h, check_hours, attend, days=3000, seed=7):
+    """Harvests a day when each check is kept with probability `attend` (the rest you miss).
+    A 24 h node collected late stays late: the delay carries to the next day."""
+    import random
+    rng, ready, n = random.Random(seed), 0.0, 0
+    for d in range(days):
+        for h in check_hours:
+            t = d * 24 + h
+            if t >= ready and rng.random() < attend:
+                n += 1
+                ready = t + cycle_h
+    return n / days
+
+
+# ways to shorten ore refills (mineGold.ts, mineCrimstone.ts, collectibleBuilt.ts, factionShop.ts, pets.ts)
+ORE_BOOSTS = [
+    {"name": "Midas Sprint", "how": "skill, 2 points", "gold": 0.9, "crim": 1, "lasts": "always"},
+    {"name": "Midas Rush", "how": "skill, 3 points", "gold": 0.8, "crim": 1, "lasts": "always"},
+    {"name": "Fireside Alchemist", "how": "skill, 3 points", "gold": 1, "crim": 0.85, "lasts": "always"},
+    {"name": "Pickaxe Shark", "how": "wearable", "gold": 0.85, "crim": 1, "lasts": "while worn; also 10% instant refill"},
+    {"name": "Crimstone Amulet", "how": "wearable", "gold": 1, "crim": 0.8, "lasts": "while worn"},
+    {"name": "Crimstone Clam", "how": "collectible", "gold": 1, "crim": 0.9, "lasts": "placed; also a chance of instant refill"},
+    {"name": "Mole Shrine", "how": "pet shrine: 15 Acorn + 10 Dewberry + 10 Ribbon", "gold": 0.75, "crim": 0.75, "lasts": "7 days (label says iron; the code also speeds gold and crimstone)"},
+    {"name": "Time Warp Totem", "how": "100 Love Charm", "gold": 0.5, "crim": 1, "lasts": "2 h (4 h with the new speed windows)"},
+    {"name": "Super Totem", "how": "6,000 Love Charm", "gold": 0.5, "crim": 1, "lasts": "7 days"},
+    {"name": "Ore Hourglass", "how": "8,000 faction Marks", "gold": 0.5, "crim": 1, "lasts": "3 h (5 h with the new speed windows)"},
+]
+
+
 def gold_cycle(sprint=0, rush=0):
     m = (MIDAS["Midas Sprint"][sprint - 1] if sprint else 1) * (MIDAS["Midas Rush"][rush - 1] if rush else 1)
     return RECOVERY_H["Gold Rock"] * m
@@ -119,7 +148,11 @@ def evaluate(farm, prices, cfg, wood_per_chop, gold_per_mine):
     p = lambda k: prices.get(k) or 0.0                                  # noqa: E731
     tree_week = cfg.get("tree_mult", 1.15) * cfg.get("tree_checks", 9) * 7 * wood_per_chop * p("Wood")
     gold_week = {g["label"]: g["per_day"] * 7 * gold_per_mine for g in gold}
-    return {"checks": ch, "gold": gold, "stock": full, "shipment": SHIPMENT, "restock_gems": RESTOCK_GEMS,
+    drift = [{"attend": a, "rates": {f"{c:g}": with_misses(c, ch, a) for c in (24, 21.6, 20.4, 18)}} for a in (0.95, 0.85, 0.7, 0.5)]
+    have = set(farm.get("collectibles", [])) | set(farm.get("wearables", [])) | {k for k, v in inv.items() if v}
+    ore = [dict(b, have=b["name"] in have or bool(skills.get(b["name"]))) for b in ORE_BOOSTS]
+    return {"checks": ch, "gold": gold, "drift": drift, "ore_boosts": ore,
+            "currency": {"Love Charm": n("Love Charm"), "Mark": n("Mark"), "Time Warp Totem": n("Time Warp Totem")}, "stock": full, "shipment": SHIPMENT, "restock_gems": RESTOCK_GEMS,
             "iron": {"rocks": n("Iron Rock"), "per_mine": iron_y, "mines_day": iron_mines, "per_day": iron_own},
             "use": {"trees": n("Tree"), "stones": n("Stone Rock"), "gold": n("Gold Rock"), "crim": n("Crimstone Rock")},
             "scenarios": scen, "sunstone": {"tree": {"cost": 7, "flower_week": tree_week, "axe_coins_week": -20 * tree_week / max(1e-9, wood_per_chop * p("Wood"))},
