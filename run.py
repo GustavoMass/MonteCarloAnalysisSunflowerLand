@@ -373,6 +373,7 @@ def main():
                                         coins_per_flower=fw.get("coins_per_flower", 1000), weeks=cfg["chapter_weeks"],
                                         item_prices=fw.get("item_prices"), crop_plan=fw.get("crop_plan"),
                                         crop_yield=fw.get("crop_yield"), crop_speed_credit=fw.get("crop_speed_credit", 1.0),
+                                        tool_rate=cfg.get("tool_coins_per_flower", 1200),
                                         gold_checks={k: cfg.get("tools", {}).get(k) for k in ("start", "end", "every") if k in cfg.get("tools", {})})
     gw = cfg.get("growth", {})
     out["growth"] = growth.evaluate(farm_d, prices["prices"], load(os.path.join(DATA, "growth_rules.json"), {}),
@@ -384,7 +385,8 @@ def main():
                                     skip_skills=gw.get("skip_skills", []))
     rt = out["farmwide"]["rates"]
     out["nft_floor"] = {n: (nfts.get(n) or {}).get("price") for n in ("Pickaxe Shark", "Crimstone Amulet", "Crimstone Clam") if (nfts.get(n) or {}).get("price")}
-    out["tools"] = TOOLS.evaluate(farm_d, prices["prices"], cfg.get("tools", {}), rt["wood_per_chop"], rt["per_gold_mine"])
+    out["tools"] = TOOLS.evaluate(farm_d, prices["prices"], cfg.get("tools", {}), rt["per_chop"], rt["per_gold_mine"],
+                                  tool_rate=cfg.get("tool_coins_per_flower", 1200))
     herd_tickets = {}
     for animal in G.ANIMALS:
         pname, pol, buf = pick(animal)

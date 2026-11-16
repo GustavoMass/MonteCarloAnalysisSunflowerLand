@@ -41,7 +41,9 @@ def _tier_unlocked(tree_skills, owned):
 
 
 def evaluate(farm, prices, skill_tree, nfts, tax=0.125, speed_credit=0.8, coins_per_flower=1000, weeks=12,
-             item_prices=None, crop_plan=None, crop_yield=None, crop_speed_credit=1.0, gold_checks=None):
+             item_prices=None, crop_plan=None, crop_yield=None, crop_speed_credit=1.0, gold_checks=None, tool_rate=1200):
+    """Tools (axes, pickaxes) cost only their coin price, counted at `tool_rate` coins per FLOWER;
+    their resource ingredients (wood, stone, iron, gold) are never subtracted."""
     """crop_plan {crop: cycles per week on every plot}; crop_yield {"boosted_plots", "boosted", "other"}
     = crops per harvest. Without a plan, the lifetime harvest counters at 1 crop per harvest are used."""
     act, wk = farm.get("activity", {}), max(farm.get("weeks_played") or 1, 1)
@@ -79,9 +81,12 @@ def evaluate(farm, prices, skill_tree, nfts, tax=0.125, speed_credit=0.8, coins_
         y, harv = 1.0, {c: r(f"{c} Harvested") for c in BASIC_MEDIUM + ADVANCED}
     crop_val = sum(sold(c, q * y) for c, q in harv.items())           # what your crops sell for a week
     base_val = sum(sold(c, q) for c, q in harv.items())               # one crop per harvest: what x-multipliers act on
-    per_stone_mine = sold("Stone", stone_y) - used("Wood", 3)
-    per_gold_mine = used("Gold", gold_y) - used("Iron", 5) - used("Wood", 3)
-    per_crim_mine = used("Crimstone", crim_y) - used("Gold", 3) - used("Wood", 3)
+    tc = lambda coins: coins / tool_rate                               # noqa: E731  tool coin price in FLOWER
+    per_stone_mine = sold("Stone", stone_y) - tc(20)
+    per_gold_mine = used("Gold", gold_y) - tc(80)
+    per_crim_mine = used("Crimstone", crim_y) - tc(100)
+    per_iron_mine = used("Iron", 1 + 0.1 - 0.5) - tc(20)                # Iron Beetle, Rocky Favor
+    per_chop = used("Wood", wood_y) - tc(20)
     rows = []
 
     def owned_rank(n):
@@ -102,7 +107,7 @@ def evaluate(farm, prices, skill_tree, nfts, tax=0.125, speed_credit=0.8, coins_
         rows.append(row)
 
     # ---- trees
-    add("Trees", "Tree Charge", flower_wk=chops * sp(0.9) * used("Wood", wood_y), coins_wk=-chops * sp(0.9) * 20,
+    add("Trees", "Tree Charge", flower_wk=chops * sp(0.9) * per_chop,
         note="more chops; each extra chop costs an Axe")
     if owned_rank("Tough Tree") == 1:          # R2: 10% -> 20% chance of x3 wood (3 points + 2 shards)
         add("Trees", "Tough Tree R2", flower_wk=chops * 0.1 * 2 * 1.2 * used("Wood", 1),
@@ -110,8 +115,8 @@ def evaluate(farm, prices, skill_tree, nfts, tax=0.125, speed_credit=0.8, coins_
     add("Trees", "Feller's Discount", coins_wk=r("Axe Crafted") * 20 * 0.2, note=f"{r('Axe Crafted'):.0f} axes a week")
     add("Trees", "Money Tree", coins_wk=chops * 0.01 * 200, note=f"{chops:.0f} chops a week x 1% x 200")
     # ---- mining (iron left out: you mine stone and buy iron)
-    add("Mining", "Speed Miner", flower_wk=mines * sp(0.8) * per_stone_mine, coins_wk=-mines * sp(0.8) * 20,
-        note=f"{per_stone_mine:.3f} FLOWER per extra stone mine after wood")
+    add("Mining", "Speed Miner", flower_wk=mines * sp(0.8) * per_stone_mine,
+        note=f"{per_stone_mine:.3f} FLOWER per extra stone mine after the pickaxe")
     picks = r("Pickaxe Crafted") * 20 + r("Stone Pickaxe Crafted") * 20 + r("Iron Pickaxe Crafted") * 80 + r("Gold Pickaxe Crafted") * 100
     add("Mining", "Frugal Miner", coins_wk=picks * 0.2, note="all pickaxes 20% cheaper")
     # gold: real timing. A rock ready while you sleep waits for the morning (tools.harvests_per_day)
@@ -124,10 +129,10 @@ def evaluate(farm, prices, skill_tree, nfts, tax=0.125, speed_credit=0.8, coins_
             gold_rate[f"{s_}{r_}"] = T.harvests_per_day(T.gold_cycle(s_, r_), ck)
     for name, key in (("Midas Sprint", "10"), ("Midas Rush", "01")):
         extra = g_rocks * 7 * (gold_rate[key] - g_now)
-        add("Mining", name, flower_wk=extra * per_gold_mine, coins_wk=-extra * 80,
+        add("Mining", name, flower_wk=extra * per_gold_mine,
             note=f"alone: gold every {T.gold_cycle(*map(int, key)):.1f} h, {gold_rate[key]:.2f} a day at your checks")
-    add("Mining", "Fireside Alchemist", flower_wk=crim_m * sp(0.85) * per_crim_mine, coins_wk=-crim_m * sp(0.85) * 100,
-        note=f"{per_crim_mine:.3f} FLOWER per extra crimstone mine after 3 Gold + 3 Wood")
+    add("Mining", "Fireside Alchemist", flower_wk=crim_m * sp(0.85) * per_crim_mine,
+        note=f"{per_crim_mine:.3f} FLOWER per extra crimstone mine after the pickaxe")
     # ---- fruit
     fruit_val = sum(sold(f, q * fruit_y) for f, q in fruit.items())
     add("Fruit", "Generous Orchard", flower_wk=sum(sold(f, q * 0.2) for f, q in fruit.items()),
@@ -193,7 +198,8 @@ def evaluate(farm, prices, skill_tree, nfts, tax=0.125, speed_credit=0.8, coins_
              "fruit_harvests": sum(fruit.values()), "crop_value_week": crop_val, "crop_yield": y, "crop_harvests_week": sum(harv.values()),
              "crop_plan": crop_plan, "plots": plots, "weeks_played": wk,
              "per_stone_mine": per_stone_mine, "crim_per_mine": crim_y, "gold_per_mine": gold_y, "per_gold_mine": per_gold_mine, "per_crim_mine": per_crim_mine,
-             "wood_per_chop": wood_y, "wood_price": used("Wood", 1),
+             "wood_per_chop": wood_y, "wood_price": used("Wood", 1), "per_chop": per_chop, "per_iron_mine": per_iron_mine,
+             "tool_rate": tool_rate,
              "fruit_value_week": sum(sold(f, q * fruit_y) for f, q in fruit.items())}
     rates.update(gold_rate=gold_rate, gold_now=g_now, gold_rocks=g_rocks, gold_checks=ck)
     return {"rows": out, "rates": rates, "speed_credit": speed_credit, "crop_speed_credit": crop_speed_credit,

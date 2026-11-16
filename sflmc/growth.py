@@ -75,7 +75,7 @@ def planned(plan, farmwide, boosts, skill_tree, weeks):
             midas[0 if n == "Midas Sprint" else 1] = rank
             after = rt["gold_rate"][f"{midas[0]}{midas[1]}"]
             extra = rt["gold_rocks"] * 7 * (after - before) * weeks
-            flower, coins = extra * rt["per_gold_mine"], -extra * 80
+            flower, coins = extra * rt["per_gold_mine"], 0.0
             note = f"gold {after:.2f} a day at your checks (was {before:.2f})"
         else:
             src = rows.get(name) or bst.get(name) or {}
@@ -140,13 +140,12 @@ def node_values(farm, rates, prices, weeks):
     n = lambda k: max(1.0, float(inv.get(k, 0) or 0))   # noqa: E731
     v = {
         "Crop Plot": (rates["crop_value_week"] / max(1, rates["plots"]), 0, "your crop plan per plot"),
-        "Tree": (rates["chops"] / n("Tree") * rates["wood_per_chop"] * rates["wood_price"],
-                 -rates["chops"] / n("Tree") * 20, f"{rates['chops'] / n('Tree'):.0f} chops a week, wood at buy price, axes in coins"),
-        "Stone Rock": (rates["stone_mines"] / n("Stone Rock") * rates["per_stone_mine"], 0, "stone barely beats the pickaxe"),
-        "Gold Rock": (rates["gold_mines"] / n("Gold Rock") * rates["per_gold_mine"], 0, ""),
-        "Crimstone Rock": (rates["crimstone_mines"] / n("Crimstone Rock") * rates["per_crim_mine"], 0, "net of the gold pickaxe"),
+        "Tree": (rates["chops"] / n("Tree") * rates["per_chop"], 0, f"{rates['chops'] / n('Tree'):.0f} chops a week, wood at buy price, axe 20 coins"),
+        "Stone Rock": (rates["stone_mines"] / n("Stone Rock") * rates["per_stone_mine"], 0, "after the 20-coin pickaxe"),
+        "Gold Rock": (rates["gold_mines"] / n("Gold Rock") * rates["per_gold_mine"], 0, "after the 80-coin pickaxe"),
+        "Crimstone Rock": (rates["crimstone_mines"] / n("Crimstone Rock") * rates["per_crim_mine"], 0, "after the 100-coin pickaxe"),
         "Fruit Patch": (rates["fruit_value_week"] / n("Fruit Patch"), 0, "your fruit mix per patch"),
-        "Iron Rock": (0, 0, "mining iron costs more than buying it"),
+        "Iron Rock": (21 * rates["per_iron_mine"], 0, "3 mines a day x 0.6 iron (Rocky Favor), 20-coin pickaxe"),
         "Oil Reserve": (0, 0, "oil valued at its drill cost; it saves time, not FLOWER"),
         "Sunstone Rock": (0, 0, "no market price"),
     }
@@ -220,15 +219,14 @@ def daily_mining(farm, prices, rates, tax):
     g_mines, c_mines = g_rocks * 7, c_rocks * 7
     gold = g_mines * rates.get("gold_per_mine", 1.8)
     crim = c_mines * rates.get("crim_per_mine", 1.6)
-    gold_for_crim = c_mines * 3
+    rate = rates.get("tool_rate", 1200)
     crim_sell = crim * p("Crimstone") * (1 - tax)
-    crim_cost = gold_for_crim * p("Gold") + c_mines * 3 * p("Wood")         # pickaxes, gold at market
-    gold_cost = g_mines * (5 * p("Iron") + 3 * p("Wood"))
-    gold_left = gold - gold_for_crim
+    crim_cost = c_mines * 100 / rate                                        # Gold Pickaxe: coins only
+    gold_cost = g_mines * 80 / rate                                         # Iron Pickaxe: coins only
+    gold_sell = gold * p("Gold") * (1 - tax)
     return {"gold_rocks": g_rocks, "crim_rocks": c_rocks, "gold_week": gold, "crim_week": crim,
-            "gold_for_crim": gold_for_crim, "gold_left": gold_left,
-            "crim_net": crim_sell - crim_cost, "gold_net": gold * p("Gold") - gold_cost,
-            "both_net": crim_sell + gold_left * p("Gold") * (1 - tax if gold_left > 0 else 1) - gold_cost - c_mines * 3 * p("Wood"),
+            "crim_net": crim_sell - crim_cost, "gold_net": gold_sell - gold_cost,
+            "both_net": crim_sell + gold_sell - crim_cost - gold_cost, "tool_rate": rate,
             "coins": -(g_mines * 80 + c_mines * 100)}
 
 

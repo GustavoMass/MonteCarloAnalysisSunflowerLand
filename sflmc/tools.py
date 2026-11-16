@@ -96,13 +96,16 @@ def stock(skills, toolshed=True):
     return s
 
 
-def scenario(name, use, full, prices, iron_own):
+COINS = {"Axe": 20, "Pickaxe": 20, "Stone Pickaxe": 20, "Iron Pickaxe": 80, "Gold Pickaxe": 100}
+
+
+def scenario(name, use, full, prices, iron_own, tool_rate=1200):
     """use: tools needed a day. Restocks a day each tool forces = (use - shipment) / full stock."""
     p = lambda k: prices.get(k) or 0.0                                  # noqa: E731
     rows = {}
     for tool, n in use.items():
         rows[tool] = {"use": n, "restocks": max(0.0, n - SHIPMENT[tool]) / full[tool],
-                      "flower": n * sum(q * p(i) for i, q in RECIPE[tool].items())}
+                      "flower": n * COINS[tool] / tool_rate}
     bind = max(rows, key=lambda t: rows[t]["restocks"])
     iron_need = use.get("Iron Pickaxe", 0) * 5
     return {"name": name, "tools": rows, "binding": bind, "restocks_day": rows[bind]["restocks"],
@@ -110,7 +113,7 @@ def scenario(name, use, full, prices, iron_own):
             "iron_own": iron_own, "iron_buy": max(0.0, iron_need - iron_own)}
 
 
-def evaluate(farm, prices, cfg, wood_per_chop, gold_per_mine):
+def evaluate(farm, prices, cfg, per_chop, gold_per_mine, tool_rate=1200):
     """cfg: {"start", "end", "every", "tree_checks", "tree_mult", "stone_checks"} from config tools."""
     inv, skills = farm.get("inventory", {}), farm.get("skills", {})
     n = lambda k: int(inv.get(k, 0) or 0)                               # noqa: E731
@@ -118,8 +121,7 @@ def evaluate(farm, prices, cfg, wood_per_chop, gold_per_mine):
     late = checks(cfg.get("start", 6), 24, cfg.get("every", 2))
     full = stock(skills, toolshed=bool(n("Toolshed")))
     cur = (skills.get("Midas Sprint", 0), skills.get("Midas Rush", 0))
-    combos = [("now", cur), ("Midas Sprint + Rush (rank 1, 5 points)", (1, 1)),
-              ("Midas Sprint R2 + Rush R2 (14 points + 5 shards)", (2, 2))]
+    combos = [("now", cur)]                       # ore refill skills are off the table
     gold = []
     for label, (s, r) in combos:
         cyc = gold_cycle(s, r)
@@ -138,23 +140,21 @@ def evaluate(farm, prices, cfg, wood_per_chop, gold_per_mine):
                 "Pickaxe": stones, "Stone Pickaxe": iron_mines, "Gold Pickaxe": crim,
                 "Iron Pickaxe": (n("Gold Rock") + extra_gold) * gold_rate}
 
-    g_now, g_r1, g_r2 = (g["per_day"] for g in gold)
+    g_now = gold[0]["per_day"]
     iron_own = iron_mines * iron_y
-    scen = [scenario("Today", use(g_now), full, prices, iron_own),
-            scenario("Midas rank 1 (your checks)", use(g_r1), full, prices, iron_own),
-            scenario("Gold 3x every 2 days (Midas R2 pair)", use(g_r2), full, prices, iron_own),
-            scenario("... + 1 Tree (7 Sunstone)", use(g_r2, extra_tree=1), full, prices, iron_own),
-            scenario("... + 1 Gold Rock (10 Sunstone)", use(g_r2, extra_gold=1), full, prices, iron_own)]
+    scen = [scenario("Today", use(g_now), full, prices, iron_own, tool_rate),
+            scenario("+ 1 Tree (7 Sunstone)", use(g_now, extra_tree=1), full, prices, iron_own, tool_rate),
+            scenario("+ 1 Gold Rock (10 Sunstone)", use(g_now, extra_gold=1), full, prices, iron_own, tool_rate)]
     p = lambda k: prices.get(k) or 0.0                                  # noqa: E731
-    tree_week = cfg.get("tree_mult", 1.15) * cfg.get("tree_checks", 9) * 7 * wood_per_chop * p("Wood")
+    tree_week = cfg.get("tree_mult", 1.15) * cfg.get("tree_checks", 9) * 7 * per_chop      # wood after the 20-coin axe
     gold_week = {g["label"]: g["per_day"] * 7 * gold_per_mine for g in gold}
-    drift = [{"attend": a, "rates": {f"{c:g}": with_misses(c, ch, a) for c in (24, 21.6, 20.4, 18)}} for a in (0.95, 0.85, 0.7, 0.5)]
+    drift = [{"attend": a, "rates": {f"{c:g}": with_misses(c, ch, a) for c in (24, 18)}} for a in (0.95, 0.85, 0.7, 0.5)]
     have = set(farm.get("collectibles", [])) | set(farm.get("wearables", [])) | {k for k, v in inv.items() if v}
-    ore = [dict(b, have=b["name"] in have or bool(skills.get(b["name"]))) for b in ORE_BOOSTS]
+    ore = [dict(b, have=b["name"] in have) for b in ORE_BOOSTS if not b["how"].startswith("skill")]
     return {"checks": ch, "gold": gold, "drift": drift, "ore_boosts": ore,
             "currency": {"Love Charm": n("Love Charm"), "Mark": n("Mark"), "Time Warp Totem": n("Time Warp Totem")}, "stock": full, "shipment": SHIPMENT, "restock_gems": RESTOCK_GEMS,
             "iron": {"rocks": n("Iron Rock"), "per_mine": iron_y, "mines_day": iron_mines, "per_day": iron_own},
             "use": {"trees": n("Tree"), "stones": n("Stone Rock"), "gold": n("Gold Rock"), "crim": n("Crimstone Rock")},
-            "scenarios": scen, "sunstone": {"tree": {"cost": 7, "flower_week": tree_week, "axe_coins_week": -20 * tree_week / max(1e-9, wood_per_chop * p("Wood"))},
+            "scenarios": scen, "sunstone": {"tree": {"cost": 7, "flower_week": tree_week},
                                             "gold": {"cost": 10, "flower_week": gold_week}},
             "shards": n("Ascension Shard"), "sunstone_have": n("Sunstone")}
