@@ -190,28 +190,48 @@ def _ask_live_copy(farm_id):
         print(f"  live reload not available ({e}); using sfl-manager's cached copy")
 
 
-# How old (hours) each cached file may be before it is fetched again. Farm and board
-# change as you play; the flower book, delivery catalog and NFT floors barely move.
-MAX_AGE = {"land": 0.25, "prices": 1, "flowers": 24, "deliveries": 24, "board": 0.25, "nft": 24}
+# How old (hours) the farm may be before it is fetched again.
+MAX_AGE = {"land": 0.25}
+# What a plain run fetches: only your farm (beds, inventory, orders) and the weekly board.
+# Everything else is fetched only when asked for by name (run.py --prices / --nft / --info).
+EXTRAS = ("prices", "nft", "info")
 
 
 def _age_h(path):
     return (time.time() - os.path.getmtime(path)) / 3600 if os.path.exists(path) else 1e9
 
 
-def refresh(data_dir, farm_id, nft_names=(), max_age=None):
+def refresh(data_dir, farm_id, nft_names=(), max_age=None, extras=()):
+    """Daily refresh: farm + weekly board (3 calls). extras adds "prices" (1 call),
+    "info" (flower book + delivery catalog, 2 calls) or "nft" (one per NFT season, ~15 calls)."""
     age = {**MAX_AGE, **(max_age or {})}
-    fresh = lambda key, name: _age_h(os.path.join(data_dir, name)) < age[key]  # noqa: E731
+    extras = set(extras)
     del CALLS[:]
-    if fresh("land", f"farm_{farm_id}.json") and fresh("prices", "prices_snapshot.json"):
-        print(f"  farm and prices fetched under {age['land'] * 60:.0f} min ago; not calling sfl-manager")
+    if _age_h(os.path.join(data_dir, f"farm_{farm_id}.json")) < age["land"] and not extras:
+        print(f"  farm fetched under {age['land'] * 60:.0f} min ago; not calling sfl-manager")
         return
     _ask_live_copy(farm_id)
     raw = _get(f"{API}/v3/land/{farm_id}")
-    prices = _get(f"{API}/v1/prices")["p2p"]
     farm = parse_farm(raw, farm_id)
     board = parse_board(raw)
+    files = []
+    if "prices" in extras:
+        files.append(("prices_snapshot.json", _price_snapshot(data_dir, _get(f"{API}/v1/prices")["p2p"])))
 
+    _write(data_dir, files + _daily_files(data_dir, farm_id, raw, farm, board, nft_names, extras))
+    print(f"  {len(CALLS)} requests to sfl-manager this run: " + ", ".join(
+        c.replace(API, "").replace(str(farm_id), "<farm>") for c in CALLS))
+    return farm
+
+
+def _write(data_dir, files):
+    os.makedirs(data_dir, exist_ok=True)
+    for name, obj in files:
+        with open(os.path.join(data_dir, name), "w", encoding="utf-8") as fh:
+            json.dump(obj, fh, indent=1)
+
+
+def _price_snapshot(data_dir, prices):
     need = {"Egg", "Feather", "Milk", "Leather", "Wool", "Merino Wool", "Truffle", "Pig Bristles",
             "Wood", "Stone", "Iron", "Gold", "Crimstone", "Oil", "Mud", "Salt", "Honey",
             "Apple", "Blueberry", "Orange", "Lemon", "Tomato", "Potato", "Pumpkin", "Carrot", "Cabbage", "Soybean",
@@ -235,7 +255,10 @@ def refresh(data_dir, farm_id, nft_names=(), max_age=None):
             snap["prices"].update(kept)
             snap["stale"] = {k: prev.get("stale", {}).get(k, prev.get("fetched")) for k in sorted(kept)}
             print(f"  no current price for {', '.join(sorted(kept))}; using the last known one")
+    return snap
 
+
+def _daily_files(data_dir, farm_id, raw, farm, board, nft_names, extras):
     # keep coin history: merge this week's coin levels into what we have seen before
     bpath = os.path.join(data_dir, "bounties_observed.json")
     old = {}
@@ -250,20 +273,18 @@ def refresh(data_dir, farm_id, nft_names=(), max_age=None):
     bounties = {**old, "source": "sfl-manager land API, merged across refreshes",
                 "updated": time.strftime("%Y-%m-%d"), "coins": coins, "current_board": board}
 
-    os.makedirs(data_dir, exist_ok=True)
-    files = [(f"farm_{farm_id}.json", farm), ("prices_snapshot.json", snap), ("bounties_observed.json", bounties)]
+    files = [(f"farm_{farm_id}.json", farm), ("bounties_observed.json", bounties)]
     # optional extras: a failure here should not stop the simulation
-    try:
-        if not fresh("flowers", "flowers.json"):
+    if "info" in extras:
+        try:
             files.append(("flowers.json", _flowers(_get(f"{API}/v3/info/flowers"))))
-    except Exception as e:  # noqa: BLE001
-        print(f"  flowers not refreshed: {e}")
-    try:
-        if not fresh("deliveries", "ticket_orders_history.json"):
+        except Exception as e:  # noqa: BLE001
+            print(f"  flowers not refreshed: {e}")
+        try:
             files.append(("ticket_orders_history.json",
                           _merge_orders(os.path.join(data_dir, "ticket_orders_history.json"), _get(f"{API}/v3/info/deliveries"))))
-    except Exception as e:  # noqa: BLE001
-        print(f"  delivery orders not refreshed: {e}")
+        except Exception as e:  # noqa: BLE001
+            print(f"  delivery orders not refreshed: {e}")
     try:
         st = _get(f"{API}/v3/tools/season-tickets/farm/{farm_id}")
         tickets = {r["id"]: r["items"].get(TICKET) for r in (raw["raw"]["farm"].get("bounties") or {}).get("requests", [])
@@ -274,13 +295,9 @@ def refresh(data_dir, farm_id, nft_names=(), max_age=None):
                                           "double_dates": st.get("double_dates", []), "board": board_items}))
     except Exception as e:  # noqa: BLE001
         print(f"  board not refreshed: {e}")
-    if nft_names and not fresh("nft", "nft_prices.json"):
+    if nft_names and "nft" in extras:
         try:
             files.append(("nft_prices.json", {"fetched": time.strftime("%Y-%m-%d"), "items": nft_prices(nft_names)}))
         except Exception as e:  # noqa: BLE001
             print(f"  NFT prices not refreshed: {e}")
-    for name, obj in files:
-        with open(os.path.join(data_dir, name), "w", encoding="utf-8") as fh:
-            json.dump(obj, fh, indent=1)
-    print(f"  {len(CALLS)} requests to sfl-manager this run: " + ", ".join(sorted({c.split('/api/')[1].split('/')[0] + '/' + c.split('/api/')[1].split('/')[1] for c in CALLS})))
-    return farm, snap, bounties
+    return files

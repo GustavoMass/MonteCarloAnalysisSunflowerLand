@@ -1,6 +1,9 @@
 """One command: fetch your farm + prices, simulate, build the report, open it.
 
-    python run.py              # refresh from sfl-manager, then simulate
+    python run.py              # refresh your farm + weekly board from sfl-manager (3 calls), then simulate
+    python run.py --prices     # ...also market prices (1 call)
+    python run.py --info       # ...also the flower book and delivery catalog (2 calls)
+    python run.py --nft        # ...also NFT floor prices (~15 calls; they barely move)
     python run.py --offline    # reuse the files in Data/
     python run.py --no-open    # don't open the browser
     python run.py --quick      # 10x fewer runs, for trying config changes
@@ -189,7 +192,10 @@ def main():
     ap.add_argument("--offline", action="store_true", help="skip the sfl-manager refresh")
     ap.add_argument("--no-open", action="store_true", help="don't open the report")
     ap.add_argument("--quick", action="store_true", help="10x fewer runs")
-    ap.add_argument("--force", action="store_true", help="fetch everything again, even files fetched minutes ago")
+    ap.add_argument("--force", action="store_true", help="fetch the farm again even if fetched minutes ago")
+    ap.add_argument("--prices", action="store_true", help="also fetch market prices")
+    ap.add_argument("--info", action="store_true", help="also fetch the flower book and delivery catalog")
+    ap.add_argument("--nft", action="store_true", help="also fetch NFT floor prices (~15 calls)")
     ap.add_argument("--config", default=os.path.join(HERE, "config.json"))
     args = ap.parse_args()
     cfg = load(args.config)
@@ -201,9 +207,10 @@ def main():
 
     if not args.offline:
         try:
-            print("Fetching farm, board, prices and NFT floors from sfl-manager ...")
-            fetch.refresh(DATA, fid, nft_names,
-                          {k: 0 for k in fetch.MAX_AGE} if args.force else cfg.get("refresh_max_age_hours"))
+            extras = [x for x in fetch.EXTRAS if getattr(args, x)]
+            print("Fetching farm and weekly board" + "".join(f", {x}" for x in extras) + " from sfl-manager ...")
+            fetch.refresh(DATA, fid, nft_names, {"land": 0} if args.force else cfg.get("refresh_max_age_hours"),
+                          extras=extras)
         except Exception as e:  # network down, API changed: keep going on cached data
             print(f"  refresh failed ({e}); using cached files in Data/", file=sys.stderr)
     farm_d = load(os.path.join(DATA, f"farm_{fid}.json"))
