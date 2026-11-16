@@ -88,7 +88,8 @@ def _rates(farm):
     return lambda k: act.get(k, 0) / wk                                  # noqa: E731
 
 
-def evaluate(farm, prices, nfts, boosts, flower_names, usd, cap_usd=30, tax=0.125, speed_credit=0.5, chapter_weeks=12):
+def evaluate(farm, prices, nfts, boosts, flower_names, usd, cap_usd=30, tax=0.125, speed_credit=0.5, chapter_weeks=12,
+             max_resale_weeks=None):
     """Rows for every NFT in CATALOG that costs <= cap_usd and you do not own, cheapest payback first."""
     r = _rates(farm)
     p = lambda k: prices.get(k) or 0.0                                   # noqa: E731
@@ -138,5 +139,7 @@ def evaluate(farm, prices, nfts, boosts, flower_names, usd, cap_usd=30, tax=0.12
                      "usd": price * usd, "listings": info.get("listings"), "week": week,
                      "payback_weeks": price / week if week and week > 0 else None,
                      "resale_weeks": price * tax / week if week and week > 0 else None, "note": note})
+    if max_resale_weeks:
+        rows = [x for x in rows if x["resale_weeks"] is not None and x["resale_weeks"] <= max_resale_weeks]
     rows.sort(key=lambda x: (x["payback_weeks"] is None, x["payback_weeks"] or x["price"]))
     return rows

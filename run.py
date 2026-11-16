@@ -29,6 +29,7 @@ from sflmc import flowerplan
 from sflmc import game as G
 from sflmc import herd as H
 from sflmc import nfts as NFT
+from sflmc import tools as TOOLS
 from sflmc import sim as S
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -279,6 +280,39 @@ def main():
             gain["feed"] += base_vals[animal]["feed"]["mean"] - r["feed"]["mean"]
         out["boosts"].append({**b, "price": price, **gain})
         print(f"  boost {b['name']:24s} ({time.time() - t0:.0f}s)")
+    fx = cfg.get("sheep_fixed")
+    if fx:
+        c2 = json.loads(json.dumps(cfg))
+        c2["buildings"]["Barn"] = [[0, fx["barn"]]]
+        pol = {"sell": False, "buffers": [None]}
+        bundle = next((b for b in cfg["boosts"] if b["name"] == "All cheap sheep NFTs"), None)
+        sets = [{"name": n, "collectibles": [n] if n in bundle.get("collectibles", []) else [],
+                 "wearables": [n] if n in bundle.get("wearables", []) else []}
+                for n in bundle.get("collectibles", []) + bundle.get("wearables", [])] + [bundle] if bundle else []
+        if bundle and "Dream Scarf" in bundle.get("wearables", []):   # its shorter sleep only adds feeds
+            sets.append({"name": "All but Dream Scarf", "collectibles": bundle.get("collectibles", []),
+                         "wearables": [w for w in bundle.get("wearables", []) if w != "Dream Scarf"]})
+        res = {"barn": fx["barn"], "herds": fx["herds"], "rows": []}
+        base = {}
+        for n_ in fx["herds"]:
+            c2["capacity"]["Barn"] = [n_] * 4
+            base[n_] = run_herd(c2, ctx, plan, "Sheep", pol, None, cfg["runs_herd"], ("fixed", n_))
+            res.setdefault("base", {})[str(n_)] = {"value": base[n_]["value_flower"]["mean"], "feed": base[n_]["feed"]["mean"]}
+        for b in sets:
+            names = b.get("collectibles", []) + b.get("wearables", [])
+            ps = [(nfts.get(n) or {}).get("price") for n in names]
+            row = {"name": b["name"], "price": None if None in ps else sum(ps), "by": {}}
+            for n_ in fx["herds"]:
+                c2["capacity"]["Barn"] = [n_] * 4
+                f2 = plan.with_skills({}, [])
+                f2.collectibles |= set(b.get("collectibles", []))
+                f2.wearables |= set(b.get("wearables", []))
+                r = run_herd(c2, ctx, f2, "Sheep", pol, None, cfg["runs_herd"], ("fixed", n_))
+                row["by"][str(n_)] = {"gain": r["value_flower"]["mean"] - base[n_]["value_flower"]["mean"],
+                                      "feed": base[n_]["feed"]["mean"] - r["feed"]["mean"]}
+            res["rows"].append(row)
+        out["sheep_fixed"] = res
+        print(f"  sheep kept forever, Barn L{fx['barn']}, {fx['herds']} ({time.time() - t0:.0f}s)")
     already = {n for b in cfg["boosts"] for n in b.get("collectibles", []) + b.get("wearables", [])
                if n in plan.collectibles or n in plan.wearables}
     out["meta"]["boosts_owned"] = sorted(already)
@@ -325,19 +359,24 @@ def main():
                              "rows": NFT.evaluate(farm_d, prices["prices"], nfts, out["boosts"], set(fl.get("flowers", {})), usd,
                                                   cap_usd=cfg.get("nft_cap_usd", 30), tax=cfg["sell_fee"],
                                                   speed_credit=cfg.get("farmwide", {}).get("speed_credit", 0.5),
-                                                  chapter_weeks=cfg["chapter_weeks"])}
+                                                  chapter_weeks=cfg["chapter_weeks"],
+                                                  max_resale_weeks=cfg.get("nft_max_resale_weeks"))}
     out["farmwide"] = farmwide.evaluate(farm_d, prices["prices"], load(os.path.join(DATA, "skill_tree.json"), []), nfts,
                                         tax=cfg["sell_fee"], speed_credit=fw.get("speed_credit", 0.5),
                                         coins_per_flower=fw.get("coins_per_flower", 1000), weeks=cfg["chapter_weeks"],
                                         item_prices=fw.get("item_prices"), crop_plan=fw.get("crop_plan"),
-                                        crop_yield=fw.get("crop_yield"))
+                                        crop_yield=fw.get("crop_yield"), crop_speed_credit=fw.get("crop_speed_credit", 1.0),
+                                        gold_checks={k: cfg.get("tools", {}).get(k) for k in ("start", "end", "every") if k in cfg.get("tools", {})})
     gw = cfg.get("growth", {})
     out["growth"] = growth.evaluate(farm_d, prices["prices"], load(os.path.join(DATA, "growth_rules.json"), {}),
                                     out["farmwide"], out["boosts"], load(os.path.join(DATA, "skill_tree.json"), []),
                                     tax=cfg["sell_fee"], weeks=cfg["chapter_weeks"],
                                     food=gw.get("xp_food", "Pizza Margherita"), cooks_per_day=gw.get("cooks_per_day", 1.0),
                                     oil_per_drill=cfg.get("derived_prices", {}).get("Oil", {}).get("per", 16.6667),
-                                    faction_pet=gw.get("faction_pet_xp", 1.0))
+                                    faction_pet=gw.get("faction_pet_xp", 1.0), skill_plan=gw.get("skill_plan"),
+                                    skip_skills=gw.get("skip_skills", []))
+    rt = out["farmwide"]["rates"]
+    out["tools"] = TOOLS.evaluate(farm_d, prices["prices"], cfg.get("tools", {}), rt["wood_per_chop"], rt["per_gold_mine"])
     herd_tickets = {}
     for animal in G.ANIMALS:
         pname, pol, buf = pick(animal)
