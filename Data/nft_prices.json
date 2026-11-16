@@ -1,33 +1,33 @@
 {
- "fetched": "2026-11-12",
+ "fetched": "2026-11-16",
  "items": {
   "Training Whistle": {
-   "price": 2100,
-   "last_sale": 2100,
+   "price": 2084,
+   "last_sale": 2084,
    "chapter": "Paw Prints",
    "tradable": true
   },
   "Ascended Chicken": {
-   "price": 119.797,
-   "last_sale": 119.797,
+   "price": 124.99,
+   "last_sale": 124.99,
    "chapter": "Ascension Age",
    "tradable": true
   },
   "Ascended Cow": {
-   "price": 24,
-   "last_sale": 24,
+   "price": 26.995,
+   "last_sale": 26.995,
    "chapter": "Ascension Age",
    "tradable": true
   },
   "Ascended Sheep": {
-   "price": 27,
-   "last_sale": 27,
+   "price": 30.9,
+   "last_sale": 30.9,
    "chapter": "Ascension Age",
    "tradable": true
   },
   "Spa Cow": {
-   "price": 150,
-   "last_sale": 150,
+   "price": 140,
+   "last_sale": 140,
    "chapter": "Salt Awakening",
    "tradable": true
   },
@@ -38,68 +38,68 @@
    "tradable": true
   },
   "Mermaid Sheep": {
-   "price": 47.04,
-   "last_sale": 47.04,
+   "price": 45,
+   "last_sale": 45,
    "chapter": "Crabs and Traps",
    "tradable": true
   },
   "Astronaut Sheep": {
-   "price": 81.9996,
-   "last_sale": 81.9996,
+   "price": 79.997,
+   "last_sale": 79.997,
    "chapter": "Paw Prints",
    "tradable": true
   },
   "Baby Cow": {
-   "price": 205.51,
-   "last_sale": 205.51,
+   "price": 165,
+   "last_sale": 165,
    "chapter": "Better Together",
    "tradable": true
   },
   "Dr Cow": {
-   "price": 347,
-   "last_sale": 347,
+   "price": 350,
+   "last_sale": 350,
    "chapter": "Great Bloom",
    "tradable": true
   },
   "Mammoth": {
-   "price": 280,
-   "last_sale": 280,
+   "price": 249.9999,
+   "last_sale": 249.9999,
    "chapter": "Winds of Change",
    "tradable": true
   },
   "Infernal Bullwhip": {
-   "price": 8500,
-   "last_sale": 8500,
+   "price": 8989,
+   "last_sale": 8989,
    "chapter": "Bull Run",
    "tradable": true
   },
   "White Sheep Onesie": {
-   "price": 19.9798,
-   "last_sale": 19.9798,
+   "price": 20.699,
+   "last_sale": 20.699,
    "chapter": "Bull Run",
    "tradable": true
   },
   "Black Sheep Onesie": {
-   "price": 2390,
-   "last_sale": 2390,
+   "price": 2940,
+   "last_sale": 2940,
    "chapter": "Bull Run",
    "tradable": true
   },
   "Chicken Suit": {
-   "price": 295,
-   "last_sale": 295,
+   "price": 287,
+   "last_sale": 287,
    "chapter": "Bull Run",
    "tradable": true
   },
   "Merino Jumper": {
-   "price": 217,
-   "last_sale": 217,
+   "price": 205,
+   "last_sale": 205,
    "chapter": "Bull Run",
    "tradable": true
   },
   "Dream Scarf": {
-   "price": 25.799,
-   "last_sale": 25.799,
+   "price": 25.789,
+   "last_sale": 25.789,
    "chapter": "Bull Run",
    "tradable": true
   },
@@ -110,38 +110,38 @@
    "tradable": true
   },
   "Milk Apron": {
-   "price": 643,
-   "last_sale": 643,
+   "price": 549.999,
+   "last_sale": 549.999,
    "chapter": "Bull Run",
    "tradable": true
   },
   "Longhorn Cowfish": {
-   "price": 261,
-   "last_sale": 261,
+   "price": 241.989,
+   "last_sale": 241.989,
    "chapter": "Bull Run",
    "tradable": true
   },
   "Moo-ver": {
-   "price": 430,
-   "last_sale": 430,
+   "price": 300,
+   "last_sale": 300,
    "chapter": "Bull Run",
    "tradable": true
   },
   "Alien Chicken": {
-   "price": 42.1398,
-   "last_sale": 42.1398,
+   "price": 42.099,
+   "last_sale": 42.099,
    "chapter": "Bull Run",
    "tradable": true
   },
   "Mootant": {
-   "price": 680,
-   "last_sale": 680,
+   "price": 679,
+   "last_sale": 679,
    "chapter": "Bull Run",
    "tradable": true
   },
   "Toxic Tuft": {
-   "price": 374,
-   "last_sale": 374,
+   "price": 370,
+   "last_sale": 370,
    "chapter": "Bull Run",
    "tradable": true
   }

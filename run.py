@@ -1,6 +1,6 @@
 """One command: fetch your farm + prices, simulate, build the report, open it.
 
-    python run.py              # refresh your farm + weekly board from sfl-manager (3 calls), then simulate
+    python run.py              # refresh your farm + weekly board (1 call with SFL_API_KEY in .env, else 3 to sfl-manager)
     python run.py --prices     # ...also market prices (1 call)
     python run.py --info       # ...also the flower book and delivery catalog (2 calls)
     python run.py --nft        # ...also NFT floor prices (~15 calls; they barely move)
@@ -208,7 +208,7 @@ def main():
     if not args.offline:
         try:
             extras = [x for x in fetch.EXTRAS if getattr(args, x)]
-            print("Fetching farm and weekly board" + "".join(f", {x}" for x in extras) + " from sfl-manager ...")
+            print("Fetching farm and weekly board" + "".join(f", {x}" for x in extras) + " ...")
             fetch.refresh(DATA, fid, nft_names, {"land": 0} if args.force else cfg.get("refresh_max_age_hours"),
                           extras=extras)
         except Exception as e:  # network down, API changed: keep going on cached data
