@@ -173,7 +173,7 @@ def parse_farm(raw, farm_id):
     chapter_wearables = sorted(w for w in worn if w and w.startswith("Duende"))
     return {
         "farm_id": farm_id,
-        "source": f"{API}/v3/land/{farm_id}",
+        "source": f"{OFFICIAL}/{farm_id}" if raw.get("official") else f"{API}/v3/land/{farm_id}",
         "fetched": time.strftime("%Y-%m-%d %H:%M"),
         "skills": {k: int(v) for k, v in (f.get("bumpkin") or {}).get("skills", {}).items()},
         "collectibles": sorted(placed),

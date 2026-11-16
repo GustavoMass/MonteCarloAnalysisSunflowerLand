@@ -52,9 +52,45 @@ def xp_food(farm, prices, rules, food, tax, faction_pet=1.0):
             "have": farm.get("inventory", {}).get(food, 0)}
 
 
-def skill_queue(farmwide, boosts, skill_tree):
-    """Skills you do not have yet, best FLOWER per point first, then coin-only ones."""
+UPGRADE_POINTS = {1: 1, 2: 3, 3: 6}     # bumpkinSkills.ts getSkillUpgradeCost: points by tier, shards = tier
+
+
+def planned(plan, farmwide, boosts, skill_tree, weeks):
+    """Your own skill order (config growth.skill_plan), valued from the same rows. Midas skills are
+    valued together: gold only comes faster if the new cycle still fits between your checks."""
     info = {s["name"]: s for s in skill_tree}
+    rows = {r["name"]: r for r in farmwide["rows"]}
+    bst = {b["name"]: b for b in boosts}
+    rt = farmwide["rates"]
+    midas = [0, 0]
+    out = []
+    for e in plan:
+        n, rank = e["skill"], e.get("rank", 1)
+        s = info.get(n, {})
+        name = n if rank == 1 else f"{n} R{rank}"
+        pts = s.get("points", 1) if rank == 1 else UPGRADE_POINTS[s.get("tier", 1)]
+        shards = 0 if rank == 1 else s.get("tier", 1)
+        if n in ("Midas Sprint", "Midas Rush"):
+            before = rt["gold_rate"][f"{midas[0]}{midas[1]}"]
+            midas[0 if n == "Midas Sprint" else 1] = rank
+            after = rt["gold_rate"][f"{midas[0]}{midas[1]}"]
+            extra = rt["gold_rocks"] * 7 * (after - before) * weeks
+            flower, coins = extra * rt["per_gold_mine"], -extra * 80
+            note = f"gold {after:.2f} a day at your checks (was {before:.2f})"
+        else:
+            src = rows.get(name) or bst.get(name) or {}
+            flower, coins, note = src.get("flower", 0.0), src.get("coins", 0.0), e.get("note", "")
+        out.append({"name": name, "points": pts, "shards": shards, "flower": flower, "coins": coins,
+                    "open": True, "area": s.get("tree", ""), "planned": True, "note": note})
+    return out
+
+
+def skill_queue(farmwide, boosts, skill_tree, plan=None, skip=(), weeks=12):
+    """Your planned skills first (in your order), then the rest best FLOWER per point first,
+    then coin-only ones. Skills in `skip` are never bought."""
+    info = {s["name"]: s for s in skill_tree}
+    mine = planned(plan or [], farmwide, boosts, skill_tree, weeks)
+    taken = {m["name"] for m in mine} | {m["name"].split(" R")[0] for m in mine} | set(skip)
     cand = {}
     for r in farmwide["rows"]:
         if r.get("kind") == "skill" and (r["flower"] > 0.05 or r["coins"] > 0):
@@ -68,10 +104,10 @@ def skill_queue(farmwide, boosts, skill_tree):
                 cand[n] = {"name": n, "points": s["points"], "flower": b["flower"], "coins": b["coins"],
                            "open": True, "area": "Animals"}
     # tier-locked skills need other points in their tree first; left out rather than guessed
-    ok = [c for c in cand.values() if c["open"]]
+    ok = [c for c in cand.values() if c["open"] and c["name"] not in taken]
     fl = sorted((c for c in ok if c["flower"] > 0.05), key=lambda c: -c["flower"] / c["points"])
     co = sorted((c for c in ok if c["flower"] <= 0.05), key=lambda c: -c["coins"] / c["points"])
-    return fl + co, [c for c in cand.values() if not c["open"]]
+    return mine + fl + co, [c for c in cand.values() if not c["open"]]
 
 
 def level_path(farm, food, queue, rules, cooks_per_day, top=100):
@@ -197,13 +233,15 @@ def daily_mining(farm, prices, rates, tax):
 
 
 def evaluate(farm, prices, rules, farmwide, boosts, skill_tree, tax, weeks, food="Pizza Margherita",
-             cooks_per_day=1.0, oil_per_drill=16.6667, faction_pet=1.0):
+             cooks_per_day=1.0, oil_per_drill=16.6667, faction_pet=1.0, skill_plan=None, skip_skills=()):
     prices = dict(prices, _oil_per_drill=oil_per_drill, _crim_per_mine=farmwide["rates"].get("crim_per_mine", 1.6))
     f = xp_food(farm, prices, rules, food, tax, faction_pet)
     nodes = node_values(farm, farmwide["rates"], prices, weeks)
-    q, locked = skill_queue(farmwide, boosts, skill_tree)
+    q, locked = skill_queue(farmwide, boosts, skill_tree, skill_plan, skip_skills, weeks)
     lv = level_path(farm, f, q, rules, cooks_per_day)
     lv["locked"] = locked
+    lv["skip"] = list(skip_skills)
+    lv["shards"] = float(farm.get("inventory", {}).get("Ascension Shard", 0) or 0)
     ex = expansion_path(farm, prices, rules, nodes, farm.get("activity", {}), farm.get("weeks_played", 1),
                         rules["level_xp"])
     if ex["level_needed"] > lv["now"]:
