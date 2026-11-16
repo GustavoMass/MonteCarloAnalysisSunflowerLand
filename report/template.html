@@ -151,6 +151,10 @@ h2 { scroll-margin-top: 56px; }
   <p class="muted" id="tStock"></p>
   <div class="tbl"><table id="tTools" class="compact"></table></div>
   <p id="tSun"></p>
+  <h4>Ore refills: what shortens them, and what missed checks cost</h4>
+  <div class="tbl"><table id="tOre" class="compact"></table></div>
+  <div class="tbl"><table id="tDrift" class="compact"></table></div>
+  <p class="muted" id="tDriftNote"></p>
   <h3>Expansions to the next island</h3>
   <div class="tbl"><table id="gExp" class="compact"></table></div>
   <div class="tbl"><table id="gNeeds" class="compact"></table></div>
@@ -438,13 +442,13 @@ function nftView() {
   const X = DATA.sheep_fixed;
   if (X) {
     const per = (v, p) => v > 0.05 && p ? nf(p / v, 1) + " ch" : "never";
-    $("nftSheep").innerHTML = `<h3>Sheep NFTs with ${X.herds.join(" / ")} sheep kept forever (Barn L${X.barn})</h3>` +
-      `<p class="muted">The herd is never sold: it is fed level after level for a ${C.chapter_weeks}-week chapter. Each cell: FLOWER gained a chapter, then chapters to pay back if you keep it (and if you resell it later, only the ${nf(fee * 100, 1)}% cut).</p>` +
+    $("nftSheep").innerHTML = `<h3>Sheep NFTs with ${X.herds.join(" / ")} sheep (Barn L${X.barn}), sold when they stop paying</h3>` +
+      `<p class="muted">One sheep makes the most at level ${X.peak} (+${fl(X.peak_profit)} FLOWER over its life); from level ${X.peak + 1} its feed (Mixed Grain) costs more than its wool. So each sheep is fed to level ${X.peak}, then waits for a bounty and a new one takes its slot; the barn stays at ${X.herds.join(" / ")}. ${C.chapter_weeks}-week chapter, ${C.runs_herd} runs. Each cell: FLOWER gained a chapter, then chapters to pay back if you keep it · if you resell it later (only the ${nf(fee * 100, 1)}% cut).</p>` +
       `<div class="tbl"><table class="compact"><thead><tr><th>NFT</th><th>Price</th>${X.herds.map(n => `<th>${n} sheep</th>`).join("")}</tr></thead><tbody>` +
       X.rows.map(r => `<tr class="${r.name.startsWith("All") ? "hi" : ""}"><td>${r.name === "All cheap sheep NFTs" ? "<b>All together</b>" : r.name.startsWith("All") ? `<b>${r.name}</b>` : r.name}</td><td class="num">${fl(r.price)}<br><span class="muted">$${fl(r.price * N.usd)}</span></td>` +
         X.herds.map(n => { const b = r.by[String(n)];
           return `<td class="num">${Math.abs(b.gain) > 0.05 ? sg(b.gain, 1) : "—"}<br><span class="muted">${per(b.gain, r.price)} · ${per(b.gain, r.price * fee)}</span></td>`; }).join("") + "</tr>").join("") +
-      `</tbody></table></div><p class="muted">Base herd: ${X.herds.map(n => `${n} sheep ${fl(X.base[String(n)].value)} FLOWER a chapter`).join(", ")}. Nurse Sheep and Frozen Sheep stop sickness in summer / winter; the sickness chance is decided on the server, so they show no gain. Sleep boosts (Dream Scarf) mean more feeds, so they barely gain.</p>`;
+      `</tbody></table></div><p class="muted">Herd without NFTs: ${X.herds.map(n => { const b = X.base[String(n)]; return `${n} sheep ${sg(b.value, 1)} FLOWER, ${nf(b.tickets)} caps, ${nf(b.coins)} coins a chapter`; }).join("; ")}. Nurse Sheep and Frozen Sheep stop sickness in summer / winter; the sickness chance is decided on the server, so they show no gain. Sleep boosts (Dream Scarf) mean more feeds, so they barely gain.</p>`;
   }
   $("nftTable").innerHTML = `<thead><tr><th>NFT</th><th>Price</th><th>FLOWER / week</th><th>Payback</th><th>If resold</th></tr></thead><tbody>` +
     N.rows.map(r => `<tr><td style="white-space:normal"><b>${r.name}</b> <span class="muted">${r.kind}</span><br><span class="muted">${r.effect}${r.note ? ` · ${r.note}` : ""}</span></td>` +
@@ -470,6 +474,17 @@ function toolsView() {
     T.scenarios.map(s => `<tr><td style="white-space:normal">${s.name}</td>${tools.map(t => { const x = s.tools[t];
       return `<td class="num${t === s.binding ? " neg" : ""}">${nf(x.use, 0)}<br><span class="muted">${nf(x.restocks, 2)}/d</span></td>`; }).join("")}` +
       `<td class="num">${nf(s.restocks_day * 7, 1)} a week<br><span class="muted">${nf(s.gems_week, 0)} gems</span></td><td class="num">${nf(s.iron_need, 0)}<br><span class="muted">buy ${nf(s.iron_buy, 0)}</span></td></tr>`).join("") + "</tbody>";
+  const nfp = n => { const x = (DATA.cheap_nfts || {}); const it = (DATA.nft_floor || {})[n]; return it ? `${nf(it, 0)} FLOWER` : ""; };
+  $("tOre").innerHTML = `<thead><tr><th>Shortens</th><th>How you get it</th><th>Gold</th><th>Crimstone</th><th>Lasts</th></tr></thead><tbody>` +
+    T.ore_boosts.map(b => `<tr><td>${b.name}${b.have ? ' <span class="pos">(have)</span>' : ""}</td><td style="white-space:normal">${b.how}${nfp(b.name) ? ` · ${nfp(b.name)}` : ""}</td>` +
+      `<td class="num">${b.gold < 1 ? "x" + b.gold : "—"}</td><td class="num">${b.crim < 1 ? "x" + b.crim : "—"}</td><td style="white-space:normal" class="muted">${b.lasts}</td></tr>`).join("") + "</tbody>";
+  const cyc = ["24", "21.6", "20.4", "18"].filter(c => c in T.drift[0].rates);
+  $("tDrift").innerHTML = `<thead><tr><th>Checks you keep</th>${cyc.map(c => `<th>${c} h refill</th>`).join("")}</tr></thead><tbody>` +
+    T.drift.map(d => `<tr><td>${nf(d.attend * 100, 0)}%</td>${cyc.map(c => `<td class="num">${nf(d.rates[c], 3)}</td>`).join("")}</tr>`).join("") + "</tbody>";
+  $("tDriftNote").innerHTML = `Harvests a day per rock when you miss some of your 2 h checks at random. 24 h = no skill; 21.6 h = Midas Sprint; 20.4 h = Fireside Alchemist on crimstone; 18 h = Mole Shrine. ` +
+    `A 24 h rock collected late stays late, so misses pile up; anything under ~22 h lets you catch up the next day. ` +
+    `The crimstone streak only resets after 48 h without mining that rock (24 h refill + 24 h grace, mineCrimstone.ts), so a late day never breaks it. ` +
+    `You have ${nf(T.currency["Love Charm"])} Love Charms (${nf(T.currency["Love Charm"] / 100, 0)} Time Warp Totems), ${T.currency["Time Warp Totem"]} totem in stock and ${nf(T.currency.Mark)} Marks (${Math.floor(T.currency.Mark / 8000)} Ore Hourglasses): one placed on a day you drifted pulls the rocks back.`;
   const S = T.sunstone, gr = Object.entries(S.gold.flower_week);
   $("tSun").innerHTML = `<b>Sunstone (you have ${T.sunstone_have}):</b> one more Tree (${S.tree.cost}) gives about ${nf(S.tree.flower_week * DATA.meta.config.chapter_weeks, 1)} FLOWER of wood a chapter ` +
     `(${nf(S.tree.flower_week / S.tree.cost * DATA.meta.config.chapter_weeks, 2)} per Sunstone, axes in coins). One more Gold Rock (${S.gold.cost}) gives, after its Iron Pickaxe: ` +

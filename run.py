@@ -284,7 +284,11 @@ def main():
     if fx:
         c2 = json.loads(json.dumps(cfg))
         c2["buildings"]["Barn"] = [[0, fx["barn"]]]
-        pol = {"sell": False, "buffers": [None]}
+        # sell when a sheep stops paying: stop feeding at the level where its accumulated profit peaks
+        # (single-animal run), then it waits for a bounty and a new lamb takes its slot
+        sh = next(x for x in out["single"] if x["build"] == plan_name and x["animal"] == "Sheep")
+        peak = max(sh["levels"], key=lambda l: l["accumulated"]["mean"])["level"]
+        pol = {"sell": True, "buffers": [None], "stop_feeding_at": peak}
         bundle = next((b for b in cfg["boosts"] if b["name"] == "All cheap sheep NFTs"), None)
         sets = [{"name": n, "collectibles": [n] if n in bundle.get("collectibles", []) else [],
                  "wearables": [n] if n in bundle.get("wearables", []) else []}
@@ -292,12 +296,15 @@ def main():
         if bundle and "Dream Scarf" in bundle.get("wearables", []):   # its shorter sleep only adds feeds
             sets.append({"name": "All but Dream Scarf", "collectibles": bundle.get("collectibles", []),
                          "wearables": [w for w in bundle.get("wearables", []) if w != "Dream Scarf"]})
-        res = {"barn": fx["barn"], "herds": fx["herds"], "rows": []}
+        res = {"barn": fx["barn"], "herds": fx["herds"], "rows": [], "peak": peak,
+               "peak_profit": max(l["accumulated"]["mean"] for l in sh["levels"])}
         base = {}
         for n_ in fx["herds"]:
             c2["capacity"]["Barn"] = [n_] * 4
             base[n_] = run_herd(c2, ctx, plan, "Sheep", pol, None, cfg["runs_herd"], ("fixed", n_))
-            res.setdefault("base", {})[str(n_)] = {"value": base[n_]["value_flower"]["mean"], "feed": base[n_]["feed"]["mean"]}
+            res.setdefault("base", {})[str(n_)] = {"value": base[n_]["value_flower"]["mean"], "feed": base[n_]["feed"]["mean"],
+                                                   "tickets": base[n_]["tickets"]["mean"], "coins": base[n_]["coins_net"]["mean"],
+                                                   "sold": base[n_]["sold"]["mean"] if "sold" in base[n_] else None}
         for b in sets:
             names = b.get("collectibles", []) + b.get("wearables", [])
             ps = [(nfts.get(n) or {}).get("price") for n in names]
@@ -376,6 +383,7 @@ def main():
                                     faction_pet=gw.get("faction_pet_xp", 1.0), skill_plan=gw.get("skill_plan"),
                                     skip_skills=gw.get("skip_skills", []))
     rt = out["farmwide"]["rates"]
+    out["nft_floor"] = {n: (nfts.get(n) or {}).get("price") for n in ("Pickaxe Shark", "Crimstone Amulet", "Crimstone Clam") if (nfts.get(n) or {}).get("price")}
     out["tools"] = TOOLS.evaluate(farm_d, prices["prices"], cfg.get("tools", {}), rt["wood_per_chop"], rt["per_gold_mine"])
     herd_tickets = {}
     for animal in G.ANIMALS:
