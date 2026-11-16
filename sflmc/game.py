@@ -172,6 +172,9 @@ TRAP_HOURS = {"Crab Pot": 4, "Mariner Pot": 8}
 EXOTIC_TICKETS = {"Black Magic": 8000, "Golden Helios": 4000, "Chiogga": 2000, "Purple Cauliflower": 800,
                   "Adirondack Potato": 600, "Warty Goblin Pumpkin": 400, "White Carrot": 200}
 # giant fruit: harvest of a village project (cheered by visitors)
+# Water traps (craftables.ts WORKBENCH): one pot is used up per placement (placeWaterTrap.ts)
+TRAP_RECIPES = {"Crab Pot": {"coins": 250, "items": {"Feather": 5, "Wool": 3}},
+                "Mariner Pot": {"coins": 500, "items": {"Feather": 10, "Merino Wool": 10}}}
 GIANT_FRUIT = {"Giant Orange": "Big Orange", "Giant Apple": "Big Apple", "Giant Banana": "Big Banana"}
 # Fish Market baits, by season (sfl.world/info/fishing); not tradeable, so made from these
 FISH_MARKET = {

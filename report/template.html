@@ -386,10 +386,11 @@ function boardView() {
       </tbody></table></div></div></div>`).join("");
   }
   if (groups.crustacean.length) {
-    h += `<h3>Crustaceans</h3><div class="tbl"><table class="compact"><thead><tr><th>Crustacean</th><th>Reward</th><th>Trap</th><th>Chum</th><th>Have</th><th>FLOWER</th></tr></thead><tbody>` +
-      groups.crustacean.map(r => r.ways.map((w, i) => `<tr><td>${i ? "" : `<b>${r.name}</b>`}</td><td>${i ? "" : tk(r)}</td><td>${w.trap} (${w.hours} h)</td>
+    const pot = w => `${w.trap} (${w.hours} h)<br><span class="muted">${w.pot_items.map(x => `${x.qty} ${x.item}${x.unit != null ? ` (${fl(x.cost)})` : ""}`).join(" + ")} + ${nf(w.pot_coins)} coins${w.pot_have ? ` · you have ${w.pot_have}` : ""}</span>`;
+    h += `<h3>Crustaceans</h3><p class="muted">Each placement uses up one pot. Pot FLOWER = Wool / Merino Wool + Feather at floor prices (coins on top).</p><div class="tbl"><table class="compact"><thead><tr><th>Crustacean</th><th>Reward</th><th>Trap</th><th>Pot FLOWER</th><th>Chum</th><th>Have</th><th>Chum FLOWER</th><th>Total FLOWER</th></tr></thead><tbody>` +
+      groups.crustacean.map(r => r.ways.map((w, i) => `<tr><td>${i ? "" : `<b>${r.name}</b>`}</td><td>${i ? "" : tk(r)}</td><td style="white-space:normal">${pot(w)}</td><td class="num">${fl(w.pot_cost)}</td>
         <td style="white-space:normal">${w.chum ? `${w.qty} ${w.chum}${w.recipe ? ` <span class="muted">— not tradeable; Fish Market this season: ${Object.entries(w.recipe).map(([k, q]) => `${q} ${k}`).join(", ")}</span>` : ""}` : "no chum"}</td>
-        <td class="num">${w.have == null ? "—" : w.have}</td><td class="num">${w.chum ? (w.cost == null ? "your fish" : fl(w.cost)) : "0"}</td></tr>`).join("")).join("") + "</tbody></table></div>";
+        <td class="num">${w.have == null ? "—" : w.have}</td><td class="num">${w.chum ? (w.cost == null ? "your fish" : fl(w.cost)) : "0"}</td><td class="num"><b>${w.total == null ? fl(w.pot_cost) + " + fish" : fl(w.total)}</b></td></tr>`).join("")).join("") + "</tbody></table></div>";
   }
   if (groups.flower.length) {
     h += `<h3>Flowers</h3><div class="tbl"><table class="compact"><thead><tr><th>Flower</th><th>Reward</th><th>Have</th><th>Plan</th></tr></thead><tbody>` +
@@ -401,12 +402,12 @@ function boardView() {
       groups.fish.map(r => `<tr><td><b>${r.name}</b></td><td>${tk(r)}</td><td>${r.baits.join(", ")}</td><td style="white-space:normal">${r.likes.map(c => `${c.qty || "?"} ${c.chum}${c.cost != null ? ` (${fl(c.cost)})` : ""}`).join(", ") || "—"}</td><td>${r.seasons.join(", ")}</td><td>${r.guaranteed.join(", ") || "—"}</td></tr>`).join("") + "</tbody></table></div>";
   }
   if (groups.exotic.length) {
-    h += `<h3>Exotic crops and giant fruit</h3><div class="tbl"><table class="compact"><thead><tr><th>Item</th><th>Reward</th><th>Have</th><th>Where from</th></tr></thead><tbody>` +
+    h += `<h3>Exotic crops</h3><div class="tbl"><table class="compact"><thead><tr><th>Item</th><th>Reward</th><th>Have</th><th>Where from</th></tr></thead><tbody>` +
       groups.exotic.map(r => `<tr><td><b>${r.name}</b></td><td>${tk(r)}</td><td class="num">${r.have || "—"}</td><td style="white-space:normal">${r.how}</td></tr>`).join("") + "</tbody></table></div>";
   }
   if (groups.other.length) h += `<p class="muted">Also open: ${groups.other.map(r => `${r.name} (${tk(r)})`).join(", ")}.</p>`;
   $("wbBody").innerHTML = h || `<p class="pos">Nothing left: the board is done.</p>`;
-  $("wbIntro").innerHTML = `Only what you still have to deliver this week (it turns Monday 00:00 UTC); animals and Obsidian are left out. FLOWER at today's floor prices; each square is bought or crafted, whichever is cheaper. Crafting grids from sfl.world, everything else from the game code.`;
+  $("wbIntro").innerHTML = `Only what you still have to deliver this week (it turns Monday 00:00 UTC); animals, Obsidian and giant fruit (daily village help) are left out. FLOWER at today's floor prices; each square is bought or crafted, whichever is cheaper. Crafting grids from sfl.world, everything else from the game code.`;
 }
 
 function method() {
