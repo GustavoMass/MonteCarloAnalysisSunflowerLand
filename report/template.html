@@ -88,7 +88,7 @@ h2 { scroll-margin-top: 56px; }
 
 <nav class="toc" aria-label="Sections">
   <a href="#l-h"><b>Animals by level</b></a><a href="#fp-h"><b>Flower plan</b></a><a href="#wb-h"><b>Weekly board</b></a>
-<a href="#n-h">Best next step</a><a href="#b-h">Cheap boosts</a><a href="#fw-h">Crop items</a><a href="#g-h">Expansions or levels</a><a href="#u-h">Barn and Pigpen</a><a href="#m-h">How it was modelled</a>
+<a href="#n-h">Best next step</a><a href="#b-h">Cheap boosts</a><a href="#nft-h">Cheap NFTs</a><a href="#fw-h">Crop items</a><a href="#g-h">Expansions or levels</a><a href="#u-h">Barn and Pigpen</a><a href="#m-h">How it was modelled</a>
 </nav>
 
 <section aria-labelledby="l-h">
@@ -134,6 +134,13 @@ h2 { scroll-margin-top: 56px; }
   <h2 id="b-h">Cheap ways to make the animals pay more</h2>
   <p class="muted" id="boostIntro"></p>
   <div class="tbl"><table id="boostTable"></table></div>
+</section>
+
+<section aria-labelledby="nft-h">
+  <h2 id="nft-h">Cheap NFTs: what they pay on your farm</h2>
+  <p class="muted" id="nftIntro"></p>
+  <div id="nftSheep"></div>
+  <div class="tbl"><table class="compact" id="nftTable"></table></div>
 </section>
 
 <section aria-labelledby="fw-h">
@@ -386,11 +393,11 @@ function boardView() {
       </tbody></table></div></div></div>`).join("");
   }
   if (groups.crustacean.length) {
-    const pot = w => `${w.trap} (${w.hours} h)<br><span class="muted">${w.pot_items.map(x => `${x.qty} ${x.item}${x.unit != null ? ` (${fl(x.cost)})` : ""}`).join(" + ")} + ${nf(w.pot_coins)} coins${w.pot_have ? ` · you have ${w.pot_have}` : ""}</span>`;
-    h += `<h3>Crustaceans</h3><p class="muted">Each placement uses up one pot. Pot FLOWER = Wool / Merino Wool + Feather at floor prices (coins on top).</p><div class="tbl"><table class="compact"><thead><tr><th>Crustacean</th><th>Reward</th><th>Trap</th><th>Pot FLOWER</th><th>Chum</th><th>Have</th><th>Chum FLOWER</th><th>Total FLOWER</th></tr></thead><tbody>` +
-      groups.crustacean.map(r => r.ways.map((w, i) => `<tr><td>${i ? "" : `<b>${r.name}</b>`}</td><td>${i ? "" : tk(r)}</td><td style="white-space:normal">${pot(w)}</td><td class="num">${fl(w.pot_cost)}</td>
-        <td style="white-space:normal">${w.chum ? `${w.qty} ${w.chum}${w.recipe ? ` <span class="muted">— not tradeable; Fish Market this season: ${Object.entries(w.recipe).map(([k, q]) => `${q} ${k}`).join(", ")}</span>` : ""}` : "no chum"}</td>
-        <td class="num">${w.have == null ? "—" : w.have}</td><td class="num">${w.chum ? (w.cost == null ? "your fish" : fl(w.cost)) : "0"}</td><td class="num"><b>${w.total == null ? fl(w.pot_cost) + " + fish" : fl(w.total)}</b></td></tr>`).join("")).join("") + "</tbody></table></div>";
+    const per = (w, r) => w.total == null || !r.tickets ? "—" : nf(w.total / r.tickets, 3);
+    h += `<h3>Crustaceans</h3><p class="muted">Each placement uses up one pot (Feather + Wool or Merino Wool, plus coins), so the pot's FLOWER is part of every catch.</p><div class="tbl"><table class="compact"><thead><tr><th>Crustacean</th><th>Caps</th><th>Trap</th><th>Chum</th><th>Pot</th><th>Chum FLOWER</th><th>Total</th><th>Per cap</th></tr></thead><tbody>` +
+      groups.crustacean.map(r => r.ways.map((w, i) => `<tr><td>${i ? "" : `<b>${r.name}</b>`}</td><td>${i ? "" : (r.tickets || "")}</td><td>${w.trap} (${w.hours} h)${w.pot_have ? ` <span class="muted">· have ${w.pot_have}</span>` : ""}</td>
+        <td style="white-space:normal">${w.chum ? `${w.qty} ${w.chum}${w.have ? ` <span class="muted">(have ${w.have})</span>` : ""}${w.recipe ? ` <span class="muted">— not tradeable; Fish Market: ${Object.entries(w.recipe).map(([k, q]) => `${q} ${k}`).join(", ")}</span>` : ""}` : "no chum"}</td>
+        <td class="num">${fl(w.pot_cost)}</td><td class="num">${w.chum ? (w.cost == null ? "your fish" : fl(w.cost)) : "0"}</td><td class="num"><b>${w.total == null ? fl(w.pot_cost) + " + fish" : fl(w.total)}</b></td><td class="num">${per(w, r)}</td></tr>`).join("")).join("") + "</tbody></table></div>";
   }
   if (groups.flower.length) {
     h += `<h3>Flowers</h3><div class="tbl"><table class="compact"><thead><tr><th>Flower</th><th>Reward</th><th>Have</th><th>Plan</th></tr></thead><tbody>` +
@@ -410,6 +417,31 @@ function boardView() {
   $("wbIntro").innerHTML = `Only what you still have to deliver this week (it turns Monday 00:00 UTC); animals, Obsidian and giant fruit (daily village help) are left out. FLOWER at today's floor prices; each square is bought or crafted, whichever is cheaper. Crafting grids from sfl.world, everything else from the game code.`;
 }
 
+// ---------- cheap NFTs
+function nftView() {
+  const N = DATA.cheap_nfts; if (!N) return;
+  const C = DATA.meta.config, fee = C.sell_fee;
+  const fl = v => v == null ? "—" : nf(v, 2), wk = v => v == null ? "—" : v >= 520 ? "10+ yr" : `${nf(v, 0)} wk`;
+  $("nftIntro").innerHTML = `Every NFT up to $${N.cap} (1 FLOWER = $${nf(N.usd, 4)}, marketplace report ${N.fetched}) that you do not own and that is not a crop boost. ` +
+    `FLOWER per week comes from your own weekly averages (fruit planted, honey, rocks, flowers harvested); animal NFTs from the herd simulation. ` +
+    `<b>Payback</b> = price ÷ FLOWER per week if you keep it; <b>if resold</b> = only the ${nf(fee * 100, 1)}% marketplace cut, assuming the floor holds. ` +
+    `Wearables only count while you or a farm hand wears them (one onesie, one shirt… each).`;
+  const b = (DATA.boosts || []).find(x => x.name === "All cheap sheep NFTs");
+  if (b) {
+    const parts = [...(b.collectibles || []), ...(b.wearables || [])].map(n => DATA.boosts.find(x => x.name === n)).filter(Boolean);
+    const per = b.flower / C.chapter_weeks;
+    $("nftSheep").innerHTML = `<h3>Every cheap sheep NFT at once</h3><div class="tbl"><table class="compact"><thead><tr><th>NFT</th><th>FLOWER</th><th>$</th><th>Per chapter</th></tr></thead><tbody>` +
+      parts.map(x => `<tr><td>${x.name}</td><td class="num">${fl(x.price)}</td><td class="num">${fl(x.price * N.usd)}</td><td class="num">${x.flower ? fl(x.flower) : "—"}</td></tr>`).join("") +
+      `<tr class="hi"><td><b>All together</b></td><td class="num"><b>${fl(b.price)}</b></td><td class="num"><b>${fl(b.price * N.usd)}</b></td><td class="num"><b>${fl(b.flower)}</b></td></tr></tbody></table></div>` +
+      `<p>Bought together they give <b>${fl(b.flower)} FLOWER a chapter</b> (${fl(per)} a week; ${fl(b.feed)} of it is feed saved) and ${nf(b.coins)} coins. ` +
+      `Kept forever: pays back in ${wk(b.price / per)}. Resold later: the ${fl(b.price * fee)} FLOWER cut pays back in ${wk(b.price * fee / per)}. ` +
+      `<span class="muted">Nurse Sheep and Frozen Sheep (no sickness in summer / winter) show 0: the sickness chance is decided on the server, so it cannot be valued. Sleep boosts (Dream Scarf) mean more feeds, which is why they barely gain.</span></p>`;
+  }
+  $("nftTable").innerHTML = `<thead><tr><th>NFT</th><th>Price</th><th>FLOWER / week</th><th>Payback</th><th>If resold</th></tr></thead><tbody>` +
+    N.rows.map(r => `<tr><td style="white-space:normal"><b>${r.name}</b> <span class="muted">${r.kind}</span><br><span class="muted">${r.effect}${r.note ? ` · ${r.note}` : ""}</span></td>` +
+      `<td class="num">${fl(r.price)}<br><span class="muted">$${fl(r.usd)}</span></td><td class="num">${r.week == null ? "—" : fl(r.week)}</td>` +
+      `<td class="num">${wk(r.payback_weeks)}</td><td class="num">${wk(r.resale_weeks)}</td></tr>`).join("") + "</tbody>";
+}
 function method() {
   const p = DATA.meta.prices.prices, sl = DATA.meta.slops, f = DATA.meta.farm;
   const items = [
@@ -524,7 +556,7 @@ function nextView() {
     `At that pace mining alone pays for both buildings in about ${nf(tot / Math.max(M.both_net, 0.1), 1)} weeks.`;
 }
 
-function all() { document.querySelectorAll(".coinNote").forEach(e => e.textContent = COIN_TXT); nextView(); levelCharts(); boostView(); farmwideView(); growthView(); upgradeView(); flowerPlanView(); boardView(); }
+function all() { document.querySelectorAll(".coinNote").forEach(e => e.textContent = COIN_TXT); nextView(); levelCharts(); boostView(); farmwideView(); growthView(); upgradeView(); flowerPlanView(); boardView(); nftView(); }
 function init() {
   $("fid").textContent = DATA.meta.farm.farm_id; $("gen").textContent = DATA.meta.generated; $("tax").textContent = (C.sell_fee * 100) + "%";
   method(); all();

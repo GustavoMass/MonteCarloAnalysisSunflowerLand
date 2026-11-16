@@ -1,148 +1,7559 @@
 {
  "fetched": "2026-11-16",
+ "source": "official marketplace report",
+ "flower_usd": 0.118344,
  "items": {
-  "Training Whistle": {
-   "price": 2084,
-   "last_sale": 2084,
-   "chapter": "Paw Prints",
+  "UFO": {
+   "price": 17,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 16,
    "tradable": true
   },
-  "Ascended Chicken": {
-   "price": 124.99,
-   "last_sale": 124.99,
-   "chapter": "Ascension Age",
+  "Woody the Beaver": {
+   "price": 475,
+   "kind": "collectible",
+   "listings": 22,
+   "last_sale": 469,
    "tradable": true
   },
-  "Ascended Cow": {
-   "price": 26.995,
-   "last_sale": 26.995,
-   "chapter": "Ascension Age",
+  "Wood": {
+   "price": 0.0139998,
+   "kind": "collectible",
+   "listings": 914,
+   "last_sale": 0.0141,
    "tradable": true
   },
-  "Ascended Sheep": {
-   "price": 30.9,
-   "last_sale": 30.9,
-   "chapter": "Ascension Age",
+  "Gold": {
+   "price": 0.292,
+   "kind": "collectible",
+   "listings": 1001,
+   "last_sale": 0.29183333333333333,
    "tradable": true
   },
-  "Spa Cow": {
-   "price": 140,
-   "last_sale": 140,
-   "chapter": "Salt Awakening",
+  "Sunflower": {
+   "price": 0.00019633333333333333,
+   "kind": "collectible",
+   "listings": 1242,
+   "last_sale": 0.00019633333333333333,
    "tradable": true
   },
-  "Spa Sheep": {
-   "price": 30.793,
-   "last_sale": 30.793,
-   "chapter": "Salt Awakening",
+  "Blueberry": {
+   "price": 0.018745,
+   "kind": "collectible",
+   "listings": 861,
+   "last_sale": 0.018744444444444446,
    "tradable": true
   },
-  "Mermaid Sheep": {
-   "price": 45,
-   "last_sale": 45,
-   "chapter": "Crabs and Traps",
+  "Wheat": {
+   "price": 0.01541,
+   "kind": "collectible",
+   "listings": 892,
+   "last_sale": 0.01541,
    "tradable": true
   },
-  "Astronaut Sheep": {
-   "price": 79.997,
-   "last_sale": 79.997,
-   "chapter": "Paw Prints",
+  "Egg": {
+   "price": 0.027700000000000002,
+   "kind": "collectible",
+   "listings": 903,
+   "last_sale": 0.027700000000000002,
    "tradable": true
   },
-  "Baby Cow": {
-   "price": 165,
-   "last_sale": 165,
-   "chapter": "Better Together",
+  "Eggplant": {
+   "price": 0.008438,
+   "kind": "collectible",
+   "listings": 828,
+   "last_sale": 0.0085,
    "tradable": true
   },
-  "Dr Cow": {
-   "price": 350,
+  "Kale": {
+   "price": 0.02058913043478261,
+   "kind": "collectible",
+   "listings": 1550,
+   "last_sale": 0.02059,
+   "tradable": true
+  },
+  "Stone": {
+   "price": 0.024670520231213872,
+   "kind": "collectible",
+   "listings": 804,
+   "last_sale": 0.024674,
+   "tradable": true
+  },
+  "Potato": {
+   "price": 0.0002268,
+   "kind": "collectible",
+   "listings": 1232,
+   "last_sale": 0.00022720000000000002,
+   "tradable": true
+  },
+  "Radish": {
+   "price": 0.009065,
+   "kind": "collectible",
+   "listings": 824,
+   "last_sale": 0.009065,
+   "tradable": true
+  },
+  "Pumpkin": {
+   "price": 0.0007072000000000001,
+   "kind": "collectible",
+   "listings": 1092,
+   "last_sale": 0.0007072000000000001,
+   "tradable": true
+  },
+  "Cauliflower": {
+   "price": 0.0081464,
+   "kind": "collectible",
+   "listings": 890,
+   "last_sale": 0.008596,
+   "tradable": true
+  },
+  "Banana": {
+   "price": 0.02062,
+   "kind": "collectible",
+   "listings": 1287,
+   "last_sale": 0.020639285714285714,
+   "tradable": true
+  },
+  "Iron": {
+   "price": 0.069895,
+   "kind": "collectible",
+   "listings": 866,
+   "last_sale": 0.0701,
+   "tradable": true
+  },
+  "Carrot": {
+   "price": 0.0014,
+   "kind": "collectible",
+   "listings": 1571,
+   "last_sale": 0.001596,
+   "tradable": true
+  },
+  "Cabbage": {
+   "price": 0.0015146666666666668,
+   "kind": "collectible",
+   "listings": 1642,
+   "last_sale": 0.0015199999999999999,
+   "tradable": true
+  },
+  "Beetroot": {
+   "price": 0.00562,
+   "kind": "collectible",
+   "listings": 1062,
+   "last_sale": 0.00562,
+   "tradable": true
+  },
+  "Corn": {
+   "price": 0.01626,
+   "kind": "collectible",
+   "listings": 1084,
+   "last_sale": 0.01626,
+   "tradable": true
+  },
+  "Parsnip": {
+   "price": 444,
+   "kind": "wearable",
+   "listings": 9,
+   "last_sale": 525,
+   "tradable": true
+  },
+  "Apple": {
+   "price": 0.0207,
+   "kind": "collectible",
+   "listings": 1002,
+   "last_sale": 0.020575,
+   "tradable": true
+  },
+  "Orange": {
+   "price": 0.015996,
+   "kind": "collectible",
+   "listings": 739,
+   "last_sale": 0.01598,
+   "tradable": true
+  },
+  "Honey": {
+   "price": 0.09714249999999999,
+   "kind": "collectible",
+   "listings": 1243,
+   "last_sale": 0.10084,
+   "tradable": true
+  },
+  "Crimstone": {
+   "price": 0.692,
+   "kind": "collectible",
+   "listings": 1299,
+   "last_sale": 0.6929000000000001,
+   "tradable": true
+  },
+  "Soybean": {
+   "price": 0.002086666666666667,
+   "kind": "collectible",
+   "listings": 1604,
+   "last_sale": 0.002087272727272727,
+   "tradable": true
+  },
+  "Olive": {
+   "price": 0.3323,
+   "kind": "collectible",
+   "listings": 509,
+   "last_sale": 0.32444,
+   "tradable": true
+  },
+  "Grape": {
+   "price": 0.23497142857142858,
+   "kind": "collectible",
+   "listings": 850,
+   "last_sale": 0.23498000000000002,
+   "tradable": true
+  },
+  "Rice": {
+   "price": 0.26388,
+   "kind": "collectible",
+   "listings": 193,
+   "last_sale": 0.26388,
+   "tradable": true
+  },
+  "Nightshade Emblem": {
+   "price": 0.041996000000000006,
+   "kind": "collectible",
+   "listings": 372,
+   "last_sale": 0.04201,
+   "tradable": true
+  },
+  "Sunflorian Emblem": {
+   "price": 0.051500000000000004,
+   "kind": "collectible",
+   "listings": 349,
+   "last_sale": 0.052500000000000005,
+   "tradable": true
+  },
+  "Goblin Emblem": {
+   "price": 0.050926,
+   "kind": "collectible",
+   "listings": 376,
+   "last_sale": 0.057804999999999995,
+   "tradable": true
+  },
+  "Bumpkin Emblem": {
+   "price": 0.056297,
+   "kind": "collectible",
+   "listings": 207,
+   "last_sale": 0.0501,
+   "tradable": true
+  },
+  "Tomato": {
+   "price": 0.007,
+   "kind": "collectible",
+   "listings": 320,
+   "last_sale": 0.00745,
+   "tradable": true
+  },
+  "Lemon": {
+   "price": 0.008,
+   "kind": "collectible",
+   "listings": 792,
+   "last_sale": 0.00902,
+   "tradable": true
+  },
+  "Silver Sentinel": {
+   "price": 3.99,
+   "kind": "collectible",
+   "listings": 23,
+   "last_sale": 1.2346,
+   "tradable": true
+  },
+  "Soybean Onesie": {
+   "price": 0.4897,
+   "kind": "wearable",
+   "listings": 37,
+   "last_sale": 0.2,
+   "tradable": true
+  },
+  "Barley": {
+   "price": 0.021967871485943775,
+   "kind": "collectible",
+   "listings": 1774,
+   "last_sale": 0.02222,
+   "tradable": true
+  },
+  "Feather": {
+   "price": 0.0039998,
+   "kind": "collectible",
+   "listings": 749,
+   "last_sale": 0.004,
+   "tradable": true
+  },
+  "Leather": {
+   "price": 0.08519,
+   "kind": "collectible",
+   "listings": 576,
+   "last_sale": 0.086,
+   "tradable": true
+  },
+  "Milk": {
+   "price": 0.09875454545454546,
+   "kind": "collectible",
+   "listings": 1162,
+   "last_sale": 0.09700714285714286,
+   "tradable": true
+  },
+  "Wool": {
+   "price": 0.062375,
+   "kind": "collectible",
+   "listings": 177,
+   "last_sale": 0.0604,
+   "tradable": true
+  },
+  "Merino Wool": {
+   "price": 0.008700000000000001,
+   "kind": "collectible",
+   "listings": 301,
+   "last_sale": 0.008715,
+   "tradable": true
+  },
+  "Farmer Pitchfork": {
+   "price": 0.0229,
+   "kind": "wearable",
+   "listings": 443,
+   "last_sale": 0.0001,
+   "tradable": true
+  },
+  "Vampire Bear": {
+   "price": 0.8389,
+   "kind": "collectible",
+   "listings": 39,
+   "last_sale": 0.1603,
+   "tradable": true
+  },
+  "Daisy Tee": {
+   "price": 6,
+   "kind": "wearable",
+   "listings": 8,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Aurora Lantern": {
+   "price": 0.1276,
+   "kind": "collectible",
+   "listings": 153,
+   "last_sale": 0.1276,
+   "tradable": true
+  },
+  "Mog": {
+   "price": 0.54,
+   "kind": "collectible",
+   "listings": 57,
+   "last_sale": 0.1826,
+   "tradable": true
+  },
+  "Speed Chicken": {
+   "price": 21.9879,
+   "kind": "collectible",
+   "listings": 61,
+   "last_sale": 21.9879,
+   "tradable": true
+  },
+  "Rich Chicken": {
+   "price": 33.2789,
+   "kind": "collectible",
+   "listings": 43,
+   "last_sale": 31,
+   "tradable": true
+  },
+  "Lemon Shark": {
+   "price": 144.997,
+   "kind": "collectible",
+   "listings": 18,
+   "last_sale": 127,
+   "tradable": true
+  },
+  "Fat Chicken": {
+   "price": 39.999,
+   "kind": "collectible",
+   "listings": 45,
+   "last_sale": 38.8,
+   "tradable": true
+  },
+  "Pirate Bear": {
+   "price": 0.5878,
+   "kind": "collectible",
+   "listings": 43,
+   "last_sale": 0.5898,
+   "tradable": true
+  },
+  "Pumpkin Head": {
+   "price": 19.999,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 23.9,
+   "tradable": true
+  },
+  "Halloween Scarecrow": {
+   "price": 7.4,
+   "kind": "collectible",
+   "listings": 16,
+   "last_sale": 7.5899,
+   "tradable": true
+  },
+  "Desert Rose": {
+   "price": 41,
+   "kind": "collectible",
+   "listings": 25,
+   "last_sale": 36,
+   "tradable": true
+  },
+  "Rainbow Artist Bear": {
+   "price": 1800,
+   "kind": "collectible",
+   "listings": 5,
+   "last_sale": 333,
+   "tradable": true
+  },
+  "Heart Balloons": {
+   "price": 2,
+   "kind": "collectible",
+   "listings": 22,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Polkastarter Shirt": {
+   "price": 15,
+   "kind": "wearable",
+   "listings": 5,
+   "last_sale": 27,
+   "tradable": true
+  },
+  "Nyon Statue": {
+   "price": 10,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 3,
+   "tradable": true
+  },
+  "Generosity Flag": {
+   "price": 4.8,
+   "kind": "collectible",
+   "listings": 17,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Farmer Bear": {
+   "price": 0.099,
+   "kind": "collectible",
+   "listings": 200,
+   "last_sale": 0.0001,
+   "tradable": true
+  },
+  "Turtle Bear": {
+   "price": 2,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 1.48,
+   "tradable": true
+  },
+  "Badass Bear": {
+   "price": 0.118,
+   "kind": "collectible",
+   "listings": 146,
+   "last_sale": 0.1,
+   "tradable": true
+  },
+  "Devotion Flag": {
+   "price": 5.999,
+   "kind": "collectible",
+   "listings": 16,
+   "last_sale": 5.99,
+   "tradable": true
+  },
+  "Lifeguard Ring": {
+   "price": 0.6,
+   "kind": "collectible",
+   "listings": 29,
+   "last_sale": 0.2282,
+   "tradable": true
+  },
+  "Chinese Flag": {
+   "price": 600,
+   "kind": "collectible",
+   "listings": 3,
    "last_sale": 350,
-   "chapter": "Great Bloom",
    "tradable": true
   },
-  "Mammoth": {
-   "price": 249.9999,
-   "last_sale": 249.9999,
-   "chapter": "Winds of Change",
+  "Warrior Helmet": {
+   "price": 8,
+   "kind": "wearable",
+   "listings": 15,
+   "last_sale": 5,
    "tradable": true
   },
-  "Infernal Bullwhip": {
-   "price": 8989,
-   "last_sale": 8989,
-   "chapter": "Bull Run",
+  "Easter Bunny": {
+   "price": 21,
+   "kind": "collectible",
+   "listings": 29,
+   "last_sale": 17,
    "tradable": true
   },
-  "White Sheep Onesie": {
-   "price": 20.699,
-   "last_sale": 20.699,
-   "chapter": "Bull Run",
+  "Potato Statue": {
+   "price": 2,
+   "kind": "collectible",
+   "listings": 16,
+   "last_sale": 1,
    "tradable": true
   },
-  "Black Sheep Onesie": {
-   "price": 2940,
-   "last_sale": 2940,
-   "chapter": "Bull Run",
+  "Cyborg Bear": {
+   "price": 5,
+   "kind": "collectible",
+   "listings": 15,
+   "last_sale": 3,
+   "tradable": true
+  },
+  "Mushroom House": {
+   "price": 63,
+   "kind": "collectible",
+   "listings": 25,
+   "last_sale": 52,
+   "tradable": true
+  },
+  "Blue Pansy": {
+   "price": 0.529,
+   "kind": "collectible",
+   "listings": 38,
+   "last_sale": 0.5,
+   "tradable": true
+  },
+  "Yellow Cosmos": {
+   "price": 0.45,
+   "kind": "collectible",
+   "listings": 31,
+   "last_sale": 0.45,
+   "tradable": true
+  },
+  "Shroom Glow": {
+   "price": 2,
+   "kind": "collectible",
+   "listings": 10,
+   "last_sale": 1.95,
+   "tradable": true
+  },
+  "Algerian Flag": {
+   "price": 66666,
+   "kind": "collectible",
+   "listings": 1,
+   "last_sale": 5,
+   "tradable": true
+  },
+  "White Carnation": {
+   "price": 0.6,
+   "kind": "collectible",
+   "listings": 19,
+   "last_sale": 0.5998,
+   "tradable": true
+  },
+  "Brilliant Bear": {
+   "price": 0.06,
+   "kind": "collectible",
+   "listings": 284,
+   "last_sale": 0.059,
+   "tradable": true
+  },
+  "Purple Cosmos": {
+   "price": 0.68,
+   "kind": "collectible",
+   "listings": 90,
+   "last_sale": 0.439,
+   "tradable": true
+  },
+  "White Pansy": {
+   "price": 0.35,
+   "kind": "collectible",
+   "listings": 35,
+   "last_sale": 0.34,
+   "tradable": true
+  },
+  "Chicory": {
+   "price": 38,
+   "kind": "collectible",
+   "listings": 53,
+   "last_sale": 37.9999,
+   "tradable": true
+  },
+  "Longhorn Cowfish": {
+   "price": 230,
+   "kind": "collectible",
+   "listings": 21,
+   "last_sale": 215.001,
+   "tradable": true
+  },
+  "Castellan": {
+   "price": 45,
+   "kind": "collectible",
+   "listings": 0,
+   "last_sale": 45,
+   "tradable": true
+  },
+  "Alien Chicken": {
+   "price": 42.1,
+   "kind": "collectible",
+   "listings": 24,
+   "last_sale": 42.099,
+   "tradable": true
+  },
+  "Luminous Lantern": {
+   "price": 0.12,
+   "kind": "collectible",
+   "listings": 129,
+   "last_sale": 0.09,
+   "tradable": true
+  },
+  "Knight Chicken": {
+   "price": 49.8,
+   "kind": "collectible",
+   "listings": 26,
+   "last_sale": 46,
+   "tradable": true
+  },
+  "Elf Potion": {
+   "price": 12.78,
+   "kind": "wearable",
+   "listings": 14,
+   "last_sale": 11,
+   "tradable": true
+  },
+  "Cannonball": {
+   "price": 104.9788,
+   "kind": "collectible",
+   "listings": 12,
+   "last_sale": 104.5,
+   "tradable": true
+  },
+  "Maneki Neko": {
+   "price": 64,
+   "kind": "collectible",
+   "listings": 36,
+   "last_sale": 58,
+   "tradable": true
+  },
+  "Crim Peckster": {
+   "price": 200,
+   "kind": "collectible",
+   "listings": 21,
+   "last_sale": 195,
+   "tradable": true
+  },
+  "Moo-ver": {
+   "price": 328,
+   "kind": "collectible",
+   "listings": 20,
+   "last_sale": 288,
+   "tradable": true
+  },
+  "Golden Bonsai": {
+   "price": 0.945,
+   "kind": "collectible",
+   "listings": 36,
+   "last_sale": 0.9444,
+   "tradable": true
+  },
+  "Tiki Totem": {
+   "price": 117,
+   "kind": "collectible",
+   "listings": 43,
+   "last_sale": 106,
+   "tradable": true
+  },
+  "Capybara": {
+   "price": 15.9499,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 10,
+   "tradable": true
+  },
+  "Cluckulator": {
+   "price": 660,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 658,
+   "tradable": true
+  },
+  "Cactus King": {
+   "price": 2.9996,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 0.4004,
+   "tradable": true
+  },
+  "Lemon Frog": {
+   "price": 61.9959,
+   "kind": "collectible",
+   "listings": 17,
+   "last_sale": 51.0001,
+   "tradable": true
+  },
+  "Reveling Lemon": {
+   "price": 84.897,
+   "kind": "collectible",
+   "listings": 20,
+   "last_sale": 80,
+   "tradable": true
+  },
+  "Beetroot Amulet": {
+   "price": 63,
+   "kind": "wearable",
+   "listings": 24,
+   "last_sale": 65,
+   "tradable": true
+  },
+  "Ocean Lantern": {
+   "price": 0.2558,
+   "kind": "collectible",
+   "listings": 44,
+   "last_sale": 0.2558,
+   "tradable": true
+  },
+  "Sunflower Coin": {
+   "price": 0.9997,
+   "kind": "collectible",
+   "listings": 58,
+   "last_sale": 0.9996,
+   "tradable": true
+  },
+  "Tunnel Mole": {
+   "price": 217,
+   "kind": "collectible",
+   "listings": 29,
+   "last_sale": 191,
+   "tradable": true
+  },
+  "Crimstone Armor": {
+   "price": 101,
+   "kind": "wearable",
+   "listings": 28,
+   "last_sale": 100,
+   "tradable": true
+  },
+  "Clay Tablet": {
+   "price": 3.498,
+   "kind": "collectible",
+   "listings": 20,
+   "last_sale": 3.7999,
+   "tradable": true
+  },
+  "Solar Lantern": {
+   "price": 0.25,
+   "kind": "collectible",
+   "listings": 52,
+   "last_sale": 0.2499,
+   "tradable": true
+  },
+  "Victoria Sisters": {
+   "price": 18,
+   "kind": "collectible",
+   "listings": 47,
+   "last_sale": 16,
+   "tradable": true
+  },
+  "Paper Reed": {
+   "price": 1.5797,
+   "kind": "collectible",
+   "listings": 24,
+   "last_sale": 1.5,
+   "tradable": true
+  },
+  "Imsety Jar": {
+   "price": 1.39,
+   "kind": "collectible",
+   "listings": 22,
+   "last_sale": 1.39,
+   "tradable": true
+  },
+  "Bumpkin Lantern": {
+   "price": 0.4,
+   "kind": "collectible",
+   "listings": 27,
+   "last_sale": 0.131,
+   "tradable": true
+  },
+  "Flower Fox": {
+   "price": 77.9999,
+   "kind": "collectible",
+   "listings": 18,
+   "last_sale": 77.99,
+   "tradable": true
+  },
+  "Purple Trail": {
+   "price": 17,
+   "kind": "collectible",
+   "listings": 43,
+   "last_sale": 17,
+   "tradable": true
+  },
+  "Black Sheep": {
+   "price": 28,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 5,
+   "tradable": true
+  },
+  "Swiss Whiskers": {
+   "price": 158,
+   "kind": "collectible",
+   "listings": 16,
+   "last_sale": 131,
+   "tradable": true
+  },
+  "Carrot Amulet": {
+   "price": 31,
+   "kind": "wearable",
+   "listings": 12,
+   "last_sale": 30,
+   "tradable": true
+  },
+  "Tofu Mask": {
+   "price": 9.5,
+   "kind": "wearable",
+   "listings": 24,
+   "last_sale": 9.4969,
+   "tradable": true
+  },
+  "Shepherd Staff": {
+   "price": 6,
+   "kind": "wearable",
+   "listings": 7,
+   "last_sale": 3,
+   "tradable": true
+  },
+  "Banana Chicken": {
+   "price": 41.485,
+   "kind": "collectible",
+   "listings": 18,
+   "last_sale": 35.51,
+   "tradable": true
+  },
+  "Blondie": {
+   "price": 0.1399,
+   "kind": "wearable",
+   "listings": 61,
+   "last_sale": 0.1397,
+   "tradable": true
+  },
+  "Eggplant Onesie": {
+   "price": 15,
+   "kind": "wearable",
+   "listings": 26,
+   "last_sale": 11,
+   "tradable": true
+  },
+  "Baobab Tree": {
+   "price": 13.3333,
+   "kind": "collectible",
+   "listings": 9,
+   "last_sale": 8.9999,
+   "tradable": true
+  },
+  "White Long Hair": {
+   "price": 0.15,
+   "kind": "wearable",
+   "listings": 82,
+   "last_sale": 0.149,
+   "tradable": true
+  },
+  "Pale Potion": {
+   "price": 18.8,
+   "kind": "wearable",
+   "listings": 11,
+   "last_sale": 4.03,
+   "tradable": true
+  },
+  "Obie": {
+   "price": 32,
+   "kind": "collectible",
+   "listings": 17,
+   "last_sale": 30,
+   "tradable": true
+  },
+  "Camel Onesie": {
+   "price": 71.979,
+   "kind": "wearable",
+   "listings": 11,
+   "last_sale": 60.15,
+   "tradable": true
+  },
+  "Green Amulet": {
+   "price": 3196,
+   "kind": "wearable",
+   "listings": 25,
+   "last_sale": 3195,
+   "tradable": true
+  },
+  "Pablo The Bunny": {
+   "price": 25,
+   "kind": "collectible",
+   "listings": 25,
+   "last_sale": 22,
    "tradable": true
   },
   "Chicken Suit": {
    "price": 287,
-   "last_sale": 287,
-   "chapter": "Bull Run",
+   "kind": "wearable",
+   "listings": 12,
+   "last_sale": 286,
+   "tradable": true
+  },
+  "Kernaldo": {
+   "price": 109,
+   "kind": "collectible",
+   "listings": 27,
+   "last_sale": 108.9999,
+   "tradable": true
+  },
+  "Morty": {
+   "price": 0.3396,
+   "kind": "collectible",
+   "listings": 105,
+   "last_sale": 0.1111,
+   "tradable": true
+  },
+  "Sunflower Amulet": {
+   "price": 25,
+   "kind": "wearable",
+   "listings": 25,
+   "last_sale": 21,
+   "tradable": true
+  },
+  "Crab Trap": {
+   "price": 134.8,
+   "kind": "wearable",
+   "listings": 18,
+   "last_sale": 124.899,
    "tradable": true
   },
   "Merino Jumper": {
-   "price": 205,
-   "last_sale": 205,
-   "chapter": "Bull Run",
+   "price": 201,
+   "kind": "wearable",
+   "listings": 17,
+   "last_sale": 167,
    "tradable": true
   },
-  "Dream Scarf": {
-   "price": 25.789,
-   "last_sale": 25.789,
-   "chapter": "Bull Run",
+  "Infernal Bullwhip": {
+   "price": 9097,
+   "kind": "wearable",
+   "listings": 11,
+   "last_sale": 8095,
+   "tradable": true
+  },
+  "Pharaoh Headdress": {
+   "price": 1,
+   "kind": "wearable",
+   "listings": 33,
+   "last_sale": 0.4501,
    "tradable": true
   },
   "Cowbell Necklace": {
    "price": 5939,
-   "last_sale": 5939,
-   "chapter": "Bull Run",
+   "kind": "wearable",
+   "listings": 11,
+   "last_sale": 5337,
    "tradable": true
   },
-  "Milk Apron": {
-   "price": 549.999,
-   "last_sale": 549.999,
-   "chapter": "Bull Run",
+  "Crimson Carp": {
+   "price": 990,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 550,
    "tradable": true
   },
-  "Longhorn Cowfish": {
-   "price": 241.989,
-   "last_sale": 241.989,
-   "chapter": "Bull Run",
+  "Black Sheep Onesie": {
+   "price": 2930,
+   "kind": "wearable",
+   "listings": 10,
+   "last_sale": 2378,
    "tradable": true
   },
-  "Moo-ver": {
-   "price": 300,
-   "last_sale": 300,
-   "chapter": "Bull Run",
+  "War Skull": {
+   "price": 6,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 3,
    "tradable": true
   },
-  "Alien Chicken": {
-   "price": 42.099,
-   "last_sale": 42.099,
-   "chapter": "Bull Run",
+  "Chicken Coop": {
+   "price": 2000,
+   "kind": "collectible",
+   "listings": 9,
+   "last_sale": 1925,
    "tradable": true
   },
-  "Mootant": {
-   "price": 679,
-   "last_sale": 679,
-   "chapter": "Bull Run",
+  "Rookie Rook": {
+   "price": 2.9997,
+   "kind": "collectible",
+   "listings": 15,
+   "last_sale": 0.1201,
+   "tradable": true
+  },
+  "Sir Goldensnout": {
+   "price": 434,
+   "kind": "collectible",
+   "listings": 10,
+   "last_sale": 357,
+   "tradable": true
+  },
+  "Scarecrow": {
+   "price": 615,
+   "kind": "collectible",
+   "listings": 21,
+   "last_sale": 606,
+   "tradable": true
+  },
+  "Rock Golem": {
+   "price": 398,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 334,
+   "tradable": true
+  },
+  "Sunflower Shield": {
+   "price": 539,
+   "kind": "wearable",
+   "listings": 8,
+   "last_sale": 224,
+   "tradable": true
+  },
+  "Squirrel Monkey": {
+   "price": 102,
+   "kind": "collectible",
+   "listings": 17,
+   "last_sale": 99,
+   "tradable": true
+  },
+  "Mushroom Hat": {
+   "price": 77,
+   "kind": "wearable",
+   "listings": 17,
+   "last_sale": 78,
+   "tradable": true
+  },
+  "King of Bears": {
+   "price": 280,
+   "kind": "collectible",
+   "listings": 9,
+   "last_sale": 265,
+   "tradable": true
+  },
+  "Pharaoh Chicken": {
+   "price": 33.999,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 25,
+   "tradable": true
+  },
+  "Apprentice Beaver": {
+   "price": 1598,
+   "kind": "collectible",
+   "listings": 30,
+   "last_sale": 1500,
+   "tradable": true
+  },
+  "Hoot": {
+   "price": 3198,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 2420,
+   "tradable": true
+  },
+  "Cabbage Boy": {
+   "price": 69,
+   "kind": "collectible",
+   "listings": 16,
+   "last_sale": 68,
+   "tradable": true
+  },
+  "Carrot Sword": {
+   "price": 160,
+   "kind": "collectible",
+   "listings": 15,
+   "last_sale": 135,
+   "tradable": true
+  },
+  "Nancy": {
+   "price": 153,
+   "kind": "collectible",
+   "listings": 35,
+   "last_sale": 152,
+   "tradable": true
+  },
+  "Nugget": {
+   "price": 754,
+   "kind": "collectible",
+   "listings": 15,
+   "last_sale": 705,
+   "tradable": true
+  },
+  "Vinny": {
+   "price": 71,
+   "kind": "collectible",
+   "listings": 20,
+   "last_sale": 68.9898,
+   "tradable": true
+  },
+  "Olive Royalty Shirt": {
+   "price": 32,
+   "kind": "wearable",
+   "listings": 39,
+   "last_sale": 31.99,
    "tradable": true
   },
   "Toxic Tuft": {
    "price": 370,
-   "last_sale": 370,
-   "chapter": "Bull Run",
+   "kind": "collectible",
+   "listings": 6,
+   "last_sale": 350,
+   "tradable": true
+  },
+  "Construction Bear": {
+   "price": 0.09,
+   "kind": "collectible",
+   "listings": 203,
+   "last_sale": 0.001,
+   "tradable": true
+  },
+  "Mootant": {
+   "price": 679,
+   "kind": "collectible",
+   "listings": 9,
+   "last_sale": 400,
+   "tradable": true
+  },
+  "Radiance Lantern": {
+   "price": 0.15,
+   "kind": "collectible",
+   "listings": 94,
+   "last_sale": 0.2,
+   "tradable": true
+  },
+  "Painter's Cap": {
+   "price": 0.79,
+   "kind": "wearable",
+   "listings": 34,
+   "last_sale": 0.32,
+   "tradable": true
+  },
+  "Sword": {
+   "price": 0.0299,
+   "kind": "wearable",
+   "listings": 152,
+   "last_sale": 0.01,
+   "tradable": true
+  },
+  "Fox Hat": {
+   "price": 1,
+   "kind": "wearable",
+   "listings": 38,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Chef Bear": {
+   "price": 0.0999,
+   "kind": "collectible",
+   "listings": 78,
+   "last_sale": 0.0987,
+   "tradable": true
+  },
+  "Poppy": {
+   "price": 56.79,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 53.99,
+   "tradable": true
+  },
+  "Farm Background": {
+   "price": 0.0035,
+   "kind": "wearable",
+   "listings": 454,
+   "last_sale": 0.0035,
+   "tradable": true
+  },
+  "Twister Rug": {
+   "price": 1.9444,
+   "kind": "collectible",
+   "listings": 20,
+   "last_sale": 0.1509,
+   "tradable": true
+  },
+  "Classy Bear": {
+   "price": 0.1479,
+   "kind": "collectible",
+   "listings": 48,
+   "last_sale": 0.14,
+   "tradable": true
+  },
+  "Lifeguard Bear": {
+   "price": 1.29,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 0.38,
+   "tradable": true
+  },
+  "Maximus": {
+   "price": 239,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 239,
+   "tradable": true
+  },
+  "Qebehsenuef Jar": {
+   "price": 1.68,
+   "kind": "collectible",
+   "listings": 20,
+   "last_sale": 1.6799,
+   "tradable": true
+  },
+  "Tiki Torch": {
+   "price": 2,
+   "kind": "collectible",
+   "listings": 30,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Grape Pants": {
+   "price": 209,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 185.22,
+   "tradable": true
+  },
+  "Duamutef Jar": {
+   "price": 1.9499,
+   "kind": "collectible",
+   "listings": 17,
+   "last_sale": 1.949,
+   "tradable": true
+  },
+  "Peeled Potato": {
+   "price": 65,
+   "kind": "collectible",
+   "listings": 17,
+   "last_sale": 56,
+   "tradable": true
+  },
+  "Bumpkin Nutcracker": {
+   "price": 0.2899,
+   "kind": "collectible",
+   "listings": 43,
+   "last_sale": 0.1,
+   "tradable": true
+  },
+  "Lunar Calendar": {
+   "price": 201.99,
+   "kind": "collectible",
+   "listings": 23,
+   "last_sale": 180.3,
+   "tradable": true
+  },
+  "Soil Krabby": {
+   "price": 87.5,
+   "kind": "collectible",
+   "listings": 15,
+   "last_sale": 88.99,
+   "tradable": true
+  },
+  "Skill Shrimpy": {
+   "price": 238,
+   "kind": "collectible",
+   "listings": 18,
+   "last_sale": 220,
+   "tradable": true
+  },
+  "Love's Topper": {
+   "price": 1.29,
+   "kind": "wearable",
+   "listings": 27,
+   "last_sale": 1.2,
+   "tradable": true
+  },
+  "Beekeeper Hat": {
+   "price": 110,
+   "kind": "wearable",
+   "listings": 22,
+   "last_sale": 110,
+   "tradable": true
+  },
+  "Santa Suit": {
+   "price": 2.55,
+   "kind": "wearable",
+   "listings": 25,
+   "last_sale": 2.54,
+   "tradable": true
+  },
+  "Black Farmer Boots": {
+   "price": 0.0069,
+   "kind": "wearable",
+   "listings": 411,
+   "last_sale": 0.0069,
+   "tradable": true
+  },
+  "Karkinos": {
+   "price": 14,
+   "kind": "collectible",
+   "listings": 53,
+   "last_sale": 12,
+   "tradable": true
+  },
+  "Oasis": {
+   "price": 10,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Observatory": {
+   "price": 150,
+   "kind": "collectible",
+   "listings": 25,
+   "last_sale": 139,
+   "tradable": true
+  },
+  "Candles": {
+   "price": 0.4,
+   "kind": "collectible",
+   "listings": 32,
+   "last_sale": 0.42,
+   "tradable": true
+  },
+  "Foliant": {
+   "price": 97.7999,
+   "kind": "collectible",
+   "listings": 17,
+   "last_sale": 99,
+   "tradable": true
+  },
+  "Ayam Cemani": {
+   "price": 290,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 264,
+   "tradable": true
+  },
+  "Undead Rooster": {
+   "price": 111,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 113,
+   "tradable": true
+  },
+  "Rooster": {
+   "price": 235,
+   "kind": "collectible",
+   "listings": 18,
+   "last_sale": 232,
+   "tradable": true
+  },
+  "Marty": {
+   "price": 31.999,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 16.01,
+   "tradable": true
+  },
+  "Lady Bug": {
+   "price": 52,
+   "kind": "collectible",
+   "listings": 24,
+   "last_sale": 51,
+   "tradable": true
+  },
+  "Silver Squire": {
+   "price": 0.2,
+   "kind": "collectible",
+   "listings": 89,
+   "last_sale": 0.249,
+   "tradable": true
+  },
+  "Cabbage Girl": {
+   "price": 348,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 365,
+   "tradable": true
+  },
+  "Baby Panda": {
+   "price": 0.29,
+   "kind": "collectible",
+   "listings": 50,
+   "last_sale": 0.3,
+   "tradable": true
+  },
+  "Scarab Beetle": {
+   "price": 1.1,
+   "kind": "collectible",
+   "listings": 17,
+   "last_sale": 0.7,
+   "tradable": true
+  },
+  "Golden Garrison": {
+   "price": 3.9999,
+   "kind": "collectible",
+   "listings": 22,
+   "last_sale": 3.9,
+   "tradable": true
+  },
+  "Festival of Colors Background": {
+   "price": 1.8,
+   "kind": "wearable",
+   "listings": 21,
+   "last_sale": 0.6,
+   "tradable": true
+  },
+  "Cluckapult": {
+   "price": 5.45,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 4.0001,
+   "tradable": true
+  },
+  "Chess Rug": {
+   "price": 6.7,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 1.72,
+   "tradable": true
+  },
+  "Rice Panda": {
+   "price": 40,
+   "kind": "collectible",
+   "listings": 25,
+   "last_sale": 35.5555,
+   "tradable": true
+  },
+  "Trainee Target": {
+   "price": 3.3299,
+   "kind": "collectible",
+   "listings": 18,
+   "last_sale": 0.65,
+   "tradable": true
+  },
+  "Grain Grinder": {
+   "price": 140,
+   "kind": "collectible",
+   "listings": 19,
+   "last_sale": 132.5001,
+   "tradable": true
+  },
+  "Black Bearry": {
+   "price": 390,
+   "kind": "collectible",
+   "listings": 15,
+   "last_sale": 365,
+   "tradable": true
+  },
+  "Sundial": {
+   "price": 4,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 1.0002,
+   "tradable": true
+  },
+  "Wood Nymph Wendy": {
+   "price": 774,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 773,
+   "tradable": true
+  },
+  "Rocky the Mole": {
+   "price": 289,
+   "kind": "collectible",
+   "listings": 24,
+   "last_sale": 297,
+   "tradable": true
+  },
+  "Nana": {
+   "price": 35,
+   "kind": "collectible",
+   "listings": 20,
+   "last_sale": 34.9999,
+   "tradable": true
+  },
+  "Desert Camel Background": {
+   "price": 1.1999,
+   "kind": "wearable",
+   "listings": 37,
+   "last_sale": 0.3203,
+   "tradable": true
+  },
+  "Corn Onesie": {
+   "price": 42.999,
+   "kind": "wearable",
+   "listings": 26,
+   "last_sale": 40.6,
+   "tradable": true
+  },
+  "Camel": {
+   "price": 998.8886,
+   "kind": "collectible",
+   "listings": 21,
+   "last_sale": 930,
+   "tradable": true
+  },
+  "Rainbow": {
+   "price": 2,
+   "kind": "collectible",
+   "listings": 17,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "T-Rex Skull": {
+   "price": 0.66,
+   "kind": "collectible",
+   "listings": 39,
+   "last_sale": 0.6599,
+   "tradable": true
+  },
+  "Banana Onesie": {
+   "price": 29.995,
+   "kind": "wearable",
+   "listings": 22,
+   "last_sale": 29.9949,
+   "tradable": true
+  },
+  "Sapo Docuras": {
+   "price": 11.49,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 11,
+   "tradable": true
+  },
+  "Hapy Jar": {
+   "price": 1.1799,
+   "kind": "collectible",
+   "listings": 24,
+   "last_sale": 1.1798,
+   "tradable": true
+  },
+  "Blue Suspenders": {
+   "price": 0.0332,
+   "kind": "wearable",
+   "listings": 84,
+   "last_sale": 0.0055,
+   "tradable": true
+  },
+  "Brown Boots": {
+   "price": 0.009,
+   "kind": "wearable",
+   "listings": 108,
+   "last_sale": 0.0003,
+   "tradable": true
+  },
+  "Lucky Red Suit": {
+   "price": 0.9999,
+   "kind": "wearable",
+   "listings": 16,
+   "last_sale": 0.98,
+   "tradable": true
+  },
+  "Orange Monarch Shirt": {
+   "price": 0.6,
+   "kind": "wearable",
+   "listings": 34,
+   "last_sale": 0.5999,
+   "tradable": true
+  },
+  "Queen Cornelia": {
+   "price": 117,
+   "kind": "collectible",
+   "listings": 20,
+   "last_sale": 116,
+   "tradable": true
+  },
+  "Snorkel Bear": {
+   "price": 1.49,
+   "kind": "collectible",
+   "listings": 32,
+   "last_sale": 1.4985,
+   "tradable": true
+  },
+  "Dinosaur Bone": {
+   "price": 0.8,
+   "kind": "collectible",
+   "listings": 19,
+   "last_sale": 0.7999,
+   "tradable": true
+  },
+  "Pyramid": {
+   "price": 179,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 45,
+   "tradable": true
+  },
+  "Parlour Hair": {
+   "price": 0.1,
+   "kind": "wearable",
+   "listings": 64,
+   "last_sale": 0.1597,
+   "tradable": true
+  },
+  "Goblin Crown": {
+   "price": 10,
+   "kind": "collectible",
+   "listings": 22,
+   "last_sale": 9,
+   "tradable": true
+  },
+  "El Pollo Veloz": {
+   "price": 241,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 205,
+   "tradable": true
+  },
+  "Sun Spots": {
+   "price": 0.078,
+   "kind": "wearable",
+   "listings": 69,
+   "last_sale": 0.0011,
+   "tradable": true
+  },
+  "Genie Lamp": {
+   "price": 202,
+   "kind": "collectible",
+   "listings": 15,
+   "last_sale": 200,
+   "tradable": true
+  },
+  "Witch's Broom": {
+   "price": 2.249,
+   "kind": "wearable",
+   "listings": 13,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Tomato Clown": {
+   "price": 548,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 470,
+   "tradable": true
+  },
+  "Bee Suit": {
+   "price": 40.4,
+   "kind": "wearable",
+   "listings": 22,
+   "last_sale": 40,
+   "tradable": true
+  },
+  "White Festive Fox": {
+   "price": 2.4999,
+   "kind": "collectible",
+   "listings": 17,
+   "last_sale": 1.2001,
+   "tradable": true
+  },
+  "Mysterious Parsnip": {
+   "price": 386,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 320,
+   "tradable": true
+  },
+  "Crimstone Amulet": {
+   "price": 525,
+   "kind": "wearable",
+   "listings": 11,
+   "last_sale": 480,
+   "tradable": true
+  },
+  "Surfboard": {
+   "price": 1.979,
+   "kind": "collectible",
+   "listings": 17,
+   "last_sale": 1.9789,
+   "tradable": true
+  },
+  "Gold Egg": {
+   "price": 6540,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 4885,
+   "tradable": true
+  },
+  "Santa Beard": {
+   "price": 0.979,
+   "kind": "wearable",
+   "listings": 46,
+   "last_sale": 0.19,
+   "tradable": true
+  },
+  "Lucky Red Hat": {
+   "price": 0.23,
+   "kind": "wearable",
+   "listings": 58,
+   "last_sale": 0.0502,
+   "tradable": true
+  },
+  "Striped Red Shirt": {
+   "price": 0.15,
+   "kind": "wearable",
+   "listings": 34,
+   "last_sale": 0.14,
+   "tradable": true
+  },
+  "Iron Idol": {
+   "price": 3700,
+   "kind": "collectible",
+   "listings": 9,
+   "last_sale": 3200,
+   "tradable": true
+  },
+  "Orange Monarch Dress": {
+   "price": 1.0499,
+   "kind": "wearable",
+   "listings": 35,
+   "last_sale": 0.2223,
+   "tradable": true
+  },
+  "Hungry Hare": {
+   "price": 34.9,
+   "kind": "collectible",
+   "listings": 19,
+   "last_sale": 30,
+   "tradable": true
+  },
+  "Hornet Mask": {
+   "price": 603,
+   "kind": "wearable",
+   "listings": 7,
+   "last_sale": 550,
+   "tradable": true
+  },
+  "Easter Bear": {
+   "price": 1.5488,
+   "kind": "collectible",
+   "listings": 20,
+   "last_sale": 1.5,
+   "tradable": true
+  },
+  "Mini Corn Maze": {
+   "price": 0.58,
+   "kind": "collectible",
+   "listings": 31,
+   "last_sale": 0.5799,
+   "tradable": true
+  },
+  "Axe": {
+   "price": 0.0399,
+   "kind": "wearable",
+   "listings": 124,
+   "last_sale": 0.0003,
+   "tradable": true
+  },
+  "Pumpkin Shirt": {
+   "price": 2,
+   "kind": "wearable",
+   "listings": 11,
+   "last_sale": 1.9,
+   "tradable": true
+  },
+  "Reel Fishing Vest": {
+   "price": 0.94,
+   "kind": "wearable",
+   "listings": 23,
+   "last_sale": 0.001,
+   "tradable": true
+  },
+  "Reindeer Suit": {
+   "price": 2,
+   "kind": "wearable",
+   "listings": 30,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Benevolence Flag": {
+   "price": 11,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 10.9,
+   "tradable": true
+  },
+  "Olive Shield": {
+   "price": 256,
+   "kind": "wearable",
+   "listings": 16,
+   "last_sale": 254,
+   "tradable": true
+  },
+  "Whale Bear": {
+   "price": 1.65,
+   "kind": "collectible",
+   "listings": 25,
+   "last_sale": 0.4,
+   "tradable": true
+  },
+  "Santa Hat": {
+   "price": 6,
+   "kind": "wearable",
+   "listings": 15,
+   "last_sale": 5,
+   "tradable": true
+  },
+  "Anubis Jackal": {
+   "price": 3.7996,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 1.1,
+   "tradable": true
+  },
+  "Tin Turtle": {
+   "price": 237,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 211,
+   "tradable": true
+  },
+  "Oil Can": {
+   "price": 289,
+   "kind": "wearable",
+   "listings": 13,
+   "last_sale": 290,
+   "tradable": true
+  },
+  "Paint Can": {
+   "price": 0.7998,
+   "kind": "collectible",
+   "listings": 23,
+   "last_sale": 0.69,
+   "tradable": true
+  },
+  "Honeycomb Shield": {
+   "price": 2675,
+   "kind": "wearable",
+   "listings": 5,
+   "last_sale": 1880,
+   "tradable": true
+  },
+  "Jelly Lamp": {
+   "price": 8.8899,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 5.4999,
+   "tradable": true
+  },
+  "Non La Hat": {
+   "price": 559,
+   "kind": "wearable",
+   "listings": 12,
+   "last_sale": 479,
+   "tradable": true
+  },
+  "Chef Apron": {
+   "price": 54,
+   "kind": "wearable",
+   "listings": 13,
+   "last_sale": 53,
+   "tradable": true
+  },
+  "Tiki Pants": {
+   "price": 0.79,
+   "kind": "wearable",
+   "listings": 22,
+   "last_sale": 0.2,
+   "tradable": true
+  },
+  "Crow Rock": {
+   "price": 3.69,
+   "kind": "collectible",
+   "listings": 24,
+   "last_sale": 1.22,
+   "tradable": true
+  },
+  "SFL Office Background": {
+   "price": 8,
+   "kind": "wearable",
+   "listings": 10,
+   "last_sale": 8,
+   "tradable": true
+  },
+  "Yellow Boots": {
+   "price": 0.0146,
+   "kind": "wearable",
+   "listings": 144,
+   "last_sale": 0.001,
+   "tradable": true
+  },
+  "Seashore Background": {
+   "price": 0.0829,
+   "kind": "wearable",
+   "listings": 158,
+   "last_sale": 0.0829,
+   "tradable": true
+  },
+  "Brown Suspenders": {
+   "price": 0.0499,
+   "kind": "wearable",
+   "listings": 85,
+   "last_sale": 0.04,
+   "tradable": true
+  },
+  "Forest Background": {
+   "price": 0.0449,
+   "kind": "wearable",
+   "listings": 95,
+   "last_sale": 0.0001,
+   "tradable": true
+  },
+  "Brown Long Hair": {
+   "price": 0.12,
+   "kind": "wearable",
+   "listings": 62,
+   "last_sale": 0.1188,
+   "tradable": true
+  },
+  "Elf Suit": {
+   "price": 0.737,
+   "kind": "wearable",
+   "listings": 31,
+   "last_sale": 0.7,
+   "tradable": true
+  },
+  "Rich Bear": {
+   "price": 0.93,
+   "kind": "collectible",
+   "listings": 27,
+   "last_sale": 0.52,
+   "tradable": true
+  },
+  "Crown": {
+   "price": 2.9,
+   "kind": "wearable",
+   "listings": 15,
+   "last_sale": 1.234,
+   "tradable": true
+  },
+  "Alba": {
+   "price": 156,
+   "kind": "collectible",
+   "listings": 16,
+   "last_sale": 128,
+   "tradable": true
+  },
+  "Blue Monarch Shirt": {
+   "price": 1.35,
+   "kind": "wearable",
+   "listings": 13,
+   "last_sale": 1.35,
+   "tradable": true
+  },
+  "Snake in Jar": {
+   "price": 3.9997,
+   "kind": "collectible",
+   "listings": 12,
+   "last_sale": 1.3001,
+   "tradable": true
+  },
+  "Beta Bear": {
+   "price": 6,
+   "kind": "collectible",
+   "listings": 12,
+   "last_sale": 4,
+   "tradable": true
+  },
+  "Valentine Bear": {
+   "price": 6.4999,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 5,
+   "tradable": true
+  },
+  "Witching Wardrobe": {
+   "price": 3.97,
+   "kind": "wearable",
+   "listings": 22,
+   "last_sale": 3.9799,
+   "tradable": true
+  },
+  "Soybliss": {
+   "price": 190,
+   "kind": "collectible",
+   "listings": 6,
+   "last_sale": 189,
+   "tradable": true
+  },
+  "Lemon Shield": {
+   "price": 849,
+   "kind": "wearable",
+   "listings": 8,
+   "last_sale": 710,
+   "tradable": true
+  },
+  "Valentine's Field Background": {
+   "price": 2.4,
+   "kind": "wearable",
+   "listings": 16,
+   "last_sale": 2.07,
+   "tradable": true
+  },
+  "Adventurer's Torch": {
+   "price": 6.4995,
+   "kind": "wearable",
+   "listings": 12,
+   "last_sale": 6.3994,
+   "tradable": true
+  },
+  "Rubber Ducky": {
+   "price": 48,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 8,
+   "tradable": true
+  },
+  "Valoria Wreath": {
+   "price": 2.3,
+   "kind": "wearable",
+   "listings": 21,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Sunflower Bear": {
+   "price": 0.739,
+   "kind": "collectible",
+   "listings": 42,
+   "last_sale": 0.738,
+   "tradable": true
+  },
+  "Bunny Onesie": {
+   "price": 2,
+   "kind": "wearable",
+   "listings": 49,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Paw Shield": {
+   "price": 500,
+   "kind": "wearable",
+   "listings": 13,
+   "last_sale": 460,
+   "tradable": true
+  },
+  "Cobalt": {
+   "price": 11.4899,
+   "kind": "collectible",
+   "listings": 12,
+   "last_sale": 11.45,
+   "tradable": true
+  },
+  "Clementine": {
+   "price": 13.8,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 13.85,
+   "tradable": true
+  },
+  "Pirate Flag": {
+   "price": 87,
+   "kind": "collectible",
+   "listings": 4,
+   "last_sale": 16,
+   "tradable": true
+  },
+  "Butterfly": {
+   "price": 25,
+   "kind": "collectible",
+   "listings": 0,
+   "last_sale": 25,
+   "tradable": true
+  },
+  "Farmer Bath": {
+   "price": 2,
+   "kind": "collectible",
+   "listings": 35,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Easter Bush": {
+   "price": 2,
+   "kind": "collectible",
+   "listings": 35,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Ancient Rod": {
+   "price": 8400,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 8101,
+   "tradable": true
+  },
+  "Ancient War Hammer": {
+   "price": 9,
+   "kind": "wearable",
+   "listings": 7,
+   "last_sale": 6,
+   "tradable": true
+  },
+  "Cemetery Background": {
+   "price": 11,
+   "kind": "wearable",
+   "listings": 14,
+   "last_sale": 6,
+   "tradable": true
+  },
+  "Genie Bear": {
+   "price": 19,
+   "kind": "collectible",
+   "listings": 10,
+   "last_sale": 10.5101,
+   "tradable": true
+  },
+  "Reindeer Antlers": {
+   "price": 2,
+   "kind": "wearable",
+   "listings": 15,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Kama": {
+   "price": 2.2499,
+   "kind": "wearable",
+   "listings": 26,
+   "last_sale": 0.5005,
+   "tradable": true
+  },
+  "Infernal Goblin Potion": {
+   "price": 800,
+   "kind": "wearable",
+   "listings": 8,
+   "last_sale": 222,
+   "tradable": true
+  },
+  "Splendor Flag": {
+   "price": 5,
+   "kind": "collectible",
+   "listings": 15,
+   "last_sale": 4,
+   "tradable": true
+  },
+  "Clock": {
+   "price": 1.95,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 0.5334,
+   "tradable": true
+  },
+  "Goblin Lantern": {
+   "price": 4.4999,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 0.7,
+   "tradable": true
+  },
+  "Betty Lantern": {
+   "price": 0.6,
+   "kind": "collectible",
+   "listings": 23,
+   "last_sale": 0.2001,
+   "tradable": true
+  },
+  "Haunted Stump": {
+   "price": 4.65,
+   "kind": "collectible",
+   "listings": 18,
+   "last_sale": 1.5,
+   "tradable": true
+  },
+  "Cupid Hair": {
+   "price": 2,
+   "kind": "wearable",
+   "listings": 20,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Grape Granny": {
+   "price": 505,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 498,
+   "tradable": true
+  },
+  "Dawn Umbrella Seat": {
+   "price": 0.398,
+   "kind": "collectible",
+   "listings": 45,
+   "last_sale": 0.3979,
+   "tradable": true
+  },
+  "Adventurer's Suit": {
+   "price": 5.5,
+   "kind": "wearable",
+   "listings": 11,
+   "last_sale": 2.8,
+   "tradable": true
+  },
+  "Community Egg": {
+   "price": 2.9998,
+   "kind": "collectible",
+   "listings": 21,
+   "last_sale": 2.9997,
+   "tradable": true
+  },
+  "Explorer Shorts": {
+   "price": 4.4999,
+   "kind": "wearable",
+   "listings": 17,
+   "last_sale": 1.5001,
+   "tradable": true
+  },
+  "Flower Cart": {
+   "price": 3.49,
+   "kind": "collectible",
+   "listings": 18,
+   "last_sale": 2.9999,
+   "tradable": true
+  },
+  "Battle Fish": {
+   "price": 133,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 133,
+   "tradable": true
+  },
+  "Explorer Hat": {
+   "price": 3.5,
+   "kind": "wearable",
+   "listings": 10,
+   "last_sale": 0.5,
+   "tradable": true
+  },
+  "Straw Hat": {
+   "price": 1.389,
+   "kind": "wearable",
+   "listings": 16,
+   "last_sale": 0.511,
+   "tradable": true
+  },
+  "Squid Hat": {
+   "price": 1666,
+   "kind": "wearable",
+   "listings": 2,
+   "last_sale": 28,
+   "tradable": true
+  },
+  "Chicken Hat": {
+   "price": 254,
+   "kind": "wearable",
+   "listings": 2,
+   "last_sale": 25,
+   "tradable": true
+  },
+  "New Years Tiara": {
+   "price": 0.14,
+   "kind": "wearable",
+   "listings": 39,
+   "last_sale": 0.06,
+   "tradable": true
+  },
+  "Goblet": {
+   "price": 3,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "China Town Background": {
+   "price": 1,
+   "kind": "wearable",
+   "listings": 18,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Lion Dance Mask": {
+   "price": 3,
+   "kind": "wearable",
+   "listings": 17,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Sunrise Bloom Rug": {
+   "price": 3.89,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 3.85,
+   "tradable": true
+  },
+  "Fancy Rug": {
+   "price": 18.749,
+   "kind": "collectible",
+   "listings": 9,
+   "last_sale": 6.1,
+   "tradable": true
+  },
+  "Heart of Davy Jones": {
+   "price": 217,
+   "kind": "collectible",
+   "listings": 20,
+   "last_sale": 215,
+   "tradable": true
+  },
+  "Banana Amulet": {
+   "price": 199,
+   "kind": "wearable",
+   "listings": 17,
+   "last_sale": 159,
+   "tradable": true
+  },
+  "Sand Golem": {
+   "price": 5,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 1.321,
+   "tradable": true
+  },
+  "Bullseye Board": {
+   "price": 4.999,
+   "kind": "collectible",
+   "listings": 10,
+   "last_sale": 1.22,
+   "tradable": true
+  },
+  "Dawn Flower": {
+   "price": 0.8998,
+   "kind": "collectible",
+   "listings": 19,
+   "last_sale": 0.9899,
+   "tradable": true
+  },
+  "Ankh Shirt": {
+   "price": 2.94,
+   "kind": "wearable",
+   "listings": 12,
+   "last_sale": 2.9,
+   "tradable": true
+  },
+  "Crimstone Boots": {
+   "price": 22,
+   "kind": "wearable",
+   "listings": 7,
+   "last_sale": 10,
+   "tradable": true
+  },
+  "Beach Umbrella": {
+   "price": 24,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 22,
+   "tradable": true
+  },
+  "Mushroom Sweater": {
+   "price": 1.44,
+   "kind": "wearable",
+   "listings": 16,
+   "last_sale": 1.45,
+   "tradable": true
+  },
+  "Christmas Bear": {
+   "price": 4.85,
+   "kind": "collectible",
+   "listings": 19,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Explorer Shirt": {
+   "price": 3.3,
+   "kind": "wearable",
+   "listings": 12,
+   "last_sale": 1.6,
+   "tradable": true
+  },
+  "Cupid Dress": {
+   "price": 3,
+   "kind": "wearable",
+   "listings": 16,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Infected Potion": {
+   "price": 11,
+   "kind": "wearable",
+   "listings": 12,
+   "last_sale": 11,
+   "tradable": true
+  },
+  "Lemon Tea Bath": {
+   "price": 950,
+   "kind": "collectible",
+   "listings": 10,
+   "last_sale": 950,
+   "tradable": true
+  },
+  "Potent Potato": {
+   "price": 35.7,
+   "kind": "collectible",
+   "listings": 24,
+   "last_sale": 33.8,
+   "tradable": true
+  },
+  "Queen Bee Crown": {
+   "price": 5.8,
+   "kind": "wearable",
+   "listings": 14,
+   "last_sale": 2.3,
+   "tradable": true
+  },
+  "Blue Monarch Dress": {
+   "price": 2.9998,
+   "kind": "wearable",
+   "listings": 17,
+   "last_sale": 0.6,
+   "tradable": true
+  },
+  "Bat Wings": {
+   "price": 127,
+   "kind": "wearable",
+   "listings": 1,
+   "last_sale": 110,
+   "tradable": true
+  },
+  "Blossom Royale": {
+   "price": 14,
+   "kind": "collectible",
+   "listings": 6,
+   "last_sale": 6,
+   "tradable": true
+  },
+  "Amber Amulet": {
+   "price": 3.7,
+   "kind": "wearable",
+   "listings": 17,
+   "last_sale": 3.69,
+   "tradable": true
+  },
+  "Stockeye Salmon Onesie": {
+   "price": 28,
+   "kind": "wearable",
+   "listings": 7,
+   "last_sale": 13,
+   "tradable": true
+  },
+  "Hideaway Herman": {
+   "price": 0.998,
+   "kind": "collectible",
+   "listings": 22,
+   "last_sale": 0.95,
+   "tradable": true
+  },
+  "Baozi": {
+   "price": 4.4897,
+   "kind": "collectible",
+   "listings": 16,
+   "last_sale": 3.2,
+   "tradable": true
+  },
+  "Freya Fox": {
+   "price": 119,
+   "kind": "collectible",
+   "listings": 19,
+   "last_sale": 119,
+   "tradable": true
+  },
+  "Butterfly Wings": {
+   "price": 37,
+   "kind": "wearable",
+   "listings": 8,
+   "last_sale": 22,
+   "tradable": true
+  },
+  "Scarab Wings": {
+   "price": 90,
+   "kind": "wearable",
+   "listings": 10,
+   "last_sale": 40,
+   "tradable": true
+  },
+  "Palm Tree": {
+   "price": 13,
+   "kind": "collectible",
+   "listings": 12,
+   "last_sale": 10,
+   "tradable": true
+  },
+  "Desert Background": {
+   "price": 9,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 4,
+   "tradable": true
+  },
+  "Eggplant Bear": {
+   "price": 3.4986,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 3.4985,
+   "tradable": true
+  },
+  "Sunlit Citadel": {
+   "price": 20.9899,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 13,
+   "tradable": true
+  },
+  "Earn Alliance Sombrero": {
+   "price": 5.32,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 5,
+   "tradable": true
+  },
+  "Flower Rug": {
+   "price": 5.4699,
+   "kind": "collectible",
+   "listings": 21,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "War Tombstone": {
+   "price": 2,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Farm Dog": {
+   "price": 2485,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 2480,
+   "tradable": true
+  },
+  "Beekeeper Suit": {
+   "price": 2.4,
+   "kind": "wearable",
+   "listings": 21,
+   "last_sale": 0.701,
+   "tradable": true
+  },
+  "Unicorn Horn": {
+   "price": 0.4346,
+   "kind": "wearable",
+   "listings": 38,
+   "last_sale": 0.0805,
+   "tradable": true
+  },
+  "Radical Radish": {
+   "price": 42,
+   "kind": "collectible",
+   "listings": 33,
+   "last_sale": 43.8666,
+   "tradable": true
+  },
+  "Foreman Beaver": {
+   "price": 16299,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 12998,
+   "tradable": true
+  },
+  "Skinning Knife": {
+   "price": 35,
+   "kind": "wearable",
+   "listings": 8,
+   "last_sale": 25,
+   "tradable": true
+  },
+  "Chef Hat": {
+   "price": 1,
+   "kind": "wearable",
+   "listings": 43,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Homeless Tent": {
+   "price": 6,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 7,
+   "tradable": true
+  },
+  "Tiki Mask": {
+   "price": 4.69,
+   "kind": "wearable",
+   "listings": 11,
+   "last_sale": 4.7,
+   "tradable": true
+  },
+  "Turbo Sprout": {
+   "price": 5750,
+   "kind": "collectible",
+   "listings": 10,
+   "last_sale": 5500,
+   "tradable": true
+  },
+  "Kraken Head": {
+   "price": 7,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 7,
+   "tradable": true
+  },
+  "Hungry Caterpillar": {
+   "price": 189,
+   "kind": "collectible",
+   "listings": 18,
+   "last_sale": 151,
+   "tradable": true
+  },
+  "Oil Overalls": {
+   "price": 4003,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 2986,
+   "tradable": true
+  },
+  "Rock Hammer": {
+   "price": 5.7499,
+   "kind": "wearable",
+   "listings": 17,
+   "last_sale": 2.41,
+   "tradable": true
+  },
+  "White Crow": {
+   "price": 35,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 15,
+   "tradable": true
+  },
+  "Fountain": {
+   "price": 5,
+   "kind": "collectible",
+   "listings": 17,
+   "last_sale": 5,
+   "tradable": true
+  },
+  "Elf Hat": {
+   "price": 17,
+   "kind": "wearable",
+   "listings": 5,
+   "last_sale": 7,
+   "tradable": true
+  },
+  "Luna's Hat": {
+   "price": 11800,
+   "kind": "wearable",
+   "listings": 4,
+   "last_sale": 11877,
+   "tradable": true
+  },
+  "Red Pansy": {
+   "price": 0.4,
+   "kind": "collectible",
+   "listings": 37,
+   "last_sale": 0.38,
+   "tradable": true
+  },
+  "Yellow Lotus": {
+   "price": 0.78,
+   "kind": "collectible",
+   "listings": 19,
+   "last_sale": 0.777,
+   "tradable": true
+  },
+  "Propeller Hat": {
+   "price": 15,
+   "kind": "wearable",
+   "listings": 9,
+   "last_sale": 15,
+   "tradable": true
+  },
+  "Sunflower Tombstone": {
+   "price": 30,
+   "kind": "collectible",
+   "listings": 6,
+   "last_sale": 12,
+   "tradable": true
+  },
+  "Sarcophagus": {
+   "price": 5,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 4.9999,
+   "tradable": true
+  },
+  "Anchor": {
+   "price": 5,
+   "kind": "collectible",
+   "listings": 17,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Fire Hair": {
+   "price": 23,
+   "kind": "wearable",
+   "listings": 7,
+   "last_sale": 8,
+   "tradable": true
+  },
+  "Novice Knight": {
+   "price": 47,
+   "kind": "collectible",
+   "listings": 5,
+   "last_sale": 45,
+   "tradable": true
+  },
+  "Mushroom Shield": {
+   "price": 16.98,
+   "kind": "wearable",
+   "listings": 10,
+   "last_sale": 15,
+   "tradable": true
+  },
+  "Bear Trap": {
+   "price": 1.74,
+   "kind": "collectible",
+   "listings": 20,
+   "last_sale": 0.5,
+   "tradable": true
+  },
+  "Harvest Hourglass": {
+   "price": 45,
+   "kind": "collectible",
+   "listings": 0,
+   "last_sale": 45,
+   "tradable": true
+  },
+  "Beach Ball": {
+   "price": 2,
+   "kind": "collectible",
+   "listings": 15,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Crow Wings": {
+   "price": 54,
+   "kind": "wearable",
+   "listings": 11,
+   "last_sale": 48.45,
+   "tradable": true
+  },
+  "Ugly Christmas Sweater": {
+   "price": 2.8,
+   "kind": "wearable",
+   "listings": 12,
+   "last_sale": 2.3,
+   "tradable": true
+  },
+  "Shark Onesie": {
+   "price": 60,
+   "kind": "wearable",
+   "listings": 11,
+   "last_sale": 30,
+   "tradable": true
+  },
+  "Tomato Bombard": {
+   "price": 940,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 900,
+   "tradable": true
+  },
+  "Mushroom Shoes": {
+   "price": 22.5,
+   "kind": "wearable",
+   "listings": 4,
+   "last_sale": 11,
+   "tradable": true
+  },
+  "Wicker Man": {
+   "price": 5.985,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 2.001,
+   "tradable": true
+  },
+  "Green Field Rug": {
+   "price": 7,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 4,
+   "tradable": true
+  },
+  "Royal Robe": {
+   "price": 34.9995,
+   "kind": "wearable",
+   "listings": 9,
+   "last_sale": 13,
+   "tradable": true
+  },
+  "Angel Bear": {
+   "price": 5.9899,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 4.5,
+   "tradable": true
+  },
+  "Fishing Pants": {
+   "price": 99,
+   "kind": "wearable",
+   "listings": 3,
+   "last_sale": 5.1,
+   "tradable": true
+  },
+  "Eggplant Grill": {
+   "price": 0.999,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 0.998,
+   "tradable": true
+  },
+  "Gnome": {
+   "price": 505,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 489,
+   "tradable": true
+  },
+  "Knowledge Crab": {
+   "price": 358,
+   "kind": "collectible",
+   "listings": 12,
+   "last_sale": 336,
+   "tradable": true
+  },
+  "Stellar Sunflower": {
+   "price": 46.9999,
+   "kind": "collectible",
+   "listings": 20,
+   "last_sale": 43.1,
+   "tradable": true
+  },
+  "Christmas Background": {
+   "price": 6,
+   "kind": "wearable",
+   "listings": 17,
+   "last_sale": 6,
+   "tradable": true
+  },
+  "Gaucho Rug": {
+   "price": 1.2899,
+   "kind": "collectible",
+   "listings": 23,
+   "last_sale": 1.12,
+   "tradable": true
+  },
+  "Water Gourd": {
+   "price": 3.7,
+   "kind": "wearable",
+   "listings": 14,
+   "last_sale": 3.6,
+   "tradable": true
+  },
+  "Infernal Horns": {
+   "price": 8,
+   "kind": "wearable",
+   "listings": 10,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Miffy": {
+   "price": 149,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 40,
+   "tradable": true
+  },
+  "Cupid Sandals": {
+   "price": 2,
+   "kind": "wearable",
+   "listings": 20,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Flamingo": {
+   "price": 2,
+   "kind": "collectible",
+   "listings": 32,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Sleeping Otter": {
+   "price": 4,
+   "kind": "wearable",
+   "listings": 18,
+   "last_sale": 4,
+   "tradable": true
+  },
+  "Bale": {
+   "price": 24,
+   "kind": "collectible",
+   "listings": 0,
+   "last_sale": 24,
+   "tradable": true
+  },
+  "Enchanted Rose": {
+   "price": 2.55,
+   "kind": "collectible",
+   "listings": 27,
+   "last_sale": 0.6,
+   "tradable": true
+  },
+  "Full Bloom Shirt": {
+   "price": 3.5,
+   "kind": "wearable",
+   "listings": 8,
+   "last_sale": 1.4,
+   "tradable": true
+  },
+  "Queen Bee": {
+   "price": 2245,
+   "kind": "collectible",
+   "listings": 12,
+   "last_sale": 1723,
+   "tradable": true
+  },
+  "Christmas Rug": {
+   "price": 2.248,
+   "kind": "collectible",
+   "listings": 29,
+   "last_sale": 0.6001,
+   "tradable": true
+  },
+  "Cozy Fireplace": {
+   "price": 0.29,
+   "kind": "collectible",
+   "listings": 68,
+   "last_sale": 0.15,
+   "tradable": true
+  },
+  "Christmas Stocking": {
+   "price": 0.2497,
+   "kind": "collectible",
+   "listings": 81,
+   "last_sale": 0.0029,
+   "tradable": true
+  },
+  "Christmas Candle": {
+   "price": 1.6298,
+   "kind": "collectible",
+   "listings": 23,
+   "last_sale": 1.39,
+   "tradable": true
+  },
+  "Golden Christmas Stocking": {
+   "price": 1.0999,
+   "kind": "collectible",
+   "listings": 20,
+   "last_sale": 0.3101,
+   "tradable": true
+  },
+  "Crumple Crown": {
+   "price": 10,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Wellies": {
+   "price": 2,
+   "kind": "wearable",
+   "listings": 16,
+   "last_sale": 1.9999,
+   "tradable": true
+  },
+  "Giant Dawn Mushroom": {
+   "price": 3.3999,
+   "kind": "collectible",
+   "listings": 15,
+   "last_sale": 3,
+   "tradable": true
+  },
+  "Penguin Pool": {
+   "price": 14,
+   "kind": "collectible",
+   "listings": 12,
+   "last_sale": 13,
+   "tradable": true
+  },
+  "Lumberjack Overalls": {
+   "price": 1.9,
+   "kind": "wearable",
+   "listings": 3,
+   "last_sale": 1.81,
+   "tradable": true
+  },
+  "White Balloon Flower": {
+   "price": 0.9253,
+   "kind": "collectible",
+   "listings": 17,
+   "last_sale": 0.7502,
+   "tradable": true
+  },
+  "Santa Penguin": {
+   "price": 11.8389,
+   "kind": "collectible",
+   "listings": 15,
+   "last_sale": 5,
+   "tradable": true
+  },
+  "Gingerbread Onesie": {
+   "price": 0.33,
+   "kind": "wearable",
+   "listings": 62,
+   "last_sale": 0.338,
+   "tradable": true
+  },
+  "Candy Cane": {
+   "price": 2,
+   "kind": "wearable",
+   "listings": 13,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Dev Wrench": {
+   "price": 4500,
+   "kind": "wearable",
+   "listings": 7,
+   "last_sale": 4599,
+   "tradable": true
+  },
+  "Golden Cow": {
+   "price": 55000,
+   "kind": "collectible",
+   "listings": 2,
+   "last_sale": 65000,
+   "tradable": true
+  },
+  "Snowman": {
+   "price": 2.1943,
+   "kind": "collectible",
+   "listings": 28,
+   "last_sale": 0.5001,
+   "tradable": true
+  },
+  "Fisher's Hourglass": {
+   "price": 9.15,
+   "kind": "collectible",
+   "listings": 0,
+   "last_sale": 9.15,
+   "tradable": true
+  },
+  "Tea Rug": {
+   "price": 10,
+   "kind": "collectible",
+   "listings": 2,
+   "last_sale": 5,
+   "tradable": true
+  },
+  "Project Dignity Hoodie": {
+   "price": 9.9798,
+   "kind": "wearable",
+   "listings": 8,
+   "last_sale": 5,
+   "tradable": true
+  },
+  "Festive Toy Train": {
+   "price": 3.98,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 1.9,
+   "tradable": true
+  },
+  "Earn Alliance Banner": {
+   "price": 5,
+   "kind": "collectible",
+   "listings": 12,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Walrus": {
+   "price": 1423,
+   "kind": "collectible",
+   "listings": 6,
+   "last_sale": 1458,
+   "tradable": true
+  },
+  "Sapo Travessuras": {
+   "price": 7.5,
+   "kind": "collectible",
+   "listings": 18,
+   "last_sale": 7.84,
+   "tradable": true
+  },
+  "Grinx's Hammer": {
+   "price": 55000,
+   "kind": "collectible",
+   "listings": 5,
+   "last_sale": 50000,
+   "tradable": true
+  },
+  "Ancient Shovel": {
+   "price": 33300,
+   "kind": "wearable",
+   "listings": 4,
+   "last_sale": 16000,
+   "tradable": true
+  },
+  "Red Daffodil": {
+   "price": 0.3,
+   "kind": "collectible",
+   "listings": 53,
+   "last_sale": 0.3,
+   "tradable": true
+  },
+  "Feather Hat": {
+   "price": 5,
+   "kind": "wearable",
+   "listings": 9,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Ox Costume": {
+   "price": 4.9,
+   "kind": "wearable",
+   "listings": 9,
+   "last_sale": 4.8,
+   "tradable": true
+  },
+  "Golden Spatula": {
+   "price": 1150,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 1095,
+   "tradable": true
+  },
+  "St Patricks Hat": {
+   "price": 2,
+   "kind": "wearable",
+   "listings": 14,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Seaside Tank Top": {
+   "price": 19,
+   "kind": "wearable",
+   "listings": 18,
+   "last_sale": 5,
+   "tradable": true
+  },
+  "Angel Wings": {
+   "price": 59900,
+   "kind": "wearable",
+   "listings": 4,
+   "last_sale": 20000,
+   "tradable": true
+  },
+  "Twilight Anglerfish": {
+   "price": 421,
+   "kind": "collectible",
+   "listings": 0,
+   "last_sale": 421,
+   "tradable": true
+  },
+  "Farm Cat": {
+   "price": 7000,
+   "kind": "collectible",
+   "listings": 5,
+   "last_sale": 2700,
+   "tradable": true
+  },
+  "Observer": {
+   "price": 5,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 4.8999,
+   "tradable": true
+  },
+  "Humming Bird": {
+   "price": 493,
+   "kind": "collectible",
+   "listings": 10,
+   "last_sale": 415,
+   "tradable": true
+  },
+  "Cap n Bells": {
+   "price": 20,
+   "kind": "wearable",
+   "listings": 0,
+   "last_sale": 20,
+   "tradable": true
+  },
+  "Fish Pro Vest": {
+   "price": 5.94,
+   "kind": "wearable",
+   "listings": 12,
+   "last_sale": 2.7,
+   "tradable": true
+  },
+  "Infernal Drill": {
+   "price": 33330,
+   "kind": "wearable",
+   "listings": 7,
+   "last_sale": 25000,
+   "tradable": true
+  },
+  "Cattlegrim": {
+   "price": 4850,
+   "kind": "wearable",
+   "listings": 10,
+   "last_sale": 4949,
+   "tradable": true
+  },
+  "Purple Daffodil": {
+   "price": 0.898,
+   "kind": "collectible",
+   "listings": 26,
+   "last_sale": 0.526,
+   "tradable": true
+  },
+  "Giant Pumpkin": {
+   "price": 19.38,
+   "kind": "collectible",
+   "listings": 1,
+   "last_sale": 19.37,
+   "tradable": true
+  },
+  "Christmas Snow Globe": {
+   "price": 5,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Ancient Goblin Sword": {
+   "price": 5,
+   "kind": "wearable",
+   "listings": 12,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Skull Shirt": {
+   "price": 6.8,
+   "kind": "wearable",
+   "listings": 9,
+   "last_sale": 4.54,
+   "tradable": true
+  },
+  "Spooky Tree": {
+   "price": 19.99,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 7,
+   "tradable": true
+  },
+  "Sunflower Statue": {
+   "price": 15,
+   "kind": "collectible",
+   "listings": 15,
+   "last_sale": 6,
+   "tradable": true
+  },
+  "Shifty Sheldon": {
+   "price": 12,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 3,
+   "tradable": true
+  },
+  "Sunburst Potion": {
+   "price": 54,
+   "kind": "wearable",
+   "listings": 8,
+   "last_sale": 23,
+   "tradable": true
+  },
+  "Crimstone Hammer": {
+   "price": 6500,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 4500,
+   "tradable": true
+  },
+  "Fishing Spear": {
+   "price": 17.7589,
+   "kind": "wearable",
+   "listings": 10,
+   "last_sale": 2.777,
+   "tradable": true
+  },
+  "Regular Pawn": {
+   "price": 22,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 10,
+   "tradable": true
+  },
+  "Milk Apron": {
+   "price": 535,
+   "kind": "wearable",
+   "listings": 15,
+   "last_sale": 549,
+   "tradable": true
+  },
+  "Luscious Hair": {
+   "price": 21,
+   "kind": "wearable",
+   "listings": 8,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Peasant Skirt": {
+   "price": 5,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 4,
+   "tradable": true
+  },
+  "Barn Delight": {
+   "price": 1,
+   "kind": "collectible",
+   "listings": 1,
+   "last_sale": 0.79,
+   "tradable": true
+  },
+  "Kuebiko": {
+   "price": 8900,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 8999,
+   "tradable": true
+  },
+  "Collectible Bear": {
+   "price": 4,
+   "kind": "collectible",
+   "listings": 16,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Yellow Pansy": {
+   "price": 0.23,
+   "kind": "collectible",
+   "listings": 37,
+   "last_sale": 0.223,
+   "tradable": true
+  },
+  "New Years Crown": {
+   "price": 0.1349,
+   "kind": "wearable",
+   "listings": 54,
+   "last_sale": 0.0022,
+   "tradable": true
+  },
+  "Blue Cosmos": {
+   "price": 0.4299,
+   "kind": "collectible",
+   "listings": 108,
+   "last_sale": 0.4298,
+   "tradable": true
+  },
+  "Blacksmith Hair": {
+   "price": 18,
+   "kind": "wearable",
+   "listings": 8,
+   "last_sale": 18,
+   "tradable": true
+  },
+  "Flower Crown": {
+   "price": 2899,
+   "kind": "wearable",
+   "listings": 9,
+   "last_sale": 2750,
+   "tradable": true
+  },
+  "Red Balloon Flower": {
+   "price": 0.725,
+   "kind": "collectible",
+   "listings": 34,
+   "last_sale": 0.709,
+   "tradable": true
+  },
+  "Blue Balloon Flower": {
+   "price": 0.35,
+   "kind": "collectible",
+   "listings": 54,
+   "last_sale": 0.32,
+   "tradable": true
+  },
+  "Mechanical Bull": {
+   "price": 5.29,
+   "kind": "collectible",
+   "listings": 17,
+   "last_sale": 2.2012,
+   "tradable": true
+  },
+  "Meteorite": {
+   "price": 2,
+   "kind": "collectible",
+   "listings": 25,
+   "last_sale": 1.3,
+   "tradable": true
+  },
+  "White Sheep Onesie": {
+   "price": 20.699,
+   "kind": "wearable",
+   "listings": 64,
+   "last_sale": 20,
+   "tradable": true
+  },
+  "Cowgirl Skirt": {
+   "price": 0.19,
+   "kind": "wearable",
+   "listings": 70,
+   "last_sale": 0.0301,
+   "tradable": true
+  },
+  "Sheaf of Plenty": {
+   "price": 1222,
+   "kind": "collectible",
+   "listings": 12,
+   "last_sale": 1034.999,
+   "tradable": true
+  },
+  "Dream Scarf": {
+   "price": 25.79,
+   "kind": "wearable",
+   "listings": 39,
+   "last_sale": 25.789,
+   "tradable": true
+  },
+  "Spinning Wheel": {
+   "price": 1.1499,
+   "kind": "collectible",
+   "listings": 37,
+   "last_sale": 1.1,
+   "tradable": true
+  },
+  "Crop Circle": {
+   "price": 3.4998,
+   "kind": "collectible",
+   "listings": 15,
+   "last_sale": 3.4997,
+   "tradable": true
+  },
+  "Cow Scratcher": {
+   "price": 1,
+   "kind": "collectible",
+   "listings": 28,
+   "last_sale": 0.9999,
+   "tradable": true
+  },
+  "Cowboy Shirt": {
+   "price": 1.0999,
+   "kind": "wearable",
+   "listings": 14,
+   "last_sale": 0.9998,
+   "tradable": true
+  },
+  "Cowboy Hat": {
+   "price": 1.0998,
+   "kind": "wearable",
+   "listings": 41,
+   "last_sale": 1.07,
+   "tradable": true
+  },
+  "Cowboy Trouser": {
+   "price": 1.8599,
+   "kind": "wearable",
+   "listings": 17,
+   "last_sale": 1.8,
+   "tradable": true
+  },
+  "Red Long Hair": {
+   "price": 118,
+   "kind": "wearable",
+   "listings": 4,
+   "last_sale": 12,
+   "tradable": true
+  },
+  "Chamomile": {
+   "price": 0.28,
+   "kind": "collectible",
+   "listings": 96,
+   "last_sale": 0.2799,
+   "tradable": true
+  },
+  "Onion": {
+   "price": 0.0113,
+   "kind": "collectible",
+   "listings": 701,
+   "last_sale": 0.011300000000000001,
+   "tradable": true
+  },
+  "Turnip": {
+   "price": 0.013000000000000001,
+   "kind": "collectible",
+   "listings": 885,
+   "last_sale": 0.012022,
+   "tradable": true
+  },
+  "Sleepy Rug": {
+   "price": 2,
+   "kind": "collectible",
+   "listings": 26,
+   "last_sale": 0.8,
+   "tradable": true
+  },
+  "Sunflower Flag": {
+   "price": 34,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 33,
+   "tradable": true
+  },
+  "Summer Chicken": {
+   "price": 73,
+   "kind": "collectible",
+   "listings": 9,
+   "last_sale": 69,
+   "tradable": true
+  },
+  "Parsnip Horns": {
+   "price": 2.3,
+   "kind": "wearable",
+   "listings": 13,
+   "last_sale": 0.4,
+   "tradable": true
+  },
+  "Emerald Turtle": {
+   "price": 7750,
+   "kind": "collectible",
+   "listings": 9,
+   "last_sale": 6000,
+   "tradable": true
+  },
+  "Giant Carrot": {
+   "price": 4,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "White Daffodil": {
+   "price": 0.8599,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 0.662,
+   "tradable": true
+  },
+  "Acorn House": {
+   "price": 0.7493,
+   "kind": "collectible",
+   "listings": 61,
+   "last_sale": 0.7493,
+   "tradable": true
+  },
+  "Rhubarb": {
+   "price": 0.00049925,
+   "kind": "collectible",
+   "listings": 968,
+   "last_sale": 0.0004994,
+   "tradable": true
+  },
+  "Frozen Sheep": {
+   "price": 120,
+   "kind": "collectible",
+   "listings": 10,
+   "last_sale": 77.11,
+   "tradable": true
+  },
+  "Lily Egg": {
+   "price": 5,
+   "kind": "collectible",
+   "listings": 10,
+   "last_sale": 3,
+   "tradable": true
+  },
+  "Pan": {
+   "price": 14995,
+   "kind": "wearable",
+   "listings": 3,
+   "last_sale": 11111,
+   "tradable": true
+  },
+  "Jellyfish": {
+   "price": 94.5,
+   "kind": "collectible",
+   "listings": 21,
+   "last_sale": 90.4,
+   "tradable": true
+  },
+  "Celestine": {
+   "price": 0.1645,
+   "kind": "collectible",
+   "listings": 863,
+   "last_sale": 0.1645,
+   "tradable": true
+  },
+  "Lunara": {
+   "price": 0.44457142857142856,
+   "kind": "collectible",
+   "listings": 548,
+   "last_sale": 0.4446,
+   "tradable": true
+  },
+  "Duskberry": {
+   "price": 0.8256,
+   "kind": "collectible",
+   "listings": 1256,
+   "last_sale": 0.8256,
+   "tradable": true
+  },
+  "Crimstone Pants": {
+   "price": 39,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 15,
+   "tradable": true
+  },
+  "Battlecry Drum": {
+   "price": 1,
+   "kind": "collectible",
+   "listings": 0,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Gardening Overalls": {
+   "price": 4.3999,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 1.5,
+   "tradable": true
+  },
+  "Love Heart Onesie": {
+   "price": 0.5,
+   "kind": "wearable",
+   "listings": 61,
+   "last_sale": 0.43,
+   "tradable": true
+  },
+  "Zucchini": {
+   "price": 0.0005807,
+   "kind": "collectible",
+   "listings": 1434,
+   "last_sale": 0.0005807,
+   "tradable": true
+  },
+  "Pepper": {
+   "price": 0.0051,
+   "kind": "collectible",
+   "listings": 1132,
+   "last_sale": 0.0053,
+   "tradable": true
+  },
+  "Blossom Tree": {
+   "price": 38,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 25,
+   "tradable": true
+  },
+  "Koi Fish Hat": {
+   "price": 10,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 4.3,
+   "tradable": true
+  },
+  "SFL T-Shirt": {
+   "price": 37,
+   "kind": "wearable",
+   "listings": 9,
+   "last_sale": 4,
+   "tradable": true
+  },
+  "Lab Grown Carrot": {
+   "price": 164.99,
+   "kind": "collectible",
+   "listings": 0,
+   "last_sale": 164.99,
+   "tradable": true
+  },
+  "Frozen Cow": {
+   "price": 137.999,
+   "kind": "collectible",
+   "listings": 12,
+   "last_sale": 104,
+   "tradable": true
+  },
+  "Locust Onesie": {
+   "price": 0.3799,
+   "kind": "wearable",
+   "listings": 40,
+   "last_sale": 0.0501,
+   "tradable": true
+  },
+  "Mysterious Head": {
+   "price": 8,
+   "kind": "collectible",
+   "listings": 20,
+   "last_sale": 5,
+   "tradable": true
+  },
+  "Purple Pansy": {
+   "price": 0.3199,
+   "kind": "collectible",
+   "listings": 28,
+   "last_sale": 0.3,
+   "tradable": true
+  },
+  "Artichoke": {
+   "price": 0.011064000000000001,
+   "kind": "collectible",
+   "listings": 952,
+   "last_sale": 0.011065,
+   "tradable": true
+  },
+  "Yam": {
+   "price": 0.0021986666666666665,
+   "kind": "collectible",
+   "listings": 1043,
+   "last_sale": 0.0021991999999999997,
+   "tradable": true
+  },
+  "Broccoli": {
+   "price": 0.0023,
+   "kind": "collectible",
+   "listings": 1297,
+   "last_sale": 0.0023,
+   "tradable": true
+  },
+  "Pineapple Shirt": {
+   "price": 7,
+   "kind": "wearable",
+   "listings": 8,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Kite": {
+   "price": 1.3299,
+   "kind": "collectible",
+   "listings": 26,
+   "last_sale": 0.2006,
+   "tradable": true
+  },
+  "Beehive Staff": {
+   "price": 90,
+   "kind": "wearable",
+   "listings": 5,
+   "last_sale": 6.2,
+   "tradable": true
+  },
+  "Clown Shirt": {
+   "price": 400,
+   "kind": "wearable",
+   "listings": 2,
+   "last_sale": 50,
+   "tradable": true
+  },
+  "Warrior Pants": {
+   "price": 19,
+   "kind": "wearable",
+   "listings": 17,
+   "last_sale": 6,
+   "tradable": true
+  },
+  "Flower Bouquet": {
+   "price": 36.9999,
+   "kind": "wearable",
+   "listings": 11,
+   "last_sale": 4.5,
+   "tradable": true
+  },
+  "Love Quiver": {
+   "price": 28,
+   "kind": "wearable",
+   "listings": 11,
+   "last_sale": 5,
+   "tradable": true
+  },
+  "Rod": {
+   "price": 0.1,
+   "kind": "collectible",
+   "listings": 0,
+   "last_sale": 0.1,
+   "tradable": true
+  },
+  "Fancy Top": {
+   "price": 210,
+   "kind": "wearable",
+   "listings": 9,
+   "last_sale": 100,
+   "tradable": true
+  },
+  "Pirate Pants": {
+   "price": 22,
+   "kind": "wearable",
+   "listings": 9,
+   "last_sale": 14,
+   "tradable": true
+  },
+  "Macaw": {
+   "price": 19.2,
+   "kind": "collectible",
+   "listings": 0,
+   "last_sale": 19.2,
+   "tradable": true
+  },
+  "Golden Bear Head": {
+   "price": 99,
+   "kind": "collectible",
+   "listings": 4,
+   "last_sale": 60,
+   "tradable": true
+  },
+  "Hawaiian Shirt": {
+   "price": 118,
+   "kind": "wearable",
+   "listings": 4,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Summer Top": {
+   "price": 6,
+   "kind": "wearable",
+   "listings": 10,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Goblin Flag": {
+   "price": 67,
+   "kind": "collectible",
+   "listings": 9,
+   "last_sale": 15,
+   "tradable": true
+  },
+  "Sunflower Rock": {
+   "price": 945,
+   "kind": "collectible",
+   "listings": 4,
+   "last_sale": 120,
+   "tradable": true
+  },
+  "Ugly Duckling": {
+   "price": 1.2999,
+   "kind": "collectible",
+   "listings": 30,
+   "last_sale": 0.4307,
+   "tradable": true
+  },
+  "Imp Costume": {
+   "price": 38.9999,
+   "kind": "wearable",
+   "listings": 13,
+   "last_sale": 11.1,
+   "tradable": true
+  },
+  "Mama Duck": {
+   "price": 0.199,
+   "kind": "collectible",
+   "listings": 44,
+   "last_sale": 0.1989,
+   "tradable": true
+  },
+  "Warrior Shirt": {
+   "price": 5,
+   "kind": "wearable",
+   "listings": 18,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Bear Onesie": {
+   "price": 182,
+   "kind": "wearable",
+   "listings": 7,
+   "last_sale": 66,
+   "tradable": true
+  },
+  "Crab Claw": {
+   "price": 34,
+   "kind": "wearable",
+   "listings": 7,
+   "last_sale": 10,
+   "tradable": true
+  },
+  "Pharaoh Gnome": {
+   "price": 13999,
+   "kind": "collectible",
+   "listings": 6,
+   "last_sale": 11167,
+   "tradable": true
+  },
+  "Bumpkin Art Competition Merch": {
+   "price": 999,
+   "kind": "wearable",
+   "listings": 3,
+   "last_sale": 11,
+   "tradable": true
+  },
+  "Teal Mohawk": {
+   "price": 83,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 25,
+   "tradable": true
+  },
+  "Lake Rug": {
+   "price": 2.8899,
+   "kind": "collectible",
+   "listings": 22,
+   "last_sale": 2.5,
+   "tradable": true
+  },
+  "Ukrainian Flag": {
+   "price": 999,
+   "kind": "collectible",
+   "listings": 3,
+   "last_sale": 60,
+   "tradable": true
+  },
+  "Space Background": {
+   "price": 51,
+   "kind": "wearable",
+   "listings": 8,
+   "last_sale": 30,
+   "tradable": true
+  },
+  "Dawn Breaker Background": {
+   "price": 52,
+   "kind": "wearable",
+   "listings": 10,
+   "last_sale": 52,
+   "tradable": true
+  },
+  "Wise Robes": {
+   "price": 6,
+   "kind": "wearable",
+   "listings": 5,
+   "last_sale": 5.5,
+   "tradable": true
+  },
+  "Fishing Hat": {
+   "price": 15.999,
+   "kind": "wearable",
+   "listings": 2,
+   "last_sale": 8.85,
+   "tradable": true
+  },
+  "Ladybug Suit": {
+   "price": 25,
+   "kind": "wearable",
+   "listings": 13,
+   "last_sale": 23.0001,
+   "tradable": true
+  },
+  "Cup of Chocolate": {
+   "price": 2.8,
+   "kind": "collectible",
+   "listings": 20,
+   "last_sale": 0.7002,
+   "tradable": true
+  },
+  "Indonesian Flag": {
+   "price": 300,
+   "kind": "collectible",
+   "listings": 0,
+   "last_sale": 300,
+   "tradable": true
+  },
+  "Belgian Flag": {
+   "price": 635,
+   "kind": "collectible",
+   "listings": 0,
+   "last_sale": 635,
+   "tradable": true
+  },
+  "German Flag": {
+   "price": 222,
+   "kind": "collectible",
+   "listings": 0,
+   "last_sale": 222,
+   "tradable": true
+  },
+  "Mountain View Background": {
+   "price": 90,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 10,
+   "tradable": true
+  },
+  "Golden Cauliflower": {
+   "price": 1875,
+   "kind": "collectible",
+   "listings": 5,
+   "last_sale": 1051,
+   "tradable": true
+  },
+  "Barn Blueprint": {
+   "price": 3340,
+   "kind": "collectible",
+   "listings": 9,
+   "last_sale": 3339,
+   "tradable": true
+  },
+  "Frozen Heart": {
+   "price": 1076,
+   "kind": "wearable",
+   "listings": 10,
+   "last_sale": 851,
+   "tradable": true
+  },
+  "Snowman Onesie": {
+   "price": 34,
+   "kind": "wearable",
+   "listings": 11,
+   "last_sale": 37,
+   "tradable": true
+  },
+  "Giant Potato": {
+   "price": 15,
+   "kind": "collectible",
+   "listings": 2,
+   "last_sale": 4.9,
+   "tradable": true
+  },
+  "Sol & Luna": {
+   "price": 484,
+   "kind": "wearable",
+   "listings": 15,
+   "last_sale": 556,
+   "tradable": true
+  },
+  "Glacial Plume": {
+   "price": 200,
+   "kind": "wearable",
+   "listings": 7,
+   "last_sale": 200,
+   "tradable": true
+  },
+  "Abyssal Angler Hat": {
+   "price": 80,
+   "kind": "wearable",
+   "listings": 3,
+   "last_sale": 35,
+   "tradable": true
+  },
+  "Portuguese Flag": {
+   "price": 250000,
+   "kind": "collectible",
+   "listings": 1,
+   "last_sale": 225,
+   "tradable": true
+  },
+  "Locust King Onesie": {
+   "price": 225,
+   "kind": "wearable",
+   "listings": 2,
+   "last_sale": 43,
+   "tradable": true
+  },
+  "Queen's Crown": {
+   "price": 35.99,
+   "kind": "wearable",
+   "listings": 1,
+   "last_sale": 34,
+   "tradable": true
+  },
+  "Goblin Puppet": {
+   "price": 29,
+   "kind": "wearable",
+   "listings": 14,
+   "last_sale": 4,
+   "tradable": true
+  },
+  "Blossom Ward": {
+   "price": 1166,
+   "kind": "wearable",
+   "listings": 10,
+   "last_sale": 1000,
+   "tradable": true
+  },
+  "Golden Sheep": {
+   "price": 7398,
+   "kind": "collectible",
+   "listings": 15,
+   "last_sale": 5544,
+   "tradable": true
+  },
+  "Dawn Lamp": {
+   "price": 23,
+   "kind": "wearable",
+   "listings": 9,
+   "last_sale": 10,
+   "tradable": true
+  },
+  "Tiki Armor": {
+   "price": 55.49,
+   "kind": "wearable",
+   "listings": 7,
+   "last_sale": 9,
+   "tradable": true
+  },
+  "Fossil Head": {
+   "price": 99,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 75,
+   "tradable": true
+  },
+  "French Flag": {
+   "price": 499,
+   "kind": "collectible",
+   "listings": 1,
+   "last_sale": 150,
+   "tradable": true
+  },
+  "Obsidian": {
+   "price": 14.85,
+   "kind": "collectible",
+   "listings": 125,
+   "last_sale": 14.1242,
+   "tradable": true
+  },
+  "Mammoth": {
+   "price": 229.9999,
+   "kind": "collectible",
+   "listings": 15,
+   "last_sale": 222.1,
+   "tradable": true
+  },
+  "Crab Hat": {
+   "price": 380,
+   "kind": "wearable",
+   "listings": 16,
+   "last_sale": 350,
+   "tradable": true
+  },
+  "Hammock": {
+   "price": 6.8,
+   "kind": "collectible",
+   "listings": 18,
+   "last_sale": 2.6,
+   "tradable": true
+  },
+  "White Bunny Lantern": {
+   "price": 10,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 9.9,
+   "tradable": true
+  },
+  "Orange Tunnel Bunny": {
+   "price": 17,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 9,
+   "tradable": true
+  },
+  "Igloo": {
+   "price": 1.2444,
+   "kind": "collectible",
+   "listings": 31,
+   "last_sale": 1.2443,
+   "tradable": true
+  },
+  "Sickle": {
+   "price": 2198,
+   "kind": "wearable",
+   "listings": 15,
+   "last_sale": 1950,
+   "tradable": true
+  },
+  "Easter Apron": {
+   "price": 25,
+   "kind": "wearable",
+   "listings": 9,
+   "last_sale": 27.9997,
+   "tradable": true
+  },
+  "Carrot Pitchfork": {
+   "price": 16.659,
+   "kind": "wearable",
+   "listings": 10,
+   "last_sale": 16.659,
+   "tradable": true
+  },
+  "Handheld Bunny": {
+   "price": 16,
+   "kind": "wearable",
+   "listings": 9,
+   "last_sale": 15,
+   "tradable": true
+  },
+  "Bunny Pants": {
+   "price": 3.777,
+   "kind": "wearable",
+   "listings": 24,
+   "last_sale": 3.7,
+   "tradable": true
+  },
+  "Spring Duckling": {
+   "price": 0.4697,
+   "kind": "collectible",
+   "listings": 47,
+   "last_sale": 0.4697,
+   "tradable": true
+  },
+  "Bunny Mask": {
+   "price": 9.98,
+   "kind": "wearable",
+   "listings": 22,
+   "last_sale": 9.9799,
+   "tradable": true
+  },
+  "Carrot House": {
+   "price": 4.3,
+   "kind": "collectible",
+   "listings": 9,
+   "last_sale": 4,
+   "tradable": true
+  },
+  "Orange Bunny Lantern": {
+   "price": 1.9,
+   "kind": "collectible",
+   "listings": 17,
+   "last_sale": 1.89,
+   "tradable": true
+  },
+  "Acorn Hat": {
+   "price": 0.2694,
+   "kind": "wearable",
+   "listings": 49,
+   "last_sale": 0.0421,
+   "tradable": true
+  },
+  "Spanish Flag": {
+   "price": 2000,
+   "kind": "collectible",
+   "listings": 1,
+   "last_sale": 320,
+   "tradable": true
+  },
+  "Turkish Flag": {
+   "price": 2350,
+   "kind": "collectible",
+   "listings": 1,
+   "last_sale": 100,
+   "tradable": true
+  },
+  "Russian Flag": {
+   "price": 1000,
+   "kind": "collectible",
+   "listings": 2,
+   "last_sale": 100,
+   "tradable": true
+  },
+  "Love Chicken": {
+   "price": 0.9999,
+   "kind": "collectible",
+   "listings": 28,
+   "last_sale": 0.9998,
+   "tradable": true
+  },
+  "Lunalist": {
+   "price": 0.1,
+   "kind": "collectible",
+   "listings": 158,
+   "last_sale": 0.007,
+   "tradable": true
+  },
+  "Solflare Aegis": {
+   "price": 1833,
+   "kind": "wearable",
+   "listings": 3,
+   "last_sale": 1832,
+   "tradable": true
+  },
+  "Red Lavender": {
+   "price": 0.3799,
+   "kind": "collectible",
+   "listings": 45,
+   "last_sale": 0.3788,
+   "tradable": true
+  },
+  "Ray": {
+   "price": 1.2,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 1.19,
+   "tradable": true
+  },
+  "Butterflyfish": {
+   "price": 0.2866,
+   "kind": "collectible",
+   "listings": 99,
+   "last_sale": 0.285,
+   "tradable": true
+  },
+  "Sea Bass": {
+   "price": 0.21,
+   "kind": "collectible",
+   "listings": 58,
+   "last_sale": 0.2147,
+   "tradable": true
+  },
+  "Blue Lavender": {
+   "price": 1.4,
+   "kind": "collectible",
+   "listings": 12,
+   "last_sale": 1.3999,
+   "tradable": true
+  },
+  "Yellow Carnation": {
+   "price": 0.258,
+   "kind": "collectible",
+   "listings": 59,
+   "last_sale": 0.2589,
+   "tradable": true
+  },
+  "Camel Bone": {
+   "price": 0.0115,
+   "kind": "collectible",
+   "listings": 63,
+   "last_sale": 0.0112,
+   "tradable": true
+  },
+  "Old Bottle": {
+   "price": 0.1359,
+   "kind": "collectible",
+   "listings": 37,
+   "last_sale": 0.1198,
+   "tradable": true
+  },
+  "Hardened Leather": {
+   "price": 0.71,
+   "kind": "collectible",
+   "listings": 10,
+   "last_sale": 0.7,
+   "tradable": true
+  },
+  "Purple Lotus": {
+   "price": 1.58,
+   "kind": "collectible",
+   "listings": 17,
+   "last_sale": 1.55,
+   "tradable": true
+  },
+  "Anchovy": {
+   "price": 0.15,
+   "kind": "collectible",
+   "listings": 78,
+   "last_sale": 0.053,
+   "tradable": true
+  },
+  "Red Snapper": {
+   "price": 0.174,
+   "kind": "collectible",
+   "listings": 109,
+   "last_sale": 0.0806,
+   "tradable": true
+  },
+  "Synthetic Fabric": {
+   "price": 1.4999,
+   "kind": "collectible",
+   "listings": 2,
+   "last_sale": 0.9,
+   "tradable": true
+  },
+  "Dr Cow": {
+   "price": 344,
+   "kind": "collectible",
+   "listings": 12,
+   "last_sale": 321,
+   "tradable": true
+  },
+  "Christmas Tree": {
+   "price": 55555,
+   "kind": "collectible",
+   "listings": 6,
+   "last_sale": 55555,
+   "tradable": true
+  },
+  "Bumpkin Boots": {
+   "price": 34,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 3,
+   "tradable": true
+  },
+  "Blue Gladiolus": {
+   "price": 0.88,
+   "kind": "collectible",
+   "listings": 26,
+   "last_sale": 0.8299,
+   "tradable": true
+  },
+  "Yellow Gladiolus": {
+   "price": 0.2169,
+   "kind": "collectible",
+   "listings": 42,
+   "last_sale": 0.215,
+   "tradable": true
+  },
+  "Royal Bedding": {
+   "price": 4.2996,
+   "kind": "collectible",
+   "listings": 4,
+   "last_sale": 4.2199,
+   "tradable": true
+  },
+  "Cushion": {
+   "price": 0.3,
+   "kind": "collectible",
+   "listings": 18,
+   "last_sale": 0.3,
+   "tradable": true
+  },
+  "Blue Lotus": {
+   "price": 0.7998,
+   "kind": "collectible",
+   "listings": 15,
+   "last_sale": 0.788,
+   "tradable": true
+  },
+  "White Lotus": {
+   "price": 0.3,
+   "kind": "collectible",
+   "listings": 43,
+   "last_sale": 0.165,
+   "tradable": true
+  },
+  "Starfish": {
+   "price": 0.125,
+   "kind": "collectible",
+   "listings": 33,
+   "last_sale": 0.11,
+   "tradable": true
+  },
+  "Pink Dolphin": {
+   "price": 114.8,
+   "kind": "collectible",
+   "listings": 16,
+   "last_sale": 114.7999,
+   "tradable": true
+  },
+  "Mahi Mahi": {
+   "price": 0.528,
+   "kind": "collectible",
+   "listings": 34,
+   "last_sale": 0.303,
+   "tradable": true
+  },
+  "Seaweed": {
+   "price": 0.2189,
+   "kind": "collectible",
+   "listings": 62,
+   "last_sale": 0.101,
+   "tradable": true
+  },
+  "Cobia": {
+   "price": 1.25,
+   "kind": "collectible",
+   "listings": 5,
+   "last_sale": 1.215,
+   "tradable": true
+  },
+  "Tuna": {
+   "price": 0.1088,
+   "kind": "collectible",
+   "listings": 66,
+   "last_sale": 0.0999,
+   "tradable": true
+  },
+  "Clownfish": {
+   "price": 0.0074,
+   "kind": "collectible",
+   "listings": 127,
+   "last_sale": 0.0001,
+   "tradable": true
+  },
+  "Moray Eel": {
+   "price": 0.004,
+   "kind": "collectible",
+   "listings": 174,
+   "last_sale": 0.0035,
+   "tradable": true
+  },
+  "Autumn's Embrace": {
+   "price": 3400,
+   "kind": "wearable",
+   "listings": 14,
+   "last_sale": 3050,
+   "tradable": true
+  },
+  "Nurse Sheep": {
+   "price": 64.889,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 55.222,
+   "tradable": true
+  },
+  "Sea Cucumber": {
+   "price": 0.1189,
+   "kind": "collectible",
+   "listings": 67,
+   "last_sale": 0.1044,
+   "tradable": true
+  },
+  "Halibut": {
+   "price": 0.0188,
+   "kind": "collectible",
+   "listings": 104,
+   "last_sale": 0.018,
+   "tradable": true
+  },
+  "Red Carnation": {
+   "price": 1.77,
+   "kind": "collectible",
+   "listings": 10,
+   "last_sale": 1.76,
+   "tradable": true
+  },
+  "Blue Clover": {
+   "price": 0.28,
+   "kind": "collectible",
+   "listings": 53,
+   "last_sale": 0.28,
+   "tradable": true
+  },
+  "Yellow Daffodil": {
+   "price": 0.6,
+   "kind": "collectible",
+   "listings": 15,
+   "last_sale": 0.6,
+   "tradable": true
+  },
+  "Kelp Fibre": {
+   "price": 3.99,
+   "kind": "collectible",
+   "listings": 4,
+   "last_sale": 2.24,
+   "tradable": true
+  },
+  "Merino Cushion": {
+   "price": 0.744,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 0.38,
+   "tradable": true
+  },
+  "American Flag": {
+   "price": 98,
+   "kind": "collectible",
+   "listings": 3,
+   "last_sale": 29,
+   "tradable": true
+  },
+  "Bumpkin Puppet": {
+   "price": 26,
+   "kind": "wearable",
+   "listings": 10,
+   "last_sale": 10,
+   "tradable": true
+  },
+  "Blue Blossom Shirt": {
+   "price": 20,
+   "kind": "wearable",
+   "listings": 2,
+   "last_sale": 10,
+   "tradable": true
+  },
+  "Pipi": {
+   "price": 0.185,
+   "kind": "collectible",
+   "listings": 19,
+   "last_sale": 0.094,
+   "tradable": true
+  },
+  "Blowfish": {
+   "price": 0.04,
+   "kind": "collectible",
+   "listings": 37,
+   "last_sale": 0.04,
+   "tradable": true
+  },
+  "Oarfish": {
+   "price": 0.17,
+   "kind": "collectible",
+   "listings": 39,
+   "last_sale": 0.18,
+   "tradable": true
+  },
+  "Muskellunge": {
+   "price": 0.65,
+   "kind": "collectible",
+   "listings": 9,
+   "last_sale": 0.171,
+   "tradable": true
+  },
+  "Blue Marlin": {
+   "price": 0.084,
+   "kind": "collectible",
+   "listings": 85,
+   "last_sale": 0.0847,
+   "tradable": true
+  },
+  "Timber": {
+   "price": 0.318,
+   "kind": "collectible",
+   "listings": 12,
+   "last_sale": 0.315,
+   "tradable": true
+  },
+  "Hieroglyph": {
+   "price": 1,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Purple Carnation": {
+   "price": 0.35,
+   "kind": "collectible",
+   "listings": 56,
+   "last_sale": 0.35,
+   "tradable": true
+  },
+  "Yellow Balloon Flower": {
+   "price": 0.929,
+   "kind": "collectible",
+   "listings": 23,
+   "last_sale": 0.929,
+   "tradable": true
+  },
+  "Zebra Turkeyfish": {
+   "price": 0.1188,
+   "kind": "collectible",
+   "listings": 52,
+   "last_sale": 0.1177,
+   "tradable": true
+  },
+  "Celestial Frostbloom": {
+   "price": 0.93,
+   "kind": "collectible",
+   "listings": 28,
+   "last_sale": 0.8978,
+   "tradable": true
+  },
+  "Red Gladiolus": {
+   "price": 5.2,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 4,
+   "tradable": true
+  },
+  "Red Cosmos": {
+   "price": 2.21,
+   "kind": "collectible",
+   "listings": 6,
+   "last_sale": 1.969,
+   "tradable": true
+  },
+  "Purple Gladiolus": {
+   "price": 0.24,
+   "kind": "collectible",
+   "listings": 34,
+   "last_sale": 0.23,
+   "tradable": true
+  },
+  "Napoleanfish": {
+   "price": 0.3275,
+   "kind": "collectible",
+   "listings": 43,
+   "last_sale": 0.2003,
+   "tradable": true
+  },
+  "Crab": {
+   "price": 0.019,
+   "kind": "collectible",
+   "listings": 67,
+   "last_sale": 0.0169,
+   "tradable": true
+  },
+  "Bee Wings": {
+   "price": 100,
+   "kind": "wearable",
+   "listings": 8,
+   "last_sale": 15.1,
+   "tradable": true
+  },
+  "Purple Clover": {
+   "price": 4.37,
+   "kind": "collectible",
+   "listings": 18,
+   "last_sale": 4.299,
+   "tradable": true
+  },
+  "Olive Flounder": {
+   "price": 0.44,
+   "kind": "collectible",
+   "listings": 41,
+   "last_sale": 0.3989,
+   "tradable": true
+  },
+  "Bee Box": {
+   "price": 1.9997,
+   "kind": "collectible",
+   "listings": 6,
+   "last_sale": 1.9996,
+   "tradable": true
+  },
+  "Sand": {
+   "price": 0.15,
+   "kind": "collectible",
+   "listings": 48,
+   "last_sale": 0.144,
+   "tradable": true
+  },
+  "Jail Background": {
+   "price": 58,
+   "kind": "wearable",
+   "listings": 7,
+   "last_sale": 20,
+   "tradable": true
+  },
+  "Horse Mackerel": {
+   "price": 1.3,
+   "kind": "collectible",
+   "listings": 6,
+   "last_sale": 1.11,
+   "tradable": true
+  },
+  "Football fish": {
+   "price": 0.12,
+   "kind": "collectible",
+   "listings": 49,
+   "last_sale": 0.0566,
+   "tradable": true
+  },
+  "Purple Edelweiss": {
+   "price": 0.45,
+   "kind": "collectible",
+   "listings": 21,
+   "last_sale": 0.45,
+   "tradable": true
+  },
+  "Sunfish": {
+   "price": 0.39,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 0.3689,
+   "tradable": true
+  },
+  "Blue Carnation": {
+   "price": 0.9,
+   "kind": "collectible",
+   "listings": 10,
+   "last_sale": 0.85,
+   "tradable": true
+  },
+  "Fire Shirt": {
+   "price": 149,
+   "kind": "wearable",
+   "listings": 4,
+   "last_sale": 10,
+   "tradable": true
+  },
+  "Vase": {
+   "price": 0.022,
+   "kind": "collectible",
+   "listings": 53,
+   "last_sale": 0.022,
+   "tradable": true
+  },
+  "Summer Guardian": {
+   "price": 939,
+   "kind": "collectible",
+   "listings": 15,
+   "last_sale": 938,
+   "tradable": true
+  },
+  "Sky Pillar": {
+   "price": 10,
+   "kind": "collectible",
+   "listings": 15,
+   "last_sale": 11,
+   "tradable": true
+  },
+  "Medic Apron": {
+   "price": 411,
+   "kind": "wearable",
+   "listings": 7,
+   "last_sale": 349,
+   "tradable": true
+  },
+  "Autumn Guardian": {
+   "price": 1193,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 1099,
+   "tradable": true
+  },
+  "Broccoli Hat": {
+   "price": 207,
+   "kind": "wearable",
+   "listings": 16,
+   "last_sale": 213,
+   "tradable": true
+  },
+  "Winter Guardian": {
+   "price": 969,
+   "kind": "collectible",
+   "listings": 10,
+   "last_sale": 920,
+   "tradable": true
+  },
+  "Spring Guardian": {
+   "price": 1335,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 1334,
+   "tradable": true
+  },
+  "Quarry": {
+   "price": 6750,
+   "kind": "collectible",
+   "listings": 5,
+   "last_sale": 6162,
+   "tradable": true
+  },
+  "Obsidian Necklace": {
+   "price": 3999,
+   "kind": "wearable",
+   "listings": 14,
+   "last_sale": 3400,
+   "tradable": true
+  },
+  "Sky Island Background": {
+   "price": 7,
+   "kind": "wearable",
+   "listings": 16,
+   "last_sale": 5,
+   "tradable": true
+  },
+  "Whale Shark": {
+   "price": 4.5,
+   "kind": "collectible",
+   "listings": 10,
+   "last_sale": 4.39,
+   "tradable": true
+  },
+  "Infernal Bumpkin Potion": {
+   "price": 340,
+   "kind": "wearable",
+   "listings": 8,
+   "last_sale": 80,
+   "tradable": true
+  },
+  "Paint Splattered Hair": {
+   "price": 10.798,
+   "kind": "wearable",
+   "listings": 23,
+   "last_sale": 14,
+   "tradable": true
+  },
+  "Rainbow Flower": {
+   "price": 15,
+   "kind": "collectible",
+   "listings": 10,
+   "last_sale": 8,
+   "tradable": true
+  },
+  "Paint Buckets": {
+   "price": 13.949,
+   "kind": "collectible",
+   "listings": 6,
+   "last_sale": 9.9999,
+   "tradable": true
+  },
+  "Rainbow Well": {
+   "price": 16.9999,
+   "kind": "collectible",
+   "listings": 12,
+   "last_sale": 7,
+   "tradable": true
+  },
+  "Blue Slime Balloon": {
+   "price": 14.29,
+   "kind": "collectible",
+   "listings": 9,
+   "last_sale": 8,
+   "tradable": true
+  },
+  "Slime Aura": {
+   "price": 175,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 77,
+   "tradable": true
+  },
+  "Paint Spray Can": {
+   "price": 22,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 19,
+   "tradable": true
+  },
+  "Paint Splattered Overalls": {
+   "price": 9.8,
+   "kind": "wearable",
+   "listings": 13,
+   "last_sale": 11,
+   "tradable": true
+  },
+  "Paint Splattered Shirt": {
+   "price": 20,
+   "kind": "wearable",
+   "listings": 12,
+   "last_sale": 12,
+   "tradable": true
+  },
+  "Obsidian Turtle": {
+   "price": 3765,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 3699,
+   "tradable": true
+  },
+  "Slime Wings": {
+   "price": 85,
+   "kind": "wearable",
+   "listings": 8,
+   "last_sale": 40,
+   "tradable": true
+  },
+  "Floating Toy": {
+   "price": 7.98,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 3.5,
+   "tradable": true
+  },
+  "Slime Hat": {
+   "price": 60,
+   "kind": "wearable",
+   "listings": 5,
+   "last_sale": 40,
+   "tradable": true
+  },
+  "Coral": {
+   "price": 1.9,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 1.3312,
+   "tradable": true
+  },
+  "Surgeonfish": {
+   "price": 0.012,
+   "kind": "collectible",
+   "listings": 73,
+   "last_sale": 0.0004,
+   "tradable": true
+  },
+  "Blue Daffodil": {
+   "price": 1.374,
+   "kind": "collectible",
+   "listings": 6,
+   "last_sale": 1.3599,
+   "tradable": true
+  },
+  "Red Slime Balloon": {
+   "price": 20,
+   "kind": "collectible",
+   "listings": 4,
+   "last_sale": 16,
+   "tradable": true
+  },
+  "Pony Toy": {
+   "price": 15,
+   "kind": "collectible",
+   "listings": 6,
+   "last_sale": 14.9999,
+   "tradable": true
+  },
+  "Indian Flag": {
+   "price": 333,
+   "kind": "collectible",
+   "listings": 0,
+   "last_sale": 333,
+   "tradable": true
+  },
+  "Red Edelweiss": {
+   "price": 0.78,
+   "kind": "collectible",
+   "listings": 10,
+   "last_sale": 0.455,
+   "tradable": true
+  },
+  "Cockle Shell": {
+   "price": 0.188,
+   "kind": "collectible",
+   "listings": 22,
+   "last_sale": 0.16,
+   "tradable": true
+  },
+  "Yellow Lavender": {
+   "price": 0.905,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 0.8999,
+   "tradable": true
+  },
+  "Weakfish": {
+   "price": 0.185,
+   "kind": "collectible",
+   "listings": 28,
+   "last_sale": 0.1838,
+   "tradable": true
+  },
+  "Primula Enigma": {
+   "price": 7.8,
+   "kind": "collectible",
+   "listings": 4,
+   "last_sale": 6.99,
+   "tradable": true
+  },
+  "White Gladiolus": {
+   "price": 1.9999,
+   "kind": "collectible",
+   "listings": 5,
+   "last_sale": 1.75,
+   "tradable": true
+  },
+  "Wooden Compass": {
+   "price": 0.1,
+   "kind": "collectible",
+   "listings": 40,
+   "last_sale": 0.0715,
+   "tradable": true
+  },
+  "White Carrot": {
+   "price": 1.55,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 1.235,
+   "tradable": true
+  },
+  "Warty Goblin Pumpkin": {
+   "price": 2.25,
+   "kind": "collectible",
+   "listings": 6,
+   "last_sale": 1.5801,
+   "tradable": true
+  },
+  "Giant Yam": {
+   "price": 72.9699,
+   "kind": "collectible",
+   "listings": 18,
+   "last_sale": 70,
+   "tradable": true
+  },
+  "Glacierguard Suit": {
+   "price": 1.2999,
+   "kind": "wearable",
+   "listings": 22,
+   "last_sale": 0.4566,
+   "tradable": true
+  },
+  "Red Pepper Onesie": {
+   "price": 3,
+   "kind": "wearable",
+   "listings": 152,
+   "last_sale": 2.75,
+   "tradable": true
+  },
+  "Giant Zucchini": {
+   "price": 97,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 105.999,
+   "tradable": true
+  },
+  "Mini Floating Island": {
+   "price": 0.365,
+   "kind": "collectible",
+   "listings": 77,
+   "last_sale": 0.3649,
+   "tradable": true
+  },
+  "Heart Air Balloon": {
+   "price": 3.478,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 3.4779,
+   "tradable": true
+  },
+  "Frost Sword": {
+   "price": 1.8,
+   "kind": "wearable",
+   "listings": 21,
+   "last_sale": 1.7996,
+   "tradable": true
+  },
+  "Balloon Rug": {
+   "price": 0.185,
+   "kind": "collectible",
+   "listings": 77,
+   "last_sale": 0.183,
+   "tradable": true
+  },
+  "Oracle Syringe": {
+   "price": 1745,
+   "kind": "wearable",
+   "listings": 10,
+   "last_sale": 1744,
+   "tradable": true
+  },
+  "Giant Kale": {
+   "price": 999,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 801,
+   "tradable": true
+  },
+  "Flower-Scribed Statue": {
+   "price": 8,
+   "kind": "collectible",
+   "listings": 10,
+   "last_sale": 1.1,
+   "tradable": true
+  },
+  "Amberfall Suit": {
+   "price": 0.175,
+   "kind": "wearable",
+   "listings": 50,
+   "last_sale": 0.1749,
+   "tradable": true
+  },
+  "Bloomwarden Suit": {
+   "price": 0.35,
+   "kind": "wearable",
+   "listings": 22,
+   "last_sale": 0.3,
+   "tradable": true
+  },
+  "Flower Mask": {
+   "price": 0.2699,
+   "kind": "wearable",
+   "listings": 36,
+   "last_sale": 0.2699,
+   "tradable": true
+  },
+  "Love Charm Shirt": {
+   "price": 0.5,
+   "kind": "wearable",
+   "listings": 34,
+   "last_sale": 0.49,
+   "tradable": true
+  },
+  "Embersteel Suit": {
+   "price": 0.16,
+   "kind": "wearable",
+   "listings": 96,
+   "last_sale": 0.0044,
+   "tradable": true
+  },
+  "Pirate Leather Polo": {
+   "price": 9,
+   "kind": "wearable",
+   "listings": 12,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Normal Fish Hat": {
+   "price": 47,
+   "kind": "wearable",
+   "listings": 8,
+   "last_sale": 8,
+   "tradable": true
+  },
+  "Frog Onesie": {
+   "price": 10000,
+   "kind": "wearable",
+   "listings": 1,
+   "last_sale": 75,
+   "tradable": true
+  },
+  "Trash": {
+   "price": 0.02,
+   "kind": "collectible",
+   "listings": 16,
+   "last_sale": 0.028,
+   "tradable": true
+  },
+  "Devil Bear": {
+   "price": 6.4997,
+   "kind": "collectible",
+   "listings": 18,
+   "last_sale": 2.8,
+   "tradable": true
+  },
+  "Floor Mirror": {
+   "price": 0.1496,
+   "kind": "collectible",
+   "listings": 58,
+   "last_sale": 0.0251,
+   "tradable": true
+  },
+  "Angelfish": {
+   "price": 0.328,
+   "kind": "collectible",
+   "listings": 17,
+   "last_sale": 0.31,
+   "tradable": true
+  },
+  "Rock Blackfish": {
+   "price": 0.17,
+   "kind": "collectible",
+   "listings": 27,
+   "last_sale": 0.1699,
+   "tradable": true
+  },
+  "Chewed Bone": {
+   "price": 0.3731,
+   "kind": "collectible",
+   "listings": 470,
+   "last_sale": 0.3733,
+   "tradable": true
+  },
+  "Ruffroot": {
+   "price": 0.4356,
+   "kind": "collectible",
+   "listings": 367,
+   "last_sale": 0.35819999999999996,
+   "tradable": true
+  },
+  "Heart leaf": {
+   "price": 0.38306666666666667,
+   "kind": "collectible",
+   "listings": 270,
+   "last_sale": 0.3831,
+   "tradable": true
+  },
+  "Acorn": {
+   "price": 0.005,
+   "kind": "collectible",
+   "listings": 0,
+   "last_sale": 0.005,
+   "tradable": true
+  },
+  "Moonfur": {
+   "price": 4,
+   "kind": "collectible",
+   "listings": 274,
+   "last_sale": 4.1,
+   "tradable": true
+  },
+  "Frost Pebble": {
+   "price": 0.3734,
+   "kind": "collectible",
+   "listings": 392,
+   "last_sale": 0.3341,
+   "tradable": true
+  },
+  "Dewberry": {
+   "price": 0.4056,
+   "kind": "collectible",
+   "listings": 193,
+   "last_sale": 0.3364,
+   "tradable": true
+  },
+  "Ribbon": {
+   "price": 0.3853,
+   "kind": "collectible",
+   "listings": 275,
+   "last_sale": 0.386,
+   "tradable": true
+  },
+  "Red Lotus": {
+   "price": 0.56,
+   "kind": "collectible",
+   "listings": 38,
+   "last_sale": 0.46,
+   "tradable": true
+  },
+  "Parasaur Skull": {
+   "price": 985,
+   "kind": "collectible",
+   "listings": 3,
+   "last_sale": 100,
+   "tradable": true
+  },
+  "Wild Grass": {
+   "price": 0.3953,
+   "kind": "collectible",
+   "listings": 247,
+   "last_sale": 0.3602666666666667,
+   "tradable": true
+  },
+  "Jin": {
+   "price": 0.2399,
+   "kind": "collectible",
+   "listings": 78,
+   "last_sale": 0.2398,
+   "tradable": true
+  },
+  "Summer Duckling": {
+   "price": 0.2,
+   "kind": "collectible",
+   "listings": 69,
+   "last_sale": 0.23,
+   "tradable": true
+  },
+  "Winter Duckling": {
+   "price": 0.15,
+   "kind": "collectible",
+   "listings": 66,
+   "last_sale": 0.177,
+   "tradable": true
+  },
+  "Autumn Duckling": {
+   "price": 0.15,
+   "kind": "collectible",
+   "listings": 74,
+   "last_sale": 0.1599,
+   "tradable": true
+  },
+  "Purple Cauliflower": {
+   "price": 3.6,
+   "kind": "collectible",
+   "listings": 5,
+   "last_sale": 3.55,
+   "tradable": true
+  },
+  "Prism Petal": {
+   "price": 3.95,
+   "kind": "collectible",
+   "listings": 5,
+   "last_sale": 3,
+   "tradable": true
+  },
+  "Adirondack Potato": {
+   "price": 5.5399,
+   "kind": "collectible",
+   "listings": 2,
+   "last_sale": 3.2,
+   "tradable": true
+  },
+  "Devil Wings": {
+   "price": 59900,
+   "kind": "wearable",
+   "listings": 4,
+   "last_sale": 24500,
+   "tradable": true
+  },
+  "Coelacanth": {
+   "price": 1.5,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 1.3,
+   "tradable": true
+  },
+  "Walleye": {
+   "price": 0.0999,
+   "kind": "collectible",
+   "listings": 28,
+   "last_sale": 0.1055,
+   "tradable": true
+  },
+  "Trout": {
+   "price": 0.6,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 0.5999,
+   "tradable": true
+  },
+  "Rocket Onesie": {
+   "price": 445,
+   "kind": "wearable",
+   "listings": 5,
+   "last_sale": 199,
+   "tradable": true
+  },
+  "Brazilian Flag": {
+   "price": 1999,
+   "kind": "collectible",
+   "listings": 1,
+   "last_sale": 450,
+   "tradable": true
+  },
+  "Porgy": {
+   "price": 0.1,
+   "kind": "collectible",
+   "listings": 47,
+   "last_sale": 0.1,
+   "tradable": true
+  },
+  "Purple Balloon Flower": {
+   "price": 3,
+   "kind": "collectible",
+   "listings": 0,
+   "last_sale": 3,
+   "tradable": true
+  },
+  "Royal Throne": {
+   "price": 80,
+   "kind": "collectible",
+   "listings": 2,
+   "last_sale": 20,
+   "tradable": true
+  },
+  "Tilapia": {
+   "price": 0.17,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 0.1594,
+   "tradable": true
+  },
+  "Sea Horse": {
+   "price": 0.073,
+   "kind": "collectible",
+   "listings": 58,
+   "last_sale": 0.0104,
+   "tradable": true
+  },
+  "Ant Queen": {
+   "price": 4,
+   "kind": "collectible",
+   "listings": 17,
+   "last_sale": 4,
+   "tradable": true
+  },
+  "Rocket Statue": {
+   "price": 6,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 4,
+   "tradable": true
+  },
+  "Giant Onion": {
+   "price": 899,
+   "kind": "collectible",
+   "listings": 10,
+   "last_sale": 721,
+   "tradable": true
+  },
+  "Giant Turnip": {
+   "price": 500,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 470,
+   "tradable": true
+  },
+  "Groovy Gramophone": {
+   "price": 1698,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 1649,
+   "tradable": true
+  },
+  "Lava Swimwear": {
+   "price": 7600,
+   "kind": "wearable",
+   "listings": 14,
+   "last_sale": 6300,
+   "tradable": true
+  },
+  "Oil Gallon": {
+   "price": 1336,
+   "kind": "wearable",
+   "listings": 17,
+   "last_sale": 1151,
+   "tradable": true
+  },
+  "Jurassic Droplet": {
+   "price": 1950,
+   "kind": "collectible",
+   "listings": 2,
+   "last_sale": 318,
+   "tradable": true
+  },
+  "Maiden Top": {
+   "price": 29,
+   "kind": "wearable",
+   "listings": 11,
+   "last_sale": 4,
+   "tradable": true
+  },
+  "Canadian Flag": {
+   "price": 999,
+   "kind": "collectible",
+   "listings": 2,
+   "last_sale": 99,
+   "tradable": true
+  },
+  "White Cosmos": {
+   "price": 1.33,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 1.2797,
+   "tradable": true
+  },
+  "Yellow Clover": {
+   "price": 0.4,
+   "kind": "collectible",
+   "listings": 15,
+   "last_sale": 0.4,
+   "tradable": true
+  },
+  "Venus Bumpkin Trap": {
+   "price": 0.11,
+   "kind": "collectible",
+   "listings": 161,
+   "last_sale": 0.0022,
+   "tradable": true
+  },
+  "Rat King": {
+   "price": 4.29,
+   "kind": "collectible",
+   "listings": 12,
+   "last_sale": 4.3,
+   "tradable": true
+  },
+  "Architect Ruler": {
+   "price": 25.7399,
+   "kind": "wearable",
+   "listings": 31,
+   "last_sale": 20.6021,
+   "tradable": true
+  },
+  "Baby Cow": {
+   "price": 189.999,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 130.001,
+   "tradable": true
+  },
+  "Fruit Tune Box": {
+   "price": 222,
+   "kind": "collectible",
+   "listings": 19,
+   "last_sale": 221.999,
+   "tradable": true
+  },
+  "Reelmaster's Chair": {
+   "price": 40.78,
+   "kind": "collectible",
+   "listings": 21,
+   "last_sale": 39,
+   "tradable": true
+  },
+  "Janitor Chicken": {
+   "price": 30.487,
+   "kind": "collectible",
+   "listings": 30,
+   "last_sale": 30.4869,
+   "tradable": true
+  },
+  "Baby Sheep": {
+   "price": 9.9999,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 8,
+   "tradable": true
+  },
+  "Turd Topper": {
+   "price": 7.1,
+   "kind": "wearable",
+   "listings": 35,
+   "last_sale": 7.1399,
+   "tradable": true
+  },
+  "Poseidon": {
+   "price": 164,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 153.8689,
+   "tradable": true
+  },
+  "Garbage Bin": {
+   "price": 0.159,
+   "kind": "collectible",
+   "listings": 57,
+   "last_sale": 0.0444,
+   "tradable": true
+  },
+  "Snail King": {
+   "price": 0.39,
+   "kind": "collectible",
+   "listings": 41,
+   "last_sale": 0.35,
+   "tradable": true
+  },
+  "Long Rug": {
+   "price": 0.1898,
+   "kind": "collectible",
+   "listings": 73,
+   "last_sale": 0.1897,
+   "tradable": true
+  },
+  "Wheat Whiskers": {
+   "price": 0.199,
+   "kind": "collectible",
+   "listings": 90,
+   "last_sale": 0.057,
+   "tradable": true
+  },
+  "Wheelbarrow": {
+   "price": 0.45,
+   "kind": "collectible",
+   "listings": 36,
+   "last_sale": 0.4499,
+   "tradable": true
+  },
+  "Raccoon Onesie": {
+   "price": 2,
+   "kind": "wearable",
+   "listings": 44,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Garbage Bin Hat": {
+   "price": 0.1287,
+   "kind": "wearable",
+   "listings": 58,
+   "last_sale": 0.0033,
+   "tradable": true
+  },
+  "Giant Artichoke": {
+   "price": 681.999,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 420.1,
+   "tradable": true
+  },
+  "Pickaxe Shark": {
+   "price": 1220,
+   "kind": "wearable",
+   "listings": 9,
+   "last_sale": 1219,
+   "tradable": true
+  },
+  "Recycle Shirt": {
+   "price": 0.9898,
+   "kind": "wearable",
+   "listings": 25,
+   "last_sale": 0.5,
+   "tradable": true
+  },
+  "Rainbow Flag": {
+   "price": 6100,
+   "kind": "collectible",
+   "listings": 2,
+   "last_sale": 100,
+   "tradable": true
+  },
+  "Pirate General Coat": {
+   "price": 495,
+   "kind": "wearable",
+   "listings": 2,
+   "last_sale": 20,
+   "tradable": true
+  },
+  "Fresh Catch Vest": {
+   "price": 297,
+   "kind": "wearable",
+   "listings": 3,
+   "last_sale": 7,
+   "tradable": true
+  },
+  "Two-toned Layered": {
+   "price": 10.6737,
+   "kind": "wearable",
+   "listings": 20,
+   "last_sale": 10.8999,
+   "tradable": true
+  },
+  "Frank Onesie": {
+   "price": 16,
+   "kind": "wearable",
+   "listings": 16,
+   "last_sale": 19.5,
+   "tradable": true
+  },
+  "Haunted House": {
+   "price": 22.95,
+   "kind": "collectible",
+   "listings": 16,
+   "last_sale": 30,
+   "tradable": true
+  },
+  "Mimic Egg": {
+   "price": 5.9,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 4.4999,
+   "tradable": true
+  },
+  "Jack O'Sweets": {
+   "price": 8.999,
+   "kind": "wearable",
+   "listings": 15,
+   "last_sale": 8,
+   "tradable": true
+  },
+  "Moonseeker Potion": {
+   "price": 32,
+   "kind": "wearable",
+   "listings": 17,
+   "last_sale": 17,
+   "tradable": true
+  },
+  "Witch's Cauldron": {
+   "price": 4.98,
+   "kind": "collectible",
+   "listings": 12,
+   "last_sale": 4.9999,
+   "tradable": true
+  },
+  "Research Uniform": {
+   "price": 9.499,
+   "kind": "wearable",
+   "listings": 13,
+   "last_sale": 11,
+   "tradable": true
+  },
+  "Sweet Devil Horns": {
+   "price": 14,
+   "kind": "wearable",
+   "listings": 29,
+   "last_sale": 13.5,
+   "tradable": true
+  },
+  "Moonseeker Hand Puppet": {
+   "price": 3.9898,
+   "kind": "wearable",
+   "listings": 15,
+   "last_sale": 3.5,
+   "tradable": true
+  },
+  "Guillotine": {
+   "price": 4.98,
+   "kind": "collectible",
+   "listings": 17,
+   "last_sale": 4.9999,
+   "tradable": true
+  },
+  "Haunted Tomb": {
+   "price": 3.248,
+   "kind": "collectible",
+   "listings": 16,
+   "last_sale": 0.6667,
+   "tradable": true
+  },
+  "Sweet Devil Wings": {
+   "price": 44,
+   "kind": "wearable",
+   "listings": 16,
+   "last_sale": 49,
+   "tradable": true
+  },
+  "Cerberus": {
+   "price": 9,
+   "kind": "collectible",
+   "listings": 16,
+   "last_sale": 9,
+   "tradable": true
+  },
+  "Sweet Devil Dress": {
+   "price": 20,
+   "kind": "wearable",
+   "listings": 13,
+   "last_sale": 9,
+   "tradable": true
+  },
+  "Halloween Deathscythe": {
+   "price": 16,
+   "kind": "wearable",
+   "listings": 16,
+   "last_sale": 16.4,
+   "tradable": true
+  },
+  "Raveyard": {
+   "price": 22,
+   "kind": "collectible",
+   "listings": 5,
+   "last_sale": 11.9999,
+   "tradable": true
+  },
+  "Vampire Coffin": {
+   "price": 13.999,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 8,
+   "tradable": true
+  },
+  "Underworld Stimpack": {
+   "price": 17,
+   "kind": "wearable",
+   "listings": 13,
+   "last_sale": 22,
+   "tradable": true
+  },
+  "Wisp Aura": {
+   "price": 73,
+   "kind": "wearable",
+   "listings": 19,
+   "last_sale": 73,
+   "tradable": true
+  },
+  "Frizzy Bob Cut": {
+   "price": 6.3,
+   "kind": "wearable",
+   "listings": 24,
+   "last_sale": 7,
+   "tradable": true
+  },
+  "Trick and Treat": {
+   "price": 15,
+   "kind": "wearable",
+   "listings": 7,
+   "last_sale": 6,
+   "tradable": true
+  },
+  "Golden Helios": {
+   "price": 18.9,
+   "kind": "collectible",
+   "listings": 9,
+   "last_sale": 15.001,
+   "tradable": true
+  },
+  "Purple Lavender": {
+   "price": 2.5,
+   "kind": "collectible",
+   "listings": 3,
+   "last_sale": 2.48,
+   "tradable": true
+  },
+  "Chiogga": {
+   "price": 8.6,
+   "kind": "collectible",
+   "listings": 3,
+   "last_sale": 6.4003,
+   "tradable": true
+  },
+  "Italian Flag": {
+   "price": 29,
+   "kind": "collectible",
+   "listings": 0,
+   "last_sale": 29,
+   "tradable": true
+  },
+  "Black Magic": {
+   "price": 52.8,
+   "kind": "collectible",
+   "listings": 5,
+   "last_sale": 50,
+   "tradable": true
+  },
+  "Yellow Edelweiss": {
+   "price": 0.39,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 0.2864,
+   "tradable": true
+  },
+  "White Lavender": {
+   "price": 0.18,
+   "kind": "collectible",
+   "listings": 32,
+   "last_sale": 0.12,
+   "tradable": true
+  },
+  "2026 Tiara": {
+   "price": 0.1078,
+   "kind": "wearable",
+   "listings": 65,
+   "last_sale": 0.1,
+   "tradable": true
+  },
+  "Black Hole Flower": {
+   "price": 0.085,
+   "kind": "collectible",
+   "listings": 151,
+   "last_sale": 0.01,
+   "tradable": true
+  },
+  "Pet Bowls": {
+   "price": 5.0099,
+   "kind": "collectible",
+   "listings": 58,
+   "last_sale": 4.52,
+   "tradable": true
+  },
+  "Astronaut Cow": {
+   "price": 4.1699,
+   "kind": "collectible",
+   "listings": 25,
+   "last_sale": 4.1,
+   "tradable": true
+  },
+  "Giant Gold Bone": {
+   "price": 31,
+   "kind": "collectible",
+   "listings": 28,
+   "last_sale": 29,
+   "tradable": true
+  },
+  "Pet Bed": {
+   "price": 5,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Giant Acorn": {
+   "price": 1.118,
+   "kind": "collectible",
+   "listings": 23,
+   "last_sale": 0.31,
+   "tradable": true
+  },
+  "Astronaut Sheep": {
+   "price": 79.499,
+   "kind": "collectible",
+   "listings": 21,
+   "last_sale": 64.0101,
+   "tradable": true
+  },
+  "Sleepy Chicken": {
+   "price": 26.9981,
+   "kind": "collectible",
+   "listings": 52,
+   "last_sale": 26.9979,
+   "tradable": true
+  },
+  "Saw Fish": {
+   "price": 66.7,
+   "kind": "wearable",
+   "listings": 37,
+   "last_sale": 56.002,
+   "tradable": true
+  },
+  "Pet Specialist Shirt": {
+   "price": 1.39,
+   "kind": "wearable",
+   "listings": 19,
+   "last_sale": 1.4989,
+   "tradable": true
+  },
+  "Pet Specialist Hat": {
+   "price": 0.18,
+   "kind": "wearable",
+   "listings": 24,
+   "last_sale": 0.25,
+   "tradable": true
+  },
+  "Lunar Temple": {
+   "price": 250,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 230,
+   "tradable": true
+  },
+  "Pet Playground": {
+   "price": 0.3839,
+   "kind": "collectible",
+   "listings": 44,
+   "last_sale": 0.1202,
+   "tradable": true
+  },
+  "Fish Bowl": {
+   "price": 0.249,
+   "kind": "collectible",
+   "listings": 37,
+   "last_sale": 0.2,
+   "tradable": true
+  },
+  "Pet Toys": {
+   "price": 0.15,
+   "kind": "collectible",
+   "listings": 46,
+   "last_sale": 0.165,
+   "tradable": true
+  },
+  "Magma Stone": {
+   "price": 1797,
+   "kind": "collectible",
+   "listings": 9,
+   "last_sale": 1700,
+   "tradable": true
+  },
+  "Pet Specialist Pants": {
+   "price": 0.319,
+   "kind": "wearable",
+   "listings": 29,
+   "last_sale": 0.001,
+   "tradable": true
+  },
+  "Training Whistle": {
+   "price": 2063,
+   "kind": "wearable",
+   "listings": 12,
+   "last_sale": 1825,
+   "tradable": true
+  },
+  "Pet Kennel": {
+   "price": 0.1796,
+   "kind": "collectible",
+   "listings": 92,
+   "last_sale": 0.1795,
+   "tradable": true
+  },
+  "Petnip Plant": {
+   "price": 0.96,
+   "kind": "collectible",
+   "listings": 52,
+   "last_sale": 0.99,
+   "tradable": true
+  },
+  "Paw Prints Rug": {
+   "price": 5,
+   "kind": "collectible",
+   "listings": 12,
+   "last_sale": 5,
+   "tradable": true
+  },
+  "Master Chef's Cleaver": {
+   "price": 1840,
+   "kind": "wearable",
+   "listings": 8,
+   "last_sale": 1890,
+   "tradable": true
+  },
+  "Moon Fox Statue": {
+   "price": 770,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 555,
+   "tradable": true
+  },
+  "Luna's Crescent": {
+   "price": 7347,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 6050,
+   "tradable": true
+  },
+  "Super Star": {
+   "price": 264,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 299,
+   "tradable": true
+  },
+  "Squeaky Chicken": {
+   "price": 0.17,
+   "kind": "collectible",
+   "listings": 63,
+   "last_sale": 0.0778,
+   "tradable": true
+  },
+  "Squirrel Onesie": {
+   "price": 440,
+   "kind": "wearable",
+   "listings": 9,
+   "last_sale": 400,
+   "tradable": true
+  },
+  "Gift Turtle": {
+   "price": 3.9995,
+   "kind": "collectible",
+   "listings": 18,
+   "last_sale": 1.51,
+   "tradable": true
+  },
+  "Holiday Decorative Totem": {
+   "price": 3.9,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 1.52,
+   "tradable": true
+  },
+  "Frozen Meat": {
+   "price": 5,
+   "kind": "collectible",
+   "listings": 12,
+   "last_sale": 7.3999,
+   "tradable": true
+  },
+  "Penguin Surprise": {
+   "price": 6.4699,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 1.5002,
+   "tradable": true
+  },
+  "Red Holiday Ornament": {
+   "price": 2.28,
+   "kind": "collectible",
+   "listings": 6,
+   "last_sale": 1.8,
+   "tradable": true
+  },
+  "Green Holiday Ornament": {
+   "price": 0.97,
+   "kind": "collectible",
+   "listings": 33,
+   "last_sale": 0.9699,
+   "tradable": true
+  },
+  "Reindeer Mask": {
+   "price": 8.5,
+   "kind": "wearable",
+   "listings": 7,
+   "last_sale": 8.4,
+   "tradable": true
+  },
+  "Cookie Shield": {
+   "price": 15.4999,
+   "kind": "wearable",
+   "listings": 10,
+   "last_sale": 10.0101,
+   "tradable": true
+  },
+  "Cool Glasses": {
+   "price": 2.29,
+   "kind": "wearable",
+   "listings": 21,
+   "last_sale": 0.2,
+   "tradable": true
+  },
+  "Ho Ho oh oh\u2026": {
+   "price": 4.92,
+   "kind": "collectible",
+   "listings": 17,
+   "last_sale": 4.899,
+   "tradable": true
+  },
+  "Comfy Xmas Pants": {
+   "price": 7.999,
+   "kind": "wearable",
+   "listings": 14,
+   "last_sale": 5,
+   "tradable": true
+  },
+  "Comfy Xmas Sweater": {
+   "price": 8.5,
+   "kind": "wearable",
+   "listings": 10,
+   "last_sale": 4,
+   "tradable": true
+  },
+  "Cozy Reindeer Onesie": {
+   "price": 63.9,
+   "kind": "wearable",
+   "listings": 11,
+   "last_sale": 43,
+   "tradable": true
+  },
+  "Candy Halbred": {
+   "price": 20,
+   "kind": "wearable",
+   "listings": 8,
+   "last_sale": 4,
+   "tradable": true
+  },
+  "Kraken Tentacle": {
+   "price": 0.298,
+   "kind": "collectible",
+   "listings": 63,
+   "last_sale": 0.15,
+   "tradable": true
+  },
+  "Red Nose Reindeer": {
+   "price": 45,
+   "kind": "collectible",
+   "listings": 6,
+   "last_sale": 25,
+   "tradable": true
+  },
+  "Wagon": {
+   "price": 0.7499,
+   "kind": "collectible",
+   "listings": 21,
+   "last_sale": 0.113,
+   "tradable": true
+  },
+  "Infernal Pitchfork": {
+   "price": 88900,
+   "kind": "wearable",
+   "listings": 3,
+   "last_sale": 70000,
+   "tradable": true
+  },
+  "Winter Alpaca": {
+   "price": 15.99,
+   "kind": "collectible",
+   "listings": 10,
+   "last_sale": 5,
+   "tradable": true
+  },
+  "Holiday Feast Background": {
+   "price": 133,
+   "kind": "wearable",
+   "listings": 2,
+   "last_sale": 119,
+   "tradable": true
+  },
+  "Tuxedo Claus": {
+   "price": 270,
+   "kind": "collectible",
+   "listings": 4,
+   "last_sale": 69,
+   "tradable": true
+  },
+  "Diamond Snow Aura": {
+   "price": 299,
+   "kind": "wearable",
+   "listings": 4,
+   "last_sale": 120,
+   "tradable": true
+  },
+  "White Tunnel Bunny": {
+   "price": 18.58,
+   "kind": "collectible",
+   "listings": 9,
+   "last_sale": 19,
+   "tradable": true
+  },
+  "Xmas Top Hat": {
+   "price": 20,
+   "kind": "wearable",
+   "listings": 5,
+   "last_sale": 9,
+   "tradable": true
+  },
+  "Snowman Mask": {
+   "price": 295,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 33,
+   "tradable": true
+  },
+  "Lithuanian Flag": {
+   "price": 600,
+   "kind": "collectible",
+   "listings": 0,
+   "last_sale": 600,
+   "tradable": true
+  },
+  "Australian Flag": {
+   "price": 99999999999999,
+   "kind": "collectible",
+   "listings": 1,
+   "last_sale": 220,
+   "tradable": true
+  },
+  "Harry's Hat": {
+   "price": 60,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 25,
+   "tradable": true
+  },
+  "Easter Basket": {
+   "price": 3.98,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 3.8995,
+   "tradable": true
+  },
+  "Pirate Scimitar": {
+   "price": 497,
+   "kind": "wearable",
+   "listings": 4,
+   "last_sale": 21,
+   "tradable": true
+  },
+  "Stone Beetle": {
+   "price": 0.1,
+   "kind": "collectible",
+   "listings": 0,
+   "last_sale": 0.1,
+   "tradable": true
+  },
+  "Skull Hat": {
+   "price": 1499,
+   "kind": "wearable",
+   "listings": 2,
+   "last_sale": 2500,
+   "tradable": true
+  },
+  "CluckCoin": {
+   "price": 0.21,
+   "kind": "collectible",
+   "listings": 495,
+   "last_sale": 0.1303,
+   "tradable": true
+  },
+  "Salt": {
+   "price": 0.00599,
+   "kind": "collectible",
+   "listings": 762,
+   "last_sale": 0.005422,
+   "tradable": true
+  },
+  "Fancy Pants": {
+   "price": 100,
+   "kind": "wearable",
+   "listings": 7,
+   "last_sale": 11,
+   "tradable": true
+  },
+  "The Sunflower Man Statue": {
+   "price": 700,
+   "kind": "collectible",
+   "listings": 3,
+   "last_sale": 175,
+   "tradable": true
+  },
+  "Jester in a box": {
+   "price": 200,
+   "kind": "collectible",
+   "listings": 4,
+   "last_sale": 50,
+   "tradable": true
+  },
+  "404 Chic Boots": {
+   "price": 7.6938,
+   "kind": "wearable",
+   "listings": 16,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Admin Fools Tools": {
+   "price": 8.8999,
+   "kind": "wearable",
+   "listings": 7,
+   "last_sale": 10,
+   "tradable": true
+  },
+  "Neon Noiz Pants": {
+   "price": 16.66,
+   "kind": "wearable",
+   "listings": 14,
+   "last_sale": 18.94,
+   "tradable": true
+  },
+  "Definitely not a Flower": {
+   "price": 1.8709,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 0.7222,
+   "tradable": true
+  },
+  "Aether Specs": {
+   "price": 20,
+   "kind": "wearable",
+   "listings": 9,
+   "last_sale": 20,
+   "tradable": true
+  },
+  "Neon Noiz Shoes": {
+   "price": 7.93,
+   "kind": "wearable",
+   "listings": 15,
+   "last_sale": 5,
+   "tradable": true
+  },
+  "Faulty Barrier Background": {
+   "price": 21,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 20,
+   "tradable": true
+  },
+  "404 Chic Skirt": {
+   "price": 14.9999,
+   "kind": "wearable",
+   "listings": 8,
+   "last_sale": 14.95,
+   "tradable": true
+  },
+  "Neon Noiz Jacket": {
+   "price": 79.9899,
+   "kind": "wearable",
+   "listings": 8,
+   "last_sale": 17.0001,
+   "tradable": true
+  },
+  "Pet Tree": {
+   "price": 4,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Fake Mouse": {
+   "price": 4.99,
+   "kind": "collectible",
+   "listings": 6,
+   "last_sale": 2.1002,
+   "tradable": true
+  },
+  "404 Chic Top": {
+   "price": 36,
+   "kind": "wearable",
+   "listings": 5,
+   "last_sale": 44,
+   "tradable": true
+  },
+  "Teeth Toy": {
+   "price": 30,
+   "kind": "collectible",
+   "listings": 5,
+   "last_sale": 1.1002,
+   "tradable": true
+  },
+  "Fake Treasure": {
+   "price": 53.9999,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 20.0001,
+   "tradable": true
+  },
+  "Glitch Aura": {
+   "price": 333,
+   "kind": "wearable",
+   "listings": 9,
+   "last_sale": 150,
+   "tradable": true
+  },
+  "Cardboard Wings": {
+   "price": 200,
+   "kind": "wearable",
+   "listings": 5,
+   "last_sale": 496,
+   "tradable": true
+  },
+  "Bumpkin Rug": {
+   "price": 12,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 15,
+   "tradable": true
+  },
+  "Goblin Rug": {
+   "price": 60,
+   "kind": "collectible",
+   "listings": 3,
+   "last_sale": 30,
+   "tradable": true
+  },
+  "Pet Rug": {
+   "price": 945,
+   "kind": "collectible",
+   "listings": 2,
+   "last_sale": 500,
+   "tradable": true
+  },
+  "Crimson Baitfish": {
+   "price": 0.02683,
+   "kind": "collectible",
+   "listings": 428,
+   "last_sale": 0.026816666666666666,
+   "tradable": true
+  },
+  "Squid Chicken": {
+   "price": 44.966,
+   "kind": "collectible",
+   "listings": 50,
+   "last_sale": 44.9654,
+   "tradable": true
+  },
+  "Anemone Flower": {
+   "price": 0.95,
+   "kind": "collectible",
+   "listings": 610,
+   "last_sale": 0.949,
+   "tradable": true
+  },
+  "Meerkat": {
+   "price": 68.99,
+   "kind": "collectible",
+   "listings": 50,
+   "last_sale": 68,
+   "tradable": true
+  },
+  "Corn Silk Hair": {
+   "price": 398,
+   "kind": "wearable",
+   "listings": 36,
+   "last_sale": 396.999,
+   "tradable": true
+  },
+  "Pearl Bed": {
+   "price": 43,
+   "kind": "collectible",
+   "listings": 3,
+   "last_sale": 21,
+   "tradable": true
+  },
+  "Mermaid Sheep": {
+   "price": 45,
+   "kind": "collectible",
+   "listings": 36,
+   "last_sale": 42,
+   "tradable": true
+  },
+  "Mermaid Cow": {
+   "price": 1.89,
+   "kind": "collectible",
+   "listings": 20,
+   "last_sale": 1.89,
+   "tradable": true
+  },
+  "Oaken": {
+   "price": 50.447,
+   "kind": "collectible",
+   "listings": 12,
+   "last_sale": 49.999,
+   "tradable": true
+  },
+  "Crimstone Clam": {
+   "price": 543,
+   "kind": "collectible",
+   "listings": 23,
+   "last_sale": 500,
+   "tradable": true
+  },
+  "Dark Eyed Kissing Fish": {
+   "price": 0.4467,
+   "kind": "collectible",
+   "listings": 44,
+   "last_sale": 0.4,
+   "tradable": true
+  },
+  "Diving Helmet": {
+   "price": 0.149,
+   "kind": "collectible",
+   "listings": 55,
+   "last_sale": 0.1486,
+   "tradable": true
+  },
+  "Yellow Submarine Trophy": {
+   "price": 1.2,
+   "kind": "collectible",
+   "listings": 24,
+   "last_sale": 0.5002,
+   "tradable": true
+  },
+  "Speckled Kissing Fish": {
+   "price": 3,
+   "kind": "collectible",
+   "listings": 17,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Fish Hook Hat": {
+   "price": 0.1,
+   "kind": "wearable",
+   "listings": 85,
+   "last_sale": 0.0107,
+   "tradable": true
+  },
+  "Beast Shoes": {
+   "price": 590,
+   "kind": "wearable",
+   "listings": 12,
+   "last_sale": 416,
+   "tradable": true
+  },
+  "Walrus Onesie": {
+   "price": 2.199,
+   "kind": "wearable",
+   "listings": 194,
+   "last_sale": 2.1,
+   "tradable": true
+  },
+  "Fish Hook Vest": {
+   "price": 0.3985,
+   "kind": "wearable",
+   "listings": 19,
+   "last_sale": 0.0257,
+   "tradable": true
+  },
+  "Fish Hook Waders": {
+   "price": 0.348,
+   "kind": "wearable",
+   "listings": 40,
+   "last_sale": 0.3,
+   "tradable": true
+  },
+  "Fish Drying Rack": {
+   "price": 0.4579,
+   "kind": "collectible",
+   "listings": 44,
+   "last_sale": 0.4589,
+   "tradable": true
+  },
+  "Crabs and Fish Rug": {
+   "price": 0.17,
+   "kind": "collectible",
+   "listings": 84,
+   "last_sale": 0.05,
+   "tradable": true
+  },
+  "Victoria's Apron": {
+   "price": 448,
+   "kind": "wearable",
+   "listings": 7,
+   "last_sale": 434,
+   "tradable": true
+  },
+  "Fish Flags": {
+   "price": 0.5498,
+   "kind": "collectible",
+   "listings": 38,
+   "last_sale": 0.5497,
+   "tradable": true
+  },
+  "Capsule Bait": {
+   "price": 0.01709,
+   "kind": "collectible",
+   "listings": 174,
+   "last_sale": 0.01709,
+   "tradable": true
+  },
+  "Umbrella Bait": {
+   "price": 0.015790000000000002,
+   "kind": "collectible",
+   "listings": 487,
+   "last_sale": 0.015790000000000002,
+   "tradable": true
+  },
+  "Fisherman's Boat": {
+   "price": 5,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 4,
+   "tradable": true
+  },
+  "Crimstone Spikes Hair": {
+   "price": 29000,
+   "kind": "wearable",
+   "listings": 7,
+   "last_sale": 25000,
+   "tradable": true
+  },
+  "Paw Aura": {
+   "price": 33333,
+   "kind": "wearable",
+   "listings": 4,
+   "last_sale": 18999,
+   "tradable": true
+  },
+  "Sea Arch": {
+   "price": 345,
+   "kind": "collectible",
+   "listings": 3,
+   "last_sale": 199,
+   "tradable": true
+  },
+  "Nautilus": {
+   "price": 258,
+   "kind": "collectible",
+   "listings": 12,
+   "last_sale": 257.9999,
+   "tradable": true
+  },
+  "Giant Isopod": {
+   "price": 3.99,
+   "kind": "collectible",
+   "listings": 16,
+   "last_sale": 1.7001,
+   "tradable": true
+  },
+  "Tiger Onesie": {
+   "price": 1000,
+   "kind": "wearable",
+   "listings": 4,
+   "last_sale": 600,
+   "tradable": true
+  },
+  "Saltwort": {
+   "price": 0.049996,
+   "kind": "collectible",
+   "listings": 43,
+   "last_sale": 0.04,
+   "tradable": true
+  },
+  "Shrimp Onesie": {
+   "price": 3.59,
+   "kind": "wearable",
+   "listings": 362,
+   "last_sale": 3.5899,
+   "tradable": true
+  },
+  "Salt Crystal Flower": {
+   "price": 1.6981,
+   "kind": "collectible",
+   "listings": 434,
+   "last_sale": 1.5999,
+   "tradable": true
+  },
+  "Deep Sea Salt Cave Background": {
+   "price": 208.9999,
+   "kind": "wearable",
+   "listings": 38,
+   "last_sale": 195,
+   "tradable": true
+  },
+  "Fish Kite": {
+   "price": 0.139,
+   "kind": "collectible",
+   "listings": 129,
+   "last_sale": 0.0127,
+   "tradable": true
+  },
+  "Bubble Aura": {
+   "price": 287.9999,
+   "kind": "wearable",
+   "listings": 23,
+   "last_sale": 287,
+   "tradable": true
+  },
+  "Dino Egg Trophy": {
+   "price": 36.95,
+   "kind": "collectible",
+   "listings": 90,
+   "last_sale": 36.95,
+   "tradable": true
+  },
+  "Flamingo Chicken": {
+   "price": 16,
+   "kind": "collectible",
+   "listings": 79,
+   "last_sale": 15.9999,
+   "tradable": true
+  },
+  "Spa Cow": {
+   "price": 139.5,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 147.9999,
+   "tradable": true
+  },
+  "Pufferfish": {
+   "price": 6,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 4,
+   "tradable": true
+  },
+  "Spa Sheep": {
+   "price": 30.793,
+   "kind": "collectible",
+   "listings": 22,
+   "last_sale": 30,
+   "tradable": true
+  },
+  "Navigation Table": {
+   "price": 1040,
+   "kind": "collectible",
+   "listings": 6,
+   "last_sale": 1030,
+   "tradable": true
+  },
+  "World Map Rug": {
+   "price": 0.15,
+   "kind": "collectible",
+   "listings": 96,
+   "last_sale": 0.0303,
+   "tradable": true
+  },
+  "Pistol Shrimp": {
+   "price": 460,
+   "kind": "wearable",
+   "listings": 9,
+   "last_sale": 469,
+   "tradable": true
+  },
+  "Spa Hat": {
+   "price": 0.099,
+   "kind": "wearable",
+   "listings": 67,
+   "last_sale": 0.08,
+   "tradable": true
+  },
+  "Salt Lamp": {
+   "price": 0.1199,
+   "kind": "collectible",
+   "listings": 165,
+   "last_sale": 0.0073,
+   "tradable": true
+  },
+  "Crystal Shrimp": {
+   "price": 3,
+   "kind": "collectible",
+   "listings": 27,
+   "last_sale": 1.21,
+   "tradable": true
+  },
+  "Clam Shell Hat": {
+   "price": 0.1,
+   "kind": "wearable",
+   "listings": 80,
+   "last_sale": 0.1,
+   "tradable": true
+  },
+  "Speed Trap": {
+   "price": 188,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 160,
+   "tradable": true
+  },
+  "Ripped Salt Bag": {
+   "price": 0.099,
+   "kind": "collectible",
+   "listings": 144,
+   "last_sale": 0.099,
+   "tradable": true
+  },
+  "Spa Slippers": {
+   "price": 0.99,
+   "kind": "wearable",
+   "listings": 36,
+   "last_sale": 0.1401,
+   "tradable": true
+  },
+  "Spa Robe": {
+   "price": 0.9,
+   "kind": "wearable",
+   "listings": 33,
+   "last_sale": 0.8999,
+   "tradable": true
+  },
+  "Fat Crab": {
+   "price": 9,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 5,
+   "tradable": true
+  },
+  "Deep Sea Slug": {
+   "price": 1049,
+   "kind": "collectible",
+   "listings": 5,
+   "last_sale": 957,
+   "tradable": true
+  },
+  "Crab House": {
+   "price": 4799,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 4444,
+   "tradable": true
+  },
+  "Royal Crab Pot": {
+   "price": 3550,
+   "kind": "collectible",
+   "listings": 6,
+   "last_sale": 3100,
+   "tradable": true
+  },
+  "Rainbow Pork Jelly": {
+   "price": 3.8,
+   "kind": "collectible",
+   "listings": 26,
+   "last_sale": 3,
+   "tradable": true
+  },
+  "Fool's Gold": {
+   "price": 49,
+   "kind": "collectible",
+   "listings": 4,
+   "last_sale": 32,
+   "tradable": true
+  },
+  "Green Paint Bucket": {
+   "price": 0.15,
+   "kind": "collectible",
+   "listings": 40,
+   "last_sale": 0.14,
+   "tradable": true
+  },
+  "Yellow Slime Puppet": {
+   "price": 3,
+   "kind": "wearable",
+   "listings": 15,
+   "last_sale": 3,
+   "tradable": true
+  },
+  "Purple Paint Bucket": {
+   "price": 1.7,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 1.69,
+   "tradable": true
+  },
+  "Sad Slime Slippers": {
+   "price": 2.999,
+   "kind": "wearable",
+   "listings": 16,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Pork Jelly": {
+   "price": 1.49,
+   "kind": "collectible",
+   "listings": 22,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Slime Wall Background": {
+   "price": 5,
+   "kind": "wearable",
+   "listings": 16,
+   "last_sale": 2.901,
+   "tradable": true
+  },
+  "Color Wheel": {
+   "price": 4.69,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 2.6,
+   "tradable": true
+  },
+  "Mimic Winged Slime Ball": {
+   "price": 3.99,
+   "kind": "collectible",
+   "listings": 30,
+   "last_sale": 2.1,
+   "tradable": true
+  },
+  "Slime Splattered Shirt": {
+   "price": 0.4899,
+   "kind": "wearable",
+   "listings": 32,
+   "last_sale": 0.4,
+   "tradable": true
+  },
+  "Yellow Paint Bucket": {
+   "price": 0.2448,
+   "kind": "collectible",
+   "listings": 40,
+   "last_sale": 0.24,
+   "tradable": true
+  },
+  "Dhol Drum": {
+   "price": 1.2,
+   "kind": "collectible",
+   "listings": 16,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Sad Slime Pants": {
+   "price": 2.29,
+   "kind": "wearable",
+   "listings": 15,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Mimic Slime Ball": {
+   "price": 5,
+   "kind": "collectible",
+   "listings": 16,
+   "last_sale": 8.9099,
+   "tradable": true
+  },
+  "Blue Jelly Shoes": {
+   "price": 4.99,
+   "kind": "wearable",
+   "listings": 15,
+   "last_sale": 3.2,
+   "tradable": true
+  },
+  "Blue Slime Shirt": {
+   "price": 8.63,
+   "kind": "wearable",
+   "listings": 12,
+   "last_sale": 2.3,
+   "tradable": true
+  },
+  "Silver Slime Trophy": {
+   "price": 14.8,
+   "kind": "collectible",
+   "listings": 6,
+   "last_sale": 12,
+   "tradable": true
+  },
+  "Red Jelly Pants": {
+   "price": 5,
+   "kind": "wearable",
+   "listings": 9,
+   "last_sale": 3.1,
+   "tradable": true
+  },
+  "Blue Paint Bucket": {
+   "price": 1.79,
+   "kind": "collectible",
+   "listings": 16,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Bronze Slime Trophy": {
+   "price": 14.9,
+   "kind": "collectible",
+   "listings": 9,
+   "last_sale": 12.5,
+   "tradable": true
+  },
+  "Golden Slime Trophy": {
+   "price": 296,
+   "kind": "collectible",
+   "listings": 3,
+   "last_sale": 63,
+   "tradable": true
+  },
+  "Slime Totem": {
+   "price": 13.9,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 7,
+   "tradable": true
+  },
+  "Giant Donut": {
+   "price": 2.77,
+   "kind": "collectible",
+   "listings": 9,
+   "last_sale": 2.5,
+   "tradable": true
+  },
+  "Green Slime Hair": {
+   "price": 8.88,
+   "kind": "wearable",
+   "listings": 11,
+   "last_sale": 3,
+   "tradable": true
+  },
+  "Sad Slime Hat": {
+   "price": 6.9,
+   "kind": "wearable",
+   "listings": 9,
+   "last_sale": 3,
+   "tradable": true
+  },
+  "Whale Hat": {
+   "price": 55,
+   "kind": "wearable",
+   "listings": 0,
+   "last_sale": 55,
+   "tradable": true
+  },
+  "Club Polo": {
+   "price": 499,
+   "kind": "wearable",
+   "listings": 4,
+   "last_sale": 35,
+   "tradable": true
+  },
+  "Butterfly Aura": {
+   "price": 65,
+   "kind": "wearable",
+   "listings": 18,
+   "last_sale": 79,
+   "tradable": true
+  },
+  "Rainbow Wings": {
+   "price": 59,
+   "kind": "wearable",
+   "listings": 10,
+   "last_sale": 21,
+   "tradable": true
+  },
+  "Japanese Flag": {
+   "price": 250,
+   "kind": "collectible",
+   "listings": 2,
+   "last_sale": 200,
+   "tradable": true
+  },
+  "Crystal Leaf": {
+   "price": 0.045,
+   "kind": "collectible",
+   "listings": 4,
+   "last_sale": 0.03782857142857143,
+   "tradable": true
+  },
+  "Green Beetle": {
+   "price": 0.07690000000000001,
+   "kind": "collectible",
+   "listings": 296,
+   "last_sale": 0.07708000000000001,
+   "tradable": true
+  },
+  "Blue Beetle": {
+   "price": 0.152975,
+   "kind": "collectible",
+   "listings": 288,
+   "last_sale": 0.149,
+   "tradable": true
+  },
+  "Pink Beetle": {
+   "price": 0.30569999999999997,
+   "kind": "collectible",
+   "listings": 329,
+   "last_sale": 0.296,
+   "tradable": true
+  },
+  "Amber Beetle": {
+   "price": 0.605625,
+   "kind": "collectible",
+   "listings": 251,
+   "last_sale": 0.58004,
+   "tradable": true
+  },
+  "Argentinian Flag": {
+   "price": 1900,
+   "kind": "collectible",
+   "listings": 1,
+   "last_sale": 250,
+   "tradable": true
+  },
+  "Otty the Otter": {
+   "price": 21.44,
+   "kind": "collectible",
+   "listings": 45,
+   "last_sale": 18.5113,
+   "tradable": true
+  },
+  "Salt Bottle Onesie": {
+   "price": 1.0939,
+   "kind": "wearable",
+   "listings": 125,
+   "last_sale": 0.81,
+   "tradable": true
+  },
+  "Astrolabe": {
+   "price": 325,
+   "kind": "collectible",
+   "listings": 19,
+   "last_sale": 293,
+   "tradable": true
+  },
+  "Rice Shirt": {
+   "price": 1399,
+   "kind": "wearable",
+   "listings": 11,
+   "last_sale": 1200,
+   "tradable": true
+  },
+  "Moon Hair": {
+   "price": 400,
+   "kind": "wearable",
+   "listings": 28,
+   "last_sale": 398,
+   "tradable": true
+  },
+  "Vibraphone": {
+   "price": 654,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 630,
+   "tradable": true
+  },
+  "Ascended Cow": {
+   "price": 26.995,
+   "kind": "collectible",
+   "listings": 33,
+   "last_sale": 26.995,
+   "tradable": true
+  },
+  "Ascended Chicken": {
+   "price": 120,
+   "kind": "collectible",
+   "listings": 12,
+   "last_sale": 124.99,
+   "tradable": true
+  },
+  "Coat Rack": {
+   "price": 4,
+   "kind": "collectible",
+   "listings": 15,
+   "last_sale": 3,
+   "tradable": true
+  },
+  "Ruins Flower": {
+   "price": 60.9999,
+   "kind": "collectible",
+   "listings": 13,
+   "last_sale": 60,
+   "tradable": true
+  },
+  "Ascended Sheep": {
+   "price": 30.9,
+   "kind": "collectible",
+   "listings": 16,
+   "last_sale": 30.9,
+   "tradable": true
+  },
+  "Crocodile": {
+   "price": 4.4,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 3.5,
+   "tradable": true
+  },
+  "Salt Rug": {
+   "price": 5,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 4,
+   "tradable": true
+  },
+  "Swamp Pants": {
+   "price": 0.1459,
+   "kind": "wearable",
+   "listings": 40,
+   "last_sale": 0.05,
+   "tradable": true
+  },
+  "Dumbo Octopus": {
+   "price": 253.997,
+   "kind": "collectible",
+   "listings": 14,
+   "last_sale": 260,
+   "tradable": true
+  },
+  "Truffle": {
+   "price": 0.08957777777777778,
+   "kind": "collectible",
+   "listings": 603,
+   "last_sale": 0.08928518518518518,
+   "tradable": true
+  },
+  "Winged Vase": {
+   "price": 599,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 493,
+   "tradable": true
+  },
+  "Swamp Armor": {
+   "price": 0.1216,
+   "kind": "wearable",
+   "listings": 40,
+   "last_sale": 0.0201,
+   "tradable": true
+  },
+  "Lampshade": {
+   "price": 0.0979,
+   "kind": "collectible",
+   "listings": 49,
+   "last_sale": 0.021,
+   "tradable": true
+  },
+  "Fairy Sandals": {
+   "price": 0.2099,
+   "kind": "wearable",
+   "listings": 53,
+   "last_sale": 0.22,
+   "tradable": true
+  },
+  "Marble Head": {
+   "price": 0.16,
+   "kind": "collectible",
+   "listings": 59,
+   "last_sale": 0.1699,
+   "tradable": true
+  },
+  "Ascended Wheel": {
+   "price": 0.1,
+   "kind": "collectible",
+   "listings": 74,
+   "last_sale": 0.05,
+   "tradable": true
+  },
+  "Blue Rose Dress": {
+   "price": 0.0799,
+   "kind": "wearable",
+   "listings": 49,
+   "last_sale": 0.0033,
+   "tradable": true
+  },
+  "Alchemist Apron": {
+   "price": 899,
+   "kind": "wearable",
+   "listings": 12,
+   "last_sale": 700,
+   "tradable": true
+  },
+  "Swamp Lily Hat": {
+   "price": 0.1589,
+   "kind": "wearable",
+   "listings": 47,
+   "last_sale": 0.1589,
+   "tradable": true
+  },
+  "Salt Worker Gnome": {
+   "price": 2649,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 2205,
+   "tradable": true
+  },
+  "Surfer Hair": {
+   "price": 3500,
+   "kind": "wearable",
+   "listings": 3,
+   "last_sale": 2999,
+   "tradable": true
+  },
+  "Pig Bristles": {
+   "price": 0.07657083333333332,
+   "kind": "collectible",
+   "listings": 414,
+   "last_sale": 0.07665454545454545,
+   "tradable": true
+  },
+  "Ascended Idol": {
+   "price": 4947,
+   "kind": "collectible",
+   "listings": 8,
+   "last_sale": 3400,
+   "tradable": true
+  },
+  "Lual Crow": {
+   "price": 0.28,
+   "kind": "collectible",
+   "listings": 33,
+   "last_sale": 0.2,
+   "tradable": true
+  },
+  "Cool Zombie Tombstone": {
+   "price": 1.58,
+   "kind": "collectible",
+   "listings": 23,
+   "last_sale": 0.91,
+   "tradable": true
+  },
+  "Zombie Hand Toy": {
+   "price": 0.459,
+   "kind": "collectible",
+   "listings": 30,
+   "last_sale": 0.4,
+   "tradable": true
+  },
+  "Witch Crow": {
+   "price": 2.1,
+   "kind": "collectible",
+   "listings": 20,
+   "last_sale": 1.2103,
+   "tradable": true
+  },
+  "Corrupted Pumpkin": {
+   "price": 85,
+   "kind": "collectible",
+   "listings": 7,
+   "last_sale": 30,
+   "tradable": true
+  },
+  "Skeleton Crow": {
+   "price": 24.9999,
+   "kind": "collectible",
+   "listings": 5,
+   "last_sale": 12,
+   "tradable": true
+  },
+  "Skull Candles": {
+   "price": 4,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 2,
+   "tradable": true
+  },
+  "Pharaoh Crow": {
+   "price": 16.988,
+   "kind": "collectible",
+   "listings": 5,
+   "last_sale": 10,
+   "tradable": true
+  },
+  "Cultist Crow": {
+   "price": 0.4399,
+   "kind": "collectible",
+   "listings": 48,
+   "last_sale": 0.439,
+   "tradable": true
+  },
+  "Count Vlad Crow": {
+   "price": 0.4,
+   "kind": "collectible",
+   "listings": 26,
+   "last_sale": 0.399,
+   "tradable": true
+  },
+  "Destroyed Sign": {
+   "price": 3,
+   "kind": "collectible",
+   "listings": 10,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Devil Crow": {
+   "price": 7,
+   "kind": "collectible",
+   "listings": 11,
+   "last_sale": 5,
+   "tradable": true
+  },
+  "Fisherbird Crow": {
+   "price": 1.7,
+   "kind": "collectible",
+   "listings": 15,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Chained Crow": {
+   "price": 1.8,
+   "kind": "collectible",
+   "listings": 20,
+   "last_sale": 0.9,
+   "tradable": true
+  },
+  "Scary Nights Background": {
+   "price": 3.9999,
+   "kind": "wearable",
+   "listings": 26,
+   "last_sale": 3,
+   "tradable": true
+  },
+  "Vampire Breeches": {
+   "price": 1.1999,
+   "kind": "wearable",
+   "listings": 11,
+   "last_sale": 0.8,
+   "tradable": true
+  },
+  "Vampire Headwear": {
+   "price": 1.6,
+   "kind": "wearable",
+   "listings": 20,
+   "last_sale": 1,
+   "tradable": true
+  },
+  "Plague Crow": {
+   "price": 2.1999,
+   "kind": "collectible",
+   "listings": 24,
+   "last_sale": 1.24,
+   "tradable": true
+  },
+  "Vampire Footwear": {
+   "price": 0.29,
+   "kind": "wearable",
+   "listings": 28,
+   "last_sale": 0.19,
+   "tradable": true
+  },
+  "Hook and Chain": {
+   "price": 11,
+   "kind": "wearable",
+   "listings": 10,
+   "last_sale": 6.3,
+   "tradable": true
+  },
+  "King Crow": {
+   "price": 200,
+   "kind": "collectible",
+   "listings": 3,
+   "last_sale": 88.71,
+   "tradable": true
+  },
+  "Haunted TV": {
+   "price": 1.24,
+   "kind": "collectible",
+   "listings": 27,
+   "last_sale": 1.23,
+   "tradable": true
+  },
+  "Skeleton Mask": {
+   "price": 20,
+   "kind": "wearable",
+   "listings": 9,
+   "last_sale": 15,
+   "tradable": true
+  },
+  "Bat Aura": {
+   "price": 200,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 179,
+   "tradable": true
+  },
+  "Skeleton Costume": {
+   "price": 37,
+   "kind": "wearable",
+   "listings": 6,
+   "last_sale": 19.9,
+   "tradable": true
+  },
+  "Vampire Garments": {
+   "price": 23,
+   "kind": "wearable",
+   "listings": 5,
+   "last_sale": 18,
+   "tradable": true
+  },
+  "Butcher Knife": {
+   "price": 11,
+   "kind": "wearable",
+   "listings": 8,
+   "last_sale": 2.22,
+   "tradable": true
+  },
+  "Huge Jack-o'-lantern": {
+   "price": 47,
+   "kind": "collectible",
+   "listings": 4,
+   "last_sale": 40,
+   "tradable": true
+  },
+  "Sky Tearer Wings": {
+   "price": 113,
+   "kind": "wearable",
+   "listings": 10,
+   "last_sale": 65,
+   "tradable": true
+  },
+  "Saudi Arabian Flag": {
+   "price": 150000,
+   "kind": "collectible",
+   "listings": 1,
+   "last_sale": null,
+   "tradable": true
+  },
+  "South Korean Flag": {
+   "price": 15000,
+   "kind": "collectible",
+   "listings": 1,
+   "last_sale": null,
+   "tradable": true
+  },
+  "Coin Aura": {
+   "price": 88888888,
+   "kind": "wearable",
+   "listings": 1,
+   "last_sale": null,
+   "tradable": true
+  },
+  "Philippine Flag": {
+   "price": 6969,
+   "kind": "collectible",
+   "listings": 2,
+   "last_sale": null,
+   "tradable": true
+  },
+  "Developer Hoodie": {
+   "price": 42069,
+   "kind": "wearable",
+   "listings": 1,
+   "last_sale": null,
+   "tradable": true
+  },
+  "Sierra Leone Flag": {
+   "price": 100000,
+   "kind": "collectible",
+   "listings": 1,
+   "last_sale": null,
    "tradable": true
   }
  }
