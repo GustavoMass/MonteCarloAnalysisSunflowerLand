@@ -6,13 +6,13 @@ Only what you still have to deliver; animals and Obsidian are left out. For each
   * crustaceans: which trap and which chum, and the chum's FLOWER cost;
   * fish: bait, the chum it likes, its seasons and any Fish Market bait that guarantees it;
   * flowers: when your flower plan plants and harvests it;
-  * exotic crops and giant fruit: where they come from.
+  * exotic crops: where they come from (giant fruit is left out: daily village help).
 Grids come from Data/crafting_recipes.json (sfl.world), the rest from the game code (game.py,
 Data/fish_rules.json). Prices are today's floors.
 """
 from . import game as G
 
-SKIP = set(G.ANIMALS) | {"Obsidian"}
+SKIP = set(G.ANIMALS) | {"Obsidian"} | set(G.GIANT_FRUIT)  # giant fruit: daily village help, not up to the player
 
 
 def _craft_cost(name, grids, prices, depth=0, seen=()):
@@ -78,10 +78,17 @@ def _crustacean(name, prices, season, inv):
             recipe = None
             if chum and unit is None:
                 recipe, unit = _bait_recipe(chum, season, prices)
+            pot = G.TRAP_RECIPES.get(trap, {"coins": 0, "items": {}})
+            pot_items = [{"item": k, "qty": n, "unit": prices.get(k),
+                          "cost": None if prices.get(k) is None else prices[k] * n} for k, n in pot["items"].items()]
+            pot_cost = sum(x["cost"] or 0 for x in pot_items)
+            chum_cost = None if unit is None else unit * q
             ways.append({"trap": trap, "hours": G.TRAP_HOURS[trap], "chum": chum, "qty": q, "recipe": recipe,
                          "have": int(inv.get(chum, 0) or 0) if chum else None,
-                         "cost": None if unit is None else unit * q})
-    ways.sort(key=lambda w: (w["cost"] is None, w["cost"] or 0))
+                         "cost": chum_cost, "pot_have": int(inv.get(trap, 0) or 0), "pot_coins": pot["coins"],
+                         "pot_items": pot_items, "pot_cost": pot_cost,
+                         "total": None if chum_cost is None else chum_cost + pot_cost})
+    ways.sort(key=lambda w: (w["total"] is None, w["total"] or 0))
     return ways
 
 
@@ -113,8 +120,6 @@ def open_items(board_week, prices, inv, grids, fish_rules, flowers, schedule, se
             row.update(kind="fish", **_fish(name, fish_rules, prices))
         elif name in G.EXOTIC_TICKETS:
             row.update(kind="exotic", how=f"Potion House: {G.EXOTIC_TICKETS[name]} Potion Tickets")
-        elif name in G.GIANT_FRUIT:
-            row.update(kind="exotic", how=f"Village project {G.GIANT_FRUIT[name]}: harvest it once visitors have cheered it full")
         else:
             row.update(kind="other")
         row["price"] = prices.get(name)

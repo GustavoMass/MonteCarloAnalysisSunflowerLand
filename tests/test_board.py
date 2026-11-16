@@ -15,7 +15,8 @@ class WeeklyBoard(unittest.TestCase):
 
     def test_only_open_items_and_no_animals_or_obsidian(self):
         out = self.items([{"label": "Moo Doll", "done": True}, {"label": "Pig", "done": False},
-                          {"label": "Obsidian", "done": False}, {"label": "Tuna", "done": False, "tickets": 3}], {})
+                          {"label": "Obsidian", "done": False}, {"label": "Giant Banana", "done": False},
+                          {"label": "Tuna", "done": False, "tickets": 3}], {})
         self.assertEqual([r["name"] for r in out], ["Tuna"])
         self.assertEqual(out[0]["guaranteed"], ["Fish Stick"])
 
@@ -29,8 +30,12 @@ class WeeklyBoard(unittest.TestCase):
         self.assertEqual(next(x for x in r["lines"] if x["item"] == "Doll")["how"], "buy")
 
     def test_crustacean_trap_and_chum(self):
-        r = self.items([{"label": "Octopus", "done": False}], {"Moonfur": 4.0})[0]
-        self.assertEqual((r["ways"][0]["trap"], r["ways"][0]["chum"], r["ways"][0]["cost"]), ("Mariner Pot", "Moonfur", 4.0))
+        r = self.items([{"label": "Octopus", "done": False}], {"Moonfur": 4.0, "Merino Wool": 0.05, "Feather": 0.01})[0]
+        w = r["ways"][0]
+        self.assertEqual((w["trap"], w["chum"], w["cost"]), ("Mariner Pot", "Moonfur", 4.0))
+        self.assertAlmostEqual(w["pot_cost"], 10 * 0.05 + 10 * 0.01)       # pot used up per placement
+        self.assertAlmostEqual(w["total"], 4.0 + 0.6)
+        self.assertEqual(w["pot_coins"], 500)
         r = self.items([{"label": "Oyster", "done": False}], {})[0]
         self.assertEqual(r["ways"][0]["recipe"]["Red Snapper"], 6)  # Fish Stick: not tradeable, Fish Market recipe
 

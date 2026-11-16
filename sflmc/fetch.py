@@ -327,7 +327,8 @@ def _board_items(data_dir):
                 names |= {k} | {c for c in cells if c}
     except Exception:  # noqa: BLE001
         pass
-    return names | {c for t in G.CRUSTACEAN_CHUMS.values() for c in t} | set(G.EXOTIC_TICKETS)
+    return (names | {c for t in G.CRUSTACEAN_CHUMS.values() for c in t} | set(G.EXOTIC_TICKETS)
+            | {k for r in G.TRAP_RECIPES.values() for k in r["items"]})
 
 
 def _price_snapshot(data_dir, prices, day=None, extra=()):
