@@ -21,7 +21,7 @@
                                "Sir Goldensnout": null, "Seed Specialist": null}},
 
   "_price_overrides": "Your own price for an item until a date (then the market price is used again).",
-  "price_overrides": {"Pig Bristles": {"price": 1.0747, "until": "2026-11-20"}},
+  "price_overrides": {},
   "_derived_prices": "Price items the market does not list from what they cost to make. Oil: one Oil Drill (20 Wood, 9 Iron, 10 Leather) per drill; drills give 10, 10, then 30 = 50 per 3.",
   "derived_prices": {"Oil": {"inputs": {"Wood": 20, "Iron": 9, "Leather": 10}, "per": 16.6667}},
 
