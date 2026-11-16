@@ -6,7 +6,7 @@
   - Prices (`/community/data?type=marketplaceActivity`): one request, floor of every tradeable item, keyed by game ids (`Data/known_ids.json`).
 - **Daily run = 2 requests**: farm + market report. Nothing else.
 - **Support only**: sfl-manager (fallback when there is no key) and sfl.world (crafting grids → `Data/crafting_recipes.json`, flower/crafting recipes, fish market baits). Never use other third-party sites.
-- **Never refresh NFT prices** unless the user asks (`--nft`). Flower book / delivery catalog only with `--info`.
+- **Never refresh NFT prices** unless the user asks (`--nft`). With the key, `--nft` reads collectible + wearable floors from the same market report (no extra request; wearable ids in `Data/wearable_ids.json`). The report also gives the FLOWER price in USD. Flower book / delivery catalog only with `--info`.
 - Game rules come from the game code (sunflower-land repo); say so when something is server-side and cannot be verified.
 
 ## What the user reads daily (keep at the top of the report, in this order)

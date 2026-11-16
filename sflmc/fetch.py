@@ -73,14 +73,23 @@ def _official_get(path, key):
     return json.loads(body.decode("utf-8"))
 
 
-def _official_prices(data_dir, key):
-    """Today's marketplace report (1 request): floor price in FLOWER of every tradeable item,
-    keyed by the game's item ids (Data/known_ids.json). Only the items the report uses are kept:
-    animal produce, feed, crops, flowers and what the weekly board asks for. NFTs are left alone."""
-    with open(os.path.join(data_dir, "known_ids.json"), encoding="utf-8") as fh:
-        by_id = {v: k for k, v in json.load(fh)["ids"].items()}
-    rep = _official_get("/community/data?type=marketplaceActivity", key)["data"]["reports"]
-    items = rep[max(rep)]["items"]
+def _official_market(key):
+    """Today's marketplace report (1 request): floor/latest sale in FLOWER of every tradeable item,
+    keyed "<kind>-<game id>", plus the FLOWER price in USD."""
+    d = _official_get("/community/data?type=marketplaceActivity", key)["data"]
+    rep = d["reports"]
+    day = max(rep)
+    return rep[day]["items"], day, d.get("flowerPrice")
+
+
+def _ids(data_dir, name):
+    with open(os.path.join(data_dir, name), encoding="utf-8") as fh:
+        return {v: k for k, v in json.load(fh)["ids"].items()}
+
+
+def _official_prices(data_dir, items):
+    """Collectible (resource) prices from the report, by name (Data/known_ids.json)."""
+    by_id = _ids(data_dir, "known_ids.json")
     out = {}
     for k, v in items.items():
         kind, _, num = k.partition("-")
@@ -88,7 +97,21 @@ def _official_prices(data_dir, key):
         price = v.get("floor") or v.get("latestSale")
         if name and price:
             out[name] = price
-    return out, max(rep)
+    return out
+
+
+def official_nfts(data_dir, items, day, usd):
+    """NFT floors (collectibles + wearables) from the same report: no extra request. Only on --nft."""
+    ids = {"collectibles": _ids(data_dir, "known_ids.json"), "wearables": _ids(data_dir, "wearable_ids.json")}
+    out = {}
+    for k, v in items.items():
+        kind, _, num = k.partition("-")
+        name = ids.get(kind, {}).get(int(num)) if num.isdigit() else None
+        price = v.get("floor") or v.get("latestSale")
+        if name and price:
+            out[name] = {"price": price, "kind": kind[:-1], "listings": v.get("listingCount", 0),
+                         "last_sale": v.get("latestSale"), "tradable": True}
+    return {"fetched": day, "source": "official marketplace report", "flower_usd": usd, "items": out}
 
 
 def _official_board(raw, data_dir):
@@ -278,7 +301,8 @@ def _age_h(path):
 def refresh(data_dir, farm_id, nft_names=(), max_age=None, extras=()):
     """Daily refresh. With SFL_API_KEY: farm + today's market prices from the official API (2 calls).
     Without: farm + weekly board from sfl-manager (3 calls). extras adds "prices" (1 call),
-    "info" (flower book + delivery catalog, 2 calls) or "nft" (one per NFT season, ~15 calls)."""
+    "info" (flower book + delivery catalog, 2 calls) or "nft" (official key: NFT floors from the same
+    market report, no extra call; without a key: one sfl-manager call per NFT season, ~15)."""
     age = {**MAX_AGE, **(max_age or {})}
     extras = set(extras)
     del CALLS[:]
@@ -298,8 +322,12 @@ def refresh(data_dir, farm_id, nft_names=(), max_age=None, extras=()):
     if key:                                          # daily: today's market report, 1 more request
         try:
             time.sleep(5)                            # Community API: about one request per 5 s
-            market, day = _official_prices(data_dir, key)
-            files.append(("prices_snapshot.json", _price_snapshot(data_dir, market, day, extra=_board_items(data_dir))))
+            items, day, usd = _official_market(key)
+            snap = _price_snapshot(data_dir, _official_prices(data_dir, items), day, extra=_board_items(data_dir))
+            snap["flower_usd"] = usd
+            files.append(("prices_snapshot.json", snap))
+            if "nft" in extras:                      # same report: no extra request
+                files.append(("nft_prices.json", official_nfts(data_dir, items, day, usd)))
         except Exception as e:  # noqa: BLE001
             print(f"  prices not refreshed: {e}")
     elif "prices" in extras:

@@ -110,8 +110,15 @@
     {"name": "Merino Jumper", "type": "wearable", "wearables": ["Merino Jumper"]},
     {"name": "Milk Apron", "type": "wearable", "wearables": ["Milk Apron"]},
     {"name": "Cowbell Necklace", "type": "wearable", "wearables": ["Cowbell Necklace"]},
-    {"name": "Training Whistle", "type": "wearable", "wearables": ["Training Whistle"]}
+    {"name": "Training Whistle", "type": "wearable", "wearables": ["Training Whistle"]},
+    {"name": "Nurse Sheep", "type": "collectible", "collectibles": ["Nurse Sheep"]},
+    {"name": "Frozen Sheep", "type": "collectible", "collectibles": ["Frozen Sheep"]},
+    {"name": "All cheap sheep NFTs", "type": "bundle: every sheep NFT under $30 you do not own",
+     "collectibles": ["Spa Sheep", "Ascended Sheep", "Mermaid Sheep", "Astronaut Sheep", "Nurse Sheep", "Frozen Sheep"],
+     "wearables": ["Dream Scarf", "Merino Jumper"]}
   ],
+  "_nft_cap_usd": "Cheap NFTs section: only NFTs up to this USD price (FLOWER x the market report's FLOWER price).",
+  "nft_cap_usd": 30,
 
   "_tickets": "Chapter ticket plan. Deliveries get VIP +2 and +1 per Duende wearable; bounties only the wearables.",
   "vip_bonus": 2,

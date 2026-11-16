@@ -3,7 +3,7 @@
     python run.py              # refresh your farm + weekly board (1 call with SFL_API_KEY in .env, else 3 to sfl-manager)
     python run.py --prices     # ...also market prices (1 call)
     python run.py --info       # ...also the flower book and delivery catalog (2 calls)
-    python run.py --nft        # ...also NFT floor prices (~15 calls; they barely move)
+    python run.py --nft        # ...also NFT floor prices (official key: same market call, no extra request)
     python run.py --offline    # reuse the files in Data/
     python run.py --no-open    # don't open the browser
     python run.py --quick      # 10x fewer runs, for trying config changes
@@ -28,6 +28,7 @@ from sflmc import fetch
 from sflmc import flowerplan
 from sflmc import game as G
 from sflmc import herd as H
+from sflmc import nfts as NFT
 from sflmc import sim as S
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -196,7 +197,7 @@ def main():
     ap.add_argument("--force", action="store_true", help="fetch the farm again even if fetched minutes ago")
     ap.add_argument("--prices", action="store_true", help="also fetch market prices")
     ap.add_argument("--info", action="store_true", help="also fetch the flower book and delivery catalog")
-    ap.add_argument("--nft", action="store_true", help="also fetch NFT floor prices (~15 calls)")
+    ap.add_argument("--nft", action="store_true", help="also refresh NFT floor prices (official key: from the same market report)")
     ap.add_argument("--config", default=os.path.join(HERE, "config.json"))
     args = ap.parse_args()
     cfg = load(args.config)
@@ -316,6 +317,15 @@ def main():
         print(f"  upgrades {bld} ({time.time() - t0:.0f}s)")
 
     fw = cfg.get("farmwide", {})
+    nft_meta = load(os.path.join(DATA, "nft_prices.json"), {})
+    usd = nft_meta.get("flower_usd") or prices.get("flower_usd")
+    if usd:
+        fl = load(os.path.join(DATA, "flowers.json"), {"flowers": {}})
+        out["cheap_nfts"] = {"usd": usd, "cap": cfg.get("nft_cap_usd", 30), "fetched": nft_meta.get("fetched"),
+                             "rows": NFT.evaluate(farm_d, prices["prices"], nfts, out["boosts"], set(fl.get("flowers", {})), usd,
+                                                  cap_usd=cfg.get("nft_cap_usd", 30), tax=cfg["sell_fee"],
+                                                  speed_credit=cfg.get("farmwide", {}).get("speed_credit", 0.5),
+                                                  chapter_weeks=cfg["chapter_weeks"])}
     out["farmwide"] = farmwide.evaluate(farm_d, prices["prices"], load(os.path.join(DATA, "skill_tree.json"), []), nfts,
                                         tax=cfg["sell_fee"], speed_credit=fw.get("speed_credit", 0.5),
                                         coins_per_flower=fw.get("coins_per_flower", 1000), weeks=cfg["chapter_weeks"],
