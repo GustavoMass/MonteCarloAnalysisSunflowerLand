@@ -1,6 +1,7 @@
-"""Pull a farm and P2P prices from the public sfl-manager API and boil them
-down to what the simulator needs. Writes Data/farm_<id>.json,
+"""Pull your farm (official Sunflower Land Community API when a key is set, else
+sfl-manager) and, on request, P2P prices; boil them down to what the simulator needs. Writes Data/farm_<id>.json,
 Data/prices_snapshot.json and Data/bounties_observed.json."""
+import gzip
 import json
 import os
 import time
@@ -10,6 +11,8 @@ import urllib.request
 from . import game as G
 
 API = "https://sfl-manager.com/api"
+OFFICIAL = "https://api.sunflower-land.com/community/farms"
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 UA = {"User-Agent": "Mozilla/5.0 (MonteCarloAnalysisSunflowerLand)"}
 TICKET = "Duende Cap"  # Cave Dwellers chapter ticket
 
@@ -29,6 +32,48 @@ def _get(url, tries=4):
             if e.code != 429 or i == tries - 1:
                 raise
             time.sleep(5 * (i + 1))
+
+
+def _api_key():
+    """Community API key: env SFL_API_KEY, else the SFL_API_KEY line in .env (name in any case).
+    Never printed or written anywhere else."""
+    if os.environ.get("SFL_API_KEY"):
+        return os.environ["SFL_API_KEY"].strip()
+    path = os.path.join(ROOT, ".env")
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as fh:
+            for line in fh:
+                k, _, v = line.partition("=")
+                if k.strip().upper() == "SFL_API_KEY" and v.strip():
+                    return v.strip().strip("\"'")
+    return None
+
+
+def _official_raw(farm_id, key):
+    """Live farm from the official Community API (1 request), in sfl-manager's wrapper shape."""
+    CALLS.append(f"{OFFICIAL}/{farm_id}")
+    req = urllib.request.Request(f"{OFFICIAL}/{farm_id}",
+                                 headers={**UA, "x-api-key": key, "Accept-Encoding": "gzip"})
+    with urllib.request.urlopen(req, timeout=60) as r:
+        body = r.read()
+        if r.headers.get("Content-Encoding") == "gzip":
+            body = gzip.decompress(body)
+    d = json.loads(body.decode("utf-8"))
+    return {"raw": {"farm": d["farm"]}, "fetched_at": time.time() * 1000, "updated_at": d.get("updatedAt")}
+
+
+def _official_board(raw, data_dir):
+    """This week's mega bounty board from bounties.requests (animals are handled by parse_board)."""
+    b = raw["raw"]["farm"].get("bounties") or {}
+    done = {c["id"] for c in b.get("completed", [])}
+    try:
+        with open(os.path.join(data_dir, "flowers.json"), encoding="utf-8") as fh:
+            flowers = set(json.load(fh)["flowers"])
+    except Exception:  # noqa: BLE001
+        flowers = set()
+    return [{"label": r["name"], "category": "Flowers" if r["name"] in flowers else "Other",
+             "tickets": (r.get("items") or {}).get(TICKET), "done": r["id"] in done}
+            for r in b.get("requests", []) if r["name"] not in G.ANIMALS]
 
 
 def _placed(farm):
@@ -210,8 +255,13 @@ def refresh(data_dir, farm_id, nft_names=(), max_age=None, extras=()):
     if _age_h(os.path.join(data_dir, f"farm_{farm_id}.json")) < age["land"] and not extras:
         print(f"  farm fetched under {age['land'] * 60:.0f} min ago; not calling sfl-manager")
         return
-    _ask_live_copy(farm_id)
-    raw = _get(f"{API}/v3/land/{farm_id}")
+    key = _api_key()
+    if key:
+        raw = _official_raw(farm_id, key)
+    else:
+        _ask_live_copy(farm_id)
+        raw = _get(f"{API}/v3/land/{farm_id}")
+    raw["official"] = bool(key)
     farm = parse_farm(raw, farm_id)
     board = parse_board(raw)
     files = []
@@ -219,8 +269,8 @@ def refresh(data_dir, farm_id, nft_names=(), max_age=None, extras=()):
         files.append(("prices_snapshot.json", _price_snapshot(data_dir, _get(f"{API}/v1/prices")["p2p"])))
 
     _write(data_dir, files + _daily_files(data_dir, farm_id, raw, farm, board, nft_names, extras))
-    print(f"  {len(CALLS)} requests to sfl-manager this run: " + ", ".join(
-        c.replace(API, "").replace(str(farm_id), "<farm>") for c in CALLS))
+    print(f"  {len(CALLS)} requests this run: " + ", ".join(
+        c.replace(API, "sfl-manager").replace(OFFICIAL, "official").replace(str(farm_id), "<farm>") for c in CALLS))
     return farm
 
 
@@ -285,6 +335,10 @@ def _daily_files(data_dir, farm_id, raw, farm, board, nft_names, extras):
                           _merge_orders(os.path.join(data_dir, "ticket_orders_history.json"), _get(f"{API}/v3/info/deliveries"))))
         except Exception as e:  # noqa: BLE001
             print(f"  delivery orders not refreshed: {e}")
+    if raw.get("official"):
+        files.append(("board_week.json", {"fetched": time.strftime("%Y-%m-%d"), "season": farm["season"],
+                                          "board": _official_board(raw, data_dir)}))
+        return files
     try:
         st = _get(f"{API}/v3/tools/season-tickets/farm/{farm_id}")
         tickets = {r["id"]: r["items"].get(TICKET) for r in (raw["raw"]["farm"].get("bounties") or {}).get("requests", [])
