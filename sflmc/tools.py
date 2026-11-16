@@ -99,13 +99,13 @@ def stock(skills, toolshed=True):
 COINS = {"Axe": 20, "Pickaxe": 20, "Stone Pickaxe": 20, "Iron Pickaxe": 80, "Gold Pickaxe": 100}
 
 
-def scenario(name, use, full, prices, iron_own, tool_rate=1200):
+def scenario(name, use, full, prices, iron_own):
     """use: tools needed a day. Restocks a day each tool forces = (use - shipment) / full stock."""
     p = lambda k: prices.get(k) or 0.0                                  # noqa: E731
     rows = {}
     for tool, n in use.items():
         rows[tool] = {"use": n, "restocks": max(0.0, n - SHIPMENT[tool]) / full[tool],
-                      "flower": n * COINS[tool] / tool_rate}
+                      "flower": n * sum(q * p(i) for i, q in RECIPE[tool].items())}
     bind = max(rows, key=lambda t: rows[t]["restocks"])
     iron_need = use.get("Iron Pickaxe", 0) * 5
     return {"name": name, "tools": rows, "binding": bind, "restocks_day": rows[bind]["restocks"],
@@ -113,7 +113,7 @@ def scenario(name, use, full, prices, iron_own, tool_rate=1200):
             "iron_own": iron_own, "iron_buy": max(0.0, iron_need - iron_own)}
 
 
-def evaluate(farm, prices, cfg, per_chop, gold_per_mine, tool_rate=1200):
+def evaluate(farm, prices, cfg, per_chop, gold_per_mine):
     """cfg: {"start", "end", "every", "tree_checks", "tree_mult", "stone_checks"} from config tools."""
     inv, skills = farm.get("inventory", {}), farm.get("skills", {})
     n = lambda k: int(inv.get(k, 0) or 0)                               # noqa: E731
@@ -142,11 +142,11 @@ def evaluate(farm, prices, cfg, per_chop, gold_per_mine, tool_rate=1200):
 
     g_now = gold[0]["per_day"]
     iron_own = iron_mines * iron_y
-    scen = [scenario("Today", use(g_now), full, prices, iron_own, tool_rate),
-            scenario("+ 1 Tree (7 Sunstone)", use(g_now, extra_tree=1), full, prices, iron_own, tool_rate),
-            scenario("+ 1 Gold Rock (10 Sunstone)", use(g_now, extra_gold=1), full, prices, iron_own, tool_rate)]
+    scen = [scenario("Today", use(g_now), full, prices, iron_own),
+            scenario("+ 1 Tree (7 Sunstone)", use(g_now, extra_tree=1), full, prices, iron_own),
+            scenario("+ 1 Gold Rock (10 Sunstone)", use(g_now, extra_gold=1), full, prices, iron_own)]
     p = lambda k: prices.get(k) or 0.0                                  # noqa: E731
-    tree_week = cfg.get("tree_mult", 1.15) * cfg.get("tree_checks", 9) * 7 * per_chop      # wood after the 20-coin axe
+    tree_week = cfg.get("tree_mult", 1.15) * cfg.get("tree_checks", 9) * 7 * per_chop      # wood; axes are coins only
     gold_week = {g["label"]: g["per_day"] * 7 * gold_per_mine for g in gold}
     drift = [{"attend": a, "rates": {f"{c:g}": with_misses(c, ch, a) for c in (24, 18)}} for a in (0.95, 0.85, 0.7, 0.5)]
     have = set(farm.get("collectibles", [])) | set(farm.get("wearables", [])) | {k for k, v in inv.items() if v}
