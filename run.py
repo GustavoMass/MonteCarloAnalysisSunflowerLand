@@ -378,7 +378,7 @@ def main():
     out["growth"] = growth.evaluate(farm_d, prices["prices"], load(os.path.join(DATA, "growth_rules.json"), {}),
                                     out["farmwide"], out["boosts"], load(os.path.join(DATA, "skill_tree.json"), []),
                                     tax=cfg["sell_fee"], weeks=cfg["chapter_weeks"],
-                                    food=gw.get("xp_food", "Pizza Margherita"), cooks_per_day=gw.get("cooks_per_day", 1.0),
+                                    foods=gw.get("xp_foods", ["Pizza Margherita"]),
                                     oil_per_drill=cfg.get("derived_prices", {}).get("Oil", {}).get("per", 16.6667),
                                     faction_pet=gw.get("faction_pet_xp", 1.0), skill_plan=gw.get("skill_plan"),
                                     skip_skills=gw.get("skip_skills", []))

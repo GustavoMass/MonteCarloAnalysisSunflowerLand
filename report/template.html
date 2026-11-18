@@ -143,7 +143,7 @@ h2 { scroll-margin-top: 56px; }
   <p class="muted" id="gIntro"></p>
   <div class="tbl"><table id="gSum" class="compact"></table></div>
   <h3>Levels bought with <span id="gFood"></span></h3>
-  <p class="muted" id="gFoodNote"></p>
+  <div class="muted" id="gFoodNote"></div>
   <div class="tbl"><table id="gLevels" class="compact"></table></div>
   <h3>Gold, tools and Sunstone</h3>
   <p class="muted" id="tIntro"></p>
@@ -502,18 +502,23 @@ function method() {
 
 function growthView() {
   const G = DATA.growth; if (!G) return;
-  const F = G.food, L = G.levels, E = G.expansions, pb = (c, v) => v > 0.05 ? c / v : null;
+  const M = G.menu, L = G.levels, E = G.expansions, pb = (c, v) => v > 0.05 ? c / v : null;
   const pbCell = x => `<td class="num ${x == null ? "" : x <= PAYBACK ? "pos" : "neg"}">${x == null ? "never" : nf(x, 1)}</td>`;
-  $("gFood").textContent = F.food;
-  $("gFoodNote").innerHTML = `${nf(F.xp)} XP each (${F.boosts.join(", ") || "no boosts"}); ${nf(F.hours, 0)} h on the Fire Pit${F.extra ? `, ${nf(100 * F.extra)}% chance of a second one (Fiery Jackpot)` : ""}.
-    One cook costs ${nf(F.cost_buy, 2)} FLOWER at market (${F.lines.map(l => `${nf(l.qty)} ${l.item} ${nf(l.flower, 2)}`).join(", ")}), or ${nf(F.cost_own, 2)} if you use your own produce instead of selling it.
-    ${G.faction_pet > 1 ? `Faction Pet x${G.faction_pet} assumes you eat only in weeks after an 8-week fed streak (<code>growth.faction_pet_xp</code>); your streak is ${G.pet_streak ?? "?"} now, so cook and store until it reaches 8. ` : ""}The ${nf(F.have)} you hold count as eaten. Each level gives 1 skill point. Your own order comes first (<code>growth.skill_plan</code>, marked ★), then the best FLOWER per point; never bought: ${(L.skip || []).join(", ") || "—"}. Rank-ups also cost Ascension Shards (you have ${nf(L.shards || 0)}).
+  const short = n => n.replace(" Margherita", "").replace(" al Limone", "").replace("Lemon ", "");
+  $("gFood").textContent = M.foods.map(f => short(f.food)).join(" + ");
+  $("gFoodNote").innerHTML = `<table class="tight"><thead><tr><th>Dish</th><th>Building</th><th>Hours</th><th>XP each</th><th>Per day nonstop</th><th>FLOWER each</th><th>XP per FLOWER</th><th>Ingredients</th></tr></thead><tbody>` +
+    M.foods.map(f => `<tr><td>${f.food}</td><td>${f.building}</td><td class="num">${nf(f.hours, 1)}</td><td class="num">${nf(f.xp)}</td><td class="num">${nf(f.per_day, 2)}${f.extra ? ` <span class="muted">(+${nf(100 * f.extra)}% Fiery Jackpot)</span>` : ""}</td>
+      <td class="num">${nf(f.cost_buy, 2)}</td><td class="num">${nf(f.xp * (1 + f.extra) / f.cost_buy)}</td><td class="muted" style="white-space:normal">${f.lines.map(l => `${nf(l.qty)} ${l.item} ${nf(l.flower, 2)}`).join(", ")}</td></tr>`).join("") +
+    `</tbody></table>All three nonstop (VIP queue of 3 keeps each building rolling): <b>${nf(M.xp_day)} XP and ${nf(M.cost_day, 1)} FLOWER a day</b> at market. XP includes ${M.foods[0].boosts.join(", ") || "no boosts"}.
+    ${G.faction_pet > 1 ? `Faction Pet x${G.faction_pet} assumes you eat only in weeks after an 8-week fed streak (<code>growth.faction_pet_xp</code>); your streak is ${G.pet_streak ?? "?"} now, so cook and store until it reaches 8. ` : ""}
+    <br><b>Food you hold</b> (${M.held.map(h => `${nf(h.have)} ${short(h.food)}`).join(", ") || "none"}): ${nf(M.held_xp)} XP, counted as eaten. Eating only that and cooking no more takes you to <b>level ${M.level_held}</b>${G.faction_pet > 1 ? ` in a x${G.faction_pet} week (level ${M.level_held_base} without it)` : ""}.
+    Each level gives 1 skill point. Your own order comes first (<code>growth.skill_plan</code>, marked ★), then the best FLOWER per point; never bought: ${(L.skip || []).join(", ") || "—"}. Rank-ups also cost Ascension Shards (you have ${nf(L.shards || 0)}).
     ${L.locked.length ? `Left out until their tier opens: ${L.locked.map(s => `${s.name} (${sg(s.flower, 1)})`).join(", ")}.` : ""}`;
   let cumF = 0;
-  $("gLevels").innerHTML = `<thead><tr><th>Reach level</th><th>Buy</th><th>Cooks (total)</th><th>Step cost</th><th>Total cost</th><th>+FLOWER / chapter</th><th>Coins / chapter</th><th>Step pays back in</th><th>Total pays back in</th></tr></thead><tbody>` +
+  $("gLevels").innerHTML = `<thead><tr><th>Reach level</th><th>Buy</th><th>Days nonstop</th><th>Dishes (${M.foods.map(f => short(f.food)).join(" / ")})</th><th>Step cost</th><th>Total cost</th><th>+FLOWER / chapter</th><th>Coins / chapter</th><th>Step pays back in</th><th>Total pays back in</th></tr></thead><tbody>` +
     L.steps.map(s => { cumF += s.flower; return `<tr class="${pb(s.step_cost, s.flower) != null && pb(s.step_cost, s.flower) <= PAYBACK ? "hi" : ""}"><td>${s.level}</td>
       <td style="white-space:normal">${s.skills.map(k => `${k.planned ? "★ " : ""}${k.name} <span class="muted">${k.points} pt${k.shards ? ` + ${k.shards} shards` : ""}${k.note ? ` · ${k.note}` : ""}</span>`).join(", ") || `<span class="muted">${s.spare_points} spare points</span>`}</td>
-      <td class="num">${nf(s.cooks)}</td><td class="num">${nf(s.step_cost, 0)}</td><td class="num">${nf(s.cost, 0)}</td>
+      <td class="num">${nf(s.days, 1)}</td><td class="num">${M.foods.map(f => nf(Math.max(0, Math.ceil(s.mix[f.food] - 1e-9)))).join(" / ")}</td><td class="num">${nf(s.step_cost, 0)}</td><td class="num">${nf(s.cost, 0)}</td>
       <td class="num">${s.flower ? sg(s.flower, 1) : "—"}</td><td class="num">${s.coins ? sg(s.coins, 0) : "—"}</td>${pbCell(pb(s.step_cost, s.flower))}${pbCell(pb(s.cost, cumF))}</tr>`; }).join("") + "</tbody>";
   const gives = g => Object.entries(g).map(([k, q]) => `${q > 1 ? q + " " : ""}${k}`).join(", ");
   $("gExp").innerHTML = `<thead><tr><th>Expansion</th><th>Resources</th><th>FLOWER</th><th>Coins</th><th>Gems</th><th>Gives</th><th>+FLOWER / chapter</th></tr></thead><tbody>` +
@@ -533,13 +538,13 @@ function growthView() {
   const good = L.steps.filter(s => !first || s.level < first.level), last = good[good.length - 1];
   const sumF = a => a.reduce((t, s) => t + s.flower, 0), top = L.steps[L.steps.length - 1];
   const rows = [];
-  if (last) rows.push(["Levels " + (L.now + 1) + "–" + last.level, last.cost, `${nf(last.cooks)} ${F.food}`, sumF(good)]);
-  if (first) rows.push(["Levels " + (last ? last.level + 1 : L.now + 1) + "–" + top.level, top.cost - (last ? last.cost : 0), `${nf(top.cooks - (last ? last.cooks : 0))} more ${F.food}`, sumF(L.steps) - sumF(good)]);
+  if (last) rows.push(["Levels " + (L.now + 1) + "–" + last.level, last.cost, `${nf(last.days, 1)} days of cooking`, sumF(good)]);
+  if (first) rows.push(["Levels " + (last ? last.level + 1 : L.now + 1) + "–" + top.level, top.cost - (last ? last.cost : 0), `${nf(top.days - (last ? last.days : 0), 1)} more days`, sumF(L.steps) - sumF(good)]);
   rows.push([`Expansions ${E.have + 1}–${E.rows.filter(r => typeof r.expansion === "number").slice(-1)[0]?.expansion} + ${E.rows.slice(-1)[0]?.expansion}`, E.flower_cost + E.level_cost,
     `${nf(E.coins)} coins, ${nf(E.gems)} gems (you have ${nf(E.gems_have)})`, E.value]);
   $("gSum").innerHTML = `<thead><tr><th>Path</th><th>FLOWER</th><th>Also costs</th><th>+FLOWER / chapter</th><th>Pays back in (chapters)</th></tr></thead><tbody>` +
     rows.map(r => `<tr><td>${r[0]}</td><td class="num">${nf(r[1], 0)}</td><td class="muted">${r[2]}</td><td class="num">${sg(r[3], 1)}</td>${pbCell(pb(r[1], r[3]))}</tr>`).join("") + "</tbody>";
-  $("gIntro").innerHTML = `Two ways to spend FLOWER on growth: buy levels (skill points) by cooking ${F.food}, or buy the land expansions to ${E.rows.slice(-1)[0]?.expansion || "the next island"}.
+  $("gIntro").innerHTML = `Two ways to spend FLOWER on growth: buy levels (skill points) by cooking ${$("gFood").textContent}, or buy the land expansions to ${E.rows.slice(-1)[0]?.expansion || "the next island"}.
     Everything at market prices; FLOWER per chapter comes from the skill and node values above (your own counters). Coins are shown but not counted. The new island itself is not valued.
     Payback under ${PAYBACK} chapters is green.`;
 }
@@ -559,9 +564,9 @@ function nextView() {
   }
   const L = G.levels, lastPlanned = L.steps.filter(s => s.skills.some(k => k.planned)).slice(-1)[0];
   const last = L.steps.filter(s => s.level <= (lastPlanned ? lastPlanned.level : 79)), top = last[last.length - 1];
-  if (top) opts.push({ name: `Feast: levels ${L.now + 1}–${top.level} on ${G.food.food}`, cost: top.cost, coins: 0,
+  if (top) opts.push({ name: `Feast: levels ${L.now + 1}–${top.level}`, cost: top.cost, coins: 0,
     flower: last.reduce((a, s) => a + s.flower, 0), tickets: 0, coinsCh: last.reduce((a, s) => a + s.coins, 0),
-    time: `${nf(top.cooks)} cooks, ${nf(top.days)} days`, note: `skills: ${last.flatMap(s => s.skills.map(k => k.name)).join(", ")}` });
+    time: `${nf(top.days, 1)} days nonstop (${G.menu.foods.map(f => nf(Math.ceil(top.mix[f.food] - 1e-9)) + " " + f.food.split(" ")[0]).join(", ")})`, note: `skills: ${last.flatMap(s => s.skills.map(k => k.name)).join(", ")}` });
   const nan = (W.rows || []).find(r => r.name === "Nancy" && !r.owned);
   if (nan) opts.push({ name: "Nancy", cost: nan.price || 0, coins: 0, flower: nan.flower, tickets: 0, coinsCh: 0, time: "now", note: nan.note });
   const E = G.expansions, oil = (E.needs || []).find(n => n.item === "Oil");
@@ -581,7 +586,7 @@ function nextView() {
   const capBest = opts.filter(o => o.tickets > 0).sort((a, b) => a.cost / a.tickets - b.cost / b.tickets)[0];
   $("nVerdict").innerHTML = `<b>Do first: ${opts[0].name}, then ${opts[1].name}.</b> ` +
     (capBest ? `For Duende Caps the cheapest is ${capBest.name}: ${nf(capBest.cost / capBest.tickets, 2)} FLOWER per cap, ${nf(capBest.tickets)} caps a chapter, every chapter. ` : "") +
-    `Meanwhile keep the Fire Pit busy: pizzas cooked now are eaten in the x${G.faction_pet} week after your pet streak reaches 8 (it is ${pet} now, so about ${Math.max(0, 8 - pet)} more fed weeks). ` +
+    `Meanwhile keep the Fire Pit, Kitchen and Bakery busy: food cooked now is eaten in the x${G.faction_pet} week after your pet streak reaches 8 (it is ${pet} now, so about ${Math.max(0, 8 - pet)} more fed weeks). ` +
     `Expansions come last: the most FLOWER per chapter once built, but the slowest payback.`;
   // full cost of the next level of both buildings
   const nx = ["Barn", "Pigpen"].map(b => up(b, (owned[b] || 0) + 1)).filter(Boolean);
