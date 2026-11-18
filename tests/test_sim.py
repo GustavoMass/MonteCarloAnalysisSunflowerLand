@@ -224,12 +224,28 @@ class GrowthTest(unittest.TestCase):
     def test_level_path_buys_skills_as_points_arrive(self):
         from sflmc import growth
         rules = {"level_xp": {"1": 0, "2": 100, "3": 200, "4": 300}}
-        food = {"xp": 50, "extra": 0, "have": 0, "cost_buy": 1.0}
+        m = {"foods": [{"food": "P", "per_day": 1.0}], "xp_day": 50, "cost_day": 1.0, "held_xp": 0}
         queue = [{"name": "A", "points": 1, "flower": 5, "coins": 0}, {"name": "B", "points": 2, "flower": 4, "coins": 0}]
-        r = growth.level_path({"experience": 0}, food, queue, rules, cooks_per_day=1, top=4)
+        r = growth.level_path({"experience": 0}, m, queue, rules, top=4)
         self.assertEqual(r["now"], 1)
         self.assertEqual([(s["level"], [k["name"] for k in s["skills"]]) for s in r["steps"]], [(2, ["A"]), (4, ["B"])])
-        self.assertAlmostEqual(r["steps"][-1]["cost"], 6.0)    # 300 XP / 50 per cook
+        self.assertAlmostEqual(r["steps"][-1]["cost"], 6.0)    # 300 XP / 50 a day
+        self.assertAlmostEqual(r["steps"][-1]["mix"]["P"], 6.0)
+
+    def test_menu_counts_every_held_food_and_kitchen_fast_feasts(self):
+        from sflmc import growth
+        rules = {"foods": {"P": {"xp": 100, "hours": 20, "building": "Fire Pit", "ingredients": {"Wheat": 1}},
+                           "S": {"xp": 50, "hours": 10, "building": "Kitchen", "ingredients": {"Wheat": 1}},
+                           "C": {"xp": 80, "hours": 24, "building": "Bakery", "ingredients": {"Wheat": 1}}},
+                 "made": {}, "xp_boosts": {}, "level_xp": {"1": 0, "2": 1000},
+                 "fire_pit": {"Fast Feasts": [0.5], "Fiery Jackpot": [0.5]}}
+        farm = {"skills": {"Fast Feasts": 1, "Fiery Jackpot": 1}, "experience": 0, "inventory": {"P": 1, "C": 2}}
+        m = growth.menu(farm, {"Wheat": 1}, rules, ["P", "S"], 0.1)
+        self.assertEqual(m["held_xp"], 100 + 2 * 80)                 # C is held though not on the menu
+        p, s = m["foods"]
+        self.assertAlmostEqual(p["per_day"], 24 / 10 * 1.5)          # Fast Feasts + Fiery Jackpot
+        self.assertAlmostEqual(s["per_day"], 24 / 5)                 # Fast Feasts, no Jackpot
+        self.assertAlmostEqual(m["xp_day"], 3.6 * 100 + 4.8 * 50)
 
 
 class FlowerNeedsTest(unittest.TestCase):

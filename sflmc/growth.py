@@ -38,15 +38,16 @@ def xp_food(farm, prices, rules, food, tax, faction_pet=1.0):
     if faction_pet and faction_pet != 1:
         mult *= faction_pet
         used.append(f"Faction Pet x{faction_pet}")
-    fp = rules["fire_pit"]
-    hours = f["hours"] * (fp["Fast Feasts"][skills["Fast Feasts"] - 1] if skills.get("Fast Feasts") else 1)
-    extra = fp["Fiery Jackpot"][skills["Fiery Jackpot"] - 1] if skills.get("Fiery Jackpot") else 0
+    fp, bld = rules["fire_pit"], f.get("building", "Fire Pit")
+    ff = skills.get("Fast Feasts") if bld in ("Fire Pit", "Kitchen") else 0
+    hours = f["hours"] * (fp["Fast Feasts"][ff - 1] if ff else 1)
+    extra = fp["Fiery Jackpot"][skills["Fiery Jackpot"] - 1] if skills.get("Fiery Jackpot") and bld == "Fire Pit" else 0
     raw = {}
     for item, q in f["ingredients"].items():
         for sub, sq in rules["made"].get(item, {item: 1}).items():
             raw[sub] = raw.get(sub, 0) + q * sq
     buy = sum(q * (prices.get(k) or 0) for k, q in raw.items())
-    return {"food": food, "xp": f["xp"] * mult, "boosts": used, "hours": hours, "extra": extra,
+    return {"food": food, "xp": f["xp"] * mult, "boosts": used, "hours": hours, "extra": extra, "building": bld,
             "raw": raw, "cost_buy": buy, "cost_own": buy * (1 - tax),
             "lines": [{"item": k, "qty": q, "flower": q * (prices.get(k) or 0)} for k, q in raw.items()],
             "have": farm.get("inventory", {}).get(food, 0)}
@@ -110,28 +111,45 @@ def skill_queue(farmwide, boosts, skill_tree, plan=None, skip=(), weeks=12):
     return mine + fl + co, [c for c in cand.values() if not c["open"]]
 
 
-def level_path(farm, food, queue, rules, cooks_per_day, top=100):
+def menu(farm, prices, rules, foods, tax, faction_pet=1.0):
+    """Every food in `foods` cooked nonstop, each in its own building (VIP queue of 3 keeps them
+    rolling). Every XP food you hold counts as eaten (also ones not on the menu)."""
+    menu_f = [xp_food(farm, prices, rules, n, tax, faction_pet) for n in foods]
+    for f in menu_f:
+        f["per_day"] = 24 / f["hours"] * (1 + f["extra"])                  # dishes a day
+    held = [xp_food(farm, prices, rules, n, tax, faction_pet) for n in rules["foods"]]
+    held = [{"food": h["food"], "have": h["have"], "xp": h["xp"]} for h in held if h["have"]]
+    held_xp = sum(h["have"] * h["xp"] for h in held)
+    exp, table = farm.get("experience", 0), rules["level_xp"]
+    return {"foods": menu_f, "held": held, "held_xp": held_xp, "held_xp_base": held_xp / (faction_pet or 1),
+            "xp_day": sum(f["per_day"] * f["xp"] for f in menu_f),
+            "cost_day": sum(24 / f["hours"] * f["cost_buy"] for f in menu_f),
+            "level_held": _level(exp + held_xp, table), "level_held_base": _level(exp + held_xp / (faction_pet or 1), table)}
+
+
+def level_path(farm, m, queue, rules, top=100):
     table = rules["level_xp"]
-    xp0 = farm.get("experience", 0) + food["have"] * food["xp"]   # pizzas you already hold count as eaten
+    xp0 = farm.get("experience", 0) + m["held_xp"]                     # food you already hold counts as eaten
     now = _level(farm.get("experience", 0), table)
-    per_cook = food["xp"] * (1 + food["extra"])
     steps, pts, q, prev_cost, prev_lv = [], 0, list(queue), 0.0, now
     for lv in range(now + 1, top + 1):
         pts += 1
-        cooks = max(0.0, (table[str(lv)] - xp0) / per_cook)
+        days = max(0.0, (table[str(lv)] - xp0) / m["xp_day"])
+        mix = {f["food"]: days * f["per_day"] for f in m["foods"]}
+        cooks = sum(mix.values())
         bought = []
         while q and q[0]["points"] <= pts:
             s = q.pop(0)
             pts -= s["points"]
             bought.append(s)
         if bought or lv == top:
-            cost = cooks * food["cost_buy"]
-            steps.append({"level": lv, "from": prev_lv, "skills": bought, "cooks": cooks, "cost": cost,
-                          "step_cost": cost - prev_cost, "days": cooks / cooks_per_day,
+            cost = days * m["cost_day"]
+            steps.append({"level": lv, "from": prev_lv, "skills": bought, "cooks": cooks, "cost": cost, "mix": mix,
+                          "step_cost": cost - prev_cost, "days": days,
                           "flower": sum(s["flower"] for s in bought), "coins": sum(s["coins"] for s in bought),
                           "spare_points": pts})
             prev_cost, prev_lv = cost, lv
-    return {"now": now, "xp": farm.get("experience", 0), "steps": steps, "per_cook_xp": per_cook}
+    return {"now": now, "xp": farm.get("experience", 0), "steps": steps}
 
 
 def node_values(farm, rates, prices, weeks):
@@ -231,23 +249,23 @@ def daily_mining(farm, prices, rates, tax):
             "coins": -(g_mines * 80 + c_mines * 100)}
 
 
-def evaluate(farm, prices, rules, farmwide, boosts, skill_tree, tax, weeks, food="Pizza Margherita",
-             cooks_per_day=1.0, oil_per_drill=16.6667, faction_pet=1.0, skill_plan=None, skip_skills=()):
+def evaluate(farm, prices, rules, farmwide, boosts, skill_tree, tax, weeks, foods=("Pizza Margherita",),
+             oil_per_drill=16.6667, faction_pet=1.0, skill_plan=None, skip_skills=()):
     prices = dict(prices, _oil_per_drill=oil_per_drill, _crim_per_mine=farmwide["rates"].get("crim_per_mine", 1.6))
-    f = xp_food(farm, prices, rules, food, tax, faction_pet)
+    m = menu(farm, prices, rules, foods, tax, faction_pet)
     nodes = node_values(farm, farmwide["rates"], prices, weeks)
     q, locked = skill_queue(farmwide, boosts, skill_tree, skill_plan, skip_skills, weeks)
-    lv = level_path(farm, f, q, rules, cooks_per_day)
+    lv = level_path(farm, m, q, rules)
     lv["locked"] = locked
     lv["skip"] = list(skip_skills)
     lv["shards"] = float(farm.get("inventory", {}).get("Ascension Shard", 0) or 0)
     ex = expansion_path(farm, prices, rules, nodes, farm.get("activity", {}), farm.get("weeks_played", 1),
                         rules["level_xp"])
     if ex["level_needed"] > lv["now"]:
-        cooks = max(0.0, (rules["level_xp"][str(ex["level_needed"])] - lv["xp"] - f["have"] * f["xp"]) / lv["per_cook_xp"])
-        ex["level_cost"] = cooks * f["cost_buy"]
+        days = max(0.0, (rules["level_xp"][str(ex["level_needed"])] - lv["xp"] - m["held_xp"]) / m["xp_day"])
+        ex["level_cost"] = days * m["cost_day"]
     else:
         ex["level_cost"] = 0.0
-    return {"food": f, "levels": lv, "expansions": ex, "nodes": nodes, "cooks_per_day": cooks_per_day,
+    return {"menu": m, "levels": lv, "expansions": ex, "nodes": nodes,
             "faction_pet": faction_pet, "pet_streak": farm.get("pet_streak"),
             "mining": daily_mining(farm, prices, farmwide["rates"], tax)}

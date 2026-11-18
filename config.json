@@ -10,8 +10,8 @@
   "coins_per_flower": 0,
 
   "_farmwide": "Other-tree skills and crop items. speed_credit: share of a faster regrowth you actually use (you do not collect on every cycle). coins_per_flower: rate used to add coins into the total column.",
-  "_growth": "Land expansions to the next island vs. levels bought with an XP food. cooks_per_day: how often you restart the Fire Pit. faction_pet_xp: Faction Pet XP multiplier you eat under (1.5 = you only eat in weeks after an 8+ week fed streak; 1 = eat any time).",
-  "growth": {"xp_food": "Pizza Margherita", "cooks_per_day": 1, "faction_pet_xp": 1.5,
+  "_growth": "Land expansions to the next island vs. levels bought with XP food. xp_foods: cooked nonstop, each in its own building (VIP queue of 3). faction_pet_xp: Faction Pet XP multiplier you eat under (1.5 = you only eat in weeks after an 8+ week fed streak; 1 = eat any time).",
+  "growth": {"xp_foods": ["Pizza Margherita", "Spaghetti al Limone", "Lemon Cheesecake"], "faction_pet_xp": 1.5,
              "_skill_plan": "Your skill order for the levels the feast buys (rank 2 = rank-up: points + Ascension Shards). The rest follows best FLOWER per point.",
              "skill_plan": [{"skill": "Tough Tree", "rank": 2},
                             {"skill": "Fine Fibers"}, {"skill": "Chonky Feed", "rank": 2}],

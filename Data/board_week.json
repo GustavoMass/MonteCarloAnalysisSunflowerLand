@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-16",
+ "fetched": "2026-11-18",
  "season": "spring",
  "board": [
   {
@@ -66,13 +66,13 @@
    "label": "Oyster",
    "category": "Other",
    "tickets": 12,
-   "done": false
+   "done": true
   },
   {
    "label": "Barnacle",
    "category": "Other",
    "tickets": 5,
-   "done": false
+   "done": true
   },
   {
    "label": "Octopus",
@@ -84,7 +84,7 @@
    "label": "Warty Goblin Pumpkin",
    "category": "Other",
    "tickets": 4,
-   "done": false
+   "done": true
   },
   {
    "label": "White Carrot",
@@ -96,7 +96,7 @@
    "label": "Adirondack Potato",
    "category": "Other",
    "tickets": 6,
-   "done": false
+   "done": true
   },
   {
    "label": "Obsidian",
@@ -132,7 +132,7 @@
    "label": "Wooly Doll",
    "category": "Other",
    "tickets": 20,
-   "done": false
+   "done": true
   },
   {
    "label": "Moo Doll",
@@ -144,7 +144,7 @@
    "label": "Lumber Doll",
    "category": "Other",
    "tickets": 15,
-   "done": false
+   "done": true
   },
   {
    "label": "Giant Orange",
