@@ -11,6 +11,7 @@
     "Spaghetti al Limone": {"xp": 15000, "hours": 15, "building": "Kitchen", "ingredients": {"Wheat": 10, "Lemon": 15, "Cheese": 3}},
     "Lemon Cheesecake": {"xp": 30000, "hours": 30, "building": "Bakery", "ingredients": {"Lemon": 20, "Cheese": 5, "Egg": 40}},
     "Truffle Cake": {"xp": 30000, "hours": 26, "building": "Bakery", "ingredients": {"Truffle": 15, "Wheat": 30, "Egg": 30, "Honey": 5}},
+    "Creamy Truffle Risotto": {"xp": 32000, "hours": 48, "building": "Kitchen", "ingredients": {"Truffle": 8, "Rice": 3, "Wild Mushroom": 5}},
     "Pizza Margherita": {"xp": 25000, "hours": 20, "building": "Fire Pit",
                          "ingredients": {"Tomato": 30, "Cheese": 5, "Wheat": 20}}
   },

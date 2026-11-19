@@ -49,7 +49,8 @@ def xp_food(farm, prices, rules, food, tax, faction_pet=1.0):
     buy = sum(q * (prices.get(k) or 0) for k, q in raw.items())
     return {"food": food, "xp": f["xp"] * mult, "boosts": used, "hours": hours, "extra": extra, "building": bld,
             "raw": raw, "cost_buy": buy, "cost_own": buy * (1 - tax),
-            "lines": [{"item": k, "qty": q, "flower": q * (prices.get(k) or 0)} for k, q in raw.items()],
+            "lines": [{"item": k, "qty": q, "flower": q * (prices.get(k) or 0), "own": prices.get(k) is None}
+                      for k, q in raw.items()],
             "have": farm.get("inventory", {}).get(food, 0)}
 
 
@@ -115,15 +116,19 @@ def menu(farm, prices, rules, foods, tax, faction_pet=1.0):
     """Every food in `foods` cooked nonstop, each in its own building (VIP queue of 3 keeps them
     rolling). Every XP food you hold counts as eaten (also ones not on the menu)."""
     menu_f = [xp_food(farm, prices, rules, n, tax, faction_pet) for n in foods]
+    per_bld = {}
     for f in menu_f:
-        f["per_day"] = 24 / f["hours"] * (1 + f["extra"])                  # dishes a day
+        per_bld[f["building"]] = per_bld.get(f["building"], 0) + 1
+    for f in menu_f:
+        f["share"] = 1 / per_bld[f["building"]]                            # dishes on one building split its time evenly
+        f["per_day"] = f["share"] * 24 / f["hours"] * (1 + f["extra"])     # dishes a day
     held = [xp_food(farm, prices, rules, n, tax, faction_pet) for n in rules["foods"]]
     held = [{"food": h["food"], "have": h["have"], "xp": h["xp"]} for h in held if h["have"]]
     held_xp = sum(h["have"] * h["xp"] for h in held)
     exp, table = farm.get("experience", 0), rules["level_xp"]
     return {"foods": menu_f, "held": held, "held_xp": held_xp, "held_xp_base": held_xp / (faction_pet or 1),
             "xp_day": sum(f["per_day"] * f["xp"] for f in menu_f),
-            "cost_day": sum(24 / f["hours"] * f["cost_buy"] for f in menu_f),
+            "cost_day": sum(f["share"] * 24 / f["hours"] * f["cost_buy"] for f in menu_f),
             "level_held": _level(exp + held_xp, table), "level_held_base": _level(exp + held_xp / (faction_pet or 1), table)}
 
 

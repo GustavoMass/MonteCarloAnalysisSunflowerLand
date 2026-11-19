@@ -25,7 +25,6 @@ Everything else is secondary.
 - Skill order for the levels the Pizza feast buys is `growth.skill_plan` (the player's own picks first). Feast and skills sit next to each other in the report.
 - Checks every 2 h, 06:00–22:00 (`tools`): node refills are worth only what fits between checks (Midas rank 1 gives nothing at these hours).
 - Crop items get 100% of their speed (`farmwide.crop_speed_credit`).
-- Sheep question: Barn L3 with 11 / 12 / 15 sheep, each fed to its most profitable level, then sold to a bounty (`sheep_fixed`).
 - Iron is bought, not mined (Rocky Favor makes iron mining a loss).
 - Tools cost their ingredients at market (Pickaxe 3 Wood, Stone Pickaxe 3 Wood + 5 Stone, Iron Pickaxe 5 Iron + 3 Wood, Gold Pickaxe 3 Gold + 3 Wood). Never count coins: the player has enough.
 - No ore refill skills at all (Midas Sprint/Rush, Fireside Alchemist, Iron Hustle, Speed Miner).
