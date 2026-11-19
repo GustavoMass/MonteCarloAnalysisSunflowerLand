@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-18",
+ "fetched": "2026-11-19",
  "season": "spring",
  "board": [
   {
@@ -78,7 +78,7 @@
    "label": "Octopus",
    "category": "Other",
    "tickets": 20,
-   "done": false
+   "done": true
   },
   {
    "label": "Warty Goblin Pumpkin",
@@ -138,7 +138,7 @@
    "label": "Moo Doll",
    "category": "Other",
    "tickets": 20,
-   "done": false
+   "done": true
   },
   {
    "label": "Lumber Doll",
@@ -150,7 +150,7 @@
    "label": "Giant Orange",
    "category": "Other",
    "tickets": 7,
-   "done": false
+   "done": true
   },
   {
    "label": "Giant Banana",

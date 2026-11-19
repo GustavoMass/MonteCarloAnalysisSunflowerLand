@@ -280,46 +280,6 @@ def main():
             gain["feed"] += base_vals[animal]["feed"]["mean"] - r["feed"]["mean"]
         out["boosts"].append({**b, "price": price, **gain})
         print(f"  boost {b['name']:24s} ({time.time() - t0:.0f}s)")
-    fx = cfg.get("sheep_fixed")
-    if fx:
-        c2 = json.loads(json.dumps(cfg))
-        c2["buildings"]["Barn"] = [[0, fx["barn"]]]
-        # sell when a sheep stops paying: stop feeding at the level where its accumulated profit peaks
-        # (single-animal run), then it waits for a bounty and a new lamb takes its slot
-        sh = next(x for x in out["single"] if x["build"] == plan_name and x["animal"] == "Sheep")
-        peak = max(sh["levels"], key=lambda l: l["accumulated"]["mean"])["level"]
-        pol = {"sell": True, "buffers": [None], "stop_feeding_at": peak}
-        bundle = next((b for b in cfg["boosts"] if b["name"] == "All cheap sheep NFTs"), None)
-        sets = [{"name": n, "collectibles": [n] if n in bundle.get("collectibles", []) else [],
-                 "wearables": [n] if n in bundle.get("wearables", []) else []}
-                for n in bundle.get("collectibles", []) + bundle.get("wearables", [])] + [bundle] if bundle else []
-        if bundle and "Dream Scarf" in bundle.get("wearables", []):   # its shorter sleep only adds feeds
-            sets.append({"name": "All but Dream Scarf", "collectibles": bundle.get("collectibles", []),
-                         "wearables": [w for w in bundle.get("wearables", []) if w != "Dream Scarf"]})
-        res = {"barn": fx["barn"], "herds": fx["herds"], "rows": [], "peak": peak,
-               "peak_profit": max(l["accumulated"]["mean"] for l in sh["levels"])}
-        base = {}
-        for n_ in fx["herds"]:
-            c2["capacity"]["Barn"] = [n_] * 4
-            base[n_] = run_herd(c2, ctx, plan, "Sheep", pol, None, cfg["runs_herd"], ("fixed", n_))
-            res.setdefault("base", {})[str(n_)] = {"value": base[n_]["value_flower"]["mean"], "feed": base[n_]["feed"]["mean"],
-                                                   "tickets": base[n_]["tickets"]["mean"], "coins": base[n_]["coins_net"]["mean"],
-                                                   "sold": base[n_]["sold"]["mean"] if "sold" in base[n_] else None}
-        for b in sets:
-            names = b.get("collectibles", []) + b.get("wearables", [])
-            ps = [(nfts.get(n) or {}).get("price") for n in names]
-            row = {"name": b["name"], "price": None if None in ps else sum(ps), "by": {}}
-            for n_ in fx["herds"]:
-                c2["capacity"]["Barn"] = [n_] * 4
-                f2 = plan.with_skills({}, [])
-                f2.collectibles |= set(b.get("collectibles", []))
-                f2.wearables |= set(b.get("wearables", []))
-                r = run_herd(c2, ctx, f2, "Sheep", pol, None, cfg["runs_herd"], ("fixed", n_))
-                row["by"][str(n_)] = {"gain": r["value_flower"]["mean"] - base[n_]["value_flower"]["mean"],
-                                      "feed": base[n_]["feed"]["mean"] - r["feed"]["mean"]}
-            res["rows"].append(row)
-        out["sheep_fixed"] = res
-        print(f"  sheep kept forever, Barn L{fx['barn']}, {fx['herds']} ({time.time() - t0:.0f}s)")
     already = {n for b in cfg["boosts"] for n in b.get("collectibles", []) + b.get("wearables", [])
                if n in plan.collectibles or n in plan.wearables}
     out["meta"]["boosts_owned"] = sorted(already)

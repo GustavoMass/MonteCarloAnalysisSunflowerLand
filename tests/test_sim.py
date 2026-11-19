@@ -247,6 +247,20 @@ class GrowthTest(unittest.TestCase):
         self.assertAlmostEqual(s["per_day"], 24 / 5)                 # Fast Feasts, no Jackpot
         self.assertAlmostEqual(m["xp_day"], 3.6 * 100 + 4.8 * 50)
 
+    def test_menu_dishes_on_one_building_split_its_time(self):
+        from sflmc import growth
+        rules = {"foods": {"S": {"xp": 50, "hours": 10, "building": "Kitchen", "ingredients": {"Wheat": 1}},
+                           "R": {"xp": 80, "hours": 40, "building": "Kitchen", "ingredients": {"Wheat": 2, "Mushroom": 5}}},
+                 "made": {}, "xp_boosts": {}, "level_xp": {"1": 0, "2": 1000},
+                 "fire_pit": {"Fast Feasts": [0.9], "Fiery Jackpot": [0.2]}}
+        farm = {"skills": {}, "experience": 0, "inventory": {}}
+        m = growth.menu(farm, {"Wheat": 1}, rules, ["S", "R"], 0.1)
+        s, r = m["foods"]
+        self.assertAlmostEqual(s["per_day"], 0.5 * 24 / 10)
+        self.assertAlmostEqual(r["per_day"], 0.5 * 24 / 40)
+        self.assertAlmostEqual(m["cost_day"], 0.5 * 24 / 10 * 1 + 0.5 * 24 / 40 * 2)   # Mushroom has no price
+        self.assertTrue(next(x for x in r["lines"] if x["item"] == "Mushroom")["own"])
+
 
 class FlowerNeedsTest(unittest.TestCase):
     def test_owed_flowers_count_stock_growing_and_chore_harvests(self):

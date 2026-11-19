@@ -10,8 +10,8 @@
   "coins_per_flower": 0,
 
   "_farmwide": "Other-tree skills and crop items. speed_credit: share of a faster regrowth you actually use (you do not collect on every cycle). coins_per_flower: rate used to add coins into the total column.",
-  "_growth": "Land expansions to the next island vs. levels bought with XP food. xp_foods: cooked nonstop, each in its own building (VIP queue of 3). faction_pet_xp: Faction Pet XP multiplier you eat under (1.5 = you only eat in weeks after an 8+ week fed streak; 1 = eat any time).",
-  "growth": {"xp_foods": ["Pizza Margherita", "Spaghetti al Limone", "Lemon Cheesecake"], "faction_pet_xp": 1.5,
+  "_growth": "Land expansions to the next island vs. levels bought with XP food. xp_foods: cooked nonstop (VIP queue of 3); dishes that share a building split its time evenly. faction_pet_xp: Faction Pet XP multiplier you eat under (1.5 = you only eat in weeks after an 8+ week fed streak; 1 = eat any time).",
+  "growth": {"xp_foods": ["Pizza Margherita", "Spaghetti al Limone", "Lemon Cheesecake", "Truffle Cake", "Creamy Truffle Risotto"], "faction_pet_xp": 1.5,
              "_skill_plan": "Your skill order for the levels the feast buys (rank 2 = rank-up: points + Ascension Shards). The rest follows best FLOWER per point.",
              "skill_plan": [{"skill": "Tough Tree", "rank": 2},
                             {"skill": "Fine Fibers"}, {"skill": "Chonky Feed", "rank": 2}],
@@ -19,8 +19,6 @@
              "skip_skills": ["Tree Charge", "Speed Miner", "Iron Hustle", "Midas Sprint", "Midas Rush", "Fireside Alchemist"]},
   "_tools": "Your day: checks every `every` hours from `start` to `end` (local). Trees: tree_checks chops a day per tree x tree_mult (Tree Turnaround); stones: stone_checks a day.",
   "tools": {"start": 6, "end": 22, "every": 2, "tree_checks": 9, "tree_mult": 1.15, "stone_checks": 5, "iron_checks": 0},
-  "_sheep_fixed": "Sheep kept forever (never sold) at this Barn level, for each herd size: what each cheap sheep NFT adds.",
-  "sheep_fixed": {"barn": 3, "herds": [11, 12, 15]},
   "farmwide": {"speed_credit": 0.5, "crop_speed_credit": 1.0, "coins_per_flower": 1000, "payback_chapters": 12,
                "_crop_plan": "Cycles per week on every plot. Yours: 5 wheat (24 h), 2 two-day crops with Instant Growth, 2 artichoke-type.",
                "crop_plan": {"Wheat": 5, "Barley": 2, "Artichoke": 2},
@@ -121,10 +119,7 @@
     {"name": "Cowbell Necklace", "type": "wearable", "wearables": ["Cowbell Necklace"]},
     {"name": "Training Whistle", "type": "wearable", "wearables": ["Training Whistle"]},
     {"name": "Nurse Sheep", "type": "collectible", "collectibles": ["Nurse Sheep"]},
-    {"name": "Frozen Sheep", "type": "collectible", "collectibles": ["Frozen Sheep"]},
-    {"name": "All cheap sheep NFTs", "type": "bundle: every sheep NFT under $30 you do not own",
-     "collectibles": ["Spa Sheep", "Ascended Sheep", "Mermaid Sheep", "Astronaut Sheep", "Nurse Sheep", "Frozen Sheep"],
-     "wearables": ["Dream Scarf", "Merino Jumper"]}
+    {"name": "Frozen Sheep", "type": "collectible", "collectibles": ["Frozen Sheep"]}
   ],
   "_nft_cap_usd": "Cheap NFTs section: only NFTs up to this USD price (FLOWER x the market report's FLOWER price).",
   "nft_cap_usd": 30,

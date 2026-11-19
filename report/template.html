@@ -164,7 +164,6 @@ h2 { scroll-margin-top: 56px; }
 <section aria-labelledby="nft-h">
   <h2 id="nft-h">Cheap NFTs: what they pay on your farm</h2>
   <p class="muted" id="nftIntro"></p>
-  <div id="nftSheep"></div>
   <div class="tbl"><table class="compact" id="nftTable"></table></div>
 </section>
 
@@ -439,17 +438,6 @@ function nftView() {
     `FLOWER per week comes from your own weekly averages (fruit planted, honey, rocks, flowers harvested); animal NFTs from the herd simulation. ` +
     `<b>Payback</b> = price ÷ FLOWER per week if you keep it; <b>if resold</b> = only the ${nf(fee * 100, 1)}% marketplace cut, assuming the floor holds. ` +
     `Wearables only count while you or a farm hand wears them (one onesie, one shirt… each).`;
-  const X = DATA.sheep_fixed;
-  if (X) {
-    const per = (v, p) => v > 0.05 && p ? nf(p / v, 1) + " ch" : "never";
-    $("nftSheep").innerHTML = `<h3>Sheep NFTs with ${X.herds.join(" / ")} sheep (Barn L${X.barn}), sold when they stop paying</h3>` +
-      `<p class="muted">One sheep makes the most at level ${X.peak} (+${fl(X.peak_profit)} FLOWER over its life); from level ${X.peak + 1} its feed (Mixed Grain) costs more than its wool. So each sheep is fed to level ${X.peak}, then waits for a bounty and a new one takes its slot; the barn stays at ${X.herds.join(" / ")}. ${C.chapter_weeks}-week chapter, ${C.runs_herd} runs. Each cell: FLOWER gained a chapter, then chapters to pay back if you keep it · if you resell it later (only the ${nf(fee * 100, 1)}% cut).</p>` +
-      `<div class="tbl"><table class="compact"><thead><tr><th>NFT</th><th>Price</th>${X.herds.map(n => `<th>${n} sheep</th>`).join("")}</tr></thead><tbody>` +
-      X.rows.map(r => `<tr class="${r.name.startsWith("All") ? "hi" : ""}"><td>${r.name === "All cheap sheep NFTs" ? "<b>All together</b>" : r.name.startsWith("All") ? `<b>${r.name}</b>` : r.name}</td><td class="num">${fl(r.price)}<br><span class="muted">$${fl(r.price * N.usd)}</span></td>` +
-        X.herds.map(n => { const b = r.by[String(n)];
-          return `<td class="num">${Math.abs(b.gain) > 0.05 ? sg(b.gain, 1) : "—"}<br><span class="muted">${per(b.gain, r.price)} · ${per(b.gain, r.price * fee)}</span></td>`; }).join("") + "</tr>").join("") +
-      `</tbody></table></div><p class="muted">Herd without NFTs: ${X.herds.map(n => { const b = X.base[String(n)]; return `${n} sheep ${sg(b.value, 1)} FLOWER, ${nf(b.tickets)} caps, ${nf(b.coins)} coins a chapter`; }).join("; ")}. Nurse Sheep and Frozen Sheep stop sickness in summer / winter; the sickness chance is decided on the server, so they show no gain. Sleep boosts (Dream Scarf) mean more feeds, so they barely gain.</p>`;
-  }
   $("nftTable").innerHTML = `<thead><tr><th>NFT</th><th>Price</th><th>FLOWER / week</th><th>Payback</th><th>If resold</th></tr></thead><tbody>` +
     N.rows.map(r => `<tr><td style="white-space:normal"><b>${r.name}</b> <span class="muted">${r.kind}</span><br><span class="muted">${r.effect}${r.note ? ` · ${r.note}` : ""}</span></td>` +
       `<td class="num">${fl(r.price)}<br><span class="muted">$${fl(r.usd)}</span></td><td class="num">${r.week == null ? "—" : fl(r.week)}</td>` +
@@ -504,12 +492,12 @@ function growthView() {
   const G = DATA.growth; if (!G) return;
   const M = G.menu, L = G.levels, E = G.expansions, pb = (c, v) => v > 0.05 ? c / v : null;
   const pbCell = x => `<td class="num ${x == null ? "" : x <= PAYBACK ? "pos" : "neg"}">${x == null ? "never" : nf(x, 1)}</td>`;
-  const short = n => n.replace(" Margherita", "").replace(" al Limone", "").replace("Lemon ", "");
+  const short = n => n.replace(" Margherita", "").replace(" al Limone", "").replace("Lemon ", "").replace("Creamy Truffle ", "");
   $("gFood").textContent = M.foods.map(f => short(f.food)).join(" + ");
-  $("gFoodNote").innerHTML = `<table class="tight"><thead><tr><th>Dish</th><th>Building</th><th>Hours</th><th>XP each</th><th>Per day nonstop</th><th>FLOWER each</th><th>XP per FLOWER</th><th>Ingredients</th></tr></thead><tbody>` +
-    M.foods.map(f => `<tr><td>${f.food}</td><td>${f.building}</td><td class="num">${nf(f.hours, 1)}</td><td class="num">${nf(f.xp)}</td><td class="num">${nf(f.per_day, 2)}${f.extra ? ` <span class="muted">(+${nf(100 * f.extra)}% Fiery Jackpot)</span>` : ""}</td>
-      <td class="num">${nf(f.cost_buy, 2)}</td><td class="num">${nf(f.xp * (1 + f.extra) / f.cost_buy)}</td><td class="muted" style="white-space:normal">${f.lines.map(l => `${nf(l.qty)} ${l.item} ${nf(l.flower, 2)}`).join(", ")}</td></tr>`).join("") +
-    `</tbody></table>All three nonstop (VIP queue of 3 keeps each building rolling): <b>${nf(M.xp_day)} XP and ${nf(M.cost_day, 1)} FLOWER a day</b> at market. XP includes ${M.foods[0].boosts.join(", ") || "no boosts"}.
+  $("gFoodNote").innerHTML = `<table class="tight"><thead><tr><th>Dish</th><th>Building</th><th>Hours</th><th>Building time</th><th>XP each</th><th>Per day nonstop</th><th>FLOWER each</th><th>XP per FLOWER</th><th>Ingredients</th></tr></thead><tbody>` +
+    M.foods.map(f => `<tr><td>${f.food}</td><td>${f.building}</td><td class="num">${nf(f.hours, 1)}</td><td class="num">${nf(100 * (f.share ?? 1))}%</td><td class="num">${nf(f.xp)}</td><td class="num">${nf(f.per_day, 2)}${f.extra ? ` <span class="muted">(+${nf(100 * f.extra)}% Fiery Jackpot)</span>` : ""}</td>
+      <td class="num">${nf(f.cost_buy, 2)}</td><td class="num">${nf(f.xp * (1 + f.extra) / f.cost_buy)}</td><td class="muted" style="white-space:normal">${f.lines.map(l => `${nf(l.qty)} ${l.item} ${l.own ? "(not tradeable, your own)" : nf(l.flower, 2)}`).join(", ")}</td></tr>`).join("") +
+    `</tbody></table>All ${M.foods.length} nonstop (VIP queue of 3 keeps each building rolling; dishes on the same building split its time evenly): <b>${nf(M.xp_day)} XP and ${nf(M.cost_day, 1)} FLOWER a day</b> at market. XP includes ${M.foods[0].boosts.join(", ") || "no boosts"}.
     ${G.faction_pet > 1 ? `Faction Pet x${G.faction_pet} assumes you eat only in weeks after an 8-week fed streak (<code>growth.faction_pet_xp</code>); your streak is ${G.pet_streak ?? "?"} now, so cook and store until it reaches 8. ` : ""}
     <br><b>Food you hold</b> (${M.held.map(h => `${nf(h.have)} ${short(h.food)}`).join(", ") || "none"}): ${nf(M.held_xp)} XP, counted as eaten. Eating only that and cooking no more takes you to <b>level ${M.level_held}</b>${G.faction_pet > 1 ? ` in a x${G.faction_pet} week (level ${M.level_held_base} without it)` : ""}.
     Each level gives 1 skill point. Your own order comes first (<code>growth.skill_plan</code>, marked ★), then the best FLOWER per point; never bought: ${(L.skip || []).join(", ") || "—"}. Rank-ups also cost Ascension Shards (you have ${nf(L.shards || 0)}).
@@ -566,7 +554,7 @@ function nextView() {
   const last = L.steps.filter(s => s.level <= (lastPlanned ? lastPlanned.level : 79)), top = last[last.length - 1];
   if (top) opts.push({ name: `Feast: levels ${L.now + 1}–${top.level}`, cost: top.cost, coins: 0,
     flower: last.reduce((a, s) => a + s.flower, 0), tickets: 0, coinsCh: last.reduce((a, s) => a + s.coins, 0),
-    time: `${nf(top.days, 1)} days nonstop (${G.menu.foods.map(f => nf(Math.ceil(top.mix[f.food] - 1e-9)) + " " + f.food.split(" ")[0]).join(", ")})`, note: `skills: ${last.flatMap(s => s.skills.map(k => k.name)).join(", ")}` });
+    time: `${nf(top.days, 1)} days nonstop (${G.menu.foods.map(f => nf(Math.ceil(top.mix[f.food] - 1e-9)) + " " + f.food.replace("Creamy Truffle ", "").split(" ")[0]).join(", ")})`, note: `skills: ${last.flatMap(s => s.skills.map(k => k.name)).join(", ")}` });
   const nan = (W.rows || []).find(r => r.name === "Nancy" && !r.owned);
   if (nan) opts.push({ name: "Nancy", cost: nan.price || 0, coins: 0, flower: nan.flower, tickets: 0, coinsCh: 0, time: "now", note: nan.note });
   const E = G.expansions, oil = (E.needs || []).find(n => n.item === "Oil");
