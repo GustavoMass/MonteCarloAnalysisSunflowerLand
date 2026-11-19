@@ -222,7 +222,15 @@ class _Planner:
         (3 Primula Enigma = 3 chains at once, bed room permitting)."""
         tr = self.tier_of(name)                     # only the copies of the goal being served now
         wanted = sum(self.need.get(m["_i"], 0) for m in self.by_flower.get(name, []) if m.get("tier", 1) == tr) +             len(self.intent.get(name, []))
-        return self.coming(name) >= wanted
+        # a parent already growing (and not kept for anything else) is sooner than a new chain
+        growing = 0
+        for parent, qty in self.fl[name].get("parents", []):
+            if parent not in self.fl:
+                continue
+            pend = sum(1 for _, n in self.pending if n == parent)
+            keep = sum(q for t, q in self.protect.get(parent, []) if t <= tr) + self.kept(parent)
+            growing += max(0, min(pend, self.stock.get(parent, 0) + pend - keep)) // qty
+        return self.coming(name) + growing >= wanted
 
     # ---- one bed decision
     def pick(self, t):
