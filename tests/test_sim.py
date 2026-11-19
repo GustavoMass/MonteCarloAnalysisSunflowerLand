@@ -165,6 +165,23 @@ class FlowerPlan(unittest.TestCase):
         self.assertIn("Red Cosmos", names)                              # target grown later from a second parent
         self.assertLess(names.index("Yellow Daffodil"), names.index("Red Cosmos"))
 
+    def test_parent_already_growing_is_not_planted_again(self):
+        from sflmc import flowerplan as FP
+        H = 3600 * 1000
+        start = 1_000 * H
+        all4 = ["spring", "summer", "autumn", "winter"]
+        flowers = {"seeds": {"Sunpetal Seed": {"days": 1, "seasons": all4, "flowers": []},
+                             "Bloom Seed": {"days": 2, "seasons": all4, "flowers": []}},
+                   "flowers": {"Red Cosmos": {"seed": "Sunpetal Seed", "days": 1, "parents": [["Yellow Daffodil", 1]]},
+                               "Yellow Daffodil": {"seed": "Bloom Seed", "days": 2, "parents": [["Radish", 5]]}}}
+        farm = {"inventory": {"Radish": 50},
+                "flower_beds": [{"name": None}, {"name": "Yellow Daffodil", "planted_at": start - 30 * H}],
+                "season": "winter", "season_started": start}
+        r = FP.plan(farm, flowers, start, target_start_ms=start, target_days=5, tz_offset_h=0, awake=(0, 24),
+                    must_have=[{"flower": "Red Cosmos", "count": 1, "by": start + 999 * H, "tier": 1}])
+        names = [s["flower"] for s in r["schedule"]]
+        self.assertEqual(names, ["Red Cosmos"])                       # waits for the growing Yellow Daffodil
+
     def test_must_have_first(self):
         from sflmc import flowerplan as FP
         H = 3600 * 1000
