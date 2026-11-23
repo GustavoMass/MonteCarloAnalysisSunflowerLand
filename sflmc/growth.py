@@ -4,6 +4,8 @@ Both paths are priced in FLOWER at market prices and valued per chapter from the
 rates (your own counters) and the animal boost results. Game rules live in Data/growth_rules.json.
 """
 
+import time
+
 NODE_KEYS = {"Crop Plot": "Crop Plot", "Tree": "Tree", "Stone Rock": "Stone Rock", "Iron Rock": "Iron Rock",
              "Gold Rock": "Gold Rock", "Crimstone Rock": "Crimstone Rock", "Fruit Patch": "Fruit Patch",
              "Oil Reserve": "Oil Reserve", "Sunstone Rock": "Sunstone Rock"}
@@ -254,8 +256,41 @@ def daily_mining(farm, prices, rates, tax):
             "coins": -(g_mines * 80 + c_mines * 100)}
 
 
+PET_TIERS = [(8, 1.5), (6, 1.3), (4, 1.2), (2, 1.1)]   # factions.ts getFactionPetBoostMultiplier
+
+
+def pet_mult(streak):
+    return next((m for s, m in PET_TIERS if streak >= s), 1.0)
+
+
+def pet_plan(streak, streak_week, now_ms, weeks=6):
+    """Faction Pet XP by week (factions.ts): the x boost in week W+1 comes from the faction's collective streak
+    at the end of week W, and only if you fed every pet request at least once in week W. Weeks turn Monday
+    00:00 UTC. streak_week = week key (Monday, YYYY-MM-DD) the streak belongs to; unknown = last week.
+    Assumes the faction keeps feeding (+1 streak a week)."""
+    import datetime as dt
+    now = dt.datetime.fromtimestamp(now_ms / 1000, dt.timezone.utc)
+    this = (now - dt.timedelta(days=now.weekday())).date()
+    try:
+        sw = dt.date.fromisoformat(str(streak_week)[:10])
+    except ValueError:
+        sw = this - dt.timedelta(days=7)
+    # streak at the end of last week
+    last = streak if sw < this else max(0, streak - 1)
+    rows = []
+    for i in range(weeks):
+        start = this + dt.timedelta(days=7 * i)
+        s_before = last + i                   # streak that sets this week's boost
+        rows.append({"start": start.isoformat(), "end": (start + dt.timedelta(days=6)).isoformat(),
+                     "mult": pet_mult(s_before), "streak_before": s_before, "streak_after": s_before + 1})
+    first = next((r for r in rows if r["mult"] >= 1.5), None)
+    return {"weeks": rows, "first_max": first,
+            "feed_week": next((r for r in rows if first and r["start"] < first["start"] and
+                               r["streak_after"] == first["streak_before"]), None)}
+
+
 def evaluate(farm, prices, rules, farmwide, boosts, skill_tree, tax, weeks, foods=("Pizza Margherita",),
-             oil_per_drill=16.6667, faction_pet=1.0, skill_plan=None, skip_skills=()):
+             oil_per_drill=16.6667, faction_pet=1.0, skill_plan=None, skip_skills=(), now_ms=None):
     prices = dict(prices, _oil_per_drill=oil_per_drill, _crim_per_mine=farmwide["rates"].get("crim_per_mine", 1.6))
     m = menu(farm, prices, rules, foods, tax, faction_pet)
     nodes = node_values(farm, farmwide["rates"], prices, weeks)
@@ -273,4 +308,6 @@ def evaluate(farm, prices, rules, farmwide, boosts, skill_tree, tax, weeks, food
         ex["level_cost"] = 0.0
     return {"menu": m, "levels": lv, "expansions": ex, "nodes": nodes,
             "faction_pet": faction_pet, "pet_streak": farm.get("pet_streak"),
+            "pet": dict(pet_plan(farm.get("pet_streak") or 0, farm.get("pet_week"), now_ms or time.time() * 1000),
+                        requests=farm.get("pet_requests"), qualifies=farm.get("pet_qualifies")),
             "mining": daily_mining(farm, prices, farmwide["rates"], tax)}

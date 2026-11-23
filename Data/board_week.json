@@ -66,13 +66,13 @@
    "label": "Blue Crab",
    "category": "Other",
    "tickets": 12,
-   "done": false
+   "done": true
   },
   {
    "label": "Sea Urchin",
    "category": "Other",
    "tickets": 8,
-   "done": false
+   "done": true
   },
   {
    "label": "Oyster",
@@ -120,7 +120,7 @@
    "label": "Juicy Doll",
    "category": "Other",
    "tickets": 15,
-   "done": false
+   "done": true
   },
   {
    "label": "Lumber Doll",

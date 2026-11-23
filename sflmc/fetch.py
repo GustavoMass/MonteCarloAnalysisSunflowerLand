@@ -204,6 +204,12 @@ def parse_farm(raw, farm_id):
         # faction pet fed streak of the latest week (x1.5 Bumpkin XP the week after a streak of 8+)
         "pet_streak": next(((h.get("collectivePet") or {}).get("streak", 0)
                             for _, h in sorted(((f.get("faction") or {}).get("history") or {}).items(), reverse=True)), 0),
+        # week key (YYYY-MM-DD, Monday) that streak belongs to, and this week's own feeding: the x boost in a week
+        # needs every pet request fed at least once the week before (factionPetQualifiesForBoost.ts)
+        "pet_week": max(((f.get("faction") or {}).get("history") or {"": 0}).keys()) or None,
+        "pet_requests": [bool((r or {}).get("dailyFulfilled")) for r in
+                         (((f.get("faction") or {}).get("pet") or {}).get("requests") or [])],
+        "pet_qualifies": ((f.get("faction") or {}).get("pet") or {}).get("qualifiesForBoost"),
         "weeks_played": ((raw.get("fetched_at") or time.time() * 1000) - (f.get("createdAt") or 0)) / 6.048e8,
     }
 
