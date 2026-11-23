@@ -174,6 +174,15 @@ h2 { scroll-margin-top: 56px; }
 </section>
 
 
+<section aria-labelledby="gh-h">
+  <h2 id="gh-h">Greenhouse: cost per round, and what makes it pay</h2>
+  <p class="muted" id="ghIntro"></p>
+  <h3>One planting per pot, by skill path</h3>
+  <div class="tbl"><table class="compact" id="ghSkills"></table></div>
+  <h3>NFTs, on top of the full skill path</h3>
+  <div class="tbl"><table class="compact" id="ghNfts"></table></div>
+</section>
+
 <section aria-labelledby="u-h">
   <h2 id="u-h">Barn and Pigpen: tickets per level, and what each upgrade adds</h2>
   <p class="muted" id="upIntro"></p>
@@ -488,6 +497,28 @@ function method() {
   $("method").innerHTML = items.map(x => `<li>${x}</li>`).join("");
 }
 
+function greenhouseView() {
+  const GH = DATA.greenhouse; if (!GH) return;
+  const crops = ["Rice", "Olive", "Grape"];
+  const b = GH.build, t = GH.today;
+  $("ghIntro").innerHTML = `Game code: ${GH.pots} pots; each planting burns Oil (Rice ${t.Rice.oil}, Olive ${t.Olive.oil}, Grape ${t.Grape.oil}) and gives 1 at base. ` +
+    `Grow time Rice ${t.Rice.hours} h, Olive ${t.Olive.hours} h, Grape ${t.Grape.hours} h. Seeds cost coins only (not counted). ` +
+    `Oil has no market price: valued at its Oil Drill cost, ${nf(GH.oil_price, 3)} FLOWER. ` +
+    `Building: 500 Wood + 100 Stone + 25 Crimstone + 100 Oil = <b>${nf(GH.build_total, 1)} FLOWER</b> (plus 4,800 coins), level 46. ` +
+    `Your ${nf(GH.oil_made_day, 0)} Oil a day from Oil Reserves is shared with everything else. ` +
+    `<b>Used</b> = the crop replaces one you would buy (market price); <b>sold</b> = after the ${nf(GH.tax * 100, 1)}% cut. Per day = all ${GH.pots} pots on that crop, nonstop. ` +
+    `Generic crop boosts (Scarecrow, Infernal Pitchfork) reach Rice and Olive; patch-fruit skills and items (Macaw, Fruitful Fumble) do not reach Grape.`;
+  const cell = x => `<td class="num">${nf(x.yield, 2)}<br><span class="muted">${nf(x.oil, 1)} oil</span></td><td class="num">${sg(x.used, 3)}<br><span class="muted">sold ${sg(x.sold, 3)}</span></td>` +
+    `<td class="num">${sg(x.used_day, 2)}<br><span class="muted">${nf(x.oil_day, 0)} oil/day</span></td>`;
+  $("ghSkills").innerHTML = `<thead><tr><th>Skills</th>${crops.map(c => `<th>${c} yield</th><th>${c} FLOWER / planting</th><th>${c} FLOWER / day</th>`).join("")}</tr></thead><tbody>` +
+    GH.skills.map(r => `<tr><td style="white-space:normal">${r.name}</td>${crops.map(c => cell(r.crops[c])).join("")}</tr>`).join("") +
+    `<tr><td class="muted">Break-even yield today</td>${crops.map(c => `<td class="num muted" colspan="3">${nf(t[c].break_even, 2)} per planting</td>`).join("")}</tr></tbody>`;
+  const wk = v => v == null ? "never" : v >= 520 ? "10+ yr" : `${nf(v, 0)} wk`;
+  $("ghNfts").innerHTML = `<thead><tr><th>NFT</th><th>Crop</th><th>Price</th><th>+FLOWER / week (no skills)</th><th>+FLOWER / week (full skills)</th><th>Pot FLOWER / day with it</th><th>Payback</th></tr></thead><tbody>` +
+    GH.nfts.slice().sort((x, y) => (x.payback_weeks ?? 1e9) - (y.payback_weeks ?? 1e9)).map(r => `<tr><td style="white-space:normal"><b>${r.name}</b> <span class="muted">${r.kind} · ${r.note}${r.owned ? " · owned" : ""}</span></td><td>${r.crop}</td>` +
+      `<td class="num">${r.price == null ? "—" : nf(r.price, 0)}</td><td class="num">${sg(r.now.gain_week, 2)}</td><td class="num">${sg(r.skills.gain_week, 2)}</td><td class="num">${sg(r.skills.day, 2)}</td><td class="num">${wk(r.payback_weeks)}</td></tr>`).join("") + "</tbody>";
+}
+
 function growthView() {
   const G = DATA.growth; if (!G) return;
   const M = G.menu, L = G.levels, E = G.expansions, pb = (c, v) => v > 0.05 ? c / v : null;
@@ -596,7 +627,7 @@ function nextView() {
     `At that pace mining alone pays for both buildings in about ${nf(tot / Math.max(M.both_net, 0.1), 1)} weeks.`;
 }
 
-function all() { document.querySelectorAll(".coinNote").forEach(e => e.textContent = COIN_TXT); nextView(); levelCharts(); boostView(); farmwideView(); growthView(); upgradeView(); flowerPlanView(); boardView(); nftView(); toolsView(); }
+function all() { document.querySelectorAll(".coinNote").forEach(e => e.textContent = COIN_TXT); nextView(); levelCharts(); boostView(); farmwideView(); growthView(); upgradeView(); flowerPlanView(); boardView(); nftView(); toolsView(); greenhouseView(); }
 function init() {
   $("fid").textContent = DATA.meta.farm.farm_id; $("gen").textContent = DATA.meta.generated; $("tax").textContent = (C.sell_fee * 100) + "%";
   method(); all();

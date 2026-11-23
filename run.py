@@ -27,6 +27,7 @@ from sflmc import farm as F
 from sflmc import fetch
 from sflmc import flowerplan
 from sflmc import game as G
+from sflmc import greenhouse as GREENHOUSE
 from sflmc import herd as H
 from sflmc import nfts as NFT
 from sflmc import tools as TOOLS
@@ -344,6 +345,8 @@ def main():
                                     skip_skills=gw.get("skip_skills", []))
     rt = out["farmwide"]["rates"]
     out["nft_floor"] = {n: (nfts.get(n) or {}).get("price") for n in ("Pickaxe Shark", "Crimstone Amulet", "Crimstone Clam") if (nfts.get(n) or {}).get("price")}
+    out["greenhouse"] = GREENHOUSE.evaluate(farm_d, prices["prices"], nfts, cfg["sell_fee"],
+                                           oil_per_drill=cfg.get("derived_prices", {}).get("Oil", {}).get("per", 16.6667))
     out["tools"] = TOOLS.evaluate(farm_d, prices["prices"], cfg.get("tools", {}), rt["per_chop"], rt["per_gold_mine"])
     herd_tickets = {}
     for animal in G.ANIMALS:

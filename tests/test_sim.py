@@ -297,5 +297,22 @@ class FlowerNeedsTest(unittest.TestCase):
         self.assertEqual(got[("grow", "Blue Pansy")]["tickets"], 3)
 
 
+class GreenhouseTest(unittest.TestCase):
+    def test_oil_order_and_yields(self):
+        from sflmc import greenhouse as GH
+        prices = {"Rice": 0.3, "Olive": 0.4, "Grape": 0.2}
+        base = GH.plant("Rice", [], prices, 0.1, 0.1)
+        self.assertEqual(base["oil"], 4)
+        self.assertAlmostEqual(base["used"], 0.3 - 0.4)
+        # Greasy Plants x2, then Slick Saver -1, then Rice Shirt x0.5: (4*2-1)*0.5 = 3.5
+        r = GH.plant("Rice", ["Greasy Plants", "Slick Saver", "Rice Shirt"], prices, 0.1, 0.1)
+        self.assertAlmostEqual(r["oil"], 3.5)
+        self.assertAlmostEqual(r["yield"], 1 + 1 + 1)
+        # Scarecrow multiplies crops only, before the adds
+        self.assertAlmostEqual(GH.plant("Olive", ["Scarecrow", "Pharaoh Gnome"], prices, 0.1, 0)["yield"], 1.2 + 2)
+        self.assertAlmostEqual(GH.plant("Grape", ["Scarecrow"], prices, 0.1, 0)["yield"], 1)
+        self.assertAlmostEqual(GH.plant("Grape", [], prices, 0.1, 0)["per_day"], 4 * 24 / 12)
+
+
 if __name__ == "__main__":
     unittest.main()
