@@ -44,8 +44,8 @@
   "_buildings": "Building level by week: [[from_week, level], ...]. Week 0 starts 9 Nov.",
   "buildings": {
     "Hen House": [[0, 3]],
-    "Barn": [[0, 1], [2, 2]],
-    "Pigpen": [[0, 1], [2, 2]]
+    "Barn": [[0, 1]],
+    "Pigpen": [[0, 2]]
   },
   "_upgrade_paths": "Building paths to compare for tickets and value: [[from_week, level], ...]. Barn = cows + sheep (buffer 1), Pigpen = pigs on bounties + trade-in.",
   "upgrade_paths": {
@@ -66,15 +66,16 @@
   "ticket_base": {"Chicken": 3, "Cow": 4, "Sheep": 4, "Pig": 4},
   "gems_per_bounty": 5,
 
-  "_herd": "How you run each building. buffer = animals kept beyond this week's requests (null = keep it full). Several buffers are compared. stop_feeding_at: \"auto\" = highest level boards ask for. trade_in_at: trade pigs for bristles at this level.",
+  "_herd": "How you run each building. plan = the policy and buffer you actually run (used for boosts, NFTs, skills, upgrades and caps); you keep only the animals the board asks for (animals cost more than they make). buffer = animals kept beyond this week's requests (null = keep it full). Several buffers are compared. stop_feeding_at: \"auto\" = highest level boards ask for. trade_in_at: trade pigs for bristles at this level.",
   "herd": {
     "Chicken": {"policies": {
       "Sell the lowest level that fits": {"sell": true, "buffers": [null], "sell_order": "lowest"},
       "Sell the highest level (old habit)": {"sell": true, "buffers": [null], "sell_order": "highest"}
     }},
-    "Cow":     {"sell": true, "buffers": [0, 1, 2], "stop_feeding_at": "auto"},
-    "Sheep":   {"sell": true, "buffers": [0, 1, 2], "stop_feeding_at": "auto"},
-    "Pig":     {"policies": {
+    "Cow":     {"sell": true, "buffers": [0, 1, 2], "stop_feeding_at": "auto", "plan": {"buffer": 0}},
+    "Sheep":   {"sell": true, "buffers": [0, 1, 2], "stop_feeding_at": "auto", "plan": {"buffer": 0}},
+    "Pig":     {"plan": {"policy": "Bounties only", "buffer": 0}, "policies": {
+      "Bounties only": {"sell": true, "buffers": [0, 1], "stop_feeding_at": "auto"},
       "Keep and feed": {"sell": false, "buffers": [null]},
       "Trade in at L9": {"sell": false, "buffers": [null], "trade_in_at": 9},
       "Bounties + trade in at L9": {"sell": true, "buffers": [null], "trade_in_at": 9}

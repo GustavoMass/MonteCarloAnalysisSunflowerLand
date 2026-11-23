@@ -218,7 +218,7 @@ const COIN_TXT = C.coins_per_flower ? `Coins are counted at 1:${C.coins_per_flow
 const PAYBACK = (C.farmwide || {}).payback_chapters || 12;
 const single = (b, a) => DATA.single.find(s => s.build === b && s.animal === a);
 const herds = (b, a) => DATA.herd.filter(h => h.build === b && h.animal === a);
-const bufLabel = h => h.policy ? h.policy : h.buffer == null ? "full building" : `needed + ${h.buffer}`;
+const bufLabel = h => (h.policy ? h.policy + (h.buffer == null ? "" : ", ") : "") + (h.buffer == null ? (h.policy ? "" : "full building") : `needed + ${h.buffer}`);
 const charts = {};
 function mk(id, cfg) { charts[id] && charts[id].destroy(); charts[id] = new Chart($(id), cfg); }
 
@@ -523,13 +523,25 @@ function growthView() {
   const G = DATA.growth; if (!G) return;
   const M = G.menu, L = G.levels, E = G.expansions, pb = (c, v) => v > 0.05 ? c / v : null;
   const pbCell = x => `<td class="num ${x == null ? "" : x <= PAYBACK ? "pos" : "neg"}">${x == null ? "never" : nf(x, 1)}</td>`;
+  const petView = P => {
+    if (!P || !P.weeks) return "";
+    const d = x => new Date(x + "T00:00:00Z").toLocaleDateString(undefined, { day: "numeric", month: "short", timeZone: "UTC" });
+    const fed = P.requests && P.requests.length ? `This week you fed ${P.requests.filter(Boolean).length} of ${P.requests.length} pet requests. ` : "";
+    return `<div style="margin:8px 0"><b>Faction Pet: when to feed.</b> ` +
+      (P.first_max ? `First x1.5 week: <b>${d(P.first_max.start)}–${d(P.first_max.end)}</b> (eat the stored food then). ` +
+        (P.feed_week ? `To get it, feed <b>every pet request at least once in ${d(P.feed_week.start)}–${d(P.feed_week.end)}</b> (and in each week before, to keep the boost on the way). ` : "") : "") +
+      fed + `<table class="tight"><thead><tr><th>Week (Mon–Sun, UTC)</th><th>Streak going in</th><th>XP boost</th></tr></thead><tbody>` +
+      P.weeks.map(w => `<tr class="${P.first_max && w.start === P.first_max.start ? "hi" : ""}"><td>${d(w.start)}–${d(w.end)}</td><td class="num">${w.streak_before}</td><td class="num">x${w.mult}</td></tr>`).join("") +
+      `</tbody></table><span class="muted">The streak is the faction's (it grows only if the faction feeds the pet every week); the boost needs your own feeding of every request the week before. Both are set server-side at the Monday rollover.</span></div>`;
+  };
   const short = n => n.replace(" Margherita", "").replace(" al Limone", "").replace("Lemon ", "").replace("Creamy Truffle ", "");
   $("gFood").textContent = M.foods.map(f => short(f.food)).join(" + ");
   $("gFoodNote").innerHTML = `<table class="tight"><thead><tr><th>Dish</th><th>Building</th><th>Hours</th><th>Building time</th><th>XP each</th><th>Per day nonstop</th><th>FLOWER each</th><th>XP per FLOWER</th><th>Ingredients</th></tr></thead><tbody>` +
     M.foods.map(f => `<tr><td>${f.food}</td><td>${f.building}</td><td class="num">${nf(f.hours, 1)}</td><td class="num">${nf(100 * (f.share ?? 1))}%</td><td class="num">${nf(f.xp)}</td><td class="num">${nf(f.per_day, 2)}${f.extra ? ` <span class="muted">(+${nf(100 * f.extra)}% Fiery Jackpot)</span>` : ""}</td>
       <td class="num">${nf(f.cost_buy, 2)}</td><td class="num">${nf(f.xp * (1 + f.extra) / f.cost_buy)}</td><td class="muted" style="white-space:normal">${f.lines.map(l => `${nf(l.qty)} ${l.item} ${l.own ? "" : nf(l.flower, 2)}`).join(", ")}</td></tr>`).join("") +
     `</tbody></table>All ${M.foods.length} nonstop (VIP queue of 3 keeps each building rolling; dishes on the same building split its time evenly): <b>${nf(M.xp_day)} XP and ${nf(M.cost_day, 1)} FLOWER a day</b> at market. XP includes ${M.foods[0].boosts.join(", ") || "no boosts"}.
-    ${G.faction_pet > 1 ? `Faction Pet x${G.faction_pet} assumes you eat only in weeks after an 8-week fed streak (<code>growth.faction_pet_xp</code>); your streak is ${G.pet_streak ?? "?"} now, so cook and store until it reaches 8. ` : ""}
+    ${G.faction_pet > 1 ? `Faction Pet x${G.faction_pet} assumes you eat only in a x1.5 week (<code>growth.faction_pet_xp</code>); cook and store until then.` : ""}
+    ${petView(G.pet)}
     <br><b>Food you hold</b> (${M.held.map(h => `${nf(h.have)} ${short(h.food)}`).join(", ") || "none"}): ${nf(M.held_xp)} XP, counted as eaten. Eating only that and cooking no more takes you to <b>level ${M.level_held}</b>${G.faction_pet > 1 ? ` in a x${G.faction_pet} week (level ${M.level_held_base} without it)` : ""}.
     Each level gives 1 skill point. Your own order comes first (<code>growth.skill_plan</code>, marked ★), then the best FLOWER per point; never bought: ${(L.skip || []).join(", ") || "—"}. Rank-ups also cost Ascension Shards (you have ${nf(L.shards || 0)}).
     ${L.locked.length ? `Left out until their tier opens: ${L.locked.map(s => `${s.name} (${sg(s.flower, 1)})`).join(", ")}.` : ""}`;
@@ -605,7 +617,7 @@ function nextView() {
   const capBest = opts.filter(o => o.tickets > 0).sort((a, b) => a.cost / a.tickets - b.cost / b.tickets)[0];
   $("nVerdict").innerHTML = `<b>Do first: ${opts[0].name}, then ${opts[1].name}.</b> ` +
     (capBest ? `For Duende Caps the cheapest is ${capBest.name}: ${nf(capBest.cost / capBest.tickets, 2)} FLOWER per cap, ${nf(capBest.tickets)} caps a chapter, every chapter. ` : "") +
-    `Meanwhile keep the Fire Pit, Kitchen and Bakery busy: food cooked now is eaten in the x${G.faction_pet} week after your pet streak reaches 8 (it is ${pet} now, so about ${Math.max(0, 8 - pet)} more fed weeks). ` +
+    `Meanwhile keep the Fire Pit, Kitchen and Bakery busy: food cooked now is eaten in the x${G.faction_pet} week${G.pet && G.pet.first_max ? ` (${G.pet.first_max.start} onward)` : ""} after the pet streak reaches 8 (it is ${pet} now). ` +
     `Expansions come last: the most FLOWER per chapter once built, but the slowest payback.`;
   // full cost of the next level of both buildings
   const nx = ["Barn", "Pigpen"].map(b => up(b, (owned[b] || 0) + 1)).filter(Boolean);

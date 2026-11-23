@@ -314,5 +314,18 @@ class GreenhouseTest(unittest.TestCase):
         self.assertAlmostEqual(GH.plant("Grape", [], prices, 0.1, 0)["per_day"], 4 * 24 / 12)
 
 
+
+class PetPlanTest(unittest.TestCase):
+    def test_first_x15_week_and_the_week_to_feed(self):
+        import datetime as dt
+        from sflmc.growth import pet_plan
+        mon = dt.datetime(2026, 11, 23, 12, tzinfo=dt.timezone.utc).timestamp() * 1000
+        r = pet_plan(5, "2026-11-16", mon)
+        self.assertEqual([w["mult"] for w in r["weeks"][:4]], [1.2, 1.3, 1.3, 1.5])
+        self.assertEqual(r["first_max"]["start"], "2026-12-14")
+        self.assertEqual(r["feed_week"]["start"], "2026-12-07")
+        # streak already counted this week: one week earlier in the chain
+        self.assertEqual(pet_plan(5, "2026-11-23", mon)["first_max"]["start"], "2026-12-21")
+
 if __name__ == "__main__":
     unittest.main()

@@ -252,9 +252,11 @@ def main():
 
     # boosts: plan build, the first policy and buffer 1 where offered
     def pick(animal):
-        pname, pol = list(policies(cfg, animal).items())[-1 if animal == "Pig" else 0]
-        bufs = pol.get("buffers", [None])
-        return pname, pol, (1 if 1 in bufs else bufs[0])
+        """The policy and buffer you run (herd.<animal>.plan); else the first policy, buffer 1 where offered."""
+        pl, pols = cfg["herd"][animal].get("plan") or {}, policies(cfg, animal)
+        pname = pl.get("policy", next(iter(pols)))
+        bufs = pols[pname].get("buffers", [None])
+        return pname, pols[pname], pl.get("buffer", 1 if 1 in bufs else bufs[0])
 
     base_vals = {}
     for animal in G.ANIMALS:
