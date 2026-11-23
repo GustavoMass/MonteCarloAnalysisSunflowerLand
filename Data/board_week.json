@@ -1,17 +1,23 @@
 {
- "fetched": "2026-11-19",
- "season": "spring",
+ "fetched": "2026-11-23",
+ "season": "summer",
  "board": [
   {
-   "label": "Red Daffodil",
+   "label": "Yellow Balloon Flower",
+   "category": "Flowers",
+   "tickets": 8,
+   "done": false
+  },
+  {
+   "label": "Purple Pansy",
    "category": "Flowers",
    "tickets": 3,
    "done": true
   },
   {
-   "label": "Red Cosmos",
+   "label": "Purple Gladiolus",
    "category": "Flowers",
-   "tickets": 8,
+   "tickets": 3,
    "done": false
   },
   {
@@ -21,39 +27,15 @@
    "done": false
   },
   {
-   "label": "Yellow Carnation",
+   "label": "Red Carnation",
    "category": "Flowers",
-   "tickets": 5,
-   "done": true
+   "tickets": 8,
+   "done": false
   },
   {
-   "label": "White Lotus",
-   "category": "Flowers",
-   "tickets": 5,
-   "done": true
-  },
-  {
-   "label": "Olive Flounder",
-   "category": "Other",
-   "tickets": 7,
-   "done": true
-  },
-  {
-   "label": "Sea Bass",
+   "label": "Sunfish",
    "category": "Other",
    "tickets": 2,
-   "done": true
-  },
-  {
-   "label": "Sea Horse",
-   "category": "Other",
-   "tickets": 2,
-   "done": true
-  },
-  {
-   "label": "Halibut",
-   "category": "Other",
-   "tickets": 3,
    "done": true
   },
   {
@@ -63,21 +45,39 @@
    "done": true
   },
   {
+   "label": "Ray",
+   "category": "Other",
+   "tickets": 3,
+   "done": true
+  },
+  {
+   "label": "Napoleanfish",
+   "category": "Other",
+   "tickets": 2,
+   "done": true
+  },
+  {
+   "label": "Sea Bass",
+   "category": "Other",
+   "tickets": 2,
+   "done": true
+  },
+  {
+   "label": "Blue Crab",
+   "category": "Other",
+   "tickets": 12,
+   "done": false
+  },
+  {
+   "label": "Sea Urchin",
+   "category": "Other",
+   "tickets": 8,
+   "done": false
+  },
+  {
    "label": "Oyster",
    "category": "Other",
    "tickets": 12,
-   "done": true
-  },
-  {
-   "label": "Barnacle",
-   "category": "Other",
-   "tickets": 5,
-   "done": true
-  },
-  {
-   "label": "Octopus",
-   "category": "Other",
-   "tickets": 20,
    "done": true
   },
   {
@@ -101,7 +101,7 @@
   {
    "label": "Obsidian",
    "category": "Other",
-   "tickets": 35,
+   "tickets": 30,
    "done": false
   },
   {
@@ -113,44 +113,44 @@
   {
    "label": "Obsidian",
    "category": "Other",
-   "tickets": 35,
+   "tickets": 40,
    "done": false
   },
   {
-   "label": "Lunar Doll",
+   "label": "Juicy Doll",
    "category": "Other",
-   "tickets": 25,
+   "tickets": 15,
    "done": false
   },
   {
-   "label": "Sizzle Doll",
+   "label": "Lumber Doll",
+   "category": "Other",
+   "tickets": 15,
+   "done": false
+  },
+  {
+   "label": "Gilded Doll",
    "category": "Other",
    "tickets": 20,
+   "done": false
+  },
+  {
+   "label": "Cluck Doll",
+   "category": "Other",
+   "tickets": 15,
    "done": false
   },
   {
    "label": "Wooly Doll",
    "category": "Other",
    "tickets": 20,
-   "done": true
-  },
-  {
-   "label": "Moo Doll",
-   "category": "Other",
-   "tickets": 20,
-   "done": true
-  },
-  {
-   "label": "Lumber Doll",
-   "category": "Other",
-   "tickets": 15,
-   "done": true
+   "done": false
   },
   {
    "label": "Giant Orange",
    "category": "Other",
    "tickets": 7,
-   "done": true
+   "done": false
   },
   {
    "label": "Giant Banana",
