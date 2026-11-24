@@ -209,6 +209,9 @@ def parse_farm(raw, farm_id):
         "pet_week": max(((f.get("faction") or {}).get("history") or {"": 0}).keys()) or None,
         "pet_requests": [bool((r or {}).get("dailyFulfilled")) for r in
                          (((f.get("faction") or {}).get("pet") or {}).get("requests") or [])],
+        # the current week's entry carries last week's streak and adds 1 once the faction reaches this week's goal
+        "pet_goal_reached": bool(((((f.get("faction") or {}).get("history") or {}).get(
+            max(((f.get("faction") or {}).get("history") or {"": 0}).keys()) or "", {}) or {}).get("collectivePet") or {}).get("goalReached")),
         "pet_qualifies": ((f.get("faction") or {}).get("pet") or {}).get("qualifiesForBoost"),
         "weeks_played": ((raw.get("fetched_at") or time.time() * 1000) - (f.get("createdAt") or 0)) / 6.048e8,
     }
