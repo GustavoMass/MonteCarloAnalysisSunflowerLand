@@ -263,7 +263,7 @@ def pet_mult(streak):
     return next((m for s, m in PET_TIERS if streak >= s), 1.0)
 
 
-def pet_plan(streak, streak_week, now_ms, weeks=6):
+def pet_plan(streak, streak_week, now_ms, weeks=6, goal_reached=False):
     """Faction Pet XP by week (factions.ts): the x boost in week W+1 comes from the faction's collective streak
     at the end of week W, and only if you fed every pet request at least once in week W. Weeks turn Monday
     00:00 UTC. streak_week = week key (Monday, YYYY-MM-DD) the streak belongs to; unknown = last week.
@@ -275,8 +275,9 @@ def pet_plan(streak, streak_week, now_ms, weeks=6):
         sw = dt.date.fromisoformat(str(streak_week)[:10])
     except ValueError:
         sw = this - dt.timedelta(days=7)
-    # streak at the end of last week
-    last = streak if sw < this else max(0, streak - 1)
+    # streak at the end of last week: an entry of this week starts with last week's streak and gets +1 once the
+    # faction reaches this week's goal (seen in the snapshots: 3 -> 4 on a Wednesday, 5 on a fresh Monday)
+    last = streak if sw < this or not goal_reached else max(0, streak - 1)
     rows = []
     for i in range(weeks):
         start = this + dt.timedelta(days=7 * i)
@@ -308,6 +309,7 @@ def evaluate(farm, prices, rules, farmwide, boosts, skill_tree, tax, weeks, food
         ex["level_cost"] = 0.0
     return {"menu": m, "levels": lv, "expansions": ex, "nodes": nodes,
             "faction_pet": faction_pet, "pet_streak": farm.get("pet_streak"),
-            "pet": dict(pet_plan(farm.get("pet_streak") or 0, farm.get("pet_week"), now_ms or time.time() * 1000),
+            "pet": dict(pet_plan(farm.get("pet_streak") or 0, farm.get("pet_week"), now_ms or time.time() * 1000,
+                                 goal_reached=farm.get("pet_goal_reached", False)),
                         requests=farm.get("pet_requests"), qualifies=farm.get("pet_qualifies")),
             "mining": daily_mining(farm, prices, farmwide["rates"], tax)}

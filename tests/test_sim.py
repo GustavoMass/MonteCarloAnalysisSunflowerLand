@@ -324,8 +324,9 @@ class PetPlanTest(unittest.TestCase):
         self.assertEqual([w["mult"] for w in r["weeks"][:4]], [1.2, 1.3, 1.3, 1.5])
         self.assertEqual(r["first_max"]["start"], "2026-12-14")
         self.assertEqual(r["feed_week"]["start"], "2026-12-07")
-        # streak already counted this week: one week earlier in the chain
-        self.assertEqual(pet_plan(5, "2026-11-23", mon)["first_max"]["start"], "2026-12-21")
+        # this week's entry before the goal: same chain; after the goal it already holds this week's +1
+        self.assertEqual(pet_plan(5, "2026-11-23", mon)["first_max"]["start"], "2026-12-14")
+        self.assertEqual(pet_plan(6, "2026-11-23", mon, goal_reached=True)["first_max"]["start"], "2026-12-14")
 
 if __name__ == "__main__":
     unittest.main()
