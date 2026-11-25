@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-24",
+ "fetched": "2026-11-25",
  "season": "summer",
  "board": [
   {
@@ -126,19 +126,19 @@
    "label": "Lumber Doll",
    "category": "Other",
    "tickets": 15,
-   "done": false
+   "done": true
   },
   {
    "label": "Gilded Doll",
    "category": "Other",
    "tickets": 20,
-   "done": false
+   "done": true
   },
   {
    "label": "Cluck Doll",
    "category": "Other",
    "tickets": 15,
-   "done": false
+   "done": true
   },
   {
    "label": "Wooly Doll",
