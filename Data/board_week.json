@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-25",
+ "fetched": "2026-11-26",
  "season": "summer",
  "board": [
   {
@@ -144,7 +144,7 @@
    "label": "Wooly Doll",
    "category": "Other",
    "tickets": 20,
-   "done": false
+   "done": true
   },
   {
    "label": "Giant Orange",
